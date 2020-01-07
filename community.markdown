@@ -1,0 +1,46 @@
+---
+layout: default
+permalink: /community/
+---
+
+<span data-page-nav="/community"></span>
+
+<h3>Source code</h3>
+
+<p>
+    All source code is available in the <a href="https://github.com/smooks">Smooks Organization on GitHub</a>.
+</p>
+
+<h3>Mailing lists</h3>
+
+<p>
+    There are 2 mailing lists to which questions can be posted:
+    
+    <ul>
+        <li><a href="https://groups.google.com/forum/?hl=en#!forum/smooks-user">User List</a>: General User Question/Discussion List. <strong>See below</strong>.</li>
+        <li><a href="https://groups.google.com/forum/?hl=en#!forum/smooks-dev">Development List</a>: Development Question/Discussion List.</li>
+    </ul>
+</p>
+
+<h3>User Mailing list</h3>
+
+In general, all questions should be posted to the User mailing list. You can do that here.
+
+<div id="user-mailing-list">
+    <iframe id="forum_embed"
+            src="javascript:void(0)"
+            scrolling="no"
+            frameborder="0"
+            width="100%"
+            height="700">
+    </iframe>
+</div>
+
+<script type="text/javascript">
+    (function () {
+        document.getElementById("forum_embed").src =
+                "https://groups.google.com/forum/embed/?place=forum/smooks-user&" + window.location.hostname +
+                "&showsearch=true&showpopout=true&parenturl=" +
+                encodeURIComponent(window.location.href);
+    }());
+</script>
