@@ -260,7 +260,7 @@ As well as a ton of bug fixes, Smooks v1.5 includes the following new highlight 
 Getting Started
 ---------------
 
-The easiest way to get started with Smooks is to download and try out some of the [examples](http://smooks.org/mediawiki/index.php?title=Smooks_v1.5_Examples "Smooks v1.5 Examples"). The examples are the perfect base upon which to integrate Smooks into your application.
+The easiest way to get started with Smooks is to download and try out some of the [examples](https://github.com/smooks/smooks-examples "Smooks v1.5 Examples"). The examples are the perfect base upon which to integrate Smooks into your application.
 
 FAQs
 ----
@@ -845,6 +845,7 @@ By default Smooks reads XML data. To set features on the default XML reader, sim
     </features>  
 </reader>
 ```
+
 CSV
 ---
 
