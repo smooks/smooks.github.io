@@ -13,206 +13,206 @@ Examples are always a great place to learn. We have quite a few
 
 ### User Guide
 
-*   [1 Introduction](#Introduction)
-    *   [1.1 What's new in Smooks v1.5?](#What.27s_new_in_Smooks_v1.5.3F)
-    *   [1.2 Getting Started](#Getting_Started)
-    *   [1.3 FAQs](#FAQs)
-    *   [1.4 Maven](#Maven)
-    *   [1.5 Ant](#Ant)
-    *   [1.6 Download](#Download)
-*   [2 Basics](#Basics)
-    *   [2.1 Basic Processing Model](#Basic_Processing_Model)
-    *   [2.2 Simple Example](#Simple_Example)
-    *   [2.3 Smooks Resources (Visitors etc)](#Smooks_Resources_.28Visitors_etc.29)
-        *   [2.3.1 Selectors](#Selectors)
-        *   [2.3.2 Namespace Declaration](#Namespace_Declaration)
-    *   [2.4 Smooks Cartridges](#Smooks_Cartridges)
-    *   [2.5 Filtering Process Selection (DOM or SAX?)](#Filtering_Process_Selection_.28DOM_or_SAX.3F.29)
-        *   [2.5.1 Mixing DOM and SAX](#Mixing_DOM_and_SAX)
-    *   [2.6 The Bean Context](#The_Bean_Context)
-        *   [2.6.1 Pre Installed Beans](#Pre_Installed_Beans)
-    *   [2.7 Multiple Outputs/Results](#Multiple_Outputs.2FResults)
-        *   [2.7.1 "In-Result" Instances](#.22In-Result.22_Instances)
-            *   [2.7.1.1 StreamResults / DOMResults](#StreamResults_.2F_DOMResults)
-        *   [2.7.2 During the Filtering Process](#During_the_Filtering_Process)
-    *   [2.8 Checking the Smooks Execution Process](#Checking_the_Smooks_Execution_Process)
-    *   [2.9 Terminating the Filtering Process](#Terminating_the_Filtering_Process)
-    *   [2.10 Global Configurations](#Global_Configurations)
-        *   [2.10.1 Global Configuration Parameters](#Global_Configuration_Parameters)
-        *   [2.10.2 Default Properties](#Default_Properties)
-    *   [2.11 Filter Settings](#Filter_Settings)
-    *   [2.12 Configuration Modularization](#Configuration_Modularization)
-*   [3 Consuming Input Data](#Consuming_Input_Data)
-    *   [3.1 XML](#XML)
-    *   [3.2 CSV](#CSV)
-        *   [3.2.1 Defining fields](#Defining_fields)
-            *   [3.2.1.1 Multi Record Field Definitions](#Multi_Record_Field_Definitions)
-        *   [3.2.2 String manipulation functions](#String_manipulation_functions)
-        *   [3.2.3 Ignoring Fields](#Ignoring_Fields)
-        *   [3.2.4 Binding CSV Records to Java](#Binding_CSV_Records_to_Java)
-        *   [3.2.5 Programmatic Configuration](#Programmatic_Configuration)
-            *   [3.2.5.1 Configuring Directly on the Smooks Instance](#Configuring_Directly_on_the_Smooks_Instance)
-            *   [3.2.5.2 CSV List and Map Binders](#CSV_List_and_Map_Binders)
-    *   [3.3 Fixed Length Values](#Fixed_Length_Values)
-        *   [3.3.1 Defining fields](#Defining_fields_2)
-        *   [3.3.2 String manipulation functions](#String_manipulation_functions_2)
-        *   [3.3.3 Ignoring Fields](#Ignoring_Fields_2)
-        *   [3.3.4 Binding fixed length Records to Java](#Binding_fixed_length_Records_to_Java)
-        *   [3.3.5 Programmatic Configuration](#Programmatic_Configuration_2)
-            *   [3.3.5.1 Configuring Directly on the Smooks Instance](#Configuring_Directly_on_the_Smooks_Instance_2)
-            *   [3.3.5.2 Fixed length List and Map Binders](#Fixed_length_List_and_Map_Binders)
-    *   [3.4 EDI](#EDI)
-        *   [3.4.1 EDI Mapping Models](#EDI_Mapping_Models)
-            *   [3.4.1.1 Segment Cardinality](#Segment_Cardinality)
-            *   [3.4.1.2 Segment Groups](#Segment_Groups)
-            *   [3.4.1.3 Segment Matching](#Segment_Matching)
-            *   [3.4.1.4 Required Values & Truncation](#Required_Values_.26_Truncation)
-        *   [3.4.2 Imports](#Imports)
-        *   [3.4.3 Type Support](#Type_Support)
-        *   [3.4.4 Programmatic Configuration](#Programmatic_Configuration_3)
-        *   [3.4.5 EJC - Edifact Java Compiler](#EJC_-_Edifact_Java_Compiler)
-            *   [3.4.5.1 EJC Maven Plugin](#EJC_Maven_Plugin)
-            *   [3.4.5.2 EJC Ant Task](#EJC_Ant_Task)
-            *   [3.4.5.3 Using EJC](#Using_EJC)
-        *   [3.4.6 UN/EDIFACT](#UN.2FEDIFACT)
-            *   [3.4.6.1 UNEdifactReader Reader Configuration](#UNEdifactReader_Reader_Configuration)
-            *   [3.4.6.2 Application Classpath Configuration](#Application_Classpath_Configuration)
-            *   [3.4.6.3 Mapping Model Zip Sets](#Mapping_Model_Zip_Sets)
-            *   [3.4.6.4 UN/EDIFACT Mapping Model URNs](#UN.2FEDIFACT_Mapping_Model_URNs)
-            *   [3.4.6.5 Reading and Writing UN/EDIFACT with Java](#Reading_and_Writing_UN.2FEDIFACT_with_Java)
-            *   [3.4.6.6 UN/EDIFACT Java Binding URNs](#UN.2FEDIFACT_Java_Binding_URNs)
-    *   [3.5 JSON](#JSON)
-        *   [3.5.1 Programmatic Configuration](#Programmatic_Configuration_4)
+*   [1 Introduction](#introduction)
+    *   [1.1 What's new in Smooks v1.5?](#whats-new-in-smooks-v15)
+    *   [1.2 Getting Started](#getting-started)
+    *   [1.3 FAQs](#faqs)
+    *   [1.4 Maven](#maven)
+    *   [1.5 Ant](#ant)
+    *   [1.6 Download](#download)
+*   [2 Basics](#basics)
+    *   [2.1 Basic Processing Model](#basic-processing-model)
+    *   [2.2 Simple Example](#simple-example)
+    *   [2.3 Smooks Resources (Visitors etc)](#smooks-resources-visitors-etc)
+        *   [2.3.1 Selectors](#selectors)
+        *   [2.3.2 Namespace Declaration](#samespace-declaration)
+    *   [2.4 Smooks Cartridges](#smooks-cartridges)
+    *   [2.5 Filtering Process Selection (DOM or SAX?)](#filtering-process-selection-dom-or-sax)
+        *   [2.5.1 Mixing DOM and SAX](#mixing-dom-and-sax)
+    *   [2.6 The Bean Context](#the-bean-context)
+        *   [2.6.1 Pre Installed Beans](#pre-installed-beans)
+    *   [2.7 Multiple Outputs/Results](#multiple-outputsresults)
+        *   [2.7.1 "In-Result" Instances](#in-result-instances)
+            *   [2.7.1.1 StreamResults / DOMResults](#streamresults--domresults)
+        *   [2.7.2 During the Filtering Process](#during-the-filtering-process)
+    *   [2.8 Checking the Smooks Execution Process](#checking-the-smooks-execution-process)
+    *   [2.9 Terminating the Filtering Process](#terminating-the-filtering-process)
+    *   [2.10 Global Configurations](#global-configurations)
+        *   [2.10.1 Global Configuration Parameters](#global-configuration-parameters)
+        *   [2.10.2 Default Properties](#default-properties)
+    *   [2.11 Filter Settings](#filter-settings)
+    *   [2.12 Configuration Modularization](#configuration-modularization)
+*   [3 Consuming Input Data](#consuming-input-data)
+    *   [3.1 XML](#xml)
+    *   [3.2 CSV](#csv)
+        *   [3.2.1 Defining fields](#defining-fields)
+            *   [3.2.1.1 Multi Record Field Definitions](#multi-record-field-definitions)
+        *   [3.2.2 String manipulation functions](#string-manipulation-functions)
+        *   [3.2.3 Ignoring Fields](#ignoring-fields)
+        *   [3.2.4 Binding CSV Records to Java](#binding-csv-records-to-java)
+        *   [3.2.5 Programmatic Configuration](#programmatic-configuration)
+            *   [3.2.5.1 Configuring Directly on the Smooks Instance](#configuring-directly-on-the-smooks-instance)
+            *   [3.2.5.2 CSV List and Map Binders](#csv-list-and-map-binders)
+    *   [3.3 Fixed Length Values](#fixed-length-values)
+        *   [3.3.1 Defining fields](#defining-fields-1)
+        *   [3.3.2 String manipulation functions](#string-manipulation-functions-1)
+        *   [3.3.3 Ignoring Fields](#ignoring-fields-1)
+        *   [3.3.4 Binding fixed length Records to Java](#binding-fixed-length-records-to-java)
+        *   [3.3.5 Programmatic Configuration](#programmatic-configuration-1)
+            *   [3.3.5.1 Configuring Directly on the Smooks Instance](#configuring-directly-on-the-smooks-instance_1)
+            *   [3.3.5.2 Fixed length List and Map Binders](#fixed-length-list-and-map-binders)
+    *   [3.4 EDI](#edi)
+        *   [3.4.1 EDI Mapping Models](#edi-mapping-models)
+            *   [3.4.1.1 Segment Cardinality](#segment-cardinality)
+            *   [3.4.1.2 Segment Groups](#segment-groups)
+            *   [3.4.1.3 Segment Matching](#segment-matching)
+            *   [3.4.1.4 Required Values & Truncation](#required-values--truncation)
+        *   [3.4.2 Imports](#imports)
+        *   [3.4.3 Type Support](#type-support)
+        *   [3.4.4 Programmatic Configuration](#programmatic-configuration-2)
+        *   [3.4.5 EJC - Edifact Java Compiler](#ejc---edifact-java-compiler)
+            *   [3.4.5.1 EJC Maven Plugin](#ejc-maven-plugin)
+            *   [3.4.5.2 EJC Ant Task](#ejc-ant-task)
+            *   [3.4.5.3 Using EJC](#using-ejc)
+        *   [3.4.6 UN/EDIFACT](#unedifact)
+            *   [3.4.6.1 UNEdifactReader Reader Configuration](#unedifactreader-reader-configuration)
+            *   [3.4.6.2 Application Classpath Configuration](#application-classpath-configuration)
+            *   [3.4.6.3 Mapping Model Zip Sets](#mapping-model-zip-sets)
+            *   [3.4.6.4 UN/EDIFACT Mapping Model URNs](#unedifact-mapping-model-urns)
+            *   [3.4.6.5 Reading and Writing UN/EDIFACT with Java](#reading-and-writing-unedifact-with-java)
+            *   [3.4.6.6 UN/EDIFACT Java Binding URNs](#unedifact-java-binding-urns)
+    *   [3.5 JSON](#json)
+        *   [3.5.1 Programmatic Configuration](#programmatic-configuration-3)
     *   [3.6 YAML](#YAML)
-        *   [3.6.1 Programmatic Configuration](#Programmatic_Configuration_5)
-    *   [3.7 Java to Java](#Java_to_Java)
-        *   [3.7.1 Source and Target Object Models](#Source_and_Target_Object_Models)
-        *   [3.7.2 Source Model Event Stream](#Source_Model_Event_Stream)
-            *   [3.7.2.1 Smooks Configuration](#Smooks_Configuration)
-            *   [3.7.2.2 Smooks Execution](#Smooks_Execution)
-    *   [3.8 Java to Text (XML, CSV, EDI etc)](#Java_to_Text_.28XML.2C_CSV.2C_EDI_etc.29)
-    *   [3.9 String manipulation functions for readers](#String_manipulation_functions_for_readers)
-*   [4 Validating Data](#Validating_Data)
-    *   [4.1 Rules](#Rules)
-        *   [4.1.1 Rule Configuration](#Rule_Configuration)
-            *   [4.1.1.1 Rulebase Configuration Options](#Rulebase_Configuration_Options)
-        *   [4.1.2 RuleProvider Implementations](#RuleProvider_Implementations)
-            *   [4.1.2.1 RegexProvider](#RegexProvider)
-                *   [4.1.2.1.1 Useful Regular Expressions](#Useful_Regular_Expressions)
-            *   [4.1.2.2 MVELProvider](#MVELProvider)
-    *   [4.2 Rule Based Validation](#Rule_Based_Validation)
-        *   [4.2.1 Validation Configuration](#Validation_Configuration)
-            *   [4.2.1.1 Configuring Max Failures](#Configuring_Max_Failures)
-            *   [4.2.1.2 onFail](#onFail)
-            *   [4.2.1.3 Composite Rule Name](#Composite_Rule_Name)
-        *   [4.2.2 Validation Results](#Validation_Results)
-        *   [4.2.3 Localized Validation Messages](#Localized_Validation_Messages)
-        *   [4.2.4 Example](#Example)
-*   [5 Producing Output Data](#Producing_Output_Data)
-    *   [5.1 Java Binding](#Java_Binding)
-        *   [5.1.1 Java Binding Overview](#Java_Binding_Overview)
-        *   [5.1.2 When to use Smooks Java Binding](#When_to_use_Smooks_Java_Binding)
-        *   [5.1.3 Basics Of Java Binding](#Basics_Of_Java_Binding)
-        *   [5.1.4 Java Binding Configuration Details](#Java_Binding_Configuration_Details)
-            *   [5.1.4.1 Data Decoders/Encoders](#Data_Decoders.2FEncoders)
-                *   [5.1.4.1.1 Date Decoding](#Date_Decoding)
-                *   [5.1.4.1.2 Number Decoding](#Number_Decoding)
-                *   [5.1.4.1.3 Mapping Decoding](#Mapping_Decoding)
-                *   [5.1.4.1.4 Enum Decoding](#Enum_Decoding)
-            *   [5.1.4.2 Bean Retention](#Bean_Retention)
-            *   [5.1.4.3 Preprocessing Binding Values](#Preprocessing_Binding_Values)
-            *   [5.1.4.4 Creating Beans Using a Factory](#Creating_Beans_Using_a_Factory)
-                *   [5.1.4.4.1 Other Definition Languages](#Other_Definition_Languages)
-                    *   [5.1.4.4.1.1 MVEL as factory definition language](#MVEL_as_factory_definition_language)
-                *   [5.1.4.4.2 Restrictions](#Restrictions)
-            *   [5.1.4.5 Binding Key Value Pairs into Maps](#Binding_Key_Value_Pairs_into_Maps)
-            *   [5.1.4.6 Virtual Object Models (Maps & Lists)](#Virtual_Object_Models_.28Maps_.26_Lists.29)
-                *   [5.1.4.6.1 Wildcard Bindings](#Wildcard_Bindings)
-            *   [5.1.4.7 Merging Multiple Data Entities Into a Single Binding](#Merging_Multiple_Data_Entities_Into_a_Single_Binding)
-            *   [5.1.4.8 Direct Value Binding](#Direct_Value_Binding)
-                *   [5.1.4.8.1 Configuration](#Configuration)
-                *   [5.1.4.8.2 Example](#Example_2)
-                    *   [5.1.4.8.2.1 The Message](#The_Message)
-                    *   [5.1.4.8.2.2 The Configuration](#The_Configuration)
-                *   [5.1.4.8.3 Programmatic Configuration](#Programmatic_Configuration_6)
-                    *   [5.1.4.8.3.1 Example](#Example_3)
-        *   [5.1.5 Programmatic Configuration](#Programmatic_Configuration_7)
-            *   [5.1.5.1 Example](#Example_4)
-        *   [5.1.6 XML to Java Reading and Writing](#XML_to_Java_Reading_and_Writing)
-            *   [5.1.6.1 Simple XMLBinding Use Case](#Simple_XMLBinding_Use_Case)
-            *   [5.1.6.2 Transforming XML Messages Using XMLBinding](#Transforming_XML_Messages_Using_XMLBinding)
-        *   [5.1.7 Generating the Smooks Binding Configuration](#Generating_the_Smooks_Binding_Configuration)
-        *   [5.1.8 Notes on JavaResult](#Notes_on_JavaResult)
-    *   [5.2 Templating](#Templating)
-        *   [5.2.1 FreeMarker Templating](#FreeMarker_Templating)
-            *   [5.2.1.1 FreeMarker Transforms using NodeModels](#FreeMarker_Transforms_using_NodeModels)
-            *   [5.2.1.2 FreeMarker and the Javabean Cartridge](#FreeMarker_and_the_Javabean_Cartridge)
-            *   [5.2.1.3 Programmatic Configuration](#Programmatic_Configuration_8)
-        *   [5.2.2 XSL Templating](#XSL_Templating)
-            *   [5.2.2.1 Points to Note Regarding XSL Support](#Points_to_Note_Regarding_XSL_Support)
-            *   [5.2.2.2 My XSLT Works Outside Smooks, but not Inside?](#My_XSLT_Works_Outside_Smooks.2C_but_not_Inside.3F)
-    *   [5.3 Simple Stream Manipulations](#Simple_Stream_Manipulations)
-    *   [5.4 Exporting Results](#Exporting_Results)
-*   [6 Enriching Output Data](#Enriching_Output_Data)
-    *   [6.1 SQL Support](#SQL_Support)
-    *   [6.2 Entity Persistence Frameworks](#Entity_Persistence_Frameworks)
-    *   [6.3 Data Access Object Support](#Data_Access_Object_Support)
-*   [7 Scripting](#Scripting)
-    *   [7.1 Groovy](#Groovy)
-        *   [7.1.1 Groovy Scriptlet Variables and Methods](#Groovy_Scriptlet_Variables_and_Methods)
-        *   [7.1.2 Adding Beans to the BeanContext](#Adding_Beans_to_the_BeanContext)
-        *   [7.1.3 Mixed DOM and SAX with Groovy](#Mixed_DOM_and_SAX_with_Groovy)
-        *   [7.1.4 Mixed DOM and SAX Example](#Mixed_DOM_and_SAX_Example)
-*   [8 Routing Output Data](#Routing_Output_Data)
-    *   [8.1 File](#File)
-    *   [8.2 Database](#Database)
-    *   [8.3 Java](#Java)
-    *   [8.4 JMS](#JMS)
-    *   [8.5 ESB Support](#ESB_Support)
-    *   [8.6 Camel](#Camel)
-*   [9 Performance Tuning](#Performance_Tuning)
-    *   [9.1 General](#General)
-    *   [9.2 Smooks Cartridges](#Smooks_Cartridges_2)
-    *   [9.3 Javabean Cartridge](#Javabean_Cartridge)
-*   [10 Testing](#Testing)
-    *   [10.1 Unit Testing](#Unit_Testing)
-*   [11 Common use cases](#Common_use_cases)
-    *   [11.1 Processing Huge Messages (GBs)](#Processing_Huge_Messages_.28GBs.29)
-        *   [11.1.1 One-to-One Transformation](#One-to-One_Transformation)
-        *   [11.1.2 Splitting & Routing](#Splitting_.26_Routing)
-            *   [11.1.2.1 Basic Splitting and Routing](#Basic_Splitting_and_Routing)
-            *   [11.1.2.2 Routing to File](#Routing_to_File)
-            *   [11.1.2.3 Routing to JMS](#Routing_to_JMS)
-            *   [11.1.2.4 Routing to a Database using SQL](#Routing_to_a_Database_using_SQL)
-    *   [11.2 Message Splitting & Routing](#Message_Splitting_.26_Routing)
-*   [12 Extending Smooks](#Extending_Smooks)
-    *   [12.1 Configuring Smooks Components](#Configuring_Smooks_Components)
-        *   [12.1.1 Configuration Annotations](#Configuration_Annotations)
-            *   [12.1.1.1 @ConfigParam](#.40ConfigParam)
-            *   [12.1.1.2 @Config](#.40Config)
-            *   [12.1.1.3 @Initialize and @Uninitialize](#.40Initialize_and_.40Uninitialize)
-        *   [12.1.2 Defining Custom Configuration Namespaces](#Defining_Custom_Configuration_Namespaces)
-    *   [12.2 Implementing a Source Reader](#Implementing_a_Source_Reader)
-        *   [12.2.1 Implementing a Binary Source Reader](#Implementing_a_Binary_Source_Reader)
-        *   [12.2.2 Implementing a Flat File Source Reader](#Implementing_a_Flat_File_Source_Reader)
-            *   [12.2.2.1 VariableFieldRecordParser and VariableFieldRecordParserFactory](#VariableFieldRecordParser_and_VariableFieldRecordParserFactory)
-    *   [12.3 Implementing a Fragment Visitor](#Implementing_a_Fragment_Visitor)
-        *   [12.3.1 The SAX Visitor API](#The_SAX_Visitor_API)
-        *   [12.3.2 Text Accumulation](#Text_Accumulation)
-        *   [12.3.3 StreamResult Writing/Serialization](#StreamResult_Writing.2FSerialization)
-            *   [12.3.3.1 SAXToXMLWriter](#SAXToXMLWriter)
-        *   [12.3.4 Visitor Configuration](#Visitor_Configuration)
-            *   [12.3.4.1 Example Visitor Configuration](#Example_Visitor_Configuration)
-        *   [12.3.5 Visitor Instance Lifecycle](#Visitor_Instance_Lifecycle)
-            *   [12.3.5.1 ExecutionLifecycleCleanable](#ExecutionLifecycleCleanable)
-            *   [12.3.5.2 VisitLifecycleCleanable](#VisitLifecycleCleanable)
-        *   [12.3.6 ExecutionContext and ApplicationContext](#ExecutionContext_and_ApplicationContext)
-*   [13 Apache Camel Integration](#Apache_Camel_Integration)
-    *   [13.1 SmooksComponent](#SmooksComponent)
-        *   [13.1.1 Options](#Options)
-    *   [13.2 SmooksDataformat](#SmooksDataformat)
-    *   [13.3 SmooksProcessor](#SmooksProcessor)
-    *   [13.4 Apache Camel Examples](#Apache_Camel_Examples)
+        *   [3.6.1 Programmatic Configuration](#programmatic-configuration-4)
+    *   [3.7 Java to Java](#java-to-java)
+        *   [3.7.1 Source and Target Object Models](#source_and-target-object-models)
+        *   [3.7.2 Source Model Event Stream](#source-model-event-stream)
+            *   [3.7.2.1 Smooks Configuration](#smooks-configuration)
+            *   [3.7.2.2 Smooks Execution](#smooks-execution)
+    *   [3.8 Java to Text (XML, CSV, EDI etc)](#java-to-text-xml-csv-edi-etc)
+    *   [3.9 String manipulation functions for readers](#string-manipulation-functions-for-readers)
+*   [4 Validating Data](#validating-data)
+    *   [4.1 Rules](#rules)
+        *   [4.1.1 Rule Configuration](#rule-configuration)
+            *   [4.1.1.1 Rulebase Configuration Options](#rulebase-configuration-options)
+        *   [4.1.2 RuleProvider Implementations](#ruleprovider-implementations)
+            *   [4.1.2.1 RegexProvider](#regexprovider)
+                *   [4.1.2.1.1 Useful Regular Expressions](#useful-regular-expressions)
+            *   [4.1.2.2 MVELProvider](#mvelprovider)
+    *   [4.2 Rule Based Validation](#rule-based-validation)
+        *   [4.2.1 Validation Configuration](#validation-configuration)
+            *   [4.2.1.1 Configuring Max Failures](#configuring-max-failures)
+            *   [4.2.1.2 onFail](#onfail)
+            *   [4.2.1.3 Composite Rule Name](#composite-rule-name)
+        *   [4.2.2 Validation Results](#validation-results)
+        *   [4.2.3 Localized Validation Messages](#localized-validation-messages)
+        *   [4.2.4 Example](#example)
+*   [5 Producing Output Data](#producing-output-data)
+    *   [5.1 Java Binding](#java-binding)
+        *   [5.1.1 Java Binding Overview](#java-binding-overview)
+        *   [5.1.2 When to use Smooks Java Binding](#when-to-use-smooks-java-binding)
+        *   [5.1.3 Basics Of Java Binding](#basics-of-java-binding)
+        *   [5.1.4 Java Binding Configuration Details](#java-binding-configuration-details)
+            *   [5.1.4.1 Data Decoders/Encoders](#data-decodersencoders)
+                *   [5.1.4.1.1 Date Decoding](#date-decoding)
+                *   [5.1.4.1.2 Number Decoding](#number-decoding)
+                *   [5.1.4.1.3 Mapping Decoding](#mapping-decoding)
+                *   [5.1.4.1.4 Enum Decoding](#enum-decoding)
+            *   [5.1.4.2 Bean Retention](#bean-retention)
+            *   [5.1.4.3 Preprocessing Binding Values](#preprocessing-binding-values)
+            *   [5.1.4.4 Creating Beans Using a Factory](#creating-beans-using-a-factory)
+                *   [5.1.4.4.1 Other Definition Languages](#other-definition-languages)
+                    *   [5.1.4.4.1.1 MVEL as factory definition language](#mvel-as-factory-definition-language)
+                *   [5.1.4.4.2 Restrictions](#restrictions)
+            *   [5.1.4.5 Binding Key Value Pairs into Maps](#binding-key-value-pairs-into-maps)
+            *   [5.1.4.6 Virtual Object Models (Maps & Lists)](#virtual-object-models-maps--lists)
+                *   [5.1.4.6.1 Wildcard Bindings](#wildcard-bindings)
+            *   [5.1.4.7 Merging Multiple Data Entities Into a Single Binding](#merging-multiple-data-entities-into-a-single-binding)
+            *   [5.1.4.8 Direct Value Binding](#direct-value-binding)
+                *   [5.1.4.8.1 Configuration](#configuration)
+                *   [5.1.4.8.2 Example](#example-1)
+                    *   [5.1.4.8.2.1 The Message](#the-message)
+                    *   [5.1.4.8.2.2 The Configuration](#the-configuration)
+                *   [5.1.4.8.3 Programmatic Configuration](#programmati-configuration_5)
+                    *   [5.1.4.8.3.1 Example](#example_2)
+        *   [5.1.5 Programmatic Configuration](programmatic-configuration-6)
+            *   [5.1.5.1 Example](#example-3)
+        *   [5.1.6 XML to Java Reading and Writing](#xml-to-java-reading-and-writing)
+            *   [5.1.6.1 Simple XMLBinding Use Case](#simple-xmlbinding-use-case)
+            *   [5.1.6.2 Transforming XML Messages Using XMLBinding](#transforming-xml-messages-using-xmlbinding)
+        *   [5.1.7 Generating the Smooks Binding Configuration](#generating-the-smooks-binding-configuration)
+        *   [5.1.8 Notes on JavaResult](#notes-on-javaresult)
+    *   [5.2 Templating](#templating)
+        *   [5.2.1 FreeMarker Templating](#freeMarker-templating)
+            *   [5.2.1.1 FreeMarker Transforms using NodeModels](#freeMarker-transforms-using-nodemodels)
+            *   [5.2.1.2 FreeMarker and the Javabean Cartridge](#freeMarker-and-the-javabean-cartridge)
+            *   [5.2.1.3 Programmatic Configuration](#programmatic-configuration-7)
+        *   [5.2.2 XSL Templating](#xsdl-templating)
+            *   [5.2.2.1 Points to Note Regarding XSL Support](#points-to-note-regarding-xsl-support)
+            *   [5.2.2.2 My XSLT Works Outside Smooks, but not Inside?](#my-xslt-works-outside-smooks-but-not-inside)
+    *   [5.3 Simple Stream Manipulations](#simple-stream-manipulations)
+    *   [5.4 Exporting Results](#exporting-results)
+*   [6 Enriching Output Data](#enriching-output-data)
+    *   [6.1 SQL Support](#sql-support)
+    *   [6.2 Entity Persistence Frameworks](#entity-persistence-frameworks)
+    *   [6.3 Data Access Object Support](#data-access-object-support)
+*   [7 Scripting](#scripting)
+    *   [7.1 Groovy](#groovy)
+        *   [7.1.1 Groovy Scriptlet Variables and Methods](#groovy-scriptlet-variables-and-methods)
+        *   [7.1.2 Adding Beans to the BeanContext](#adding-beans-to-the-beancontext)
+        *   [7.1.3 Mixed DOM and SAX with Groovy](#mixed-dom-and-sax-with-groovy)
+        *   [7.1.4 Mixed DOM and SAX Example](#mixed-dom-and-sax-example)
+*   [8 Routing Output Data](#routing-output-data)
+    *   [8.1 File](#file)
+    *   [8.2 Database](#database)
+    *   [8.3 Java](#java)
+    *   [8.4 JMS](#jms)
+    *   [8.5 ESB Support](#esb-support)
+    *   [8.6 Camel](#camel)
+*   [9 Performance Tuning](#performance-tuning)
+    *   [9.1 General](#general)
+    *   [9.2 Smooks Cartridges](#smooks-cartridges-1)
+    *   [9.3 Javabean Cartridge](#javabean-cartridge)
+*   [10 Testing](#testing)
+    *   [10.1 Unit Testing](#unit-testing)
+*   [11 Common use cases](#common-use-cases)
+    *   [11.1 Processing Huge Messages (GBs)](#processing-huge-messages-gbs)
+        *   [11.1.1 One-to-One Transformation](#one-to-one-transformation)
+        *   [11.1.2 Splitting & Routing](#splitting-routing)
+            *   [11.1.2.1 Basic Splitting and Routing](#basic-splitting-and-routing)
+            *   [11.1.2.2 Routing to File](#routing-to-file)
+            *   [11.1.2.3 Routing to JMS](#routing-to-jms)
+            *   [11.1.2.4 Routing to a Database using SQL](#routing-to-a-database-using-sql)
+    *   [11.2 Message Splitting & Routing](#message-splitting-routing)
+*   [12 Extending Smooks](#extending-smooks)
+    *   [12.1 Configuring Smooks Components](#configuring-smooks-components)
+        *   [12.1.1 Configuration Annotations](#configuration-annotations)
+            *   [12.1.1.1 @ConfigParam](#configparam)
+            *   [12.1.1.2 @Config](#config)
+            *   [12.1.1.3 @Initialize and @Uninitialize](#initialize-and-uninitialize)
+        *   [12.1.2 Defining Custom Configuration Namespaces](#defining-custom-configuration-namespaces)
+    *   [12.2 Implementing a Source Reader](#implementing-a-source-reader)
+        *   [12.2.1 Implementing a Binary Source Reader](#implementing-a-binary-source-reader)
+        *   [12.2.2 Implementing a Flat File Source Reader](#implementing-a-flat-file-source-reader)
+            *   [12.2.2.1 VariableFieldRecordParser and VariableFieldRecordParserFactory](#variablefieldrecordparser-and-variablefieldrecordparserfactory)
+    *   [12.3 Implementing a Fragment Visitor](#implementing-a-fragment-visitor)
+        *   [12.3.1 The SAX Visitor API](#the-sax-visitor-api)
+        *   [12.3.2 Text Accumulation](#text-accumulation)
+        *   [12.3.3 StreamResult Writing/Serialization](#streamresult-writing-serialization)
+            *   [12.3.3.1 SAXToXMLWriter](#saxtoxmlwriter)
+        *   [12.3.4 Visitor Configuration](#visitor-configuration)
+            *   [12.3.4.1 Example Visitor Configuration](#example-visitor-configuration)
+        *   [12.3.5 Visitor Instance Lifecycle](#visitor-instance-lifecycle)
+            *   [12.3.5.1 ExecutionLifecycleCleanable](#executionlifecyclecleanable)
+            *   [12.3.5.2 VisitLifecycleCleanable](#visitlifecyclecleanable)
+        *   [12.3.6 ExecutionContext and ApplicationContext](#executioncontext-and-applicationcontext)
+*   [13 Apache Camel Integration](#apache-camel-integration)
+    *   [13.1 SmooksComponent](#smookscomponent)
+        *   [13.1.1 Options](#options)
+    *   [13.2 SmooksDataformat](#smooksdataformat)
+    *   [13.3 SmooksProcessor](#smooksprocessor)
+    *   [13.4 Apache Camel Examples](#apache-camel-examples)
   
 
 Introduction
@@ -346,6 +346,7 @@ Smooks executes by taking a data stream of one form or another (XML, EDI, Java, 
 At a core level (inside Smooks), it just sees all of the "[Visitor](http://smooks.org/mediawiki/index.php?title=Visitor "Visitor") logic" etc as "Smooks Resources" (SmooksResourceConfiguration) that are configured to be applied based on an event **selector** (i.e. event from the source data event stream). This is a very generic processing model and makes a lot of sense from the point of view of Smooks Core and it's architecture (maintainance etc). However, it can be a little too generic from a usability perspective because everything looks very similar in the configuration. To help with this, Smooks v1.1 introduced an "Extensible Configuration Model" feature. This allows specific resource types (Javabean binding configs, FreeMarker template configs etc) to be specified in the configuration using dedicated XSD namespaces of their own.
 
 Example (Java Binding Resource):
+
 ```xml
 <jb:bean beanId="lineOrder" class="example.trgmodel.LineOrder" createOnElement="example.srcmodel.Order">  
     <jb:wiring property="lineItems" beanIdRef="lineItems" />  
@@ -353,7 +354,6 @@ Example (Java Binding Resource):
     <jb:value property="customerName" data="header/customerName" />  
 </jb:bean>
 ```
-
 Example (FreeMarker Template Resource):
 ```xml
 <ftl:freemarker applyOnElement="order-item">
@@ -671,6 +671,7 @@ The default behavior is to terminate at the end of the targeted fragment (i.e. o
    
 </smooks-resource-list>
 ```
+
 Global Configurations
 ---------------------
 
@@ -685,7 +686,7 @@ Smooks supports two types of globals, default properties and global parameters:
 
 Global properties differ from the default properties in that they are not specified on the root element and are not automatically applied to resources.
 
-Global parameters are specified in a **<params>** element:
+Global parameters are specified in a **\<params>** element:
 ```xml
 <params>  
     <param name="xyz.param1">param1-val</param>  
@@ -1710,6 +1711,7 @@ smooks.setReaderConfig(new JSONReaderConfigurator()
    
 // Use Smooks as normal...
 ```
+
 YAML
 ----
 
@@ -1865,6 +1867,7 @@ protected LineOrder runSmooksTransform(Order srcOrder) throws [IOException](http
     return (LineOrder) result.getBean("lineOrder");  
 }
 ```
+
 Java to Text (XML, CSV, EDI etc)
 --------------------------------
 
@@ -2260,6 +2263,7 @@ The Smooks config required to bind the data from the order XML and into this obj
 
 </smooks-resource-list>
 ```
+
 |     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 |-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | (1) | Configuration **(1)** defines the creation rules for the _com.acme.Order_ bean instance (top level bean). We create this bean instance at the very start of the message i.e. on the <order> element . In fact, we create each of the beans instances (**(1)**, **(2)**, **(3)** - all accepts **(4)**) at the very start of the message (on the <order> element). We do this because there will only ever be a single instance of these beans in the populated model.<br><br>Configurations **(1.a)** and **(1.b)** define the **wiring** configuration for wiring the _Header_ and _List<OrderItem>_ bean instances (**(2)** and **(3)**) into the Order bean instance (see the **beanIdRef** attribute values and how the reference the **beanId** values defined on **(2)** and **(3)**). The **property** attributes on **(1.a)** and **(1.b)** define the _Order_ bean properties on which the wirings are to be made. Note also that beans can also be wired into an object based on their Java class type (**beanType**), or by being annotated with a specific Annotation (**beanAnnotation**).                                                                                                                                                                                                                                                                                                                                                             |
@@ -2269,12 +2273,12 @@ The Smooks config required to bind the data from the order XML and into this obj
 
 **Binding Tips**
 
-*   **<jb:bean createOnElement>**
+*   **\<jb:bean createOnElement>**
     1.  Set it to the root element (or "#document"): For bean instances where only a single instance will exist in the model.
     2.  Set it to the recurring element: For Collection bean instances. If you don't specify the correct element in this case, you could loose data.
-*   **<jb:value decoder>**
+*   **\<jb:value decoder>**
     1.  In most cases, Smooks will automatically detect the datatype decoder to be used for a \<jb:value> binding. However, some decoders require configuration e.g. the DateDecoder (decoder="Date"). In these cases, the decoder attribute should be defined on the binding, as well as the <jb:decodeParam> child elements for specifying the decode parameters for that decoder. [See the full list of DataDecoder available out of the box](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html").
-*   **<jb:wiring property>**
+*   **\<jb:wiring property>**
     1.  Not required when binding into Collections.
 *   **Collections**
     1.  Just define the <jb:bean class> to be the required Collection type and wire in the Collection entries.
@@ -2642,9 +2646,9 @@ The **ValueBinder** class is the visitor that does the value binding.
 
 ##### Configuration
 
-The value binding XML configuration is part of the JavaBean schema from Smooks 1.3 on: <a href="[https://www.smooks.org/xsd/smooks/javabean-1.6.xsd](https://www.smooks.org/xsd/smooks/javabean-1.6.xsd "https://www.smooks.org/xsd/smooks/javabean-1.6.xsd")">[https://www.smooks.org/xsd/smooks/javabean-1.6.xsd](https://www.smooks.org/xsd/smooks/javabean-1.6.xsd "https://www.smooks.org/xsd/smooks/javabean-1.6.xsd")</a> The element for the value binding is **<value>**.
+The value binding XML configuration is part of the JavaBean schema from Smooks 1.3 on: <a href="[https://www.smooks.org/xsd/smooks/javabean-1.6.xsd](https://www.smooks.org/xsd/smooks/javabean-1.6.xsd "https://www.smooks.org/xsd/smooks/javabean-1.6.xsd")">[https://www.smooks.org/xsd/smooks/javabean-1.6.xsd](https://www.smooks.org/xsd/smooks/javabean-1.6.xsd "https://www.smooks.org/xsd/smooks/javabean-1.6.xsd")</a> The element for the value binding is **\<value>**.
 
-The **<value>** has the following attributes:
+The **\<value>** has the following attributes:
 
 *   **beanId**: The ID under which the created object is to be bound in the bean context.
 *   **data**: The data selector for the data value to be bound. e.g. "order/orderid" or "order/header/@date"
@@ -2873,8 +2877,8 @@ The optional "-p" properties file parameter allows specification of additional c
 After running this utility against the target class, you typically need to perform the following follow-up tasks in order to make the binding configuration work for your Source data model.
 
 1.  For each **\<jb:bean>** element, set the **createOnElement** attribute to the event element that should be used to create the bean instance.
-2.  Update the **<jb:value data>** attributes to select the event element/attribute supplying the binding data for that bean property.
-3.  Check the **<jb:value decoder>** attributes. Not all will be set, depending on the actual property type. These must be configured by hand e.g. you may need to configure **\<jb:decodeParam>** sub-elements for the decoder on some of the bindings. E.g. for a date field.
+2.  Update the **\<jb:value data>** attributes to select the event element/attribute supplying the binding data for that bean property.
+3.  Check the **\<jb:value decoder>** attributes. Not all will be set, depending on the actual property type. These must be configured by hand e.g. you may need to configure **\<jb:decodeParam>** sub-elements for the decoder on some of the bindings. E.g. for a date field.
 4.  Double-check the binding config elements (**\<jb:value>** and **\<jb:wiring>**), making sure all Java properties have been covered in the generated configuration.
 
 Determining the selector values can sometimes be difficult, especially for non XML Sources (Java etc). The Html Reporting tool can be a great help here because it helps you visualise the input message model (against which the selectors will be applied) as seen by Smooks. So, first off, generate a report using your Source data, but with an empty transformation configuration. In the report, you can see the model against which you need to add your configurations. Add the configurations one at a time, rerunning the report to check they are being applied.
@@ -3003,7 +3007,7 @@ Configuring FreeMarker templates in Smooks is done through the [https://www.smoo
     </ftl:freemarker>  
 </smooks-resource-list>
 ```
-Smooks allows you to perform a number of operations with the Templating result. This is controlled by the **<use>** element, which is added to the <ftl:freemarker> configuration.
+Smooks allows you to perform a number of operations with the Templating result. This is controlled by the **\<use>** element, which is added to the <ftl:freemarker> configuration.
 
 **Example - Inlining the Templating Result**:
 ```xml
@@ -3017,11 +3021,11 @@ Smooks allows you to perform a number of operations with the Templating result. 
 Inlining allows you to inline the templating result into a **Smooks.filterSource** Result object. A number of **directives** are supported:
 
 *   **addto**: Add the templating result to the targeted element.
-*   **replace** (default): Use the templating result to replace the targeted element. This is the default behavior for the <ftl:freemarker> configuration when the **<use>** element is not configured.
+*   **replace** (default): Use the templating result to replace the targeted element. This is the default behavior for the <\ftl:freemarker> configuration when the **\<use>** element is not configured.
 *   **insertbefore**: Add the templating result before to the targeted element.
 *   **insertafter**: Add the templating result after to the targeted element.
 
-Using **<ftl:bindTo>**, you can bind the Templating result to the Smooks **bean context**. The templating result can then be accessed by other Smooks components, such as the routing components. This can be especially useful for [splitting](http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing "http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing") huge messages into smaller (more consumable) messages that can then be [routed](http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing "http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing") to another process for handling.
+Using **\<ftl:bindTo>**, you can bind the Templating result to the Smooks **bean context**. The templating result can then be accessed by other Smooks components, such as the routing components. This can be especially useful for [splitting](http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing "http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing") huge messages into smaller (more consumable) messages that can then be [routed](http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing "http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing") to another process for handling.
 
 **Example - Binding the Templating Result to the Smooks bean context**:
 ```xml
@@ -3044,7 +3048,7 @@ Using **<ftl:bindTo>**, you can bind the Templating result to the Smooks **bean 
 ```
 (_See full example in the [split-transform-route-jms](http://smooks.org/mediawiki/index.php?title=Smooks_v1.2_Examples "Smooks v1.2 Examples") tutorial_)
 
-Using **<ftl:outputTo>**, you can direct Smooks to write the templating result directly to an **OutputStreamResource**. This is another useful mechanism for [splitting](http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing "http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing") huge messages into smaller (more consumable) messages that can then be processed individually.
+Using **\<ftl:outputTo>**, you can direct Smooks to write the templating result directly to an **OutputStreamResource**. This is another useful mechanism for [splitting](http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing "http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Splitting_.26_Routing") huge messages into smaller (more consumable) messages that can then be processed individually.
 
 **Example - Writing the Template Result to an OutputStreamSource**:
 ```xml
@@ -3252,9 +3256,9 @@ Simple Stream Manipulations
 
 Sometimes all you need to do is make a small modification to the message event stream e.g. renaming or removing an element, changing an attribute value etc. Having to write a template to do this is obviously overkill. What you can do is use the following core configurations (available since v1.4 only):  
 
-*   **<core:setElementData>**: Set data (name and/or attribites) on the targeted element.
-*   **<core:remove>**: Remove an element (i.e. do not serialize it to a StreamResult, if defined).
-*   **<core:removeAttribute>**: Remove an attribute (i.e. do not serialize it to a StreamResult, if defined).
+*   **\<core:setElementData>**: Set data (name and/or attribites) on the targeted element.
+*   **\<core:remove>**: Remove an element (i.e. do not serialize it to a StreamResult, if defined).
+*   **\<core:removeAttribute>**: Remove an attribute (i.e. do not serialize it to a StreamResult, if defined).
 
   
 Example:
@@ -3282,6 +3286,7 @@ Example:
    
 </smooks-resource-list>
 ```
+
 Exporting Results
 -----------------
 
@@ -3335,6 +3340,7 @@ if (exports.hasExports())
     // Camel, JBossESB, Mule etc.  
 }
 ```
+
 Enriching Output Data
 =====================
 
@@ -3502,6 +3508,7 @@ smooks.filterSource(executionContext, source);
    
 transaction.commit();
 ```
+
 Data Access Object Support
 --------------------------
 
@@ -3614,6 +3621,7 @@ smooks.filter(new StreamSource(messageIn),null,executionContext);
    
 tx.commit();
 ```
+
 Scripting
 =========
 
@@ -3733,6 +3741,7 @@ Using Groovy, we want to modify the "supplies" category in the shopping list, ad
  
 </smooks-resource-list>
 ```
+
 Routing Output Data
 ===================
 
@@ -3777,7 +3786,7 @@ Smooks plugins are available for a number of ESBs:
 Camel
 -----
 
-It is possible to route fragments to Apache Camel endpoints using the **<[camel:route](https://www.smooks.org/xsd/smooks/camel-1.5.xsd "https://www.smooks.org/xsd/smooks/camel-1.5.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/camel-1.5.xsd](https://www.smooks.org/xsd/smooks/camel-1.5.xsd "https://www.smooks.org/xsd/smooks/camel-1.5.xsd") configuration namespace.
+It is possible to route fragments to Apache Camel endpoints using the **\<[camel:route](https://www.smooks.org/xsd/smooks/camel-1.5.xsd "https://www.smooks.org/xsd/smooks/camel-1.5.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/camel-1.5.xsd](https://www.smooks.org/xsd/smooks/camel-1.5.xsd "https://www.smooks.org/xsd/smooks/camel-1.5.xsd") configuration namespace.
 
 For example, you can route to Camel endpoint by specifying the following in your Smooks configuration:
 ```xml
@@ -3854,7 +3863,7 @@ public class MyMessageTransformTest {
     }  
 }
 ```
-The test case above uses [xmlunit](http://xmlunit.sourceforge.net/ "http://xmlunit.sourceforge.net/").
+The test case above uses [xmlunit](https://www.xmlunit.org/).
 
 The following maven dependency was used for xmlunit in the above test:
 ```xml
@@ -3864,6 +3873,7 @@ The following maven dependency was used for xmlunit in the above test:
     <version>1.1</version>  
 </dependency>
 ```
+
 Common use cases
 ================
 
@@ -3955,7 +3965,7 @@ The first FreeMarker template is targeted at the <order-items> element and looks
         </ftl:template>
 </ftl:freemarker>
 ```
-You will notice the **<?TEMPLATE-SPLIT-PI?>** Processing Instruction. This tells Smooks where to split the template, outputting the first part of the template at the start of the <order-items> element, and the other part at the end of the <order-items> element. The <item> element template (the second template) will be output in between.
+You will notice the **\<?TEMPLATE-SPLIT-PI?>** Processing Instruction. This tells Smooks where to split the template, outputting the first part of the template at the start of the <order-items> element, and the other part at the end of the <order-items> element. The <item> element template (the second template) will be output in between.
 
 The second FreeMarker template is very straightforward. It simply outputs the <item> elements at the end of every <order-item> element in the source message:
 ```xml
@@ -3970,7 +3980,7 @@ The second FreeMarker template is very straightforward. It simply outputs the <i
     </ftl:freemarker>
 </smooks-resource-list>
 ```
-Because the second template fires on the end of the <order-item> elements, it effectively generates output into the location of the **<?TEMPLATE-SPLIT-PI?>** Processing Instruction in the first template. Note that the second template could have also referenced data in the "order" NodeModel.
+Because the second template fires on the end of the <order-item> elements, it effectively generates output into the location of the **\<?TEMPLATE-SPLIT-PI?>** Processing Instruction in the first template. Note that the second template could have also referenced data in the "order" NodeModel.
 
 And that's it! This is available as a runnable example in the Tutorials section.
 
@@ -4147,7 +4157,7 @@ Smooks Resource configuration #4 defines the FreeMarker templating resource used
 ```
 #### Routing to JMS
 
-JMS routing is performed via the the **<[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd") configuration namespace.
+JMS routing is performed via the the **\<[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd") configuration namespace.
 
 The following is an example <[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd")> configuration that routes an "orderItem\_xml" bean to a JMS Queue named "smooks.exampleQueue" (also read the "Routing to File" example):
 ```xml
@@ -5125,6 +5135,7 @@ public class MySmooksComponent {
     // etc...  
 }
 ```
+
 Apache Camel Integration
 ========================
 
@@ -5168,6 +5179,7 @@ from("direct:unmarshal")
 .convertBodyTo(List.class)
 .to("mock:result");
 ```
+
 SmooksProcessor
 ---------------
 
