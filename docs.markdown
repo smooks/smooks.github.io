@@ -354,6 +354,7 @@ Example (Java Binding Resource):
     <jb:value property="customerName" data="header/customerName" />  
 </jb:bean>
 ```
+
 Example (FreeMarker Template Resource):
 ```xml
 <ftl:freemarker applyOnElement="order-item">
