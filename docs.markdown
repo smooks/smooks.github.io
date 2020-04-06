@@ -2313,6 +2313,7 @@ The Smooks config required to bind the data from the order XML and into this obj
    </tbody>
 </table>
 <br/>
+
 **Binding Tips**
 
 *   **\<jb:bean createOnElement>**
