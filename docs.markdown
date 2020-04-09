@@ -24,26 +24,26 @@ Examples are always a great place to learn. We have quite a few
 *   [2 Basics](#basics)
     *   [2.1 Basic Processing Model](#basic-processing-model)
     *   [2.2 Simple Example](#simple-example)
-    *   [2.2 Visitor](#visitor)
-    *   [2.4 Smooks Resources (Visitors, etc...)](#smooks-resources-visitors-etc)
-        *   [2.4.1 Selectors](#selectors)
-        *   [2.4.2 Namespace Declaration](#namespace-declaration)
-    *   [2.5 Smooks Cartridges](#smooks-cartridges)
-    *   [2.6 Filtering Process Selection (DOM or SAX?)](#filtering-process-selection-dom-or-sax)
-        *   [2.6.1 Mixing DOM and SAX](#mixing-dom-and-sax)
-    *   [2.7 The Bean Context](#the-bean-context)
-        *   [2.7.1 Pre Installed Beans](#pre-installed-beans)
-    *   [2.8 Multiple Outputs/Results](#multiple-outputsresults)
-        *   [2.8.1 "In-Result" Instances](#in-result-instances)
-            *   [2.8.1.1 StreamResults / DOMResults](#streamresults--domresults)
-        *   [2.8.2 During the Filtering Process](#during-the-filtering-process)
-    *   [2.9 Checking the Smooks Execution Process](#checking-the-smooks-execution-process)
-    *   [2.19 Terminating the Filtering Process](#terminating-the-filtering-process)
-    *   [2.11 Global Configurations](#global-configurations)
-        *   [2.11.1 Global Configuration Parameters](#global-configuration-parameters)
-        *   [2.11.2 Default Properties](#default-properties)
-    *   [2.12 Filter Settings](#filter-settings)
-    *   [2.13 Configuration Modularization](#configuration-modularization)
+    *   [2.3 Smooks Resources (Visitors, etc...)](#smooks-resources-visitors-etc)
+        *   [2.3.1 Visitor](#visitor)
+        *   [2.3.2 Selectors](#selectors)
+        *   [2.3.3 Namespace Declaration](#namespace-declaration)
+    *   [2.4 Smooks Cartridges](#smooks-cartridges)
+    *   [2.5 Filtering Process Selection (DOM or SAX?)](#filtering-process-selection-dom-or-sax)
+        *   [2.5.1 Mixing DOM and SAX](#mixing-dom-and-sax)
+    *   [2.6 The Bean Context](#the-bean-context)
+        *   [2.6.1 Pre Installed Beans](#pre-installed-beans)
+    *   [2.7 Multiple Outputs/Results](#multiple-outputsresults)
+        *   [2.7.1 "In-Result" Instances](#in-result-instances)
+            *   [2.7.1.1 StreamResults / DOMResults](#streamresults--domresults)
+        *   [2.7.2 During the Filtering Process](#during-the-filtering-process)
+    *   [2.8 Checking the Smooks Execution Process](#checking-the-smooks-execution-process)
+    *   [2.9 Terminating the Filtering Process](#terminating-the-filtering-process)
+    *   [2.10 Global Configurations](#global-configurations)
+        *   [2.10.1 Global Configuration Parameters](#global-configuration-parameters)
+        *   [2.10.2 Default Properties](#default-properties)
+    *   [2.11 Filter Settings](#filter-settings)
+    *   [2.12 Configuration Modularization](#configuration-modularization)
 *   [3 Consuming Input Data](#consuming-input-data)
     *   [3.1 XML](#xml)
     *   [3.2 CSV](#csv)
@@ -138,7 +138,7 @@ Examples are always a great place to learn. We have quite a few
                     *   [5.1.4.8.2.2 The Configuration](#the-configuration)
                 *   [5.1.4.8.3 Programmatic Configuration](#programmatic-configuration-5)
                     *   [5.1.4.8.3.1 Example](#example-2)
-        *   [5.1.5 Programmatic Configuration](programmatic-configuration-6)
+        *   [5.1.5 Programmatic Configuration](#programmatic-configuration-6)
             *   [5.1.5.1 Example](#example-3)
         *   [5.1.6 XML to Java Reading and Writing](#xml-to-java-reading-and-writing)
             *   [5.1.6.1 Simple XMLBinding Use Case](#simple-xmlbinding-use-case)
@@ -368,17 +368,6 @@ Note that in this case we don't produce a Result. Also note that we don't intera
 This example illustrated the lower level mechanics of the Smooks Programming Model. In reality however, users are not going to want to solve their problems by implementing lots Java code themselves from scratch. For this reason, Smooks is shipped with quite a lot of pre-built functionality i.e. ready to use Visitor logic. We bundle this Visitor logic based on functionality and we call the bundles "**Cartridges**".
 
 
-Visitor
--------
-
-Central to how Smooks works is the concept of Visitor logic. A Visitor is a simple piece of Java logic that can perform a specific task on the message fragment at which it is targeted e.g. apply an XSLT, bind fragment data in a Java object, perform some validation on the message fragment etc etc.
-
-Implementing a Visitor is quite simple. You have the choice of supporting your logic through either the SAX and/or DOM Filters by implementing one or both of the following interfaces:
-
-* [org.milyn.delivery.sax.SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor)
-* [org.milyn.delivery.dom.DOMElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMElementVisitor)
-
-
 Smooks Resources (Visitors, etc...)
 -----------------------------------
 
@@ -415,6 +404,16 @@ When comparing the above examples to the pre Smooks v1.1 equivalents you can see
 1.  The user now has a more strongly typed configuration that is domain specific in each case (and so easier to read).
 2.  Because the v1.1+ configurations are XSD based, the user also gets autocompletion support from their IDE.
 3.  No longer any need to define the actual handler for the given resource type e.g. the BeanPopulator for java bindings.
+
+
+### Visitor
+
+Central to how Smooks works is the concept of Visitor logic. A Visitor is a simple piece of Java logic that can perform a specific task on the message fragment at which it is targeted e.g. apply an XSLT, bind fragment data in a Java object, perform some validation on the message fragment etc etc.
+
+Implementing a Visitor is quite simple. You have the choice of supporting your logic through either the SAX and/or DOM Filters by implementing one or both of the following interfaces:
+
+* [org.milyn.delivery.sax.SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor)
+* [org.milyn.delivery.dom.DOMElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMElementVisitor)
 
 
 ### Selectors

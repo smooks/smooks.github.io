@@ -54,7 +54,7 @@ Smooks supports DOM and SAX based processing models, but adds a more "code frien
 
 #### **What "Configuration Model" does Smooks employ?**
 
-See the [SmooksResourceConfiguration](javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html) javadocs.
+See the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html) javadocs.
 
 
 #### **What is a "Message Fragment"?**
@@ -88,7 +88,7 @@ Check out the [java-basic](https://github.com/smooks/smooks/tree/v1.7.1/smooks-e
 
 #### **How do I configure a StringTemplate resource?**
 
-1. Check out the [StringTemplateContentHandlerFactory Javadocs](javadoc/v1.7.1/smooks/org/milyn/templating/stringtemplate/StringTemplateContentHandlerFactory).
+1. Check out the [StringTemplateContentHandlerFactory Javadocs](/javadoc/v1.7.1/smooks/org/milyn/templating/stringtemplate/StringTemplateContentHandlerFactory).
 2. Check out the templating [tutorials](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples).
 
 #### **How do I configure a Groovy resource?**
@@ -110,7 +110,7 @@ First off, don't think of Smooks as an alternative to the likes of XSLT and don'
 
 The Smooks configuration should be thought of more as a "Framework Configuration" - most frameworks have a configuration of one sort or another. It's nothing like XSLT, which is basically a programming language in XML. It just defines how transformation/analysis resources are targeted at messages and message fragments. It doesn't define the low level details of each individual transformation. Also note that the Smooks configuration is quite simple in terms of the number of configuration elements you need to remember - there are only a few.
 
-See the [SmooksResourceConfiguration](javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration) javadocs.
+See the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration) javadocs.
 
 
 #### **How does Smooks simplify my XSLT?**
@@ -199,12 +199,12 @@ They remain in the resulting document, untouched. This is unlike a templating ty
 
 #### **Can I target more than one resource at a message fragment?**
 
-You can. They will be sorted an applied by Smooks in order of their configuration specificity. See the [SmooksResourceConfigurationSortComparator](javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfigurationSortComparator).
+You can. They will be sorted an applied by Smooks in order of their configuration specificity. See the [SmooksResourceConfigurationSortComparator](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfigurationSortComparator).
 
 
 #### **What technologies are supported by Smooks?**
 
-Smooks supports a number of technologies and [can easily be extended to support more]((javadoc/v1.7.1/smooks/org/milyn/delivery/ContentHandlerFactory)). These technologies are bundled in what we call "Cartridges". A single cartridge may support more than one type of processing technology.
+Smooks supports a number of technologies and [can easily be extended to support more]((/javadoc/v1.7.1/smooks/org/milyn/delivery/ContentHandlerFactory)). These technologies are bundled in what we call "Cartridges". A single cartridge may support more than one type of processing technology.
 
 [See the current list of Smooks cartridges and the technologies they add support for](https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges).
 
@@ -213,20 +213,20 @@ Smooks supports a number of technologies and [can easily be extended to support 
 
 In most of the Smooks documentation we talk about Smooks in the context of data transformation. However, the core of Smooks (smooks-core) knows nothing about data transformation and so does nothing specific in this area. It's basically an engine for applying "visitor" logic to data "fragments". This logic can be data transformation logic, or it can be logic for processing/analyzing data in any way you require.
 
-So, the answer to this question is - "whatever type of processing you require". Just write the visitor implementation(s) and get Smooks to apply the logic on the target fragments. [Visitor](documentation#visitor) implementations can interact with each other via the [ExecutionContext](javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext).
+So, the answer to this question is - "whatever type of processing you require". Just write the visitor implementation(s) and get Smooks to apply the logic on the target fragments. [Visitor](documentation#visitor) implementations can interact with each other via the [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext).
 
 
-#### **Can a single [Smooks](javadoc/v1.7.1/smooks/org/milyn/Smooks) instance be run concurrently?**
+#### **Can a single [Smooks](/javadoc/v1.7.1/smooks/org/milyn/Smooks) instance be run concurrently?**
 
 Absolutely!
 
 
 #### **Can Smooks be extended to support other transformation/processing technologies?**
 
-Sure. To add support for another transformation or processing technology, you need to implement a [ContentHandlerFactory](javadoc/v1.7.1/smooks/org/milyn/delivery/ContentHandlerFactory) for that technology. As examples, see the following ContentHandlerFactory implementations:
+Sure. To add support for another transformation or processing technology, you need to implement a [ContentHandlerFactory](/javadoc/v1.7.1/smooks/org/milyn/delivery/ContentHandlerFactory) for that technology. As examples, see the following ContentHandlerFactory implementations:
 
-1. [XslContentHandlerFactory](javadoc/v1.7.1/smooks/org/milyn/templating/xslt/XslContentHandlerFactory): Adds support for XSLT.
-2. [StringTemplateContentHandlerFactory](javadoc/v1.7.1/smooks/org/milyn/templating/stringtemplate/StringTemplateContentHandlerFactory): Adds support for the [StringTemplate](https://www.stringtemplate.org/) templating framework.
-3. [GroovyContentHandlerFactory](javadoc/v1.7.1/smooks/org/milyn/smooks/scripting/groovy/GroovyContentHandlerFactory): Adds support for [Groovy](https://groovy-lang.org/) scripted resource.
+1. [XslContentHandlerFactory](/javadoc/v1.7.1/smooks/org/milyn/templating/xslt/XslContentHandlerFactory): Adds support for XSLT.
+2. [StringTemplateContentHandlerFactory](/javadoc/v1.7.1/smooks/org/milyn/templating/stringtemplate/StringTemplateContentHandlerFactory): Adds support for the [StringTemplate](https://www.stringtemplate.org/) templating framework.
+3. [GroovyContentHandlerFactory](/javadoc/v1.7.1/smooks/org/milyn/smooks/scripting/groovy/GroovyContentHandlerFactory): Adds support for [Groovy](https://groovy-lang.org/) scripted resource.
 
 Registering the ContentHandlerFactory is just a matter of adding a file named "content-handlers.inf" to the META-INF folder of factory's jar file and listing the implementation class(s) there in (one per line).
