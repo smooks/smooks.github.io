@@ -348,7 +348,7 @@ The most important events (typically) are the **visitBefore** and **visitAfter**
 Simple Example
 --------------
 
-In order to consume the SAX Event Stream produced from the Source message, you need to implement one or more of the [SAXVisitor](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html") interfaces (depending on which events you need to consume).
+In order to consume the SAX Event Stream produced from the Source message, you need to implement one or more of the [SAXVisitor](javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html) interfaces (depending on which events you need to consume).
 
 The following is a very simple example of how you implement Visitor logic and target that logic at the **visitBefore** and **visitAfter** events for a specific element in the Event Stream. In this case we target the Visitor logic at the <xxx> element events.
 
@@ -363,7 +363,7 @@ Smooks smooks = new Smooks("/smooks/echo-example.xml");
 smooks.filterSource(new StreamSource(inputStream));
 ```
 
-Note that in this case we don't produce a Result. Also note that we don't interact with the "execution" of the filtering process in any way, since we don't explicitly create an [ExecutionContext](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html") and supply it to the [Smooks](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html).filterSource method call.
+Note that in this case we don't produce a Result. Also note that we don't interact with the "execution" of the filtering process in any way, since we don't explicitly create an [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) and supply it to the [Smooks](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html).filterSource method call.
 
 This example illustrated the lower level mechanics of the Smooks Programming Model. In reality however, users are not going to want to solve their problems by implementing lots Java code themselves from scratch. For this reason, Smooks is shipped with quite a lot of pre-built functionality i.e. ready to use Visitor logic. We bundle this Visitor logic based on functionality and we call the bundles "**Cartridges**".
 
@@ -375,8 +375,8 @@ Central to how Smooks works is the concept of Visitor logic. A Visitor is a simp
 
 Implementing a Visitor is quite simple. You have the choice of supporting your logic through either the SAX and/or DOM Filters by implementing one or both of the following interfaces:
 
-* [org.milyn.delivery.sax.SAXElementVisitor](javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor)
-* [org.milyn.delivery.dom.DOMElementVisitor](javadoc/v1.7.1/smooks/org/milyn/delivery/sax/DOMElementVisitor)
+* [org.milyn.delivery.sax.SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor)
+* [org.milyn.delivery.dom.DOMElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMElementVisitor)
 
 
 Smooks Resources (Visitors, etc...)
@@ -465,7 +465,7 @@ Smooks Cartridges
 
 The basic functionality of Smooks Core can be extended through the creation of what we call a "Smooks Cartridge". A Cartridge is simply a Java archive (jar) containing reusable Content Handlers (Visitor Logic). A Smooks Cartridge should provide "ready to use" support for a specific type of XML analysis or transformation.
 
-For a full list of the Cartridges supported by Smooks, see the [Cartridges list](http://www.smooks.org/cartri "http://www.smooks.org/cartri").
+For a full list of the Cartridges supported by Smooks, see the [Cartridges list](https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges).
 
 Filtering Process Selection (DOM or SAX?)
 -----------------------------------------
@@ -496,7 +496,7 @@ More information on global filtering settings can be found in the [Filter Settin
 
 The DOM processing model has the obvious:
 
-*   **Advantage** of being easier to work with on a code level, allowing node traversal etc. It also makes it a lot easier to take advantage of Scripting and Templating engines that have built in support for utilizing DOM structures (e.g. [FreeMarker](http://freemarker.org/ "http://freemarker.org") and [Groovy](http://groovy.codehaus.org/ "http://groovy.codehaus.org")).
+*   **Advantage** of being easier to work with on a code level, allowing node traversal etc. It also makes it a lot easier to take advantage of Scripting and Templating engines that have built in support for utilizing DOM structures (e.g. [FreeMarker](http://freemarker.org/ "http://freemarker.org") and [Groovy](https://groovy-lang.org/)).
 *   **Disadvantage** of being constrained by memory i.e. if you have huge messages, then you typically cannot use a DOM processing model.
 
 Smooks v1.1 added support for mixing these 2 models through the **DomModelCreator** class. When used with SAX filtering, this Visitor will construct a DOM Fragment of the visited element. This allows DOM utilities to be used in a Streaming environment.
@@ -578,8 +578,8 @@ If you need to access the bean context beans at runtime (e.g. from a customer Vi
 
 A number of pre-installed beans are available in the Bean Context at runtime:
 
-*   **PUUID**: UniqueId bean. This bean provides unique identifiers for the filtering ExecutionContext. [See Javadoc](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/UniqueID.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/UniqueID.html").
-*   **PTIME**: Time bean. This bean provides time based data for the filtering ExecutionContext. [See Javadoc](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/Time.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/Time.html").
+*   **PUUID**: UniqueId bean. This bean provides unique identifiers for the filtering ExecutionContext. [See Javadoc](/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/UniqueID.html).
+*   **PTIME**: Time bean. This bean provides time based data for the filtering ExecutionContext. [See Javadoc](/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/Time.html).
 
 The following are examples of how each of these would be used in a FreeMarker template.
 
@@ -615,7 +615,7 @@ Time now (Date):
 ``` 
 ${PTIME.nowDate}
 ``` 
-[See Javadoc](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/package-summary.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/package-summary.html")
+[See Javadoc](/javadoc/v1.7.1/smooks/org/milyn/javabean/context/preinstalled/package-summary.html)
 
 Multiple Outputs/Results
 ------------------------
@@ -624,7 +624,7 @@ This section looks at the different ways in which Smooks can produce "Output" fr
 
 Smooks can "present" output to the outside world in the following ways:
 
-1.  **"In-Result" Instances**: Returned in the [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") instances passed to the [Smooks.filterSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...) "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)") method.
+1.  **"In-Result" Instances**: Returned in the [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") instances passed to the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) method.
 2.  **During the Filtering Process**: Output generated and sent to external endpoints (ESB Services, Files, JMS Destinations, DBs etc) during the Filtering process. This is where message fragment events are used to trigger routing of message fragments to external endpoints e.g. when [Splitting and Routing](#splitting--routing) fragments of a message.
   
 A very important point to remember is that Smooks can generate output/results in either or both of the above ways, all in a single filtering pass of a message stream. It doesn't need to filter a message stream multiple times in order to generate multiple outputs/results. This is critical in terms of performance/efficiency.
@@ -637,26 +637,26 @@ public void filterSource(Source source, Result... results) throws SmooksExceptio
 
 In terms of the types of [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") that Smooks can work with, we're talking about the standard JDK [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") and [DOMResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html") types, as well as some Smooks "specializations":
 
-1.  [JavaResult](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/JavaResult.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/JavaResult.html"): Result type for capturing the contents of the Smooks Java Bean context.
-2.  [ValidationResult](https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/validation/org/milyn/validation/ValidationResult.html "https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/validation/org/milyn/validation/ValidationResult.html"): Result type for capturing [Validation](#validating-data) Results.
-3.  [StringResult](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/StringResult.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/StringResult.html"): Simple Result type used mainly when writing tests. Simple [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") extension wrapping a [StringWriter](http://java.sun.com/j2se/1.5.0/docs/api/java/io//StringWriter.html "http://java.sun.com/j2se/1.5.0/docs/api/java/io//StringWriter.html").
+1.  [JavaResult](/javadoc/v1.7.1/smooks/org/milyn/payload/JavaResult.html): Result type for capturing the contents of the Smooks Java Bean context.
+2.  [ValidationResult](/javadoc/v1.7.1/smooks/org/milyn/validation/ValidationResult.html): Result type for capturing [Validation](#validating-data) Results.
+3.  [StringResult](/javadoc/v1.7.1/smooks/org/milyn/payload/StringResult.html): Simple Result type used mainly when writing tests. Simple [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") extension wrapping a [StringWriter](http://java.sun.com/j2se/1.5.0/docs/api/java/io//StringWriter.html "http://java.sun.com/j2se/1.5.0/docs/api/java/io//StringWriter.html").
 
 This is obviously the most common method of capturing output from the Smooks filtering process.
 
 **NOTE**:
 
-_As yet, Smooks does not support capturing of [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") data to multiple [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") instances of the same type. For example, you can specify multiple [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") instances in the [Smooks.filterSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...) "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)") method call, but Smooks will only output to one of these [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") instances (the first one)._
+_As yet, Smooks does not support capturing of [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") data to multiple [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") instances of the same type. For example, you can specify multiple [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") instances in the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) method call, but Smooks will only output to one of these [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") instances (the first one)._
 
 #### StreamResults / DOMResults
 
-These [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") types receive "special" attention from Smooks. As Smooks process a message [Source](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html"), it produces a stream of events. If a [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") or [DOMResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html") is supplied in the [Smooks.filterSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...) "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)") call, Smooks will (by default - see [default.serialization.on](#filter-settings) global parameter) serialize the event stream (produced from the [Source](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html")) to the supplied [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") or [DOMResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html") as XML. Obviously, Visitor logic can be configured/applied to the event stream before serialization.
+These [Result](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html") types receive "special" attention from Smooks. As Smooks process a message [Source](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html"), it produces a stream of events. If a [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") or [DOMResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html") is supplied in the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) call, Smooks will (by default - see [default.serialization.on](#filter-settings) global parameter) serialize the event stream (produced from the [Source](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Source.html")) to the supplied [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") or [DOMResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/dom/DOMResult.html") as XML. Obviously, Visitor logic can be configured/applied to the event stream before serialization.
 
   
 This is the mechanism used to perform a standard 1-input/1-xml-output character based transformation.
 
 ### During the Filtering Process
 
-Smooks is also able to generate different types of output during the [Smooks.filterSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...) "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)") process i.e. as it is filtering the message event stream and before it reaches the end of the message. A classic example of this being when it is used to [split and route](#splitting--routing) message fragments to different types of endpoints for processing by other processes.
+Smooks is also able to generate different types of output during the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) process i.e. as it is filtering the message event stream and before it reaches the end of the message. A classic example of this being when it is used to [split and route](#splitting--routing) message fragments to different types of endpoints for processing by other processes.
 
 So one might wonder why Smooks doesn't "batch up" the message data and produce all the results/outputs after filtering the complete message. Well the answer is straightforward enough:
 
@@ -683,7 +683,7 @@ The HtmlReportGenerator is a very useful tool during development with Smooks. It
 
 An example HtmlReportGenerator report can be seen [online here](http://www.milyn.org/docs/smooks-report/report.html "http://www.milyn.org/docs/smooks-report/report.html").
 
-Of course you can also write and use your own [ExecutionEventListener](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/event/ExecutionEventListener.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/event/ExecutionEventListener.html") implementations.
+Of course you can also write and use your own [ExecutionEventListener](/javadoc/v1.7.1/smooks/org/milyn/event/ExecutionEventListener.html) implementations.
 
 Terminating the Filtering Process
 ---------------------------------
@@ -720,8 +720,8 @@ Global configuration settings are, as the name implies, configuration options th
 
 Smooks supports two types of globals, default properties and global parameters:
 
-*   **Global Configuration Parameters**: Every <resource-config> in a Smooks configuration can specify <param> elements for configuration parameters. These parameter values are available at runtime through the [SmooksResourceConfiguration](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html"), or are reflectively injected through the **@ConfigParam** annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the [ExecutionContext](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html") (Vs the [SmooksResourceConfiguration](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html")). More on this in the following sections.
-*   **Default Properties**: Specify default values for <resource-config> attributes. These defaults are automatically applied to [SmooksResourceConfigurations](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html") when their corresponding <resource-config> does not specify the attribute. More on this in the following section.
+*   **Global Configuration Parameters**: Every <resource-config> in a Smooks configuration can specify <param> elements for configuration parameters. These parameter values are available at runtime through the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html), or are reflectively injected through the **@ConfigParam** annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) (Vs the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html)). More on this in the following sections.
+*   **Default Properties**: Specify default values for <resource-config> attributes. These defaults are automatically applied to [SmooksResourceConfigurations](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html) when their corresponding <resource-config> does not specify the attribute. More on this in the following section.
 
 ### Global Configuration Parameters
 
@@ -733,7 +733,7 @@ Global parameters are specified in a **\<params>** element:
     <param name="xyz.param1">param1-val</param>  
 </params>
 ```
-Global Configuration Parameters are accessible via the [ExecutionContext](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html") e.g.:
+Global Configuration Parameters are accessible via the [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) e.g.:
 ```java
 public void visitAfter(final Element element, final ExecutionContext executionContext) throws SmooksException {
     String param1 = executionContext.getConfigParameter("xyz.param1", "defaultValueABC");
@@ -786,10 +786,10 @@ An example configuration:
 </smooks-resource-list>
 ```
 *   **type** Determines the type of processing model that will be used. Either SAX or DOM. Please refer to [Filtering Process Selection](#filtering-process-selection-dom-or-sax) for more information about the processing models. Default is SAX ([default was DOM in Smooks v1.4 and before](http://jira.codehaus.org/browse/MILYN-589 "http://jira.codehaus.org/browse/MILYN-589")).
-*   **defaultSerialization**: Determines if default serialization should be switched on (default "true"). Default serialization being turned on simply tells Smooks to locate a [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") (or DOMResult) in the Result objects provided to the [Smooks.filterSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...) "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)") method and to, by default, serialize all events to that Result. This behavior can be turned off using this global configuration parameter and can be overridden on a per fragment basis by targetting a Visitor implementation at that fragment that takes ownership of the Result writer (in the case of SAX filtering), or simply modifies the DOM (in the case of DOM filtering). As an example of this, see the [FreeMarkerTemplateProcessor](https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/templating/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html "https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/templating/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html").
+*   **defaultSerialization**: Determines if default serialization should be switched on (default "true"). Default serialization being turned on simply tells Smooks to locate a [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") (or DOMResult) in the Result objects provided to the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) method and to, by default, serialize all events to that Result. This behavior can be turned off using this global configuration parameter and can be overridden on a per fragment basis by targetting a Visitor implementation at that fragment that takes ownership of the Result writer (in the case of SAX filtering), or simply modifies the DOM (in the case of DOM filtering). As an example of this, see the [FreeMarkerTemplateProcessor](/javadoc/v1.7.1/smooks-cartridges/templating/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html).
 *   **terminateOnException**: Determines whether an exception should terminate processing (default "true").
-*   **closeSource**: Close Source instance streams passed to the [Smooks.filterSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...) "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)") method (default "true"). The exception here is System.in, which will never be closed.
-*   **closeResult**: Close Result streams passed to the [Smooks.filterSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...) "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)") method (default "true"). The exception here is System.out and System.err, which will never be closed.
+*   **closeSource**: Close Source instance streams passed to the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) method (default "true"). The exception here is System.in, which will never be closed.
+*   **closeResult**: Close Result streams passed to the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) method (default "true"). The exception here is System.out and System.err, which will never be closed.
 *   **rewriteEntities**: Rewrite XML entities when reading and writing (default serialization) XML.
 *   **readerPoolSize**: Reader Pool Size (default 0). Some Reader implementations are very expensive to create (e.g. Xerces). Pooling Reader instances (i.e. reusing) can result in a huge performance improvement, especially when processing lots of "small" messages. The default value for this setting is 0 (i.e. unpooled - a new Reader instance is created for each message). Configure in line with your applications threading model.
 
@@ -836,7 +836,7 @@ Note how the replacement token injection points are specified using **@tokenname
 Consuming Input Data
 ====================
 
-Smooks relies on a "Stream Reader" for generating a stream of SAX events from the Source message data stream. A Stream Reader is a class that implements the [XMLReader interface](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") (or the [SmooksXMLReader interface](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html")).
+Smooks relies on a "Stream Reader" for generating a stream of SAX events from the Source message data stream. A Stream Reader is a class that implements the [XMLReader interface](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") (or the [SmooksXMLReader interface](/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html)).
 
 By default, Smooks uses the default XMLReader ([XMLReaderFactory.createXMLReader()](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/helpers/XMLReaderFactory.html#createXMLReader%28%29 "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/helpers/XMLReaderFactory.html#createXMLReader%28%29")), but can be easily configured to read non-XML data Sources by configuring a specialized XMLReader:
 ```xml
@@ -1412,7 +1412,7 @@ The configuration-example above demonstrates the use of import that were introdu
 Since version 1.2, the <field>, <component> and <sub-component> elements support a "type" attribute that allows datatype specificaton. It actually consists of 2 attributes:
 
 1.  **type**: The type attribute specifies the basic datatype.
-2.  **typeParameters**: The typeParameters attribute specifies data decoding parameters for the [DataDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html") associated with the specified type.
+2.  **typeParameters**: The typeParameters attribute specifies data decoding parameters for the [DataDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/package-summary.html) associated with the specified type.
 
 The following example shows the type support:
 ```xml
@@ -1445,7 +1445,7 @@ This type system has a number of uses:
 
 ### Programmatic Configuration
 
-Programmatically configuring the Smooks instance to use the EDIReader is done through the [EDIReaderConfigurator](https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/edi/org/milyn/smooks/edi/EDIReaderConfigurator.html "https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/edi/org/milyn/smooks/edi/EDIReaderConfigurator.html"):
+Programmatically configuring the Smooks instance to use the EDIReader is done through the [EDIReaderConfigurator](/javadoc/v1.7.1/smooks/org/milyn/smooks/edi/EDIReaderConfigurator.html):
 ```java
 Smooks smooks = new Smooks();  
    
@@ -1742,7 +1742,7 @@ The following options can also be configured on the JSON reader:
 
 ### Programmatic Configuration
 
-Smooks is programmatically configured to read a JSON configuration using the [JSONReaderConfigurator](https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/json/org/milyn/json/JSONReaderConfigurator.html "https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/json/org/milyn/json/JSONReaderConfigurator.html") class.
+Smooks is programmatically configured to read a JSON configuration using the [JSONReaderConfigurator](/javadoc/v1.7.1/smooks/org/milyn/json/JSONReaderConfigurator.html) class.
 ```java
 Smooks smooks = new Smooks();  
    
@@ -1808,7 +1808,7 @@ By the default the YAML reader uses the **REFER** strategy.
 
 ### Programmatic Configuration
 
-Smooks is programmatically configured to read a YAML configuration using the [YamlReaderConfigurator](https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/yaml/org/milyn/yaml/YamlReaderConfigurator.html "https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/yaml/org/milyn/yaml/YamlReaderConfigurator.html") class.
+Smooks is programmatically configured to read a YAML configuration using the [YamlReaderConfigurator](/javadoc/v1.7.1/smooks/org/milyn/yaml/YamlReaderConfigurator.html) class.
 ```java
 Smooks smooks = new Smooks();  
    
@@ -1925,7 +1925,9 @@ javaSource.setEventStreamRequired(false);
    
 smooks.filterSource(javaSource, result);
 ```
-Or, by turning off the "[http://www.smooks.org/sax/features/generate-java-event-stream](http://www.smooks.org/sax/features/generate-java-event-stream "http://www.smooks.org/sax/features/generate-java-event-stream")" <reader> feature in the Smooks configuration:
+
+Or, by turning off the "http://www.smooks.org/sax/features/generate-java-event-stream" \<reader> feature in the Smooks configuration:
+
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
@@ -2175,7 +2177,7 @@ The Smooks JavaBean Cartridge allows you to create and populate Java objects fro
 
 ### Java Binding Overview
 
-This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV etc. However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java Objects it creates (and binds data into) available through the [BeanContext](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/BeanContext.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/javabean/context/BeanContext.html") class. This is essentially a java bean context that is made available to any Smooks Visitor implementation via the Smooks [ExecutionContext](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html").
+This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV etc. However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java Objects it creates (and binds data into) available through the [BeanContext](/javadoc/v1.7.1/smooks/org/milyn/javabean/context/BeanContext.html) class. This is essentially a java bean context that is made available to any Smooks Visitor implementation via the Smooks [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html).
 
 Some of the existing features that build on the functionality provided in the Javabean Cartridge include:
 
@@ -2265,7 +2267,7 @@ The Javabean Cartridge provides support for 3 types of data bindings, which are 
 
 *   **\<jb:value>**: This is used to bind data values from the Source message event stream into the target bean.
 *   **\<jb:wiring>**: This is used to "wire" another bean instance from the bean context into a bean property on the target bean. This is the configuration that allows you to construct an object graph (Vs just a loose bag of Java object instances). Beans can be wired in based on their "beanId", their Java class type, or by Annotation (by being annotated with a specific Annotation).
-*   **\<jb:expression>**: As it's name suggests, this configuration is used to bind in a value calculated from an expression (in the [MVEL](http://mvel.codehaus.org/ "http://mvel.codehaus.org/") language), a simple example being the binding of an order item total value into an OrderItem bean based on the result of an expression that calculates the value from the items price and quantity (e.g. "price \* quantity"). The 'execOnElement' attribute he expression defines the element on which the expression is to be evaluated and the result bound. If not defined, the expression is executed based on the value of the parent <jb:bean createOnElement>. The value of the targeted element is available in the expression as a String variable under the name '\_VALUE' (notice the underscore).
+*   **\<jb:expression>**: As it's name suggests, this configuration is used to bind in a value calculated from an expression (in the [MVEL](http://mvel.documentnode.com/) language), a simple example being the binding of an order item total value into an OrderItem bean based on the result of an expression that calculates the value from the items price and quantity (e.g. "price \* quantity"). The 'execOnElement' attribute he expression defines the element on which the expression is to be evaluated and the result bound. If not defined, the expression is executed based on the value of the parent <jb:bean createOnElement>. The value of the targeted element is available in the expression as a String variable under the name '\_VALUE' (notice the underscore).
 
 Taking the Order XML message (previous section), lets see what the full XML to Java binding configuration might be. We've seen the order XML (above). Now lets look at the Java Objects that we want to populate from that XML message (getters and setters not shown):
 ```java
@@ -2373,7 +2375,7 @@ The Smooks config required to bind the data from the order XML and into this obj
     1.  Set it to the root element (or "#document"): For bean instances where only a single instance will exist in the model.
     2.  Set it to the recurring element: For Collection bean instances. If you don't specify the correct element in this case, you could loose data.
 *   **\<jb:value decoder>**
-    1.  In most cases, Smooks will automatically detect the datatype decoder to be used for a \<jb:value> binding. However, some decoders require configuration e.g. the DateDecoder (decoder="Date"). In these cases, the decoder attribute should be defined on the binding, as well as the \<jb:decodeParam> child elements for specifying the decode parameters for that decoder. [See the full list of DataDecoder available out of the box](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html").
+    1.  In most cases, Smooks will automatically detect the datatype decoder to be used for a \<jb:value> binding. However, some decoders require configuration e.g. the DateDecoder (decoder="Date"). In these cases, the decoder attribute should be defined on the binding, as well as the \<jb:decodeParam> child elements for specifying the decode parameters for that decoder. [See the full list of DataDecoder available out of the box](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/package-summary.html).
 *   **\<jb:wiring property>**
     1.  Not required when binding into Collections.
 *   **Collections**
@@ -2385,20 +2387,19 @@ The Smooks config required to bind the data from the order XML and into this obj
 In most cases, Smooks will automatically detect the datatype decoder to be used for a given \<jb:value> binding. However, some decoders require configuration e.g. the DateDecoder (decoder="Date"). In these cases, the decoder attribute should be defined on the binding, as well as the \<jb:decodeParam> child elements for specifying the decode parameters for that decoder.
 
   
-DataDecoder implementations can also implement the DataEncoder interface (new in Smooks v1.4). As it's name might suggest, a DataEncoder implements methods for encoding/formatting an object value to a String. [See the full list of DataDecoder/DataEncoder implementations available out of the box](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/package-summary.html").
+DataDecoder implementations can also implement the DataEncoder interface (new in Smooks v1.4). As it's name might suggest, a DataEncoder implements methods for encoding/formatting an object value to a String. [See the full list of DataDecoder/DataEncoder implementations available out of the box](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/package-summary.html).
 
 
 ##### Date Decoding
 
 A number of Date based DataDecoder/DataEncoder implementations are available:
 
-*   **[Date](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/DateDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/DateDecoder.html")**: Decode/Encode a String to a _java.util.Date_ instance.
-*   **[Calendar](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/CalendarDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/CalendarDecoder.html")**: Decode/Encode a String to a _java.util.Calendar_ instance.
-*   **[SqlDate](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/SqlDateDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/SqlDateDecoder.html")**: Decode/Encode a String to a _java.sql.Date_ instance.
-*   **[SqlTime](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/SqlTimeDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/SqlTimeDecoder.html")**: Decode/Encode a String to a _java.sql.Time_ instance.
-*   **[SqlTimestamp](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/SqlTimestampDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/SqlTimestampDecoder.html")**: Decode/Encode a String to a _java.sql.Timestamp_ instance.
+*   **[Date](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/DateDecoder.html)**: Decode/Encode a String to a _java.util.Date_ instance.
+*   **[Calendar](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/CalendarDecoder.html)**: Decode/Encode a String to a _java.util.Calendar_ instance.
+*   **[SqlDate](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlDateDecoder.html)**: Decode/Encode a String to a _java.sql.Date_ instance.
+*   **[SqlTime](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlTimeDecoder.html)**: Decode/Encode a String to a _java.sql.Time_ instance.
+*   **[SqlTimestamp](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlTimestampDecoder.html)**: Decode/Encode a String to a _java.sql.Timestamp_ instance.
 
-  
 All of these Date based Decoder/Encoder implementations are configured in the same way.
   
 **Date** Example:
@@ -2434,13 +2435,13 @@ The _locale_ decodeParam value is an underscore separated string, with the first
 
 A number of Number based DataDecoder/DataEncoder implementations are available:
 
-*   **[BigDecimalDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/BigDecimalDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/BigDecimalDecoder.html")**: Decode/Encode a String to a _java.math. BigDecimal_ instance.
-*   **[BigIntegerDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/BigIntegerDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/BigIntegerDecoder.html")**: Decode/Encode a String to a _java.math. BigInteger_ instance.
-*   **[DoubleDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/DoubleDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/DoubleDecoder.html")**: Decode/Encode a String to a _java.lang.Double_ instance (including primitive).
-*   **[FloatDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/FloatDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/FloatDecoder.html")**: Decode/Encode a String to a _java.lang.Float_ instance (including primitive).
-*   **[IntegerDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/IntegerDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/IntegerDecoder.html")**: Decode/Encode a String to a _java.lang.Integer_ instance (including primitive).
-*   **[LongDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/LongDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/LongDecoder.html")**: Decode/Encode a String to a _java.lang.Long' instance (including primitive)._
-*   **[ShortDecoder](https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/ShortDecoder.html "https://www.smooks.org/javadoc/v1.7.1/commons/org/milyn/javabean/decoders/ShortDecoder.html")**: Decode/Encode a String to a _java.lang.Short_ instance (including primitive).
+*   **[BigDecimalDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/BigDecimalDecoder.html)**: Decode/Encode a String to a _java.math. BigDecimal_ instance.
+*   **[BigIntegerDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/BigIntegerDecoder.html)**: Decode/Encode a String to a _java.math. BigInteger_ instance.
+*   **[DoubleDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/DoubleDecoder.html)**: Decode/Encode a String to a _java.lang.Double_ instance (including primitive).
+*   **[FloatDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/FloatDecoder.html)**: Decode/Encode a String to a _java.lang.Float_ instance (including primitive).
+*   **[IntegerDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/IntegerDecoder.html)**: Decode/Encode a String to a _java.lang.Integer_ instance (including primitive).
+*   **[LongDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/LongDecoder.html)**: Decode/Encode a String to a _java.lang.Long' instance (including primitive)._
+*   **[ShortDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/ShortDecoder.html)**: Decode/Encode a String to a _java.lang.Short_ instance (including primitive).
 
   
 All of these Number based Decoder/Encoder implementations are configured in the same way.
@@ -2540,7 +2541,7 @@ As an example for solving the numeric decoding issue described above:
 </jb:value>
 ```
   
-Note in the above example how the String data value is referenced in the expression using the _value_ variable name. The expression can be any valid [MVEL](http://mvel.codehaus.org/ "http://mvel.codehaus.org") expression that operates on the _value_ String and returns a String.
+Note in the above example how the String data value is referenced in the expression using the _value_ variable name. The expression can be any valid [MVEL](http://mvel.documentnode.com/) expression that operates on the _value_ String and returns a String.
 
 #### Creating Beans Using a Factory
 
@@ -2814,7 +2815,7 @@ String customerName = (String) result.getBean("customerName");
 ```
 ### Programmatic Configuration
 
-Java Binding Configuratons can be programmatically added to a Smooks using the [Bean](https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/javabean/org/milyn/javabean/Bean.html "https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/javabean/org/milyn/javabean/Bean.html") configuration class.
+Java Binding Configuratons can be programmatically added to a Smooks using the [Bean](/v1.7.1/smooks/org/milyn/javabean/Bean.html) configuration class.
 
 This class can be used to programmatically configure a Smooks instance for performing a Java Bindings on a specific class. To populate a graph, you simply create a graph of Bean instances by binding Beans onto Beans. The Bean class uses a Fluent API (all methods return the Bean instance), making it easy to string configurations together to build up a graph of Bean configuration.
 
@@ -3024,7 +3025,7 @@ The following is an example of a generated configuration. Note the "$TODO$" toke
 ```
 ### Notes on JavaResult
 
-Users should note that there is **no guarantee** as to the exact contents of a [JavaResult](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/JavaResult.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/JavaResult.html") instance after calling the Smooks.filterSource method. After calling this method, the JavaResult instance will contain the final contents of the bean context, which can be added to by any Visitor implementation.
+Users should note that there is **no guarantee** as to the exact contents of a [JavaResult](/javadoc/v1.7.1/smooks/org/milyn/payload/JavaResult.html) instance after calling the Smooks.filterSource method. After calling this method, the JavaResult instance will contain the final contents of the bean context, which can be added to by any Visitor implementation.
 
 You can restrict the Bean set returned in a JavaResult by using a **\<jb:result>** configuration in the Smooks configuration. In the following example configuration, we tell Smooks to only retain the "order" bean in the ResultSet:
 ```xml
@@ -3056,7 +3057,7 @@ You can restrict the Bean set returned in a JavaResult by using a **\<jb:result>
 ```
 So after applying this configuration, calls to the JavaResult.getBean(String) method for anything other than the "order" bean will return null. This will work fine in cases such as the above example, because the other bean instances are wired into the "order" graph.
 
-Note that as of Smooks v1.2, if a [JavaSource](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/JavaSource.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/payload/JavaSource.html") instance is supplied to the Smooks.filterSource method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the [ExecutionContect](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html") for that Smooks.filterSource invocation. This will mean that some of the JavaSource bean instances may be visible in the JavaResult.
+Note that as of Smooks v1.2, if a [JavaSource](/javadoc/v1.7.1/smooks/org/milyn/payload/JavaSource.html) instance is supplied to the Smooks.filterSource method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the [ExecutionContect](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) for that Smooks.filterSource invocation. This will mean that some of the JavaSource bean instances may be visible in the JavaResult.
 
 Templating
 ----------
@@ -3300,7 +3301,7 @@ In situations where using the NodeModel is not practical, Smooks allows you to u
 
 #### Programmatic Configuration
 
-FreeMarker templating configurations can be programmatically added to a Smooks instance simply by configuring and adding a [FreeMarkerTemplateProcessor](https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/templating/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html "https://www.smooks.org/javadoc/v1.7.1/smooks-cartridges/templating/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html") instance to the Smooks instance. The following example configures a Smooks instance with a Java Binding configuration and a FreeMarker templating configuration:
+FreeMarker templating configurations can be programmatically added to a Smooks instance simply by configuring and adding a [FreeMarkerTemplateProcessor](/javadoc/v1.7.1/smooks/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html) instance to the Smooks instance. The following example configures a Smooks instance with a Java Binding configuration and a FreeMarker templating configuration:
 ```java
 Smooks smooks = new Smooks();  
    
@@ -3723,7 +3724,7 @@ Scripting
 Groovy
 ------
 
-Support for [Groovy](http://groovy.codehaus.org/ "http://groovy.codehaus.org") based scripting is made available through the [https://www.smooks.org/xsd/smooks/groovy-1.2.xsd](https://www.smooks.org/xsd/smooks/groovy-1.2.xsd "https://www.smooks.org/xsd/smooks/groovy-1.2.xsd") configuration namespace. This adds support for DOM or SAX based Groovy scripting.
+Support for [Groovy](https://groovy-lang.org/) based scripting is made available through the [https://www.smooks.org/xsd/smooks/groovy-1.2.xsd](https://www.smooks.org/xsd/smooks/groovy-1.2.xsd "https://www.smooks.org/xsd/smooks/groovy-1.2.xsd") configuration namespace. This adds support for DOM or SAX based Groovy scripting.
 
 Example configuration:
 ```xml
@@ -3776,7 +3777,7 @@ executionContext.getBeanContext().addBean("myBean", myBeanInstance);
 
 ### Mixed DOM and SAX with Groovy
 
-Because [Groovy](http://groovy.codehaus.org/ "http://groovy.codehaus.org") has a number of very useful DOM processing features, we added support for the mixed DOM and SAX processing models.
+Because [Groovy](https://groovy-lang.org/) has a number of very useful DOM processing features, we added support for the mixed DOM and SAX processing models.
 
 What this means is that you can use Groovy's DOM utilities to process the targeted message fragment. The "**element**" received by the Groovy script will be a DOM Element, even when using the SAX filter. This makes Groovy scripting via the SAX filter a lot easier, while at the same time maintaining the ability to process huge messages in a streamed fashion.
 
@@ -4562,7 +4563,7 @@ Implementing a Source Reader
 
 Implementing and configuring a new Source Reader for Smooks is straightforward. The Smooks specific parts of the process are easy and are not really the issue. The level of effort involved is a function of the complexity of the Source data format for which you are implementing the reader.
 
-Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting & Routing etc. So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the [org.milyn.xml.SmooksXMLReader](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html") interface (which is just an extension of [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html")). So, you can easily use (or extend) an existing [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") implementation, or implement a new Reader from scratch.
+Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting & Routing etc. So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the [org.milyn.xml.SmooksXMLReader](/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html) interface (which is just an extension of [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html")). So, you can easily use (or extend) an existing [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") implementation, or implement a new Reader from scratch.
 
 Let's now look at a simple example of implementing a Reader for use with Smooks. In this example, we will implement a Reader that can read a stream of Comma Separated Value (CSV) records, converting the CSV stream into a stream of SAX events that can be processed by Smooks, allowing you to do all the things Smooks allows (Java Binding etc).
 
@@ -4751,8 +4752,8 @@ For more on Java Binding, see the [Java Binding](#java-binding) section.
 **Tips**:
 
 *   Reader instances are never used concurrently. Smooks Core will create a new instance for every message, or, will pool and reuse instances as per the [_readerPoolSize_ FilterSettings property](#filter-settings).
-*   If your Reader requires access to the Smooks ExecutionContext for the current filtering context, your Reader needs to implement the [SmooksXMLReader](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html") interface.
-*   If your Source data is a binary data stream your Reader must implement the [StreamReader](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/StreamReader.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/StreamReader.html") interface. See next section.
+*   If your Reader requires access to the Smooks ExecutionContext for the current filtering context, your Reader needs to implement the [SmooksXMLReader](/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html") interface.
+*   If your Source data is a binary data stream your Reader must implement the [StreamReader](/javadoc/v1.7.1/smooks/org/milyn/delivery/StreamReader.html) interface. See next section.
 *   You can programmatically configure your reader (e.g. in your unit tests) using a _GenericReaderConfigurator_ instance, which you then set on the _Smooks_ instance.
 *   While the basic <reader> configuration is fine, it's possible to define a custom configuration namespace (XSD) for your custom CSV Reader implementation. This topic is not covered here. Review the source code to see the extended configuration namespace for the Reader implementations suppled with Smooks (out of the box) e.g. the EDIReader, CSVReader, JSONReader etc. From this, you should be able to work out how to do this for your own custom Reader.
 
@@ -4900,8 +4901,8 @@ Visitor implementations are the workhorse of Smooks. Most of the out-of-the-box 
 
 Smooks supports two types of Visitor implementation:
 
-1.  **SAX** based implementations based on the [SAXVisitor](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html") sub-interfaces.
-2.  **DOM** based implementations based on the [DOMVisitor](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMVisitor.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMVisitor.html") sub-interfaces.
+1.  **SAX** based implementations based on the [SAXVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html) sub-interfaces.
+2.  **DOM** based implementations based on the [DOMVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMVisitor.html) sub-interfaces.
 
 Your implementation can support both SAX and DOM, but in general, we recommend people to stick with implementing a SAX only Visitor. As yet, we have not found a use case that could not be solved through the SAX based implementations, while at the same time, the SAX based implementations are usually easier to create, and offer clear advantages in terms of performance. For this reason, we will concentrate on the SAX only here.
 
@@ -4911,14 +4912,14 @@ Your implementation can support both SAX and DOM, but in general, we recommend p
 
 The SAX Visitor API is made up of a number of interfaces. These interfaces are based on the [SAX events](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/ContentHandler.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/ContentHandler.html") that a SAXVisitor implementation can capture and processes. Depending on the use case being solved with the SAXVisitor implementation, you may need to implement one or all of these interfaces.
 
-**[SAXVisitBefore](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitBefore.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitBefore.html")**: Captures the _startElement_ SAX event for the targeted fragment element:
+**[SAXVisitBefore](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitBefore.html)**: Captures the _startElement_ SAX event for the targeted fragment element:
 ```java
 public interface SAXVisitBefore extends SAXVisitor {  
    
     void visitBefore(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException;  
 }
 ```
-**[SAXVisitChildren](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitChildren.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitChildren.html")**: Captures the _character_ based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the _startElement_ events of child fragment elements:
+**[SAXVisitChildren](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitChildren.html)**: Captures the _character_ based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the _startElement_ events of child fragment elements:
 ```java
 public interface SAXVisitChildren extends SAXVisitor {  
    
@@ -4927,14 +4928,14 @@ public interface SAXVisitChildren extends SAXVisitor {
     void onChildElement(SAXElement element, SAXElement childElement, ExecutionContext executionContext) throws SmooksException, IOException;  
 }
 ```
-**[SAXVisitAfter](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitAfter.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitAfter.html")**: Captures the _endElement_ SAX event for the targeted fragment element:
+**[SAXVisitAfter](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitAfter.html)**: Captures the _endElement_ SAX event for the targeted fragment element:
 ```java
 public interface SAXVisitAfter extends SAXVisitor {  
    
     void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException;  
 }
 ```
-As a convenience for those implementations that need to capture all of the SAX events, the above three interfaces are pulled together into a single interface in the [SAXElementVisitor](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor.html") interface.
+As a convenience for those implementations that need to capture all of the SAX events, the above three interfaces are pulled together into a single interface in the [SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor.html) interface.
 
 Illustrating these events using a piece of XML:
 ```xml
@@ -4948,13 +4949,13 @@ Illustrating these events using a piece of XML:
 ```
 **Note**: _Of course, the above is just an illustration of a Source message event stream and it looks like XML, but could be EDI, CSV, JSON etc. Think of this as just an XML serialization of a Source message event stream, serialized as XML for easy reading._
 
-**[SAXElement](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html")**: As can be seen from the above SAX interfaces, the [SAXElement](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html") type is passed in all method calls. This object contains details about the targeted fragment element, including attributes and their values. It also contains methods for managing text accumulation, as well as accessing the _Writer_ associated with any _StreamResult_ instance that may have been passed in the _Smooks.filterSource(Source, Result)_ method call. We'll see more on text accumulation and _StreamResult_ writing in the coming sections.
+**[SAXElement](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html)**: As can be seen from the above SAX interfaces, the [SAXElement](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html) type is passed in all method calls. This object contains details about the targeted fragment element, including attributes and their values. It also contains methods for managing text accumulation, as well as accessing the _Writer_ associated with any _StreamResult_ instance that may have been passed in the _Smooks.filterSource(Source, Result)_ method call. We'll see more on text accumulation and _StreamResult_ writing in the coming sections.
 
 ### Text Accumulation
 
 SAX is a stream based processing model. It doesn't create a Document Object Model (DOM) of any form. It doesn't "accumulate" event data in any way. This is why it is a suitable processing model for processing huge message streams.
 
-The [SAXElement](https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html "https://www.smooks.org/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html") will always contain attribute data associated with the targeted element, but will not contain the fragment child text data, whose SAX events (_SAXVisitChildren.onChildText_) occur between the _SAXVisitBefore.visitBefore_ and _SAXVisitAfter.visitAfter_ events (see above illustration). The text events are not accumulated on the _SAXElement_ because, as already stated, that could result in a significant performance drain. Of course the downside to this is the fact that if your _SAXVisitor_ implementation needs access to the text content of a fragment, you need to explicitly tell Smooks to **accumulate text** for the targeted fragment. This is done by calling the _SAXElement.accumulateText_ method from inside the _SAXVisitBefore.visitBefore_ method implementation of your _SAXVisitor_:
+The [SAXElement](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html) will always contain attribute data associated with the targeted element, but will not contain the fragment child text data, whose SAX events (_SAXVisitChildren.onChildText_) occur between the _SAXVisitBefore.visitBefore_ and _SAXVisitAfter.visitAfter_ events (see above illustration). The text events are not accumulated on the _SAXElement_ because, as already stated, that could result in a significant performance drain. Of course the downside to this is the fact that if your _SAXVisitor_ implementation needs access to the text content of a fragment, you need to explicitly tell Smooks to **accumulate text** for the targeted fragment. This is done by calling the _SAXElement.accumulateText_ method from inside the _SAXVisitBefore.visitBefore_ method implementation of your _SAXVisitor_:
 ```java
 public class MyVisitor implements SAXVisitBefore, SAXVisitAfter {
  
@@ -5245,7 +5246,7 @@ Using Smooks in Camel can be done in three ways:
 SmooksComponent
 ---------------
 
-The SmooksComponent is a Camel \[[Component](http://camel.apache.org/component.html%7C "http://camel.apache.org/component.html|")\] which can used when you want to process the Camel Message Body using Smooks. You can do this by adding a route in your Camel route configuration:
+The SmooksComponent is a Camel [Component](https://camel.apache.org/component.html "http://camel.apache.org/component.html") which can used when you want to process the Camel Message Body using Smooks. You can do this by adding a route in your Camel route configuration:
 ```java
 from("file://inputDir?noop=true")  
 .to("smooks://smooks-config.xml")  
