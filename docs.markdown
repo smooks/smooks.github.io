@@ -25,7 +25,7 @@ Examples are always a great place to learn. We have quite a few
     *   [2.1 Basic Processing Model](#basic-processing-model)
     *   [2.2 Simple Example](#simple-example)
     *   [2.3 Smooks Resources (Visitors, etc...)](#smooks-resources-visitors-etc)
-        *   [2.3.1 Visitor](#visitor)
+        *   [2.3.1 Visitor](#visitors)
         *   [2.3.2 Selectors](#selectors)
         *   [2.3.3 Namespace Declaration](#namespace-declaration)
     *   [2.4 Smooks Cartridges](#smooks-cartridges)
@@ -238,7 +238,7 @@ Why Smooks was Created
 
 Smooks started life as a transformation solution. The main goal was a solution in which one could perform "fragment based transforms" on a message. Supporting fragment-based transformation opened up the possibility of mixing and matching different technologies within the context of a single transformation. This meant that one could use different technologies for transforming different fragments of a message, depending on the type of transformation required by the fragment in question.
 
-In the process of building this fragment based transformation solution, we realized that we were actually building a much more general fragment based processing solution. We were building a solution that supported targeting of custom [Visitor](#visitor) logic, of any kind, at fragments of a message. We realized that this Visitor logic did not need to be restricted to the realm of message transformation. We could implement Visitor logic to perform all sorts of operations on message fragments (and therefore a message as a whole). Up to the point of writing, Smooks has support for the following forms of fragment based message processing:
+In the process of building this fragment based transformation solution, we realized that we were actually building a much more general fragment based processing solution. We were building a solution that supported targeting of custom [Visitor](#visitors) logic, of any kind, at fragments of a message. We realized that this Visitor logic did not need to be restricted to the realm of message transformation. We could implement Visitor logic to perform all sorts of operations on message fragments (and therefore a message as a whole). Up to the point of writing, Smooks has support for the following forms of fragment based message processing:
 
 * Templating: Fragment Transforms using XSLT or FreeMarker, with the ability to be extended to use other technologies.
 * Java Binding: Bind message fragment data into a Java Object model.
@@ -255,7 +255,7 @@ Fragment-Based Data Processing with Smooks
 
 The primary design goals of Smooks were to provide a framework within which fragment-based Data Processing could be performed on hierarchical data (XML and non-XML) using existing data processing technologies (such as XSLT, raw Java, Groovy script), providing a degree of isolation between the different technologies.
 
-[Visitor](#visitor) logic targets a message fragment via the "selector" value on the Visitor logic's resource configuration. The targeted message fragment can take in as much or as little of the message as you like. A message fragment is identified by the name of the Element enclosing the fragment. To target a resource at "the whole message" you simply target it at the root fragment using the root Element's name as the selector, or through the special "$document" selector.
+[Visitor](#visitors) logic targets a message fragment via the "selector" value on the Visitor logic's resource configuration. The targeted message fragment can take in as much or as little of the message as you like. A message fragment is identified by the name of the Element enclosing the fragment. To target a resource at "the whole message" you simply target it at the root fragment using the root Element's name as the selector, or through the special "$document" selector.
 
 You may wonder why we use and mix the terms "Fragment" and "Element". Well the difference is a little subtle and often quite irrelevant, so it's often OK to interchange the terms. Anyway, an "Element" is just the outer node (only) of a "Fragment". A "Fragment" is an "Element" and all it's child Elements and content nodes (text etc). So, when a piece of Visitor logic is targeted at a message fragment, that typically means that that piece of logic can not only process (transform etc) the outer "Element" of that fragment, but can also perform processing on child nodes i.e. the fragment as a whole. 
 
@@ -313,7 +313,7 @@ Basics
 
 The most commonly accepted definition of Smooks would be that it is a "Transformation Engine". However, at its core, Smooks makes no mention of "data transformation". The **smooks-core** codebase is designed simply to support hooking of custom "Visitor" logic into an Event Stream produced by a data Source of some kind (XML, CSV, EDI, Java etc). As such, **smooks-core** is simply a "**Structured Data Event Stream Processor**".
 
-Of course, the most common application of this will be in the creation of **Transformation** solutions i.e. implementing [Visitor](#visitor) logic that uses the Event Stream produced from a Source message to produce a Result of some other kind. The capabilities in **smooks-core** enable more than this however. We have implemented a range of other solutions based on this processing model:
+Of course, the most common application of this will be in the creation of **Transformation** solutions i.e. implementing [Visitor](#visitors) logic that uses the Event Stream produced from a Source message to produce a Result of some other kind. The capabilities in **smooks-core** enable more than this however. We have implemented a range of other solutions based on this processing model:
 
 *   **Java Binding**: Population of a Java Object Model from the Source message.
 *   **Message Splitting & Routing**: The ability to perform complex splitting and routing operations on the Source message, including routing to multiple destinations concurrently, as well as routing different data formats concurrently (XML, EDI, CSV, Java etc).
@@ -406,7 +406,7 @@ When comparing the above examples to the pre Smooks v1.1 equivalents you can see
 3.  No longer any need to define the actual handler for the given resource type e.g. the BeanPopulator for java bindings.
 
 
-### Visitor
+### Visitors
 
 Central to how Smooks works is the concept of Visitor logic. A Visitor is a simple piece of Java logic that can perform a specific task on the message fragment at which it is targeted e.g. apply an XSLT, bind fragment data in a Java object, perform some validation on the message fragment etc etc.
 
