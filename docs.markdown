@@ -25,7 +25,7 @@ Examples are always a great place to learn. We have quite a few
     *   [2.1 Basic Processing Model](#basic-processing-model)
     *   [2.2 Simple Example](#simple-example)
     *   [2.3 Smooks Resources (Visitors, etc...)](#smooks-resources-visitors-etc)
-        *   [2.3.1 Visitor](#visitors)
+        *   [2.3.1 Visitors](#visitors)
         *   [2.3.2 Selectors](#selectors)
         *   [2.3.3 Namespace Declaration](#namespace-declaration)
     *   [2.4 Smooks Cartridges](#smooks-cartridges)
