@@ -204,7 +204,7 @@ You can. They will be sorted an applied by Smooks in order of their configuratio
 
 #### **What technologies are supported by Smooks?**
 
-Smooks supports a number of technologies and [can easily be extended to support more]((/javadoc/v1.7.1/smooks/org/milyn/delivery/ContentHandlerFactory)). These technologies are bundled in what we call "Cartridges". A single cartridge may support more than one type of processing technology.
+Smooks supports a number of technologies and [can easily be extended to support more](/javadoc/v1.7.1/smooks/org/milyn/delivery/ContentHandlerFactory). These technologies are bundled in what we call "Cartridges". A single cartridge may support more than one type of processing technology.
 
 [See the current list of Smooks cartridges and the technologies they add support for](https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges).
 
