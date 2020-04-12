@@ -181,7 +181,7 @@ Examples are always a great place to learn. We have quite a few
 *   [11 Common use cases](#common-use-cases)
     *   [11.1 Processing Huge Messages (GBs)](#processing-huge-messages-gbs)
         *   [11.1.1 One-to-One Transformation](#one-to-one-transformation)
-        *   [11.1.2 Splitting & Routing](#splitting-routing)
+        *   [11.1.2 Splitting & Routing](#splitting--routing)
             *   [11.1.2.1 Basic Splitting and Routing](#basic-splitting-and-routing)
             *   [11.1.2.2 Routing to File](#routing-to-file)
             *   [11.1.2.3 Routing to JMS](#routing-to-jms)
