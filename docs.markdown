@@ -1616,7 +1616,7 @@ Notes:
 
 [Mapping Model Zip Sets](#mapping-model-zip-sets) are available for all of the [UN/EDIFACT Directories](http://www.unece.org/trade/untdid/down_index.htm "http://www.unece.org/trade/untdid/down_index.htm"). These are available from the [Maven SNAPSHOT and Central repositories](/maven) and can be added to your application using standard Maven dependency management.
 
-As an example. To add the D93A [Mapping Model Zip Set](#mapping-model-zip-sets) to your application classpath, simply add the following <dependency> to your applications POM (translate as appropriate for Ivy etc):
+As an example. To add the D93A [Mapping Model Zip Set](#mapping-model-zip-sets) to your application classpath, simply add the following \<dependency> to your applications POM (translate as appropriate for Ivy etc):
 ```xml
 <!-- The mapping model sip set for the D93A directory... -->  
 <dependency>  
