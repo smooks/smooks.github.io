@@ -1626,13 +1626,13 @@ As an example. To add the D93A [Mapping Model Zip Set](#mapping-model-zip-sets) 
 </dependency>
 ```
   
-And then to configure Smooks to use that [Mapping Model Zip Set](#mapping-model-zip-sets), simply add the <unedifact:reader> configuration to your Smooks configuration as follows:
+And then to configure Smooks to use that [Mapping Model Zip Set](#mapping-model-zip-sets), simply add the \<unedifact:reader> configuration to your Smooks configuration as follows:
 
 ```xml  
 <unedifact:reader mappingModel="urn:org.milyn.edi.unedifact:d93a-mapping:*" />
 ```
   
-Note how you configure the reader using a URN constructed from the Maven artifact dependency information. Also note that you can add multiple [Mapping Model Zip Sets](#mapping-model-zip-sets) to your application's classpath, adding all of them to your <unedifact:reader> configuration by comma separating the URNs.
+Note how you configure the reader using a URN constructed from the Maven artifact dependency information. Also note that you can add multiple [Mapping Model Zip Sets](#mapping-model-zip-sets) to your application's classpath, adding all of them to your \<unedifact:reader> configuration by comma separating the URNs.
 
 #### Reading and Writing UN/EDIFACT with Java
 
