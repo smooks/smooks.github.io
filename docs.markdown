@@ -1538,7 +1538,7 @@ The following sections provide more details on these UN/EDIFACT capabilities.
 
 #### UNEdifactReader Reader Configuration
 
-UN/EDIFACT Interchanges are supported through a specialized variant of the base <edi:reader>. This reader is configured through the [https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd](https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd "https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd") configuration namespace as follows:
+UN/EDIFACT Interchanges are supported through a specialized variant of the base \<edi:reader>. This reader is configured through the [https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd](https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd "https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd") configuration namespace as follows:
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
@@ -1596,7 +1596,7 @@ See the **unedifact** [Examples](https://github.com/smooks/unedifact-examples).
 
 In an effort to simplify the processing of UN/EDIFACT Interchanges, we have built tools (ECT) that allow us to construct EDI Mapping Model "Zip Sets" from [the official UN/EDIFACT message definition zip directories](http://www.unece.org/trade/untdid/down_index.htm "http://www.unece.org/trade/untdid/down_index.htm"). We have built Zip Sets for all of the [official UN/EDIFACT message definition zip directories](http://www.unece.org/trade/untdid/down_index.htm "http://www.unece.org/trade/untdid/down_index.htm") and have deployed them to the maven repositories, from where users can easily access the EDI Mapping Models for the UN/EDIFACT message sets they need to process (using Maven, Ivy etc).
 
-Once an application has added an EDI Mapping Model zip set to their application classpath, Smooks can be configured to use these Mapping Models by simply referencing the Maven artifact using a URN as the _mappingModel_ attribute value on the \<unedifact:reader> configuration (**urn:<group-id>:<artifact-id>:<version>**):
+Once an application has added an EDI Mapping Model zip set to their application classpath, Smooks can be configured to use these Mapping Models by simply referencing the Maven artifact using a URN as the _mappingModel_ attribute value on the \<unedifact:reader> configuration (**urn:\<group-id>:\<artifact-id>:\<version>**):
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
