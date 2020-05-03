@@ -7,13 +7,13 @@ permalink: /documentation/
 
 ### Examples
 
-Examples are always a great place to learn. We have quite a few [general examples as well as UN/EDIFACT examples on GitHub](https://github.com/smooks/smooks-exmaples/tree/v2.0.0).
+Examples are always a great place to learn. We have quite a few [general examples as well as UN/EDIFACT examples on GitHub](https://github.com/smooks/smooks-examples/tree/v2.0.0).
 
 ### User Guide
 
 - [Introduction](#introduction)
   * [Why Smooks?](#why-smooks)
-  * [Fragment-Based Data Processing with Smooks](#fragment-based-data-processing-with-smooks)
+  * [Fragment-Based Processing with Smooks](#fragment-based-processing-with-smooks)
   * [What's new in Smooks 2?](#whats-new-in-smooks-2)
   * [Getting Started](#getting-started)
   * [Migrating from Smooks 1.7 to 2.0](#migrating-from-smooks-17-to-20)
@@ -28,8 +28,9 @@ Examples are always a great place to learn. We have quite a few [general example
     + [Selectors](#selectors)
     + [Namespace Declaration](#namespace-declaration)
   * [Smooks Cartridges](#smooks-cartridges)
-  * [Filtering Process Selection (DOM or SAX?)](#filtering-process-selection-dom-or-sax)
-    + [Mixing DOM and SAX](#mixing-dom-and-sax)
+  * [Filtering Process Selection (SAX NG or SAX or DOM?)](#filtering-process-selection-sax-ng-or-sax-or-dom)
+    + [SAX NG](#sax-ng)
+    + [Mixing DOM and Legacy SAX](#mixing-dom-and-legacy-sax)
   * [The Bean Context](#the-bean-context)
     + [Pre Installed Beans](#pre-installed-beans)
   * [Multiple Outputs/Results](#multiple-outputs-results)
@@ -130,7 +131,7 @@ Examples are always a great place to learn. We have quite a few [general example
     + [When to use Smooks Java Binding](#when-to-use-smooks-java-binding)
     + [Basics Of Java Binding](#basics-of-java-binding)
     + [Java Binding Configuration Details](#java-binding-configuration-details)
-      - [Data Decoders/Encoders](#data-decoders-encoders)
+      - [Data Type Converter](#data-type-converters)
         * [Date Decoding](#date-decoding)
         * [Number Decoding](#number-decoding)
         * [Mapping Decoding](#mapping-decoding)
@@ -204,16 +205,15 @@ Examples are always a great place to learn. We have quite a few [general example
 - [Extending Smooks](#extending-smooks)
   * [Configuring Smooks Components](#configuring-smooks-components)
     + [Configuration Annotations](#configuration-annotations)
-      - [@ConfigParam](#-configparam)
-      - [@Config](#-config)
-      - [@Initialize and @Uninitialize](#initialize-and-uninitialize)
+      - [@Inject](#-inject)
+      - [@PostConstruct and @PreDestroy](#postconstruct-and-predestroy)
     + [Defining Custom Configuration Namespaces](#defining-custom-configuration-namespaces)
   * [Implementing a Source Reader](#implementing-a-source-reader)
     + [Implementing a Binary Source Reader](#implementing-a-binary-source-reader)
     + [Implementing a Flat File Source Reader](#implementing-a-flat-file-source-reader)
       - [VariableFieldRecordParser and VariableFieldRecordParserFactory](#variablefieldrecordparser-and-variablefieldrecordparserfactory)
   * [Implementing a Fragment Visitor](#implementing-a-fragment-visitor)
-    + [The SAX Visitor API](#the-sax-visitor-api)
+    + [SAX NG Visitor API](#the-sax-ng-visitor-api)
     + [Text Accumulation](#text-accumulation)
     + [StreamResult Writing/Serialization](#streamresult-writing-serialization)
       - [SAXToXMLWriter](#saxtoxmlwriter)
@@ -233,43 +233,43 @@ Examples are always a great place to learn. We have quite a few [general example
 Introduction
 ============
 
-Smooks is an extensible Java framework for building XML and non-XML data (CSV, EDI, Java, etc...) processing applications.
+Smooks is an extensible Java framework for building XML and non-XML data (CSV, EDI, Java, etc...) streaming applications.
 
-While Smooks can be used as a lightweight platform on which to build your own custom processing logic for a wide range of data formats, 
-"out of the box" it comes with some very useful features that can be used individually or seamlessly together:
+While Smooks can be used as a lightweight framework on which to hook your own processing logic for a wide range of data formats, "out of the box" it ships with useful features that can be used individually or seamlessly together:
 
-*   **Java Binding**: Populate a POJO from a data source (CSV, EDI, XML, Java, etc...). Populated POJOs can be used as a transformation result itself, or can be used by, for example, templating resources to generate XML or other character-based results. Additionally, supports Virtual Object Models (maps and lists of typed data) which can be used by expression language and templating functionality.
+*   **Java Binding**: Populate a POJO from a data stream (CSV, EDI, XML, Java, etc...). Populated POJOs can either be the final result of a transformation, or serve as a bridge for further transformations like what is seen in template resources which generate textual results such as XML.
+Additionally, supports Virtual Object Models (maps and lists of typed data) that can be references from expression languages and templating functionality.
 *   **Transformation**: Perform a wide range of data transformations - XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, Java to XML, Java to EDI, Java to CSV, Java to Java, XML to Java, EDI to Java, etc...
-*   **Huge Message Processing**: Process huge messages (GBs) - split, transform and route message fragments to JMS, file, database, and other destinations.
+*   **Huge Message Processing**: Process huge messages (TBs) - split, transform and route message fragments to JMS, file, database, and other destinations.
 *   **Message Enrichment**: Enrich a message with data from a database, or other data sources.
 *   **Complex Message Validation**: Rules-based fragment validation.
 *   **ORM Based Message Persistence**: Use an entity persistence framework (like MyBatis, Hibernate, or any JPA compatible framework) to access a database and use its query language or CRUD methods to read from it or write to it. Use custom Data Access Objects (DAOs) to access a database and use its CRUD methods to read from it or write to it.
-*   **Combine**: Perform Extract Transform Load (ETL) operations by leveraging Smooks's transformation, routing and persistence functionality.
+*   **Combine**: Leverage Smooks's transformation, routing and persistence functionality to perform Extract Transform Load (ETL) operations.
 
 Why Smooks?
 -----------
 
-Smooks started its life as a transformation solution. The main goal was a solution in which one could perform "fragment-based transformations" on a message. Supporting fragment-based transformation opened up the possibility of mixing and matching different technologies within the context of a single transformation. This meant that one could use different technologies for transforming different fragments of a message, depending on the type of transformation required by the fragment in question.
+Smooks started its life as a transformation solution. The main goal was to perform "fragment-based transformations" on messages. Supporting fragment-based transformation opened up the possibility of mixing and matching different technologies within the context of a single transformation. This meant that one could leverage different technologies for transforming message fragments, depending on the type of transformation required by the fragment in question.
 
 In the process of building this fragment-based transformation solution, we realised that we were actually building a much more general fragment-based processing solution. We were building a solution that supported targeting of custom [visitor](#visitors) logic, of any kind, at fragments of a message. The visitor logic did not need to be restricted to the realm of message transformation. A visitor could be implemented to perform all sorts of operations on message fragments (and therefore a message as a whole). Up to the point of writing, Smooks has support for the following forms of fragment-based message processing:
 
-* Templating: Fragment transformations using XSLT or FreeMarker, with the ability to be extended to use other technologies.
-* Java Binding: Bind message fragment data to a POJO.
-* Splitting: Perform complex splitting of messages fragments, routing the split message fragments over a range of different transports/destinations e.g. filesystem, JMS, database, ESB.
+* Templating: XSLT or FreeMarker fragment transformations, with the ability to be extended to other technologies.
+* Java Binding: Bind fragments to POJOs.
+* Splitting: Perform complex splitting of messages fragments, routing the split message fragments over a range of different transports/destinations such as filesystem, JMS, database, or ESB.
 * Enrichment: Enrich message fragments with data from a database.
 * Persistence: Persist message fragment data to a database using raw SQL, or by reusing your existing JPA, Hibernate or MyBatis resources.
 * Validation: Perform basic or complex validation on message fragment data. This is more than simple type/value-range validation. Complex rules based validation is also possible. 
 
-Smooks now also supports a wide range of message source formats - XML, EDI, JSON, CSV, Java (Java to Java!). Smooks has a pluggable Reader interface which allows you to plug in a Reader implementation for any data format. 
+Smooks supports a wide range of data formats - XML, EDI, JSON, CSV, Java (Java to Java!). A pluggable reader interface allows you to plug in a reader implementation for any data format. 
 
-Fragment-Based Data Processing with Smooks
-------------------------------------------
+Fragment-Based Processing with Smooks
+-------------------------------------
 
-The primary design goals of Smooks were to provide a framework within which fragment-based data processing could be performed on hierarchical data (XML and non-XML) using existing data processing technologies (such as XSLT, plain vanilla Java, Groovy script), providing a degree of isolation between the different technologies.
+The primary design goals of Smooks are to provide a framework within which fragment-based processing can be performed on hierarchical data (XML and non-XML) using existing data processing technologies (such as XSLT, plain vanilla Java, Groovy script), providing a degree of isolation between the different technologies.
 
-A [visitor](#visitors) targets a message fragment via the "selector" value on the visitor's resource configuration. The targeted message fragment can take in as much or as little of the message as you like. A message fragment is identified by the name of the Element enclosing the fragment. To target a resource at "the whole message" you simply target it at the root fragment using the root Element's name as the selector, or through the special "#document" selector.
+A [visitor](#visitors) targets a message fragment via the "selector" value on the visitor's resource configuration. The targeted message fragment can take in as much or as little of the message as you like. A message fragment is identified by the name of the element enclosing the fragment. You can capture the whole message using the element name of the root fragment as the selector or through the special "#document" selector.
 
-You may wonder why we use and mix the terms "Fragment" and "Element". Well the difference is a little subtle and often quite irrelevant, so it's often OK to interchange the terms. Anyway, an "Element" is just the outer node (only) of a "Fragment". A "Fragment" is an "Element" and all it's child Elements and content nodes (text etc). So, when a piece of visitor logic targets at a message fragment, that typically means that that piece of logic can not only process (transform etc) the outer "Element" of that fragment, but can also perform processing on child nodes i.e. the fragment as a whole. 
+You may wonder why we use and mix the terms "Fragment" and "Element". Well the difference is a little subtle and often quite irrelevant, so it is often OK to interchange the terms. Anyway, an "Element" is the outer node (only) of a "Fragment". A "Fragment" is an "Element" and all its child elements and content nodes (text, etc...). So when a piece of visitor logic targets at a message fragment, that typically means that that piece of logic can not only process (transform, etc...) the outer "Element" of that fragment, but can also perform processing on child nodes i.e. the fragment as a whole. 
 
 What's new in Smooks 2?
 -----------------------
@@ -277,17 +277,28 @@ What's new in Smooks 2?
 Smooks 2 introduces the DFDL cartridge and revamps its EDI cartridge, while dropping support for Java 7 along with a few other notable breaking changes:
 
 * DFDL cartridge
-    * DFDL is a specification for describing file formats in XML. The DFDL cartridge leverages [Apache Daffodil](https://daffodil.apache.org/) to parse 
-files and unparse XML. This opens up Smooks to an incredible number of file formats like SWIFT, ISO8583, HL7, and many more.
+    * DFDL is a specification for describing file formats in XML. The DFDL cartridge leverages [Apache Daffodil](https://daffodil.apache.org/) to parse files and unparse XML. This opens up Smooks to an incredible number of file formats like SWIFT, ISO8583, HL7, and many more.
 * Complete overhaul of the EDI cartridge
     * Rewritten to extend the DFDL cartridge and provide much better support for reading EDI documents.
     * New functionality for serialising EDI documents.
     * As in previous Smooks versions, incorporated special support for EDIFACT.
+* SAX NG filter (experimental)
+    * Supersedes the SAX and DOM filters
+    * Brings with it a new visitor API which unifies the SAX and DOM visitor APIs
+    * Cartridges migrated to SAX NG
+    * Supports XSLT and StringTemplate resources unlike the legacy SAX filter
+* Visitor mementos
+    * A convenient way to stash and un-stash a visitor's state during its execution lifecycle
 * Independent release cycles for all cartridges and one [Maven BOM](/maven#bill-of-materials--bom-) (bill of materials) to track them all
 * License change 
-    * After reaching consensus among our code contributors, we've dual-licensed Smooks under [LGPL v3.0](https://choosealicense.com/licenses/lgpl-3.0/) 
-and [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/). This license change keeps Smooks open source while adopting 
-a permissive stance to modifications.
+    * After reaching consensus among our code contributors, we've dual-licensed Smooks under [LGPL v3.0](https://choosealicense.com/licenses/lgpl-3.0/) and [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/). This license change keeps Smooks open source while adopting a permissive stance to modifications.
+* New Smooks XSD schema (_xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"_)
+    * Uniform XML namespace declarations
+        * Dropped *default-selector-namespace* and *selector-namespace* XML attributes in favour of declaring namespaces within the standard *xmlns* attribute from the *smooks-resource-config* element.
+    * Removed *default-selector* attribute from *smooks-resource-config* element: selectors need to be set explicitly.
+* Dropped Smooks-specific annotations in favour of JSR annotations
+    * Farewell @ConfigParam, @Config, @AppContext, and @StreamResultWriter. Welcome @Inject.
+    * Farewell @Initialize and @Uninitialize. Welcome @PostConstruct and @PreDestroy.
 * Numerous dependency updates
 * Maven coordinates change
     * We are now publishing Smooks artifacts under Maven group IDs prefixed with "org.smooks".
@@ -301,9 +312,22 @@ Migrating from Smooks 1.7 to 2.0
 --------------------------------
 
 1. Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.
-2. Replace references to Java packages "org.milyn" or "org.milyn.smooks" with "org.smooks".
-3. Change legacy document root fragment selectors from "$document" to "#document".
+2. Replace references to Java packages `org.milyn` or `org.milyn.smooks` with `org.smooks`.
+3. Change legacy document root fragment selectors from `$document` to `#document`.
 4. Replace Smooks Maven coordinates to match the coordinates as described in the [Maven guide](/maven#artifact-ids).
+5. Replace `ExecutionContext#isDefaultSerializationOn` method calls with `ExecutionContext#getDeliveryConfig#isDefaultSerializationOn`.
+6. Replace `ExecutionContext#getContext` method calls with `ExecutionContext#getApplicationContext`.
+7. Replace `org.smooks.delivery.dom.serialize.SerializationVisitor` references with `org.smooks.delivery.dom.serialize.SerializerVisitor`.
+8. Replace `org.smooks.cdr.annotation.AppContext` annotations with `javax.inject.Inject` annotations.
+9. Replace `org.smooks.cdr.annotation.ConfigParam` annotations with `javax.inject.Inject` annotations:
+    * Substitute the `@ConfigParam` name attribute with the `@javax.inject.Named` annotation.
+    * Wrap `java.util.Optional` around the field to mimic the behaviour of the `@ConfigParam` optional attribute.
+10. Replace `org.smooks.delivery.annotation.Initialize` annotations with `javax.annotation.PostConstruct` annotations.
+11. Replace `org.smooks.delivery.annotation.Uninitialize` annotations with `javax.annotation.PreDestroy` annotations.
+12. Replace references to `org.smooks.javabean.DataDecode` with `org.smooks.converter.factory.TypeConverterFactory`.
+13. Replace references to `org.smooks.cdr.annotation.Configurator` with `org.smooks.lifecycle.LifecycleManager`.
+14. Replace references to `org.smooks.javabean.DataDecoderException` with `org.smooks.converter.TypeConverterException`.
+15. Replace references to `org.smooks.cdr.SmooksResourceConfigurationStore` with `org.smooks.registry.Registry`.
 
 FAQs
 ----
@@ -323,9 +347,9 @@ For details on how to integrate Smooks into your project via Ant, see the [Ant g
 Basics
 ======
 
-The most commonly accepted definition of Smooks would be that it is a "Transformation Engine". However, at its core, Smooks makes no mention of "data transformation". The core codebase is designed simply to support hooking of custom "Visitor" logic into an event stream produced by a data source of some kind (XML, CSV, EDI, Java, etc...). As such, **smooks-core** is simply a "**Structured Data Event Stream Processor**".
+The most commonly accepted definition of Smooks would be that it is a "Transformation Engine". However, at its core, Smooks makes no reference to "data transformation". The core codebase is designed to hook custom "visitor" logic into an event stream produced from a data source of some kind. As such, in its simplest form, Smooks is a **Structured Data Event Stream Processor**.
 
-Of course, the most common application of this will be in the creation of transformation solutions, that is, implementing a [visitor](#visitors) that reads the event stream produced from a source message to produce a result of some other kind. The capabilities in **smooks-core** enable more than this however. We have implemented a range of other solutions based on this processing model:
+Of course, the most common application of this will be in the creation of transformation solutions, that is, implementing a [visitor](#visitors) that reads the event stream produced from a data source to produce a result of some other kind. However, Smooks's core capabilities enable more than this. We have implemented a range of other solutions based on this processing model:
 
 *   **Java Binding**: Population of a Java Object Model from the Source message.
 *   **Message Splitting & Routing**: The ability to perform complex splitting and routing operations on the Source message, including routing to multiple destinations concurrently, as well as routing different data formats concurrently (XML, EDI, CSV, Java, etc...).
@@ -334,9 +358,9 @@ Of course, the most common application of this will be in the creation of transf
 Basic Processing Model
 ----------------------
 
-As stated above, the basic principle of Smooks is to take a data **source** of some kind (e.g., XML) and from it generate an **Event Stream**, to which you apply **Visitors** to produce a **Result** of some other kind (e.g., EDI).
+As stated above, the basic principle of Smooks is to take a data **source** of some kind (e.g., XML) and from it generate an **event stream**, to which you apply **visitors** to produce a **result** of some other kind (e.g., EDI).
 
-Many different data source and result types are supported, meaning many different transformation types are supported, including (but not limited to):
+Several data source and result types are supported which translate to different transformation types, including (but not limited to):
 
 *   XML to XML
 *   XML to Java
@@ -349,41 +373,42 @@ Many different data source and result types are supported, meaning many differen
 *   CSV to ...
 *   etc...
 
-In terms of the event model used to map between the source and result, Smooks currently supports DOM and SAX Event Models. We will concentrate on the SAX event model here. The SAX event model is based on the hierarchical SAX events generated from an XML Source (startElement, endElement, etc...). However, this event model can be just as easily applied to other structured/hierarchical data Sources (EDI, CSV, Java, etc...).
-
-The most important events (typically) are the **visitBefore** and **visitAfter** events. The following illustration tries to convey the hierarchical nature of these events.
+Smooks 2 maps the source to the result with the help of a highly-tunable SAX event model. The hierarchical events generated from an XML source (startElement, endElement, etc...) drives the SAX event model. 
+However, the event model can be just as easily applied to other structured/hierarchical data sources (EDI, CSV, Java, etc...). 
+The most important events are typically the **visitBefore** and **visitAfter** events. The following illustration tries to convey the hierarchical nature of these events.
 
 ![Image:event-model.gif](../assets/images/Event-model.gif)
 
 Simple Example
 --------------
 
-In order to consume the SAX event stream produced from the source message, you need to implement one or more of the [SAXVisitor](javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html) interfaces (depending on which events you need to consume).
+In order to consume the SAX event stream produced from the source message, you need to implement one or more of the [SaxNgVisitor](javadoc/v2.0.0/smooks/org/smooks/delivery/sax/ng/SaxNgVisitor.html) interfaces (depending on which events you need to consume).
 
 The following is a very simple example of how you implement a visitor and target it at the **visitBefore** and **visitAfter** events for a specific element in the event stream. In this case we target the visitor logic at the <xxx> element events.
 
 ![Image:simple-example.png](../assets/images/Simple-example.png)
 
-As you can see, the visitor implementation is very simple; one method implementation per event. To target this implementation at the <xxx> element **visitBefore** and **visitAfter** events, we need to create a Smook configuration as shown (more on "Resource Configurations" in the following sections).
+As you can see, the visitor implementation is very simple; one method implementation per event. To target this implementation at the _<xxx>_ element **visitBefore** and **visitAfter** events, we need to create a Smook configuration as shown (more on "Resource Configurations" in the following sections).
 
-The Smooks code to execute this is very simple:
+The Smooks code executing this is a two liner:
 
 ```java
 Smooks smooks = new Smooks("/smooks/echo-example.xml");  
-   
 smooks.filterSource(new StreamSource(inputStream));
 ```
 
-Note that in this case we don't produce a Result. Also note that we don't interact with the "execution" of the filtering process in any way, since we don't explicitly create an [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) and supply it to the [Smooks](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html).filterSource method call.
+Observe that in this case the program doesn't produce a result. It doesn't even interact with the filtering process in any way because it doesn't provide an [ExecutionContext](/javadoc/v2.0.0/smooks/org/smooks/container/ExecutionContext.html) to the [Smooks](/javadoc/v2.0.0/smooks/org/smooks/Smooks.html).filterSource method call.
 
-This example illustrated the lower level mechanics of the Smooks's programming model. In reality, however, users are not going to want to solve their problems by writing lots Java code themselves from scratch. For this reason, Smooks ships with substantial pre-built functionality i.e., ready to use visitors. We bundle visitors based on functionality and call these bundles "**Cartridges**".
+This example illustrated the lower level mechanics of the Smooks's programming model. In reality, however, users are not going to want to solve their problems by writing boilerplate Java code. For this reason, Smooks ships with substantial pre-built functionality, that is, ready to use visitors. We bundle visitors based on functionality and call these bundles **Cartridges**.
 
 Smooks Resources (Visitors, etc...)
 -----------------------------------
 
-Smooks executes by taking a data stream of one form or another (XML, EDI, Java, JSON, CSV, etc...) and from it, it generates an event stream, which it uses to fire different types of visitors (Java, Groovy, FreeMarker, XSLT, etc...). The result of this process can be to produce a new data stream in a different format (i.e. a traditional "transformation"), bind data from the source message data stream to java objects to produce a populated Java object graph (i.e. a "Java binding"), produce many smaller messages (message splitting), etc...
+A Smooks execution consumes a data stream of one form or another (XML, EDI, Java, JSON, CSV, etc...), and from it, generates an event stream that fires different visitors (Java, Groovy, DFDL, XSLT, etc...). The result of this process can be to produce a new data stream in a different format (i.e., a traditional "transformation"), bind data from the source message data stream to Java objects to go on and produce a populated Java object graph (Java binding), produce many smaller messages (message splitting), etc...
 
-At its core, Smooks views visitors and other abstractions as "Resources" (SmooksResourceConfiguration), configured to be applied based on an event **selector** (i.e., event from the source data event stream). This is a very generic processing model and makes sense from the point of view of Smooks Core and its architecture (maintenance, etc...). However, it can be a little too generic from a usability perspective because everything looks very similar in the configuration. To help with this, Smooks v1.1 introduced an "Extensible Configuration Model" feature. This allows specific resource types (Javabean binding configs, FreeMarker template configs, etc...) to be specified in the configuration using dedicated XSD namespaces of their own.
+At its core, Smooks views visitors and other abstractions as "resources", to be applied based on a given event **selector** (i.e., event from the source data event stream). This is a general processing model and makes sense from the point of view of Smooks and its architecture. 
+However, its generality can be daunting from a usability perspective because everything looks very similar in the configuration. 
+To help with this, Smooks 1.1 introduced an "Extensible Configuration Model" feature. This allows specific resource types (JavaBean binding configs, FreeMarker template configs, etc...) to be specified in the configuration using dedicated XSD namespaces of their own.
 
 Example (Java Binding Resource):
 
@@ -410,29 +435,32 @@ Example (FreeMarker Template Resource):
 </ftl:freemarker>
 ```
 
-When comparing the above examples to the pre-Smooks v1.1 equivalents you can see that:
+You can see that when comparing the above examples to earlier versions of Smooks:
 
-1.  The user now has a more strongly typed configuration that is domain specific in each case (and so easier to read).
+1.  The user now has a more strongly typed domain specific configuration in each case and so easier to read.
 2.  Because the v1.1+ configurations are XSD based, the user also gets auto-completion support from their IDE.
-3.  No longer any need to define the actual handler for the given resource type e.g., the BeanPopulator for java bindings.
+3.  No longer any need to define the actual handler for the given resource type e.g., the BeanPopulator for Java bindings.
 
 ### Visitors
 
-Central to how Smooks works is the concept of a visitor. A visitor is a Java class that can perform a specific task on the message fragment at which it is targeted e.g., apply an XSLT, bind fragment data in a Java object, perform validation on the message fragment, etc...
+Central to how Smooks works is the concept of a visitor. A visitor is a Java class performing a specific task on the targeted message fragment such as applying an XSLT, binding fragment data to a Java object, performing message fragment validation, etc...
 
-When writing a visitor, you have the choice of supporting your logic through either the SAX and/or DOM Filters by implementing one or both of the following interfaces:
+When writing a visitor, you have the choice of supporting your logic through either the SAX NG, SAX, and/or DOM filters by implementing one or more of the following interfaces:
 
-* [org.smooks.delivery.sax.SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor)
-* [org.smooks.delivery.dom.DOMElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMElementVisitor)
+* [org.smooks.delivery.sax.ng.ElementVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/ng/ElementVisitor)
+* [org.smooks.delivery.sax.SAXElementVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/SAXElementVisitor)
+* [org.smooks.delivery.dom.DOMElementVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/dom/DOMElementVisitor)
+
+The SAX NG filter supersedes the SAX and DOM filters, and therefore, implementing _org.smooks.delivery.sax.ng.ElementVisitor_ should be sufficient for all your needs.
 
 ### Selectors
 
-Smooks Resource "selectors" are a very important part of Smooks and how it works. They instruct Smooks to apply configured visitors on message fragments, as well working as a simple opaque lookup value for non-visitor logic.
+Resource selectors are a very important part of Smooks and how it works. They instruct Smooks to apply configured visitors on message fragments, as well working as a simple opaque lookup value for non-visitor logic.
 
-When the resource is a visitor (e.g. \<jb:bean>, \<ftl:freemarker>, etc...), Smooks will interpret the selector as an [XPath](http://www.w3.org/TR/xpath/ "http://www.w3.org/TR/xpath/") (like) selector. There are a number of things to be aware of:
+When the resource is a visitor (e.g. \<jb:bean>, \<ftl:freemarker>, etc...), Smooks will interpret the selector as an [XPath](http://www.w3.org/TR/xpath/ "http://www.w3.org/TR/xpath/") (like) expression. There are a number of things to be aware of:
 
 1.  The order in which the [XPath](http://www.w3.org/TR/xpath/ "http://www.w3.org/TR/xpath/") expression is applied is the reverse of normal order e.g. as applied by an XSLT. Smooks works backwards from the targeted fragment element, as opposed to forwards from the message root element.
-2.  Not all of the [XPath](http://www.w3.org/TR/xpath/ "http://www.w3.org/TR/xpath/") specification is supported. Selector supports the following XPath syntax:
+2.  Not all of the [XPath](http://www.w3.org/TR/xpath/ "http://www.w3.org/TR/xpath/") specification is supported. A selector supports the following XPath syntax:
     *   'text()' and attribute (e.g. '@x') value selectors, with both Literal and Numeric e.g. "a/b\[text() = 'abc'\]", "a/b\[text() = 123\]", "a/b\[@id = 'abc'\]", "a/b\[@id = 123\]".
         *   Note: 'text()' is only supported on the last selector step in an expression e.g. "a/b\[text() = 'abc'\]" is legal while "a/b\[text() = 'abc'\]/c" is illegal.
         *   Note: 'text()' is only supported on SAXVisitor implementations that implement the SAXVisitAfter interface **only**. If the SAXVisitor implements the SAXVisitBefore or SAXVisitChildren interfaces, an error will result.
@@ -444,21 +472,31 @@ When the resource is a visitor (e.g. \<jb:bean>, \<ftl:freemarker>, etc...), Smo
 
 ### Namespace Declaration
 
-Namespace prefix-to-URI mappings are configured through the core configuration namespace. These configurations are then available when resolving namespaced selectors.
+You bind a selector prefix to a namespace by declaring the namespace using the _xmlns_ attribute:
 
-Example:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
- xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
+                      xmlns:c="http://c" xmlns:d="http://d">     
    
-   <core:namespaces>  
-        <core:namespace prefix="a" uri="http://a"/>  
-        <core:namespace prefix="b" uri="http://b"/>  
+    <resource-config selector="c:item[@c:code = '8655']/d:units[text() = 1]">  
+        <resource>com.acme.visitors.MyCustomVisitorImpl</resource>  
+    </resource-config>  
+   
+</smooks-resource-list>
+```
+
+Alternatively, you can declare namespace prefix-to-URI mappings with the legacy core configuration namespace element:
+
+```xml
+<?xml version="1.0"?>  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
+   
+    <core:namespaces>  
         <core:namespace prefix="c" uri="http://c"/>  
         <core:namespace prefix="d" uri="http://d"/>  
     </core:namespaces>  
-   
    
     <resource-config selector="c:item[@c:code = '8655']/d:units[text() = 1]">  
         <resource>com.acme.visitors.MyCustomVisitorImpl</resource>  
@@ -470,27 +508,29 @@ Example:
 Smooks Cartridges
 -----------------
 
-The basic functionality of Smooks Core can be extended through the creation of what we call a "Smooks Cartridge". A Cartridge is simply a Java archive (JAR) containing reusable Content Handlers (i.e., resources). A Smooks Cartridge should provide "ready to use" support for a specific type of XML analysis or transformation.
+The basic functionality of Smooks can be extended through the creation of a "Smooks Cartridge". A cartridge is a Java archive (JAR) containing reusable content handlers (i.e., resources). 
+A Smooks Cartridge should provide "ready to use" support for a specific type of XML processing.
 
-For a full list of the Cartridges supported by Smooks, see the [Cartridges list](https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges).
+For a complete list of the cartridges supported by Smooks, see the [Cartridges page](https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges).
 
-Filtering Process Selection (DOM or SAX?)
------------------------------------------
+Filtering Process Selection (SAX NG, SAX, or DOM?)
+-------------------------------------------------
 
-This is done by Smooks based on the following criteria:
+The rules for selecting the Smooks filter to be applied on a stream are as follows:
 
-1.  If all Visitor resources\* implement only the DOM Visitor interfaces (DOMElementVisitor or SerializationUnit), then the DOM processing model is selected.
-2.  If all Visitor resources\* implement only the SAX Visitor interface (SAXElementVisitor), then the SAX processing model is selected.
-3.  If all Visitor resources\* implement both the DOM and SAX Visitor interfaces, then the SAX processing model is selected, unless the Smooks resource configuration contains the **\<core:filterSettings type="DOM" />** (see below).
+1.  If all visitor resources\* implement only the SAX NG visitor interfaces (ElementVisitor), then the SAX NG processing model is selected.
+1.  If all visitor resources\* implement only the DOM visitor interfaces (DOMElementVisitor or DOMSerializerVisitor), then the DOM processing model is selected.
+2.  If all visitor resources\* implement only the SAX visitor interfaces (SAXElementVisitor), then the SAX processing model is selected.
+3.  If all visitor resources\* implement the SAX NG, SAX, and DOM visitor interfaces, then the SAX NG processing model is selected, unless the Smooks configuration contains **\<core:filterSettings type="SAX" />** or **\<core:filterSettings type="DOM" />** (see below).
 
 **\*** not including non-element visitor resources, like readers for example.
 
-The following is an example of setting the filter type to DOM (SAX is the default):
+The following is an example of setting the filter type to DOM (SAX NG is the default):
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"   
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
    
     <core:filterSettings type="DOM" />  
    
@@ -499,14 +539,55 @@ The following is an example of setting the filter type to DOM (SAX is the defaul
 
 More information on global filtering settings can be found in the [Filter Settings section](#filter-settings).
 
-### Mixing DOM and SAX
+### SAX NG
+
+The SAX NG processing model unifies the legacy DOM and SAX processing models without sacrificing convenience or performance.
+By default, the SAX NG filter delivers **partial** DOM elements to visitors targeting the elements. This means that the visitor can read the targeted element as well as any of the element's ancestors but not the targeted element's children or siblings because the filter is streaming the data.
+However, the SAX NG filter can mimic the DOM filter by setting its _max.node.depth_ parameter to 0 (default value is 1) allowing each visitor to process the complete DOM tree in its _visitAfter_ method:
+
+```xml
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">
+
+    <params>
+        <param name="max.node.depth">0</param>
+    </params>
+    ...
+</smooks>
+```
+
+A _max.node_depth_ value of greater than 1 will tell the filter to read and keep an element's descendants up to the desired depth.
+Programmatically, implementing _org.smooks.delivery.sax.ng.ParameterizedVisitor_ will give you control over the visitor's targeted element depth:
+
+```java
+public class DomVisitor implements ParameterizedVisitor {
+    
+    @Override
+    public void visitBefore(Element element, ExecutionContext executionContext) {
+    }
+    
+    @Override
+    public void visitAfter(Element element, ExecutionContext executionContext) {
+        System.out.println("Element: " + XmlUtil.serialize(element, true));
+    }
+
+    @Override
+    public int getMaxNodeDepth() {
+        return Integer.MAX_VALUE;
+    }
+}
+```
+
+_getMaxNodeDepth()_ returns an integer denoting the targeted element's maximum tree depth the visitor can accept in its _visitAfter_ method.
+
+
+### Mixing DOM and Legacy SAX
 
 The DOM processing model has the obvious:
 
-*   **Advantage** of being easier to work with on a code level, allowing node traversal, etc... It also makes it a lot easier to take advantage of Scripting and Templating engines that have built in support for utilizing DOM structures (e.g. [FreeMarker](http://freemarker.org/ "http://freemarker.org") and [Groovy](https://groovy-lang.org/)).
-*   **Disadvantage** of being constrained by memory i.e. if you have huge messages, then you typically cannot use a DOM processing model.
+* Advantage of being easier to work with on a code level, allowing node traversal, etc... It also makes it a lot easier to take advantage of Scripting and Templating engines that have built in support for utilizing DOM structures (e.g. [FreeMarker](http://freemarker.org/ "http://freemarker.org") and [Groovy](https://groovy-lang.org/)).
+* Disadvantage of being constrained by memory i.e. if you have huge messages, then you typically cannot use a DOM processing model.
 
-Smooks v1.1 added support for mixing these 2 models through the **DomModelCreator** class. When used with SAX filtering, this visitor will construct a DOM Fragment of the visited element. This allows DOM utilities to be used in a Streaming environment.
+Smooks v1.1 added support for mixing these 2 models through the **DomModelCreator** class. When used with legacy SAX filtering, this visitor will construct a DOM Fragment of the visited element. This allows DOM utilities to be used in a streaming environment.
 
 When 1+ models are nested inside each other, outer models will never contain data from the inner models: the same fragments will never coexist inside two models.
 
@@ -537,7 +618,7 @@ Take the following message as an example:
 </order>
 ```
 
-The DomModelCreator can be configured in Smooks to create models for the "order" and "order-item" message fragments:
+The _DomModelCreator_ can be configured in Smooks to create models for the "order" and "order-item" message fragments:
 
 ```xml
 <resource-config selector="order,order-item">  
@@ -560,7 +641,7 @@ Added to this is the fact that there will only ever be 0 or 1 "order-item" model
 
 Because the Smooks processing model is event driven via the message content (i.e. you can hook in the visitor at different points while Smooks filters/streams the message), you can take advantage of this mixed DOM and SAX processing model.
 
-See the following examples that utilize this mixed DOM + SAX approach:
+See the following examples that utilise this mixed DOM + SAX approach:
 
 *   [Groovy Scripting Example](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/groovy)
 *   [FreeMarker Templating Example](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/freemarker-huge-transform)
@@ -704,14 +785,14 @@ Of course you can also write and use your own [ExecutionEventListener](/javadoc/
 Terminating the Filtering Process
 ---------------------------------
 
-Sometimes you want/need to terminate the Smooks filtering process before reaching the end of a message. This can be done by using a <core:terminate> configuration in the Smooks configuration. This configuration only works for the SAX filter - it doesn't really make sense to add it for DOM.
+Sometimes you want/need to terminate the Smooks filtering process before reaching the end of a message. This can be done by using a <core:terminate> configuration in the Smooks configuration. This configuration only works for the SAX NG and SAX filters - it doesn't really make sense to add it for DOM.
 
 The following is an example configuration that terminates filtering at the end of the customer fragment of the message:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"   
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
    
     <!-- Visitors... -->  
     <core:terminate onElement="customer"/>  
@@ -723,8 +804,8 @@ The default behavior is to terminate at the end of the targeted fragment (i.e. o
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"   
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
    
     <!-- Visitors... -->  
     <core:terminate onElement="customer" terminateBefore="true"/>  
@@ -739,7 +820,7 @@ Global configuration settings are, as the name implies, configuration options th
 
 Smooks supports two types of globals, default properties and global parameters:
 
-*   **Global Configuration Parameters**: Every <resource-config> in a Smooks configuration can specify <param> elements for configuration parameters. These parameter values are available at runtime through the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html), or are reflectively injected through the **@ConfigParam** annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) (Vs the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html)). More on this in the following sections.
+*   **Global Configuration Parameters**: Every <resource-config> in a Smooks configuration can specify <param> elements for configuration parameters. These parameter values are available at runtime through the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html), or are reflectively injected through the **@Inject** annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) (Vs the [SmooksResourceConfiguration](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html)). More on this in the following sections.
 *   **Default Properties**: Specify default values for <resource-config> attributes. These defaults are automatically applied to [SmooksResourceConfigurations](/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html) when their corresponding <resource-config> does not specify the attribute. More on this in the following section.
 
 ### Global Configuration Parameters
@@ -757,7 +838,7 @@ Global parameters are specified in a **\<params>** element:
 Global Configuration Parameters are accessible via the [ExecutionContext](/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html) e.g.:
 
 ```java
-public void visitAfter(final Element element, final ExecutionContext executionContext) throws SmooksException {
+public void visitAfter(Element element, ExecutionContext executionContext) {
     String param1 = executionContext.getConfigParameter("xyz.param1", "defaultValueABC");
     ....
 }
@@ -765,12 +846,12 @@ public void visitAfter(final Element element, final ExecutionContext executionCo
 
 ### Default Properties
 
-Default properties are properties that can be set on the root element of a Smooks configuration and have them applied to all resource configurations in smooks-conf.xml file. For example, if you have a resource configuration file in which all the resource configurations have the same selector value, you could specify a _default-selector=order_ to save specifying the selector on on every resource configuration:
+Default properties are properties that can be set on the root element of a Smooks configuration and have them applied to all resource configurations in smooks-conf.xml file. For example, if you have a resource configuration file in which all the resource configurations have the same selector value, you could specify a _default-target-profile=order_ to save specifying the profile on every resource configuration:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:xsl="https://www.smooks.org/xsd/smooks/xsl-1.2.xsd" default-selector="order">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      default-target-profile="order">  
    
     <resource-config>  
         <resource>com.acme.VisitorA</resource>  
@@ -787,24 +868,22 @@ Default properties are properties that can be set on the root element of a Smook
 
 The following default configuration options are available:
 
-*   **default-selector**: Selector that will be applied to all resource-config elements in the smooks configuration file, where a selector is not defined.
-*   **default-selector-namespace**: The default selector namespace, where a namespace is not defined.
 *   **default-target-profile**: Default target profile that will be applied to all resources in the smooks configuration file, where a target-profile is not defined.
 *   **default-condition-ref**: Refers to a global condition by the conditions id. This condition is applied to resources that define an empty "condition" element (i.e. <condition/>) that does not reference a globally defined condition.
 
 Filter Settings
 ---------------
 
-Filtering specific configurations are made through the **smooks-core** configuration namespace ([https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd](https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd "https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd")) introduced in Smooks v1.3.
+Filtering specific configurations are made through the **smooks-core** configuration namespace ([https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd](https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd "https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd")) introduced in Smooks v1.3.
 
 An example configuration:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"   
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
    
-    <core:filterSettings type="SAX" defaultSerialization="true" terminateOnException="true"   
+    <core:filterSettings type="SAX-NG" defaultSerialization="true" terminateOnException="true"   
                          readerPoolSize="3" closeSource="true" closeResult="true" rewriteEntities="true" />  
    
     <!-- Other visitor configs etc... -->  
@@ -812,7 +891,7 @@ An example configuration:
 </smooks-resource-list>
 ```
 
-*   **type** Determines the type of processing model that will be used. Either SAX or DOM. Please refer to [Filtering Process Selection](#filtering-process-selection-dom-or-sax) for more information about the processing models. Default is SAX ([default was DOM in Smooks v1.4 and before](http://jira.codehaus.org/browse/MILYN-589 "http://jira.codehaus.org/browse/MILYN-589")).
+*   **type** Determines the type of processing model that will be used. Either SAX NG, SAX or DOM. Please refer to [Filtering Process Selection](#filtering-process-selection-sax-ng-sax-or-dom) for more information about the processing models. Default is SAX NG ([default was DOM in Smooks v1.4 and before](http://jira.codehaus.org/browse/MILYN-589 "http://jira.codehaus.org/browse/MILYN-589")).
 *   **defaultSerialization**: Determines if default serialization should be switched on (default "true"). Default serialization being turned on simply tells Smooks to locate a [StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html") (or DOMResult) in the Result objects provided to the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) method and to, by default, serialize all events to that Result. This behavior can be turned off using this global configuration parameter and can be overridden on a per fragment basis by targeting a visitor at that fragment that takes ownership of the result writer (in the case of SAX filtering), or simply modifies the DOM (in the case of DOM filtering). As an example of this, see the [FreeMarkerTemplateProcessor](/javadoc/v1.7.1/smooks-cartridges/templating/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html).
 *   **terminateOnException**: Determines whether an exception should terminate processing (default "true").
 *   **closeSource**: Close Source instance streams passed to the [Smooks.filterSource](/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result...)) method (default "true"). The exception here is System.in, which will never be closed.
@@ -826,7 +905,7 @@ Configuration Modularization
 Smooks configurations are easily modularized through use of the _\<import>_ element. This allows you to split Smooks configurations into multiple reusable configuration files and then compose the top level configurations using the _\<import>_ element e.g.
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <import file="bindings/order-binding.xml" />  
     <import file="templates/order-template.xml" />  
@@ -838,7 +917,7 @@ You can also inject replacement tokens into the imported configuration by using 
 
 ```xml
 <!-- Top level configuration... -->  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <import file="bindings/order-binding.xml">  
         <param name="orderRootElement">order</param>  
@@ -849,7 +928,7 @@ You can also inject replacement tokens into the imported configuration by using 
 
 ```xml
 <!-- Imported parameterized bindings/order-binding.xml configuration... -->  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <jb:bean beanId="order" class="org.acme.Order" createOnElement="@orderRootElement@">  
@@ -870,7 +949,7 @@ By default, Smooks uses the default XMLReader ([XMLReaderFactory.createXMLReader
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <reader class="com.acme.ZZZZReader" />  
    
@@ -946,7 +1025,7 @@ The next example shows an XML resource configuration of a CSV reader:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <!--  
@@ -1038,7 +1117,7 @@ This reader configuration will generate the following output for the above sampl
 </sales>
 ```
 
-Note the sytax in the 'fields' attribute. Each record definition is separated by the pipe character '|'. Each record definition is constructed as _record-name\[field-name,field-name\]_. _record-name_ is matched against the first field in the incoming message and so used to select the appropriate recodr definition to be used for outputting that record. Also note how you can use an astrix character ('\*') when you don't want to name the record fields. In this case (as when extra/unexpected fields are present in a record), the reader will generate the output field elements using a generated element name e.g. "field\_0", "field\_1", etc... See the "magazine" record in the previous example.
+Note the syntax in the 'fields' attribute. Each record definition is separated by the pipe character '|'. Each record definition is constructed as _record-name\[field-name,field-name\]_. _record-name_ is matched against the first field in the incoming message and so used to select the appropriate recodr definition to be used for outputting that record. Also note how you can use an astrix character ('\*') when you don't want to name the record fields. In this case (as when extra/unexpected fields are present in a record), the reader will generate the output field elements using a generated element name e.g. "field\_0", "field\_1", etc... See the "magazine" record in the previous example.
 
 _**Note**_: Multi Record Field Definitions are not supported when the fields are defined in the messase (fieldsInMessage="true").
 
@@ -1047,7 +1126,7 @@ _**Note**_: Multi Record Field Definitions are not supported when the fields are
 String manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after field name, separated with a question mark.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="lastname?trim.capitalize,country?upper_case" />  
@@ -1061,7 +1140,7 @@ Take a look at the [#String manipulation functions for readers](#string-manipula
 One or more fields of a CSV record can be ignored by specifying the **$ignore$** token in the fields configuration value. You can specify the number of fields to be ignored simply by following the $ignore$ token with a number e.g. "$ignore$3" to ignore the next 3 fields. "$ignore$+" ignores all fields to the end of the CSV record.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="firstname,$ignore$2,age,$ignore$+" />  
@@ -1100,7 +1179,7 @@ Using a config of the form:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
@@ -1126,7 +1205,7 @@ Smooks also supports creation of Maps from the CSV record set:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
@@ -1226,7 +1305,7 @@ A simple/basic fixed-length reader configuration:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
    
     <!-- Configure the Fixed length to parse the message into a stream of SAX events. -->  
@@ -1282,7 +1361,7 @@ By setting the **rootElementName** and **recordElementName** attributes you can 
 String manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after the field length definitiona and are optionally separated with a question mark.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
    
     <!-- Configure the fixed length reader to parse the message into a stream of SAX events.  -->  
@@ -1298,7 +1377,7 @@ Characters ranges of a fixed length record can be ignored by specifying the **$i
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
    
     <fl:reader fields="firstname,$ignore$[2],age,$ignore$[10]" />  
@@ -1331,7 +1410,7 @@ Using a config of the form:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
                       xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
    
     <fl:reader fields="firstname[10]?trim,lastname[10]?trim,gende[1],age[3]?trim,country[2]">  
@@ -1357,7 +1436,7 @@ Smooks also supports creation of Maps from the fixed length record set:
 
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">
  
     <csv:reader fields="firstname,lastname,gender,age,country">
@@ -1512,7 +1591,7 @@ written as:
 
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
 
     <dfdl:parser schemaURI="/csv.dfdl.xsd"/>
@@ -1558,7 +1637,7 @@ Shown in the next snippet is the _dfdl:unparser_ visitor serialising the root el
 
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
 
     ...
@@ -1589,10 +1668,7 @@ EDI Cartridge
 
 ```
 xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
-xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
 ```
-
-Note: the DFDL namespace is required because the EDI cartridge inherits from the DFDL cartridge.
 
 ### XML API
 
@@ -1603,9 +1679,8 @@ XML stream to produce an EDI document identical to the parsed document.
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
-                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">    
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd">    
   
 	<!-- Configure the reader to parse the EDI stream into a stream of SAX events. -->  
     <edi:parser schemaURI="/edi-to-xml-mapping.dfdl.xsd" segmentTerminator="%NL;"
@@ -1891,11 +1966,7 @@ The following sections provide more details on these UN/EDIFACT capabilities.
 
 ```
 xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
-xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
-xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
 ```
-
-Note: the DFDL and EDI namespaces are required because the EDIFACT cartridge inherits from both cartridges.
 
 ### XML API
 
@@ -1903,10 +1974,8 @@ Specialised _edi:parser_ and _edi:unparser_ resources support UN/EDIFACT interch
 
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
-                      xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
-                      xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
-                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
     <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd"/>
 
@@ -1923,10 +1992,8 @@ ahead of time which message types the parser will process:
  
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
-                      xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
-                      xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
-                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd">
 
     <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd">
         <edifact:messageTypes>
@@ -1985,9 +2052,8 @@ referencing the root schema in _schemaURI_ attribute of the _edifact:parser_ or 
 
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
-                      xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd"
-                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-1.0.xsd">
 
     <edifact:parser schemaURI="/d03b/EDIFACT-Messages.dfdl.xsd">
         <edifact:messages>
@@ -2026,7 +2092,7 @@ Processing JSON with Smooks requires a JSON reader to be configured:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd">  
    
     <json:reader/>  
@@ -2043,7 +2109,7 @@ JSON allows characters in the key name that aren't allowed in XML element name. 
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd">  
    
     <json:reader keyWhitspaceReplacement="_" keyPrefixOnNumeric="n" illegalElementNameCharReplacement=".">  
@@ -2102,7 +2168,7 @@ xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd"
 Processing YAML with Smooks requires a YAML reader to be configured:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd">  
    
     <yaml:reader/>  
@@ -2129,7 +2195,7 @@ YAML allows characters in the key name that aren't allowed in XML element name. 
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd">  
    
     <yaml:reader keyWhitspaceReplacement="_" keyPrefixOnNumeric="n" illegalElementNameCharReplacement=".">  
@@ -2229,7 +2295,7 @@ So we need to target the Smooks Javabean resources at this event stream. This is
 The Smooks configuration for performing this transform ("smooks-config.xml") is as follows (see the Source Model Event Stream above):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <jb:bean beanId="lineOrder" class="example.trgmodel.LineOrder" createOnElement="example.srcmodel.Order">  
@@ -2256,7 +2322,7 @@ The Smooks configuration for performing this transform ("smooks-config.xml") is 
 The source object model is provided to Smooks via a **org.smooks.delivery.JavaSource** Object. This object is created by passing the constructor the root object of the source model. The resulting JavaSource object is used in the **Smooks#filter** method. The resulting code could look like as follows:
 
 ```java
-protected LineOrder runSmooksTransform(Order srcOrder) throws [IOException](http://www.google.com/search?hl=en&q=allinurl%3Aioexception+java.sun.com&btnI=I%27m%20Feeling%20Lucky), SAXException {  
+protected LineOrder runSmooksTransform(Order srcOrder) throws Exception {  
     Smooks smooks = new Smooks("smooks-config.xml");  
     ExecutionContext executionContext = smooks.createExecutionContext();  
    
@@ -2296,7 +2362,7 @@ Or, by turning off the "http://www.smooks.org/sax/features/generate-java-event-s
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <reader>  
         <features>  
@@ -2348,7 +2414,7 @@ Rules are centrally defined through "ruleBase" definitions. A single Smooks conf
 An example of a ruleBase configuration is as follows:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
                       xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
    
     <rules:ruleBases>  
@@ -2386,7 +2452,7 @@ As it's name suggests, the RegexProvider is based on regular expression. It allo
 Configuration of a Regex ruleBase would look like this:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
    
     <rules:ruleBases>  
@@ -2429,7 +2495,7 @@ The [MVEL](http://mvel.documentnode.com/) Provider allows rules to be defined as
 Configuration of an MVEL ruleBase would look like this:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
                       xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
    
     <rules:ruleBases>  
@@ -2611,7 +2677,7 @@ The JavaBean Cartridge is used via the [https://www.smooks.org/xsd/smooks/javabe
 An example configuration:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <jb:bean beanId="order" class="example.model.Order" createOnElement="#document" />  
@@ -2667,7 +2733,7 @@ The Smooks config required to bind the data from the order XML and into this obj
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
 (1)   <jb:bean beanId="order" class="com.acme.Order" createOnElement="order">  
 (1.a)     <jb:wiring property="header" beanIdRef="header" />  
@@ -2749,6 +2815,7 @@ The Smooks config required to bind the data from the order XML and into this obj
 *   **\<jb:bean createOnElement>**
     1.  Set it to the root element (or "#document"): For bean instances where only a single instance will exist in the model.
     2.  Set it to the recurring element: For Collection bean instances. If you don't specify the correct element in this case, you could loose data.
+*   **\<jb:value decoder>**ean instances. If you don't specify the correct element in this case, you could loose data.
 *   **\<jb:value decoder>**
     1.  In most cases, Smooks will automatically detect the datatype decoder to be used for a \<jb:value> binding. However, some decoders require configuration e.g. the DateDecoder (decoder="Date"). In these cases, the decoder attribute should be defined on the binding, as well as the \<jb:decodeParam> child elements for specifying the decode parameters for that decoder. [See the full list of DataDecoder available out of the box](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/package-summary.html).
 *   **\<jb:wiring property>**
@@ -2757,17 +2824,14 @@ The Smooks config required to bind the data from the order XML and into this obj
     1.  Just define the <jb:bean class> to be the required Collection type and wire in the Collection entries.
     2.  For arrays, just postfix the <jb:bean class> attribute value with square brackets e.g. **class="com.acme.OrderItem[]"**.
 
-#### Data Decoders/Encoders
+#### Type Converters
 
-In most cases, Smooks will automatically detect the datatype decoder to be used for a given \<jb:value> binding. However, some decoders require configuration e.g. the DateDecoder (decoder="Date"). In these cases, the decoder attribute should be defined on the binding, as well as the \<jb:decodeParam> child elements for specifying the decode parameters for that decoder.
-
-  
-DataDecoder implementations can also implement the DataEncoder interface (new in Smooks v1.4). As it's name might suggest, a DataEncoder implements methods for encoding/formatting an object value to a String. [See the full list of DataDecoder/DataEncoder implementations available out of the box](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/package-summary.html).
+In most cases, Smooks will automatically detect the datatype type converter to be used for a given \<jb:value> binding. However, some decoders require configuration e.g. the TypeConverter (decoder="Date"). In these cases, the converter attribute should be defined on the binding, as well as the \<jb:decodeParam> child elements for specifying the decode parameters for that converter.
 
 
-##### Date Decoding
+##### Type Conversion
 
-A number of Date based DataDecoder/DataEncoder implementations are available:
+A number of date-based type converter implementations are available:
 
 *   **[Date](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/DateDecoder.html)**: Decode/Encode a String to a _java.util.Date_ instance.
 *   **[Calendar](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/CalendarDecoder.html)**: Decode/Encode a String to a _java.util.Calendar_ instance.
@@ -2775,7 +2839,7 @@ A number of Date based DataDecoder/DataEncoder implementations are available:
 *   **[SqlTime](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlTimeDecoder.html)**: Decode/Encode a String to a _java.sql.Time_ instance.
 *   **[SqlTimestamp](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlTimestampDecoder.html)**: Decode/Encode a String to a _java.sql.Timestamp_ instance.
 
-All of these Date based Decoder/Encoder implementations are configured in the same way.
+All of these date-based type converter implementations are configured in the same way.
   
 **Date** Example:
 
@@ -2809,7 +2873,7 @@ The _locale_ decodeParam value is an underscore separated string, with the first
 
 ##### Number Decoding
 
-A number of Number based DataDecoder/DataEncoder implementations are available:
+A number of Number based type converter implementations are available:
 
 *   **[BigDecimalDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/BigDecimalDecoder.html)**: Decode/Encode a String to a _java.math. BigDecimal_ instance.
 *   **[BigIntegerDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/BigIntegerDecoder.html)**: Decode/Encode a String to a _java.math. BigInteger_ instance.
@@ -2820,7 +2884,7 @@ A number of Number based DataDecoder/DataEncoder implementations are available:
 *   **[ShortDecoder](/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/ShortDecoder.html)**: Decode/Encode a String to a _java.lang.Short_ instance (including primitive).
 
   
-All of these Number based Decoder/Encoder implementations are configured in the same way.
+All of these Number based type converter implementations are configured in the same way.
 
   
 **BigDecimal** Example:
@@ -2852,7 +2916,7 @@ The _locale_ decodeParam value is an underscore separated string, with the first
 
 ##### Mapping Decoding
 
-Sometimes you want to bind a different value into your object model, based on the data in your input message. You could use an expression based binding to do this, but you could also use a Mapping Decoder as follows:
+Sometimes you want to bind a different value into your object model, based on the data in your input message. You could use an expression based binding to do this, but you could also use a Mapping type converter as follows:
 
 ```xml
 <jb:value property="name" decoder="Mapping" data="history/@warehouse">  
@@ -2866,7 +2930,7 @@ In the above example, an input data value of "1" is mapped onto the "name" prope
 
 ##### Enum Decoding
 
-The Enum Decoder is a specialized version of the [Mapping Decoder](#mapping-decoding). Decoding of enumerations will typically happen automatically (without any specific configuration) if the data input values map exactly to the enum values/names. However when this is not the case, you need to define mappings from the input data value to the enum value/name.
+The Enum type converter is a specialized version of the [Mapping type converter](#mapping-decoding). Decoding of enumerations will typically happen automatically (without any specific configuration) if the data input values map exactly to the enum values/names. However when this is not the case, you need to define mappings from the input data value to the enum value/name.
 
   
 In the following example, the **header/priority** field in the input message contains values of "LOW", "MEDIUM" and "HIGH". This need to be mapped the _LineOrderPriority_ enum values of "NOT_IMPORTANT", "IMPORTANT" and "VERY_IMPORTANT" respectfully:
@@ -2982,7 +3046,7 @@ MVEL has some advantages over the basic default definition language, for example
 Here is an example with the same use case as before but then with MVEL:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <jb:bean beanId="orders" class="java.util.List" factory="mvel:some.package.ListFactory.getInstance().newList()"  
@@ -2996,7 +3060,7 @@ Here is an example with the same use case as before but then with MVEL:
 In the next example we use MVEL to extract a List object from an existing bean in the bean context. The Order object in this example has method that returns a list which we must use to add the order lines to:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <jb:bean beanId="order" class="some.package.Order" createOnElement="order">  
         <!-- ... bindings -->  
@@ -3059,8 +3123,8 @@ The following example demonstrates the principle:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
    
     <!--  
         Bind data from the message into a Virtual Object model in the bean context....  
@@ -3171,7 +3235,7 @@ Taking the "classic" Order message as an example and getting the order number, n
 
 ```xml
 <?xml version="1.0"?>  
- <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+ <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                        xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <jb:value beanId="customerName" data="customer" default="unknown"/>  
@@ -3395,7 +3459,7 @@ The following is an example of a generated configuration. Note the "$TODO$" toke
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <jb:bean beanId="order" class="org.smooks.javabean.Order" createOnElement="$TODO$">  
@@ -3445,7 +3509,7 @@ You can restrict the Bean set returned in a JavaResult by using a **\<jb:result>
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <!-- Capture some data from the message into the bean context... -->  
@@ -3498,13 +3562,13 @@ Smooks can also be extended (and will) to add support for other templating techn
 
 [FreeMarker](http://freemarker.org/ "http://freemarker.org") is a very powerful Templating Engine. Smooks allows FreeMarker to be used as a means of generating text based content that can then be inserted into a message stream (aka a "Fragment Transform"), or used as a "Split Message Fragment" for [routing to another process](#splitting--routing).
 
-Configuring FreeMarker templates in Smooks is done through the [https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd](https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd "https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
+Configuring FreeMarker templates in Smooks is done through the [https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd](https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd "https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
 
 **Example - Inline Template**:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
     <ftl:freemarker applyOnElement="order">  
         <ftl:template><!--<orderId>${order.id}</orderId>--></ftl:template>  
     </ftl:freemarker>  
@@ -3514,8 +3578,8 @@ Configuring FreeMarker templates in Smooks is done through the [https://www.smoo
 **Example - External Template Reference**:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
     <ftl:freemarker applyOnElement="order">  
         <ftl:template>/templates/shop/ordergen.ftl</ftl:template>  
     </ftl:freemarker>  
@@ -3547,9 +3611,9 @@ Using **\<ftl:bindTo>**, you can bind the Templating result to the Smooks **bean
 **Example - Binding the Templating Result to the Smooks bean context**:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
+                      xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd"  
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
    
     <jms:router routeOnElement="order-item" beanId="orderItem_xml" destination="queue.orderItems" />  
    
@@ -3572,10 +3636,10 @@ Using **\<ftl:outputTo>**, you can direct Smooks to write the templating result 
 **Example - Writing the Template Result to an OutputStreamSource**:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:file="https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+                      xmlns:file="https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd"  
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
    
     <!-- Create/open a file output stream. This is written to by the freemarker template (below).. -->  
     <file:outputStream openOnElement="order-item" resourceName="orderItemSplitStream">  
@@ -3611,16 +3675,16 @@ The easiest way to construct message transformations in FreeMarker is to use Fre
 Smooks adds two additional capabilities here:
 
 1.  The ability to perform this on a fragment basis i.e. you don't have to use the full message as the DOM model, just the targeted fragment.
-2.  The ability to use [NodeModel](http://freemarker.org/docs/xgui_expose_dom.html "http://freemarker.org/docs/xgui_expose_dom.html") in a streaming filter process (see [Mixing DOM and SAX Models with Smooks](#mixing-dom-and-sax)).
+2.  The ability to use [NodeModel](http://freemarker.org/docs/xgui_expose_dom.html "http://freemarker.org/docs/xgui_expose_dom.html") in a streaming filter process (see [Mixing DOM and legacy SAX Models with Smooks](#mixing-dom-and-legacy-sax)).
 3.  The ability to use it on non-XML messages (CSV, EDI, etc...).
 
 To use this facility in Smooks, you need to define an additional resource that defines/declares the NodeModels to be captured (created in the case of SAX streaming):
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
  xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
- xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+ xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
    
      <!--  
          Create 2 NodeModels. One high level model for the "order"  
@@ -3691,9 +3755,9 @@ In situations where using the NodeModel is not practical, Smooks allows you to u
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
    
     <!-- Extract and decode data from the message. Used in the freemarker template (below). -->  
     <jb:bean beanId="order" class="java.util.Hashtable" createOnElement="order">  
@@ -3744,14 +3808,14 @@ smooks.addVisitor(new FreeMarkerTemplateProcessor(new TemplatingConfiguration("/
 
 ### XSL Templating
 
-Configuring XSL templates in Smooks is almost identical to that of configuring [FreeMarker templates](#freemarker-templating). It is done through the [https://www.smooks.org/xsd/smooks/xsl-1.2.xsd](https://www.smooks.org/xsd/smooks/xsl-1.2.xsd "https://www.smooks.org/xsd/smooks/xsl-1.2.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
+Configuring XSL templates in Smooks is almost identical to that of configuring [FreeMarker templates](#freemarker-templating). It is done through the [https://www.smooks.org/xsd/smooks/xsl-2.0.xsd](https://www.smooks.org/xsd/smooks/xsl-2.0.xsd "https://www.smooks.org/xsd/smooks/xsl-2.0.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
 
 **Example**:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:xsl="https://www.smooks.org/xsd/smooks/xsl-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:xsl="https://www.smooks.org/xsd/smooks/xsl-2.0.xsd">  
    
     <xsl:xsl applyOnElement="#document">  
         <xsl:template><!--<xxxxxx/>--></xsl:template>  
@@ -3769,16 +3833,15 @@ As already stated, configuring XSL templates in Smooks is almost identical to th
 1.  It does not make sense to use Smooks for executing XSLT, unless:
     *   You need to perform a fragment transform i.e. you are not transforming the whole message.
     *   You need to use other Smooks functionality to perform other operations on the message, such as message splitting, persistence, etc...
-2.  XSL Templating is only supported through the DOM Filter. It is not supported through the SAX Filter. This can (depending on the XSL being applied) result in lower performance when compared to SAX based application of XSL.
-3.  Smooks applies XSLs on a message fragment basis (i.e. DOM Element Nodes) Vs to the whole document (i.e. DOM Document Node). This can be very useful for fragmenting/modularizing your XSLs, but don't assume that an XSL written and working standalone (externally to Smooks and on the whole document) will automatically work through Smooks without modification. For this reason, Smooks does handle XSLs targeted at the document root node differently in that it applies the XSL to the DOM Document Node (Vs the root DOM Element). The basic point here is that if you already have XSLs and are porting them to Smooks, you may need to make some tweaks to the Stylesheet.
-4.  XSLs typically contain a template matched to the root element. Because Smooks applies XSLs on a fragment basis, matching against the "root element" is no longer valid. You need to make sure the Stylesheet contains a template that matches against the context node (i.e. the targeted fragment).
+2.  Smooks applies XSLs on a message fragment basis (i.e. DOM Element Nodes) Vs to the whole document (i.e. DOM Document Node). This can be very useful for fragmenting/modularizing your XSLs, but don't assume that an XSL written and working standalone (externally to Smooks and on the whole document) will automatically work through Smooks without modification. For this reason, Smooks does handle XSLs targeted at the document root node differently in that it applies the XSL to the DOM Document Node (Vs the root DOM Element). The basic point here is that if you already have XSLs and are porting them to Smooks, you may need to make some tweaks to the Stylesheet.
+3.  XSLs typically contain a template matched to the root element. Because Smooks applies XSLs on a fragment basis, matching against the "root element" is no longer valid. You need to make sure the Stylesheet contains a template that matches against the context node (i.e. the targeted fragment).
 
 #### My XSLT Works Outside Smooks, but not Inside?
 
-This can happen and is most likely going to be a a result of one of the following:
-
-1.  The Fragment-based Processing Model: Your Stylesheet contains a template that's using an absolute path reference to the document root node. This will cause issues in the Smooks Fragment-based Processing Model because the element being targeted by Smooks is not the document root node. Your XSLT needs to contain a template that matches against the context node being targeted by Smooks.
-2.  SAX Vs DOM Processing: You are not comparing like with like. Smooks currently only supports a DOM based processing for XSL. In order to do an accurate comparison, you need to use a DOMSource (namespace aware) when executing the XSLT outside Smooks. It has been noticed that a given XSL Processor does not always produce the same output when applying a given XSLT using SAX or DOM.
+This can happen and is most likely going to be a result of your stylesheet containing a template that's using an absolute 
+path reference to the document root node. This will cause issues in the Smooks Fragment-based Processing Model because the 
+element being targeted by Smooks is not the document root node. Your XSLT needs to contain a template that matches against 
+the context node being targeted by Smooks.
 
 Simple Stream Manipulations
 ---------------------------
@@ -3793,8 +3856,8 @@ Example:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
- xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
+ xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
    
     <!-- Other configs, e.g. bean bindings, etc... -->  
    
@@ -3824,7 +3887,7 @@ When using Smooks standalone you are in full control of the type of output that 
 To declare the type of result that Smooks produces you use the 'exports' element as shown below:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
    <core:exports>  
       <core:result type="org.smooks.payload.JavaResult"/>  
    </core:exports>  
@@ -3850,8 +3913,8 @@ if (exports.hasExports())
 There might also be cases where you only want a portion of the result extracted and returned. You can use the ‘extract’ attribute to specify this:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">  
    <core:exports>  
       <core:result type="org.smooks.payload.JavaResult" extract="orderBean"/>  
    </core:exports>  
@@ -3993,7 +4056,7 @@ What we want to do here is to process and persist the <order>. First thing we ne
 To do this, we need the following Smooks configuration:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"   
  xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"   
  xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd">  
    
@@ -4121,7 +4184,7 @@ When looking at this class, you should notice the @Lookup and @Param annotation.
 
 The Smooks configuration look likes this:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
                       xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd">  
    
@@ -4180,14 +4243,14 @@ Scripting
 Groovy
 ------
 
-Support for [Groovy](https://groovy-lang.org/) based scripting is made available through the [https://www.smooks.org/xsd/smooks/groovy-1.2.xsd](https://www.smooks.org/xsd/smooks/groovy-1.2.xsd "https://www.smooks.org/xsd/smooks/groovy-1.2.xsd") configuration namespace. This adds support for DOM or SAX based Groovy scripting.
+Support for [Groovy](https://groovy-lang.org/) based scripting is made available through the [https://www.smooks.org/xsd/smooks/groovy-2.0.xsd](https://www.smooks.org/xsd/smooks/groovy-2.0.xsd "https://www.smooks.org/xsd/smooks/groovy-2.0.xsd") configuration namespace. This adds support for DOM or SAX based Groovy scripting.
 
 Example configuration:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:g="https://www.smooks.org/xsd/smooks/groovy-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:g="https://www.smooks.org/xsd/smooks/groovy-2.0.xsd">  
    
     <g:groovy executeOnElement="xxx">  
         <g:script>  
@@ -4269,9 +4332,9 @@ Using Groovy, we want to modify the "supplies" category in the shopping list, ad
 
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"
-                      xmlns:g="https://www.smooks.org/xsd/smooks/groovy-1.2.xsd">
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"
+                      xmlns:g="https://www.smooks.org/xsd/smooks/groovy-2.0.xsd">
  
     <core:filterSettings type="SAX" />
  
@@ -4348,7 +4411,7 @@ It is possible to route fragments to Apache Camel endpoints using the **\<[camel
 For example, you can route to Camel endpoint by specifying the following in your Smooks configuration:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:camel="https://www.smooks.org/xsd/smooks/camel-1.5.xsd">  
    
   <!-- Create some bean instances from the input source... -->  
@@ -4405,7 +4468,7 @@ Unit testing with Smooks is simple:
 ```java
 public class MyMessageTransformTest {  
     @Test  
-    public void test_transform() throws IOException, SAXException {
+    public void test_transform() throws Exception {
         Smooks smooks = new Smooks(getClass().getResourceAsStream("smooks-config.xml"));  
    
         try {  
@@ -4415,7 +4478,7 @@ public class MyMessageTransformTest {
             smooks.filterSource(source, result);  
    
             // compare the expected xml with the transformation result.  
-            XMLUnit.setIgnoreWhitespace( true );  
+            XMLUnit.setIgnoreWhitespace(true);  
             XMLAssert.assertXMLEqual(new InputStreamReader(getClass().getResourceAsStream("expected.xml")), new StringReader(result.getResult()));        
         } finally {  
             smooks.close();  
@@ -4454,7 +4517,7 @@ All of the above is possible without writing any code (i.e. in a declarative man
 
 **Performance Hint**
 
-*   When processing huge messages with Smooks, make sure you are using the **SAX filter**.
+*   When processing huge messages with Smooks, make sure you are using the **SAX NG filter**.
 
 ### One-to-One Transformation
 
@@ -4475,23 +4538,16 @@ Imagine a situation where the <order> message contains millions of <order-item> 
 
 ![Image:huge-message-models.png](../assets/images/Huge-message-models.png)
 
-So in this case, the most data that will be in memory at any one time is the main order data, plus one of the order-items. Because the NodeModels are nested, Smooks makes sure that the order data NodeModel never contains any of the data from the order-item NodeModels. Also, as Smooks filters the message, the order-item NodeModel will be overwritten for every order-item (i.e. they are not collected). See Mixing DOM and SAX Models with Smooks.
+So in this case, the most data that will be in memory at any one time is the main order data, plus one of the order-items. Because the NodeModels are nested, Smooks makes sure that the order data NodeModel never contains any of the data from the order-item NodeModels. Also, as Smooks filters the message, the order-item NodeModel will be overwritten for every order-item (i.e. they are not collected). See [Mixing DOM and legacy SAX Models with Smooks](#mixing-dom-and-legacy-sax).
 
 Configuring Smooks to capture multiple NodeModels for use by the FreeMarker templates is just a matter of configuring the **DomModelCreator** visitor, targeting it at the root node of each of the models. Note again that Smooks also makes this available to SAX filtering (the key to processing huge message). The Smooks configuration for creating the NodeModels for this message are:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
-   
-     <!--  
-         Filter the message using the SAX Filter (i.e. not DOM, so no  
-         intermediate DOM for the "complete" message - there are "mini" DOMs  
-         for the NodeModels below)....  
-     -->  
-    <core:filterSettings type="SAX" defaultSerialization="false" />  
-   
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"   
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"  
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">   
+
      <!--  
         Create 2 NodeModels. One high level model for the "order"  
         (header, etc...) and then one for the "order-item" elements...  
@@ -4593,7 +4649,7 @@ The following is an example for serializing the contents of a SOAP message body 
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:frag="https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd">  
    
     <frag:serialize fragment="Envelope/Body" bindTo="soapBody" childContentOnly="true"/>  
@@ -4631,8 +4687,8 @@ The following is a quick example, showing the config for routing split messages 
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:frag="https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd" xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:frag="https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd" xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd">  
    
     <!-- Create the split messages for the order items... -->  
     <frag:serialize fragment="order-items/order-item" bindTo="orderItem" />  
@@ -4647,7 +4703,7 @@ For more details on the JMS routing aspects of the above example, see the JMS Ro
 
 #### Routing to File
 
-File based routing is performed via the the **\<file:outputStream>** configuration from the [https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd](https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd") configuration namespace.
+File based routing is performed via the the **\<file:outputStream>** configuration from the [https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd](https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd "https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd") configuration namespace.
 
 This section illustrates how you can combine the following Smooks functionality to split a message out into smaller messages on the file system.
 
@@ -4663,17 +4719,11 @@ To achieve this with Smooks, we assemble the following Smooks configuration:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"  
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:file="https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
-   
-        <!--  
-         Filter the message using the SAX Filter (i.e. not DOM, so no  
-         intermediate DOM, so we can process huge messages...  
-        -->  
-        <core:filterSettings type="SAX" />  
+                      xmlns:file="https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd"  
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
    
         <!-- Extract and decode data from the message. Used in the freemarker template (below).  
              Note that we could also use a NodeModel here... -->  
@@ -4737,23 +4787,17 @@ Smooks Resource configuration #4 defines the FreeMarker templating resource used
 
 #### Routing to JMS
 
-JMS routing is performed via the the **\<[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd") configuration namespace.
+JMS routing is performed via the the **\<[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd "https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd](https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd "https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd") configuration namespace.
 
-The following is an example <[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd")> configuration that routes an "orderItem\_xml" bean to a JMS Queue named "smooks.exampleQueue" (also read the "Routing to File" example):
+The following is an example <[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd "https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd")> configuration that routes an "orderItem\_xml" bean to a JMS Queue named "smooks.exampleQueue" (also read the "Routing to File" example):
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"  
-                      xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
-   
-        <!--  
-         Filter the message using the SAX Filter (i.e. not DOM, so no  
-         intermediate DOM, so we can process huge messages...  
-        -->  
-        <core:filterSettings type="SAX" />  
-   
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"  
+                      xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd"  
+                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd">  
+      
 (1)     <resource-config selector="order,order-item">  
             <resource>org.smooks.delivery.DomModelCreator</resource>  
         </resource-config>  
@@ -4796,7 +4840,7 @@ First we need to define a set of Java bindings that extract the order and order-
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"   
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <!-- Extract the order data... -->  
@@ -4819,12 +4863,12 @@ First we need to define a set of Java bindings that extract the order and order-
 
 Next we need to define datasource configuration and a number of \<db:executor> configurations that will use that datasource to insert the data that was bound into the Java Object model into the database.
 
-The Datasource configuration (namespace [https://www.smooks.org/xsd/smooks/datasource-1.4.xsd](https://www.smooks.org/xsd/smooks/datasource-1.4.xsd "https://www.smooks.org/xsd/smooks/datasource-1.4.xsd")) for retrieving direct database connection:
+The Datasource configuration (namespace [https://www.smooks.org/xsd/smooks/datasource-1.5.xsd](https://www.smooks.org/xsd/smooks/datasource-1.5.xsd "https://www.smooks.org/xsd/smooks/datasource-1.5.xsd")) for retrieving direct database connection:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ds="https://www.smooks.org/xsd/smooks/datasource-1.4.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:ds="https://www.smooks.org/xsd/smooks/datasource-1.5.xsd">  
    
     <ds:direct bindOnElement="#document"  
               datasource="DBExtractTransformLoadDS"  
@@ -4841,8 +4885,8 @@ or it is possible to use a JNDI datasource for retrieving a database connection:
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ds="https://www.smooks.org/xsd/smooks/datasource-1.4.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
+                      xmlns:ds="https://www.smooks.org/xsd/smooks/datasource-1.5.xsd">  
    
     <!-- This JNDI datasource can handle JDBC and JTA transactions or   
          it can leave the transaction managment to an other external component.  
@@ -4861,12 +4905,12 @@ or it is possible to use a JNDI datasource for retrieving a database connection:
 
 The datasource schema describes and documents how you can configure the datasource.
 
-The \<db:executor> configurations (namespace [https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd](https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd "https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd")):
+The \<db:executor> configurations (namespace [https://www.smooks.org/xsd/smooks/db-routing-2.0.xsd](https://www.smooks.org/xsd/smooks/db-routing-2.0.xsd "https://www.smooks.org/xsd/smooks/db-routing-2.0.xsd")):
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:db="https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"  
+                      xmlns:db="https://www.smooks.org/xsd/smooks/db-routing-2.0.xsd">  
    
     <!-- Assert whether it's an insert or update. Need to do this just before we do the insert/update... -->  
     <db:executor executeOnElement="order-items" datasource="DBExtractTransformLoadDS" executeBefore="true">  
@@ -4906,7 +4950,7 @@ All existing Smooks functionality (Java Binding, EDI processing, etc...) is buil
 The main extension points/APIs in Smooks are:
 
 1.  **Reader APIs**: Those for processing Source/Input data (Readers) so as to make it consumable by other Smooks components as a series of well defined hierarchical events (based on the SAX event model) for all of the message fragments and sub-fragments.
-2.  **Visitor APIs**: Those for consuming the message fragment SAX Events produced by a Source/Input Reader.
+2.  **Visitor APIs**: Those for consuming the message fragment SAX events produced by a source/input reader.
 
 Another very important aspect of writing Smooks extensions is how these components are configured. Because this is common to all Smooks components, we will look at this first.
 
@@ -4915,10 +4959,10 @@ Configuring Smooks Components
 
 All Smooks components are configured in exactly the same way. As far as the Smooks Core code is concerned, all Smooks components are "resources" and are configured via a SmooksResourceConfiguration instance, which we talked about in earlier sections.
 
-Smooks provides mechanisms for constructing namespace (XSD) specific XML configurations for components, but the most basic configuration (and the one that maps directly to the SmooksResourceConfiguration class) is the basic <resource-config> XML configuration from the base configuration namespace ([https://www.smooks.org/xsd/smooks-1.2.xsd](https://www.smooks.org/xsd/smooks-1.2.xsd "https://www.smooks.org/xsd/smooks-1.2.xsd")).
+Smooks provides mechanisms for constructing namespace (XSD) specific XML configurations for components, but the most basic configuration (and the one that maps directly to the SmooksResourceConfiguration class) is the basic <resource-config> XML configuration from the base configuration namespace ([https://www.smooks.org/xsd/smooks-2.0.xsd](https://www.smooks.org/xsd/smooks-2.0.xsd "https://www.smooks.org/xsd/smooks-2.0.xsd")).
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <resource-config selector="">  
         <resource></resource>  
@@ -4938,18 +4982,18 @@ Smooks takes care of all the details of creating the runtime representation of t
 
 ### Configuration Annotations
 
-After your component has been created, you need to configure it with the <param> element details. This is done using the _@ConfigParam_ and _@Config_ Annotations.
+After your component has been created, you need to configure it with the <param> element details. This is done using the _@Inject_ annotation.
 
-#### @ConfigParam
+#### @Inject
 
-The _ConfigParam_ annotation reflectively injects the named parameter (from the <param> elements) having the same name as the annotated property itself (the name can actually be different, but by default, it matches against the name of the component property).
+The _Inject_ annotation reflectively injects the named parameter (from the <param> elements) having the same name as the annotated property itself (the name can actually be different, but by default, it matches against the name of the component property).
 
 Suppose we have a component as follows:
 
 ```java
 public class DataSeeder {  
    
-    @ConfigParam  
+    @Inject  
     private File seedDataFile;
    
     public File getSeedDataFile() {
@@ -4962,7 +5006,7 @@ public class DataSeeder {
 
 We configure this component in Smooks as follows:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <resource-config selector="dataSeeder">  
         <resource>com.acme.DataSeeder</resource>  
@@ -4973,40 +5017,37 @@ We configure this component in Smooks as follows:
 ```
 This annotation eliminates a lot of noisy code from your component because it:
 
-*   Handles decoding of the <param> value before setting it on the annotated component property. Smooks provides DataDecoders for all of the main types (int, Double, File, Enums, etc...), but you can implement and use a custom DataDecoder where the out of the box decoders don't cover specific decoding requirements e.g. _@ConfigParam(decoder = MyQuirkyDataDecoder.class)_. Smooks will automatically use your custom decoder (i.e. you won't need to define the decoder property on this annotation) if it is registered. See the DataDecoder Javadocs for details on registering a DataDecoder implementation such that Smooks will automatically locate it for decoding a specific data type.
-*   Supports a "choice" constraint for the config property, generating a configuration exception where the configured value is not one of the defined choice values. For example, you may have a property which has a constrained value set of "ON" and "OFF". You can use the choice property on this annotation to constrain the config, raise exceptions, etc... e.g. _@ConfigParam(choice = {"ON", "OFF"})_.
-*   Can specify default config values e.g. _@ConfigParam(defaultVal = "true")_.
-*   Can specify whether or not the property config value is required or optional e.g. _@ConfigParam(use = Use.OPTIONAL)_. By default, all properties are _REQUIRED_, but setting a _defaultVal_ implicitly marks the property as being _OPTIONAL_.
-
-#### @Config
-
-The _Config_ annotation reflectively injects the full _SmooksResourceConfiguration_ instance, associated with the component resource, onto the annotated component property. Obviously an error will result if this annotation is added to a component property that is not of type _SmooksResourceConfiguration_.
-
-Example:
-
+*  Handles decoding of the <param> value before setting it on the annotated component property. Smooks provides type converters for all the main types (Integer, Double, File, Enums, etc...), but you can implement and use a custom TypeConverter where the out of the box converters don't cover specific decoding requirements. Smooks will automatically use your custom converter if it is registered. See the TypeConverter Javadocs for details on registering a TypeConverter implementation such that Smooks will automatically locate it for converting a specific data type.
+*  Supports enum constraints for the injected property, generating a configuration exception where the configured value is not one of the defined choice values. For example, you may have a property which has a constrained value set of "ON" and "OFF". You can use an enum for the property type to constrain the value, raise exceptions, etc...: 
 ```java
-public class MySmooksComponent {  
-   
-    @Config  
-    private SmooksResourceConfiguration config;  
-   
-    // etc...  
-}
+@Inject
+private OnOffEnum foo;
 ```
+*  Can specify default property values: 
+```java
+@Inject
+private Boolean foo = true;
+```
+*   Can specify whether the property is optional: 
+```java
+@Inject
+private java.util.Optional<Boolean> foo;
+```
+By default, all properties are required but setting a default implicitly marks the property as being optional.
 
-#### @Initialize and @Uninitialize
+#### @PostConstruct and @PreDestroy
 
-The _@ConfigParam_ annotation is great for configuring your component with simple values, but sometimes your component needs more involved configuration for which we need to write some "initialization" code. For this, Smooks provides the _@Initialize_ annotation.
+The _@Inject_ annotation is great for configuring your component with simple values, but sometimes your component needs more involved configuration for which we need to write some "initialization" code. For this, Smooks provides the _@PostConstruct_ annotation.
 
-On the other side of this, there are times when we need to undo work performed during initialization when the associated Smooks instance is being discarded (garbage collected) e.g. to release some resources acquired during initialization, etc... For this, Smooks provides the _@Uninitialize_ annotation.
+On the other side of this, there are times when we need to undo work performed during initialization when the associated Smooks instance is being discarded (garbage collected) e.g. to release some resources acquired during initialization, etc... For this, Smooks provides the _@PreDestroy_ annotation.
 
-The basic initialization/uninitialization sequence can be described as follows:
+The basic initialization/un-initialization sequence can be described as follows:
 
 ```java
 smooks = new Smooks(..);  
    
     // Initialize all annotated components  
-    @Initialize  
+    @PostConstruct  
    
         // Use the smooks instance through a series of filterSource invocations...  
         smooks.filterSource(...);  
@@ -5017,7 +5058,7 @@ smooks = new Smooks(..);
 smooks.close();  
    
     // Uninitialize all annotated components  
-    @Uninitialize
+    @PreDestroy
 ```
 
 In the following example, lets assume we have a component that opens multiple connections to a database on initialization and then needs to release all those database resources when we close the Smooks instance.
@@ -5025,18 +5066,18 @@ In the following example, lets assume we have a component that opens multiple co
 ```java
 public class MultiDataSourceAccessor {  
    
-    @ConfigParam  
+    @Inject  
     private File dataSourceConfig;
    
     Map<String, Datasource> datasources = new HashMap<String, Datasource>();  
    
-    @Initialize  
+    @PostConstruct  
     public void createDataSources() {  
         // Add DS creation code here....  
         // Read the dataSourceConfig property to read the DS configs...  
     }  
    
-    @Uninitialize  
+    @PreDestroy  
     public void releaseDataSources() {  
         // Add DS release code here....  
     }  
@@ -5047,9 +5088,9 @@ public class MultiDataSourceAccessor {
 
 **Notes**:
 
-*   The _@Initialize_ and _@Uninitialize_ methods must be public, zero-arg methods.
-*   The _@ConfigParam_ properties are all initialized before the first _@Initialize_ method is called. Therefore, you can use the _@ConfigParam_ component properties as input to the initialization process.
-*   The _@Uninitialize_ methods are all called in response to a call to the _Smooks.close_ method.
+*   The _@PostConstruct_ and _@PreDestroy_ methods must be public, zero-arg methods.
+*   The _@Inject_ properties are all initialized before the first _@PostConstruct_ method is called. Therefore, you can use the _@Inject_ component properties as input to the initialization process.
+*   The _@PreDestroy_ methods are all called in response to a call to the _Smooks.close_ method.
 
 ### Defining Custom Configuration Namespaces
 
@@ -5057,7 +5098,7 @@ Smooks supports a mechanism for defining custom configuration namespaces for com
 
 The basic process involves:
 
-1.  Writing an configuration XSD for your component that extends the base [https://www.smooks.org/xsd/smooks-1.2.xsd](https://www.smooks.org/xsd/smooks-1.2.xsd "https://www.smooks.org/xsd/smooks-1.2.xsd") configuration namespace. This XSD must be supplied on the classpath with your component. It must be located in the _/META-INF_ folder and have the same path as the namespace URI. For example, if your extended namespace URI is "[http://www.acme.com/schemas/smooks/acme-core-1.0.xsd](http://www.acme.com/schemas/smooks/acme-core-1.0.xsd "http://www.acme.com/schemas/smooks/acme-core-1.0.xsd")", then the physical XSD file must be supplied on the classpath in "/META-INF/schemas/smooks/acme-core-1.0.xsd".
+1.  Writing an configuration XSD for your component that extends the base [https://www.smooks.org/xsd/smooks-2.0.xsd](https://www.smooks.org/xsd/smooks-2.0.xsd "https://www.smooks.org/xsd/smooks-2.0.xsd") configuration namespace. This XSD must be supplied on the classpath with your component. It must be located in the _/META-INF_ folder and have the same path as the namespace URI. For example, if your extended namespace URI is "[http://www.acme.com/schemas/smooks/acme-core-1.0.xsd](http://www.acme.com/schemas/smooks/acme-core-1.0.xsd "http://www.acme.com/schemas/smooks/acme-core-1.0.xsd")", then the physical XSD file must be supplied on the classpath in "/META-INF/schemas/smooks/acme-core-1.0.xsd".
 2.  Writing a Smooks configuration namespace mapping configuration file that maps the custom namespace configuration into a _SmooksResourceConfiguration_ instance. This file must be named (by convention) based on the name of the namespace it is mapping and must be physically located on the classpath in the same folder as the XSD. Extending the above example, the Smooks mapping file would be "/META-INF/schemas/smooks/acme-core-1.0.xsd-smooks.xml". Note the "-smooks.xml" postfix.
 
 The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, [as can be seen in the source](https://github.com/smooks/smooks/smooks-core/src/main/resources/META-INF/xsd/smooks/ "https://github.com/smooks/smooks/smooks-core/src/main/resources/META-INF/xsd/smooks/").
@@ -5094,7 +5135,7 @@ public class MyCSVReader implements SmooksXMLReader {
  
     private ContentHandler contentHandler;
  
-    @ConfigParam
+    @Inject
     private String[] fields; // Auto decoded and injected from the "fields" <param> on the reader config.
  
     public void setContentHandler(ContentHandler contentHandler) {
@@ -5125,7 +5166,7 @@ Second thing we need is a test Smooks configuration to configure Smooks with our
 (_mycsvread-config.xml_)
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <reader class="com.acme.MyCSVReader">  
         <params>  
@@ -5160,7 +5201,7 @@ public class MyCSVReader implements SmooksXMLReader {
  
     private ContentHandler contentHandler;
  
-    @ConfigParam
+    @Inject
     private String[] fields; // Auto decoded and injected from the "fields" <param> on the reader config.
  
     public void setContentHandler(ContentHandler contentHandler) {
@@ -5227,7 +5268,7 @@ Now you can use your reader to perform all sorts of operations supported by Smoo
 
 _(java-binding-config.xml)_
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
     <reader class="com.acme.MyCSVReader">  
         <params>  
@@ -5328,14 +5369,14 @@ public interface RecordParser<T extends RecordParserFactory>  {
 }
 ```
   
-Obviously the _RecordParserFactory_ implementation is responsible for creating the _RecordParser_ instances for the Smooks runtime. The _RecordParserFactory_ is the class that Smooks configures, so it is in here you place all your _@ConfigParam_ details. The created _RecordParser_ instances are supplied with a reference to the _RecordParserFactory_ instance that created them, so it is easy enough the provide them with access to the configuration via getters on the _RecordParserFactory_ implementation.
+Obviously the _RecordParserFactory_ implementation is responsible for creating the _RecordParser_ instances for the Smooks runtime. The _RecordParserFactory_ is the class that Smooks configures, so it is in here you place all your _@Inject_ details. The created _RecordParser_ instances are supplied with a reference to the _RecordParserFactory_ instance that created them, so it is easy enough the provide them with access to the configuration via getters on the _RecordParserFactory_ implementation.
   
 The _RecordParser_ implementation is responsible for parsing out each _Records_ (a _Record_ contains a set of _Fields_) in the _nextRecord()_ method. Each instance is supplied with the _Reader_ to the message stream via the _setReader(Reader)_ method. The _RecordParser_ should store a reference to this _Reader_ and use it in the _nextRecord()_ method. A new instance of a given _RecordParser_ implementation is created for each message being filtered by Smooks.
   
 Configuring your implementation in the Smooks configuration is as simple as the following:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:ff="https://www.smooks.org/xsd/smooks/flatfile-1.6.xsd">  
    
     <ff:reader fields="first,second,third" parserFactory="com.acme.ARecordParserFactory">  
@@ -5355,7 +5396,7 @@ Configuring your implementation in the Smooks configuration is as simple as the 
 The Flat File configuration also supports basic Java binding configurations, inlined in the reader configuration.
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:ff="https://www.smooks.org/xsd/smooks/flatfile-1.6.xsd">  
    
     <ff:reader fields="firstname,lastname,gender,age,country" parserFactory="com.acme.PersonRecordParserFactory">  
@@ -5380,7 +5421,7 @@ List<Person> people = (List<Person>) result.getBean("people");
 Smooks also supports creation of Maps from the record set:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:ff="https://www.smooks.org/xsd/smooks/flatfile-1.6.xsd">  
    
     <ff:reader fields="firstname,lastname,gender,age,country" parserFactory="com.acme.PersonRecordParserFactory">  
@@ -5421,94 +5462,113 @@ Implementing a Fragment Visitor
 
 Visitors are the workhorse of Smooks. Most of the out-of-the-box functionality in Smooks (Java binding, templating, persistence, etc...) was created by creating one or more visitors. Visitors often collaborate through the _ExecutionContext_ and _ApplicationContext_ context objects, accomplishing a common goal by working together.
 
-Smooks supports two types of visitor implementations:
+Smooks supports three types of visitor implementations:
 
-1.  **SAX** based implementations based on the [SAXVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html) sub-interfaces.
-2.  **DOM** based implementations based on the [DOMVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMVisitor.html) sub-interfaces.
+1.  **SAX NG** based implementations based on the [SaxNgVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/ng/SaxNgVisitor.html) sub-interfaces.
+1.  **SAX** based implementations based on the [SAXVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/SAXVisitor.html) sub-interfaces.
+2.  **DOM** based implementations based on the [DOMVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/dom/DOMVisitor.html) sub-interfaces.
 
-Your implementation can support both SAX and DOM, but in general, we recommend people to stick with implementing a SAX-only visitor. As yet, we have not found a use case that could not be solved through the SAX based implementations, while at the same time, the SAX based implementations are usually easier to create, and offer clear advantages in terms of performance. For this reason, we will concentrate on the SAX only here.
+Your implementation can support both SAX and DOM, but in general, we recommend people to stick with implementing a SAX NG-only visitor. As yet, we have not found a use case that could not be solved through the SAX NG-based implementations, while at the same time, the SAX NG-based implementations are usually easier to create, and offer clear advantages in terms of performance. For this reason, we will concentrate on the SAX NG API only here.
 
-**Note**: Smooks treats all visitors as stateless objects. A visitor instance must be usable concurrently across multiple messages i.e. across multiple concurrent calls to the _Smooks.filterSource_ method. All state associated with the current _Smooks.filterSource_ execution must be stored in the _ExecutionContext_. For more details see the [ExecutionContext and ApplicationContex](#executioncontext-and-applicationcontext) section.
+**Note**: Smooks treats all visitors as stateless objects. A visitor instance must be usable concurrently across multiple messages, that is, across multiple concurrent calls to the _Smooks.filterSource_ method. 
+All state associated with the current _Smooks.filterSource_ execution must be stored in the _ExecutionContext_. For more details see the [ExecutionContext and ApplicationContex](#executioncontext-and-applicationcontext) section.
 
-### The SAX Visitor API
+### SAX NG Visitor API
 
-The SAX Visitor API is made up of a number of interfaces. These interfaces are based on the [SAX events](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/ContentHandler.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/ContentHandler.html") that a SAXVisitor implementation can capture and processes. Depending on the use case being solved with the SAXVisitor implementation, you may need to implement one or all of these interfaces.
+The SAX NG visitor API is made up of a number of interfaces. These interfaces are based on the [SAX events](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/ContentHandler.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/ContentHandler.html") that a SaxNgVisitor implementation can capture and processes. Depending on the use case being solved with the SaxNgVisitor implementation, you may need to implement one or all of these interfaces.
 
-**[SAXVisitBefore](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitBefore.html)**: Captures the _startElement_ SAX event for the targeted fragment element:
+**[BeforeVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/ng/BeforeVisitor.html)**: Captures the _startElement_ SAX event for the targeted fragment element:
 
 ```java
-public interface SAXVisitBefore extends SAXVisitor {  
+public interface BeforeVisitor extends Visitor {  
    
-    void visitBefore(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException;  
+    void visitBefore(Element element, ExecutionContext executionContext);  
 }
 ```
 
-**[SAXVisitChildren](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitChildren.html)**: Captures the _character_ based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the _startElement_ events of child fragment elements:
+**[ChildrenVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/ng/ChildrenVisitor.html)**: Captures the _character_ based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the _startElement_ events of child fragment elements:
 
 ```java
-public interface SAXVisitChildren extends SAXVisitor {  
+public interface ChildrenVisitor extends Visitor {  
    
-    void onChildText(SAXElement element, SAXText childText, ExecutionContext executionContext) throws SmooksException, IOException;  
+    void visitChildText(Element element, ExecutionContext executionContext) throws SmooksException, IOException;  
    
-    void onChildElement(SAXElement element, SAXElement childElement, ExecutionContext executionContext) throws SmooksException, IOException;  
+    void visitChildElement(Element childElement, ExecutionContext executionContext) throws SmooksException, IOException;  
 }
 ```
 
-**[SAXVisitAfter](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitAfter.html)**: Captures the _endElement_ SAX event for the targeted fragment element:
+**[AfterVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/ng/AfterVisitor.html)**: Captures the _endElement_ SAX event for the targeted fragment element:
 
 ```java
-public interface SAXVisitAfter extends SAXVisitor {  
+public interface AfterVisitor extends Visitor {  
    
-    void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException;  
+    void visitAfter(Element element, ExecutionContext executionContext);  
 }
 ```
 
-As a convenience for those implementations that need to capture all of the SAX events, the above three interfaces are pulled together into a single interface in the [SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor.html) interface.
+As a convenience for those implementations that need to capture all the SAX events, the above three interfaces are pulled together into a single interface in the [ElementVisitor](/javadoc/v2.0.0/smooks/org/smooks/delivery/sax/ng/ElementVisitor.html) interface.
 
 Illustrating these events using a piece of XML:
 
 ```xml
 <message>  
-    <target-fragment>      <--- SAXVisitBefore.visitBefore  
-        Text!!                       <--- SAXVisitChildren.onChildText   
-        <child>                      <--- SAXVisitChildren.onChildElement  
+    <target-fragment>      <--- BeforeVisitor.visitBefore  
+        Text!!                       <--- ChildrenVisitor.visitChildText   
+        <child>                      <--- ChildrenVisitor.visitChildElement  
         </child>                   
-    </target-fragment>     <--- SAXVisitAfter.visitAfter  
+    </target-fragment>     <--- AfterVisitor.visitAfter  
 </message>
 ```
 
 **Note**: _Of course, the above is just an illustration of a Source message event stream and it looks like XML, but could be EDI, CSV, JSON, etc... Think of this as just an XML serialization of a Source message event stream, serialized as XML for easy reading._
 
-**[SAXElement](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html)**: As can be seen from the above SAX interfaces, the [SAXElement](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html) type is passed in all method calls. This object contains details about the targeted fragment element, including attributes and their values. It also contains methods for managing text accumulation, as well as accessing the _Writer_ associated with any _StreamResult_ instance that may have been passed in the _Smooks.filterSource(Source, Result)_ method call. We'll see more on text accumulation and _StreamResult_ writing in the coming sections.
+**[Element](https://docs.oracle.com/javase/8/docs/api/org/w3c/dom/Element.html)**: As can be seen from the above SAX NG interfaces, the [Element](https://docs.oracle.com/javase/8/docs/api/org/w3c/dom/Element.html) type is passed in all method calls. This object contains details about the targeted fragment element, including attributes and their values. We'll discuss text accumulation and _StreamResult_ writing in the coming sections.
 
 ### Text Accumulation
 
-SAX is a stream based processing model. It doesn't create a Document Object Model (DOM) of any form. It doesn't "accumulate" event data in any way. This is why it is a suitable processing model for processing huge message streams.
+SAX is a stream based processing model. It doesn't create a Document Object Model (DOM) of any form. It doesn't "accumulate" event data in any way. 
+This is why it is a suitable processing model for processing huge message streams.
 
-The [SAXElement](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElement.html) will always contain attribute data associated with the targeted element, but will not contain the fragment child text data, whose SAX events (_SAXVisitChildren.onChildText_) occur between the _SAXVisitBefore.visitBefore_ and _SAXVisitAfter.visitAfter_ events (see above illustration). The text events are not accumulated on the _SAXElement_ because, as already stated, that could result in a significant performance drain. Of course the downside to this is the fact that if your _SAXVisitor_ implementation needs access to the text content of a fragment, you need to explicitly tell Smooks to **accumulate text** for the targeted fragment. This is done by calling the _SAXElement.accumulateText_ method from inside the _SAXVisitBefore.visitBefore_ method implementation of your _SAXVisitor_:
+The [Element](https://docs.oracle.com/javase/8/docs/api/org/w3c/dom/Element.html) will always contain attributes associated with the targeted element, 
+but will not contain the fragment child text data, whose SAX events (_ChildrenVisitor.visitChildText_) occur between the 
+_BeforeVisitor.visitBefore_ and _AfterVisitor.visitAfter_ events (see above illustration). The filter does not accumulate text events
+on the _Element_ because, as already stated, that could result in a significant performance drain. Of course the downside 
+to this is the fact that if your _SaxNgVisitor_ implementation needs access to the text content of a fragment, you need to 
+explicitly tell Smooks to **accumulate text** for the targeted fragment. This is done by stashing the text into a memento from within 
+the _ChildrenVisitor.visitChildText_ method and then restoring the memento from within the _AfterVisitor.visitAfter_ method 
+implementation of your _SaxNgVisitor_ as shown below:
 
 ```java
-public class MyVisitor implements SAXVisitBefore, SAXVisitAfter {
+public class MyVisitor implements ChildrenVisitor, AfterVisitor {
  
-    public void visitBefore(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        element.accumulateText();
+    @Override
+    public void visitChildText(Element element, ExecutionContext executionContext) {
+        executionContext.getMementoCaretaker().stash(new TextAccumulatorMemento(new NodeVisitable(element), this), textAccumulatorMemento -> textAccumulatorMemento.accumulateText(element.getTextContent()));
+    }
+
+    @Override
+    public void visitChildElement(Element childElement, ExecutionContext executionContext) {
+    
     }
  
-    public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        String fragmentText = element.getTextContent();
+    @Override
+    public void visitAfter(Element element, ExecutionContext executionContext) {
+        TextAccumulatorMemento textAccumulatorMemento = new TextAccumulatorMemento(new NodeVisitable(element), this);
+        executionContext.getMementoCaretaker().restore(textAccumulatorMemento);
+        String fragmentText = textAccumulatorMemento.getTextContent();
  
         // ... etc ...
     }
 }
 ```
 
-Of course, it's a bit ugly having to implement _SAXVisitBefore.visitBefore_ just to tell Smooks to accumulate the text events for the targeted fragment. For that reason, we have the _@TextConsumer_ annotation that can be used to annotate your _SAXVisitor_ implementation, removing the need to implement the _SAXVisitBefore.visitBefore_ method:
+It is a bit ugly having to implement _ChildrenVisitor.visitChildText_ just to tell Smooks to accumulate the text events for the targeted fragment. For that reason, we have the _@TextConsumer_ annotation that can be used to annotate your _SaxNgVisitor_ implementation, removing the need to implement the _ChildrenVisitor.visitChildText_ method:
 
 ```java
 @TextConsumer
-public class MyVisitor implements SAXVisitAfter {
+public class MyVisitor implements AfterVisitor {
  
-    public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
+    public void visitAfter(Element element, ExecutionContext executionContext) {
         String fragmentText = element.getTextContent();
  
         // ... etc ...
@@ -5516,137 +5576,165 @@ public class MyVisitor implements SAXVisitAfter {
 }
 ```
 
-Note that all of the fragment text will not be available until the _SAXVisitAfter.visitAfter_ event.
+Note that all of the fragment text will not be available until the _AfterVisitor.visitAfter_ event.
 
 ### StreamResult Writing/Serialization
 
 The _Smooks.filterSource(Source, Result)_ method can take one or more of a number of different _Result_ type implementations, one of which is the _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ class (see [Multiple Outputs/Results](#multiple-outputsresults)). By default, Smooks will always serialize the full Source event stream as XML to any _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ instance provided to the _Smooks.filterSource(Source, Result)_ method.
 
-So, if the Source provided to the _Smooks.filterSource(Source, Result)_ method is an XML stream and a _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ instance is provided as one of the _Result_ instances, the Source XML will be written out to the _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ unmodified, unless the Smooks instance is configured with one or more _SAXVisitor_ implementations that modify one or more fragments. In other words, Smooks streams the Source in and back out again through the _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ instance. This **default serialization** behavior can be turned on/off by [configuring the filter settings](#filter-settings).
+So, if the Source provided to the _Smooks.filterSource(Source, Result)_ method is an XML stream and a _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ instance is provided as one of the _Result_ instances, the Source XML will be written out to the _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ unmodified, unless the Smooks instance is configured with one or more _SaxNgVisitor_ implementations that modify one or more fragments. In other words, Smooks streams the Source in and back out again through the _[StreamResult](http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html "http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html")_ instance. This **default serialization** behavior can be turned on/off by [configuring the filter settings](#filter-settings).
 
-If you want to modify the serialized form of one of the message fragments (i.e. "transform"), you need to implement a _SAXVisitor_ to do so and target it at the message fragment using an XPath-like expression.
+If you want to modify the serialized form of one of the message fragments (i.e. "transform"), you need to implement a _SaxNgVisitor_ to do so and target it at the message fragment using an XPath-like expression.
 
-**Note**: _Of course, you can also modify the serialized form of a message fragment using one of the out-of-the-box [Templating](#templating) components. These components are also_ SAXVisitor _implementations._
+**Note**: _Of course, you can also modify the serialized form of a message fragment using one of the out-of-the-box [Templating](#templating) components. These components are also_ SaxNgVisitor _implementations._
 
-The key to implementing a _SAXVisitor_ geared towards transforming the serialized form of a fragment is telling Smooks that the _SAXVisitor_ implementation in question will be writing to the _StreamResult_. You need to tell Smooks this because Smooks supports targeting of multiple _SAXVisitor_ implementations at a single fragment, but only one _SAXVisitor_ is allowed to write to the _StreamResult_, per fragment. If a second _SAXVisitor_ attempts to write to the _StreamResult_, a _SAXWriterAccessException_ will result and you will need to modify your Smooks configuration.
+The key to implementing a _SaxNgVisitor_ geared towards transforming the serialized form of a fragment is telling Smooks that the _SaxNgVisitor_ implementation in question will be writing to the _StreamResult_. You need to tell Smooks this because Smooks supports targeting of multiple _SaxNgVisitor_ implementations at a single fragment, but only one _SaxNgVisitor_ is allowed to write to the _StreamResult_, per fragment. If a second _SaxNgVisitor_ attempts to write to the _StreamResult_, a _SAXWriterAccessException_ will result and you will need to modify your Smooks configuration.
 
-In order to be "the one" that writes to the _StreamResult_, the _SAXVisitor_ needs to **acquire ownership** of the _Writer_ to the _StreamResult_. It does this by simply making a call to the _SAXElement.getWriter(SAXVisitor)_ method from inside the _SAXVisitBefore.visitBefore_ methods implementation, passing _this_ as the _SAXVisitor_ parameter:
+In order to be "the one" that writes to the _StreamResult_, the _SaxNgVisitor_ needs to **acquire ownership** of the _Writer_ to the _StreamResult_. It does this by simply making a call to the _ExecutionContext.getWriter().write(...)_ method from inside the _BeforeVisitor.visitBefore_ methods implementation:
 
 ```java
-public class MyVisitor implements SAXElementVisitor {
+public class MyVisitor implements ElementVisitor {
  
-    public void visitBefore(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        Writer writer = element.getWriter(this);
- 
+    @Override
+    public void visitBefore(Element element, ExecutionContext executionContext) {
+        Writer writer = executionContext.getWriter();
+
         // ... write the start of the fragment...
     }
  
-    public void onChildText(SAXElement element, SAXText childText, ExecutionContext executionContext) throws SmooksException, IOException {        
-        Writer writer = element.getWriter(this);
+    @Override
+    public void visitChildText(Element element, ExecutionContext executionContext) {        
+        Writer writer = executionContext.getWriter();
  
         // ... write the child text...
     }
  
-    public void onChildElement(SAXElement element, SAXElement childElement, ExecutionContext executionContext) throws SmooksException, IOException {
+    @Override
+    public void visitChildElement(Element childElement, ExecutionContext executionContext) {
     }
  
-    public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        Writer writer = element.getWriter(this);
+    @Override
+    public void visitAfter(Element element, ExecutionContext executionContext) {
+        Writer writer = executionContext.getWriter();
  
         // ... close the fragment...
     }
 }
 ```
 
-**Note**: If you need to control serialization of sub-fragments you need to reset the _Writer_ instance so as to divert serialization of the sub-fragments. You do this by calling _SAXElement.setWriter_.
+**Note**: If you need to control serialization of sub-fragments you need to reset the _Writer_ instance so as to divert serialization of the sub-fragments. You do this by calling _ExecutionContext.setWriter_.
 
-Sometimes you know that the target fragment you are serializing/transforming will never have sub-fragments. In this situation, it's a bit ugly to have to implement the _SAXVisitBefore.visitBefore_ method just to make a call to the _SAXElement.getWriter_ method to acquire ownership of the _Writer_. For this reason, we have the _@StreamResultWriter_ annotation. Used in combination with the _@TextConsumer_ annotation, we can remove the need to implement all but the _SAXVisitAfter.visitAfter_ method:
+Sometimes you know that the target fragment you are serializing/transforming will never have sub-fragments. In this situation, it's a bit ugly to have to implement the _BeforeVisitor.visitBefore_ method just to make a call to the _ExecutionContext.getWriter().write(...)_ method to acquire ownership of the _Writer_. For this reason, we have the _@StreamResultWriter_ annotation. Used in combination with the _@TextConsumer_ annotation, we can remove the need to implement all but the _AfterVisitor.visitAfter_ method:
 
 ```java
 @TextConsumer
 @StreamResultWriter
-public class MyVisitor implements SAXVisitAfter {
+public class MyVisitor implements AfterVisitor {
  
-    public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        Writer writer = element.getWriter(this);
+    public void visitAfter(Element element, ExecutionContext executionContext) {
+        Writer writer = executionContext.getWriter();
  
         // ... serialize to the writer ...
     }
 }
 ```
 
-#### SAXToXMLWriter
+#### DomToXmlWriter
 
-Smooks provides the _SAXToXMLWriter_ class to make serializing of _SAXElement_ data, as XML, a little easier. This class allows you to write a _SAXVisitor_ implementation like:
+Smooks provides the _DomToXmlWriter_ class to make serializing of _Element_ data, as XML, a little easier. This class allows you to write a _SaxNgVisitor_ implementation like:
 
 ```java
 @StreamResultWriter
-public class MyVisitor implements SAXElementVisitor {
+public class MyVisitor implements ElementVisitor {
  
-    private SAXToXMLWriter xmlWriter = new SAXToXMLWriter(this, true);
+    private DomToXmlWriter xmlWriter = new DomToXmlWriter(true, true);
  
-    public void visitBefore(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        xmlWriter.writeStartElement(element);
+    @Override
+    public void visitBefore(Element element, ExecutionContext executionContext) {
+        try {
+            xmlWriter.writeStartElement(element, executionContext.getWriter());
+        } catch (IOException e) {
+            throw new SmooksException(e);
+        }
     }
  
-    public void onChildText(SAXElement element, SAXText childText, ExecutionContext executionContext) throws SmooksException, IOException {
-        xmlWriter.writeText(childText, element);
+    @Override
+    public void visitChildText(Element childElement, ExecutionContext executionContext) {
+        try {
+            xmlWriter.writeText(childElement, executionContext.getWriter());
+        } catch (IOException e) {
+            throw new SmooksException(e);
+        }
     }
  
-    public void onChildElement(SAXElement element, SAXElement childElement, ExecutionContext executionContext) throws SmooksException, IOException {
+    @Override
+    public void visitChildElement(Element element, ExecutionContext executionContext) throws SmooksException, IOException {
     }
  
-    public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        xmlWriter.writeEndElement(element);
+    @Override
+    public void visitAfter(Element element, ExecutionContext executionContext) throws SmooksException, IOException {
+        try {
+            xmlWriter.writeEndElement(element, executionContext.getWriter());
+        } catch (IOException e) {
+            throw new SmooksException(e);
+        }
     }
 }
 ```
 
-You may have noticed that the second argument in the _SAXToXMLWriter_ constructor is a boolean. This is the _encodeSpecialChars_ arg and should be set based on the _rewriteEntities_ [filter setting](#filter-settings). Smooks provides a small code optimization/assist here. If you move the _@StreamResultWriter_ annotation from the class and onto the _SAXToXMLWriter_ instance declaration, Smooks will create the _SAXToXMLWriter_ instance and initialize it with the _rewriteEntities_ [filter setting](#filter-settings) for the associated Smooks instance:
+You may have noticed that the arguments in the _DomToXmlWriter_ constructor are boolean. This is the _closeEmptyElements_ and _rewriteEntities_ args which should be based on the _closeEmptyElements_ and _rewriteEntities_ [filter setting](#filter-settings), respectively. Smooks provides a small code optimization/assist here. If you annotate the _DomToXmlWriter_ field with _@Inject_, Smooks will create the _DomToXmlWriter_ instance and initialize it with the _closeEmptyElements_ and _rewriteEntities_ [filter setting](#filter-settings) for the associated Smooks instance:
 
 ```java
 @TextConsumer
-public class MyVisitor implements SAXVisitAfter {
+public class MyVisitor implements AfterVisitor {
  
-    @StreamResultWriter
-    private SAXToXMLWriter xmlWriter;
+    @Inject
+    private DomToXmlWriter xmlWriter;
  
-    public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
-        xmlWriter.writeStartElement(element);
-        xmlWriter.writeText(element);
-        xmlWriter.writeEndElement(element);
+    public void visitAfter(Element element, ExecutionContext executionContext) throws SmooksException, IOException {
+        try {
+            xmlWriter.writeStartElement(element, executionContext.getWriter());
+            xmlWriter.writeText(element, executionContext.getWriter());
+            xmlWriter.writeEndElement(element, executionContext.getWriter());
+        } catch (IOException e) {
+            throw new SmooksException(e);
+        }
     }
 }
 ```
 
 ### Visitor Configuration
 
-_SAXVisitor_ configuration works in exactly the same way as any other Smooks component. See [Configuring Smooks Components](#configuring-smooks-components).
+_SaxNgVisitor_ configuration works in exactly the same way as any other Smooks component. See [Configuring Smooks Components](#configuring-smooks-components).
 
 The most important thing to note with respect to configuring visitor instances is the fact that the _selector_ attribute is interpreted as an XPath (like) expression. For more on this see the docs on [Selectors](#selectors).
 
-Also note that visitors can be programatically configured on a Smooks instance. Among other things, this is very useful for unit testing.
+Also note that visitors can be programmatically configured on a Smooks instance. Among other things, this is very useful for unit testing.
 
 #### Example Visitor Configuration
 
-Let's assume we have a very simple _SAXVisitor_ implementation as follows:
+Let's assume we have a very simple _SaxNgVisitor_ implementation as follows:
 
 ```java
 @TextConsumer
-public class ChangeItemState implements SAXVisitAfter {
+public class ChangeItemState implements AfterVisitor {
  
-    @StreamResultWriter
-    private SAXToXMLWriter xmlWriter;
+    @Inject
+    private DomToXmlWriter xmlWriter;
  
-    @ConfigParam
+    @Inject
     private String newState;
  
-    public void visitAfter(SAXElement element, ExecutionContext executionContext) throws SmooksException, IOException {
+    public void visitAfter(Element element, ExecutionContext executionContext) {
         element.setAttribute("state", newState);
  
-        xmlWriter.writeStartElement(element);
-        xmlWriter.writeText(element);
-        xmlWriter.writeEndElement(element);
+        try {
+            xmlWriter.writeStartElement(element, executionContext.getWriter());
+            xmlWriter.writeText(element, executionContext.getWriter());
+            xmlWriter.writeEndElement(element, executionContext.getWriter());
+        } catch (IOException e) { 
+            throw new SmooksException(e);
+        }
     }
 }
 ```
@@ -5654,7 +5742,7 @@ public class ChangeItemState implements SAXVisitAfter {
 Declaratively configuring _ChangeItemState_ to fire on <order-item> fragments having a status of "OK" is as simple as:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd">  
    
     <resource-config selector="order-items/order-item[@status = 'OK']">  
         <resource>com.acme.ChangeItemState </resource>  
@@ -5667,7 +5755,7 @@ Declaratively configuring _ChangeItemState_ to fire on <order-item> fragments ha
 Of course it would be really nice to be able to define a cleaner and more strongly typed configuration for the _ChangeItemState_ component, such that it could be configured something like:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd" 
                       xmlns:order="http://www.acme.com/schemas/smooks/order.xsd">  
    
     <order:changeItemState itemElement="order-items/order-item[@status = 'OK']" newState="COMPLETED" />  
@@ -5700,7 +5788,7 @@ Visitor components implementing this lifecycle interface will be able to perform
 ```java
 public interface ExecutionLifecycleCleanable extends Visitor {  
    
-    public abstract void executeExecutionLifecycleCleanup(ExecutionContext executionContext);  
+    void executeExecutionLifecycleCleanup(ExecutionContext executionContext);  
 }
 ```
 
@@ -5722,12 +5810,12 @@ This lifecycle method allows you to ensure that resources scoped around the _Smo
 
 #### VisitLifecycleCleanable
 
-Visitor components implementing this lifecycle interface will be able to perform post _SAXVisitAfter.visitAfter_ lifecycle operations.
+Visitor components implementing this lifecycle interface will be able to perform post _AfterVisitor.visitAfter_ lifecycle operations.
 
 ```java
 public interface VisitLifecycleCleanable extends Visitor {  
    
-    public abstract void executeVisitLifecycleCleanup(ExecutionContext executionContext);  
+    void executeVisitLifecycleCleanup(ExecutionContext executionContext);  
 }
 ```
 
@@ -5738,14 +5826,14 @@ smooks.filterSource(...);
  
     <message>
         <target-fragment>      <--- VisitorXX.visitBefore
-            Text!!                       <--- VisitorXX.onChildText  
-            <child>                      <--- VisitorXX.onChildElement
+            Text!!                       <--- VisitorXX.visitChildText  
+            <child>                      <--- VisitorXX.visitChildElement
             </child>                 
         </target-fragment>     <--- VisitorXX.visitAfter
         ** VisitorXX.executeVisitLifecycleCleanup **
         <target-fragment>      <--- VisitorXX.visitBefore
-            Text!!                       <--- VisitorXX.onChildText  
-            <child>                      <--- VisitorXX.onChildElement
+            Text!!                       <--- VisitorXX.visitChildText  
+            <child>                      <--- VisitorXX.visitChildElement
             </child>                 
         </target-fragment>     <--- VisitorXX.visitAfter
         ** VisitorXX.executeVisitLifecycleCleanup **
@@ -5756,14 +5844,14 @@ smooks.filterSource(...);
  
     <message>
         <target-fragment>      <--- VisitorXX.visitBefore
-            Text!!                       <--- VisitorXX.onChildText  
-            <child>                      <--- VisitorXX.onChildElement
+            Text!!                       <--- VisitorXX.visitChildText  
+            <child>                      <--- VisitorXX.visitChildElement
             </child>                 
         </target-fragment>     <--- VisitorXX.visitAfter
         ** VisitorXX.executeVisitLifecycleCleanup **
         <target-fragment>      <--- VisitorXX.visitBefore
-            Text!!                       <--- VisitorXX.onChildText  
-            <child>                      <--- VisitorXX.onChildElement
+            Text!!                       <--- VisitorXX.visitChildText  
+            <child>                      <--- VisitorXX.visitChildElement
             </child>                 
         </target-fragment>     <--- VisitorXX.visitAfter
         ** VisitorXX.executeVisitLifecycleCleanup **
@@ -5771,20 +5859,20 @@ smooks.filterSource(...);
     VisitorXX.executeExecutionLifecycleCleanup
 ```
 
-This lifecycle method allows you to ensure that resources scoped around a single fragment execution of a SAXVisitor implementation can be cleaned up for the associated _ExecutionContext_.
+This lifecycle method allows you to ensure that resources scoped around a single fragment execution of a SaxNgVisitor implementation can be cleaned up for the associated _ExecutionContext_.
 
 ### ExecutionContext and ApplicationContext
 
 Smooks provides these two Context objects for storing of state information.
 
-The _ExecutionContext_ is scoped specifically around a single execution of a _Smooks.filterSource_ method. All Smooks visitors must be stateless within the context of a single _Smooks.filterSource_ execution, allowing the visitor to be used across multiple concurrent executions of the _Smooks.filterSource_ method. All data stored in an _ExecutionContext_ instance will be lost on completion of the 'Smooks.filterSource _execution. The_ ExecutionContext _is supplied in all visitor API message event calls._
+The _ExecutionContext_ is scoped specifically around a single execution of a _Smooks.filterSource_ method. All Smooks visitors must be stateless within the context of a single _Smooks.filterSource_ execution, allowing the visitor to be used across multiple concurrent executions of the _Smooks.filterSource_ method. All data stored in an _ExecutionContext_ instance will be lost on completion of the _Smooks.filterSource_ execution. The _ExecutionContext_ is supplied in all visitor API message event calls._
 
-The _ApplicationContext_ is scoped around the associated _Smooks_ instance i.e. only one _ApplicationContext_ instance exists per _Smooks_ instance. This context object can be used to store data that needs to be maintained (and accessible) across multiple 'Smooks.filterSource _executions. Components (any component, including_ SAXVisitor _components) can gain access to their associated_ ApplicationContext _instance by declaring an_ ApplicationContext _class property and annotating it with the_ @AppContext _annotation:_
+The _ApplicationContext_ is scoped around the associated _Smooks_ instance i.e. only one _ApplicationContext_ instance exists per Smooks instance. This context object can be used to store data that needs to be maintained (and accessible) across multiple _Smooks.filterSource_ executions. Components (any component, including _SaxNgVisitor_ components) can gain access to their associated _ApplicationContext_ instance by declaring an _ApplicationContext_ class property and annotating it with _@Inject:
 
 ```java
 public class MySmooksComponent {  
    
-    @AppContext  
+    @Inject  
     private ApplicationContext appContext;  
    
     // etc...  
@@ -5841,7 +5929,7 @@ from("direct:unmarshal")
 SmooksProcessor
 ---------------
 
-Using the SmooksProcessor gives you full control over Smooks, for example if you want to programatically create the underlying Smooks instance you’d use the SmooksProcessor. When using the SmooksProcessor you can pass a Smooks instance to its constructor and prior to that programmatically configure Smooks.
+Using the _SmooksProcessor_ gives you full control over Smooks, for example if you want to programatically create the underlying Smooks instance you’d use the SmooksProcessor. When using the SmooksProcessor you can pass a Smooks instance to its constructor and prior to that programmatically configure Smooks.
 
 Below is an example of using the SmooksProcessor in a Camel route:
 
@@ -5872,4 +5960,4 @@ from("file://input?noop=true")
 Apache Camel Examples
 ---------------------
 
-Please see the [Apache Camel Examples](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/camel) in the Examples page.
+Please see the [Apache Camel examples](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/camel) in the examples page.

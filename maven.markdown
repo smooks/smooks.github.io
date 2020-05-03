@@ -16,7 +16,7 @@ The artifact ID for each of the Smooks artifact is as follows:
 * [Smooks Cartridges](documentation/#smooks-cartridges):
     * Calc: "smooks-calc-cartridge"
     * CSV: "smooks-csv-cartridge"
-    * Fixed length reader: "smooks-fixed-length-cartridge"
+    * Fixed-length reader: "smooks-fixed-length-cartridge"
     * EDI: "smooks-edi-cartridge"
     * EDIFACT: "smooks-edifact-cartridge"
     * Javabean: "smooks-javabean-cartridge"
@@ -34,7 +34,7 @@ The artifact ID for each of the Smooks artifact is as follows:
 <dependency>
     <groupId>org.smooks.cartridges</groupId>
     <artifactId>smooks-javabean-cartridge</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.0-M2</version>
 </dependency>
 ```
 
@@ -52,7 +52,7 @@ before declaring dependencies on Smooks:
         <dependency>
             <groupId>org.smooks</groupId>
             <artifactId>smooks-bom</artifactId>
-            <version>2.0.0</version>
+            <version>2.0.0-M2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
