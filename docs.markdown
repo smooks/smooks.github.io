@@ -234,7 +234,7 @@ Smooks is an extensible Java framework for building XML and non-XML data (CSV, E
 While Smooks can be used as a lightweight platform on which to build your own custom processing logic for a wide range of data formats, 
 "out of the box" it comes with some very useful features that can be used individually or seamlessly together:
 
-*   **Java Binding**: Populate a Java Object Model from a data source (CSV, EDI, XML, Java, etc...). Populated object models can be used as a transformation result itself, or can be used by, for example, templating resources to generate XML or other character-based results. Additionally, supports Virtual Object Models (maps and lists of typed data) which can be used by expression language and templating functionality.
+*   **Java Binding**: Populate a POJO from a data source (CSV, EDI, XML, Java, etc...). Populated POJOs can be used as a transformation result itself, or can be used by, for example, templating resources to generate XML or other character-based results. Additionally, supports Virtual Object Models (maps and lists of typed data) which can be used by expression language and templating functionality.
 *   **Transformation**: Perform a wide range of data transformations - XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, Java to XML, Java to EDI, Java to CSV, Java to Java, XML to Java, EDI to Java, etc...
 *   **Huge Message Processing**: Process huge messages (GBs) - split, transform and route message fragments to JMS, file, database, and other destinations.
 *   **Message Enrichment**: Enrich a message with data from a database, or other data sources.
@@ -261,7 +261,7 @@ Smooks now also supports a wide range of message source formats - XML, EDI, JSON
 Fragment-Based Data Processing with Smooks
 ------------------------------------------
 
-The primary design goals of Smooks were to provide a framework within which fragment-based data processing could be performed on hierarchical data (XML and non-XML) using existing data processing technologies (such as XSLT, raw Java, Groovy script), providing a degree of isolation between the different technologies.
+The primary design goals of Smooks were to provide a framework within which fragment-based data processing could be performed on hierarchical data (XML and non-XML) using existing data processing technologies (such as XSLT, plain vanilla Java, Groovy script), providing a degree of isolation between the different technologies.
 
 A [visitor](#visitors) targets a message fragment via the "selector" value on the visitor's resource configuration. The targeted message fragment can take in as much or as little of the message as you like. A message fragment is identified by the name of the Element enclosing the fragment. To target a resource at "the whole message" you simply target it at the root fragment using the root Element's name as the selector, or through the special "$document" selector.
 
@@ -270,28 +270,27 @@ You may wonder why we use and mix the terms "Fragment" and "Element". Well the d
 What's new in Smooks 2?
 -----------------------
 
-Smooks 2 introduces the DFDL cartridge and revamps its EDI cartridge, while dropping support for Java 7 along with a few other breaking changes:
+Smooks 2 introduces the DFDL cartridge and revamps its EDI cartridge, while dropping support for Java 7 along with a few other notable breaking changes:
 
 * DFDL cartridge
-    * DFDL is a specification for describing file formats in XML. The DFDL cartridge leverages Apache Daffodil to parse 
+    * DFDL is a specification for describing file formats in XML. The DFDL cartridge leverages [Apache Daffodil](https://daffodil.apache.org/) to parse 
 files and unparse XML. This opens up Smooks to an incredible number of file formats like SWIFT, ISO8583, HL7, and many more.
 * Complete overhaul of the EDI cartridge
     * Rewritten to extend the DFDL cartridge and provide much better support for reading EDI documents.
-    * Added capability for serialising EDI documents.
-    * Incorporated special support for EDIFACT.
+    * Added functionality for serialising EDI documents.
+    * As in previous Smooks versions, incorporated special support for EDIFACT.
 * Independent release cycles for all cartridges and one Maven BOM (bill of materials) to track them all.
-* Numerous dependencies updates, including:
-    * Camel Cartridge's Apache Camel library to version 3.
-    * CSV Cartridge's OpenCSV library to version 5.
+* Supporting Apache Camel 3 in the Camel cartridge
+* Numerous dependency updates
 * New Maven Coordinates
-    * Smooks artefacts are now published under the Maven group ID beginning with "org.smooks".
+    * We are now publishing Smooks artefacts under Maven group IDs prefixed with "org.smooks".
     
 **[See the full list of features and fixes...](http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11071&version=16269 "http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11071&version=16269")**
 
 Getting Started
 ---------------
 
-The easiest way to get started with Smooks is to download and try out some of the [examples](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples "Smooks v1.5 Examples"). The examples are the perfect base upon which to integrate Smooks into your application.
+The easiest way to get started with Smooks is to download and try out some of the [examples](https://github.com/smooks/smooks-examples/tree/v2.0.0). The examples are the perfect base upon which to integrate Smooks into your application.
 
 FAQs
 ----
@@ -311,9 +310,9 @@ For details on how to integrate Smooks into your project via Ant, see the [Ant g
 Basics
 ======
 
-The most commonly accepted definition of Smooks would be that it is a "Transformation Engine". However, at its core, Smooks makes no mention of "data transformation". The core codebase is designed simply to support hooking of custom "Visitor" logic into an Event Stream produced by a data Source of some kind (XML, CSV, EDI, Java, etc...). As such, **smooks-core** is simply a "**Structured Data Event Stream Processor**".
+The most commonly accepted definition of Smooks would be that it is a "Transformation Engine". However, at its core, Smooks makes no mention of "data transformation". The core codebase is designed simply to support hooking of custom "Visitor" logic into an event stream produced by a data source of some kind (XML, CSV, EDI, Java, etc...). As such, **smooks-core** is simply a "**Structured Data Event Stream Processor**".
 
-Of course, the most common application of this will be in the creation of **Transformation** solutions i.e., implementing a [visitor](#visitors) logic that uses the Event Stream produced from a Source message to produce a Result of some other kind. The capabilities in **smooks-core** enable more than this however. We have implemented a range of other solutions based on this processing model:
+Of course, the most common application of this will be in the creation of transformation solutions, that is, implementing a [visitor](#visitors) that reads the event stream produced from a source message to produce a result of some other kind. The capabilities in **smooks-core** enable more than this however. We have implemented a range of other solutions based on this processing model:
 
 *   **Java Binding**: Population of a Java Object Model from the Source message.
 *   **Message Splitting & Routing**: The ability to perform complex splitting and routing operations on the Source message, including routing to multiple destinations concurrently, as well as routing different data formats concurrently (XML, EDI, CSV, Java, etc...).
@@ -462,7 +461,7 @@ Example:
 Smooks Cartridges
 -----------------
 
-The basic functionality of Smooks Core can be extended through the creation of what we call a "Smooks Cartridge". A Cartridge is simply a Java archive (jar) containing reusable Content Handlers (i.e., a visitor). A Smooks Cartridge should provide "ready to use" support for a specific type of XML analysis or transformation.
+The basic functionality of Smooks Core can be extended through the creation of what we call a "Smooks Cartridge". A Cartridge is simply a Java archive (JAR) containing reusable Content Handlers (i.e., resources). A Smooks Cartridge should provide "ready to use" support for a specific type of XML analysis or transformation.
 
 For a full list of the Cartridges supported by Smooks, see the [Cartridges list](https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges).
 
@@ -1400,6 +1399,101 @@ If you need more control over the binding process, revert back to the lower leve
 *   [Configuring Directly on the Smooks Instance](#configuring-directly-on-the-smooks-instance)
 *   [Java Binding](#java-binding)
 
+DFDL Cartridge
+-------------
+
+### Maven Coordinates
+
+```xml
+<dependency>
+    <groupId>org.smooks.cartridges</groupId>
+    <artifactId>smooks-dfdl-cartridge</artifactId>
+    <version>1.0.0</version>
+</dependency>    
+``` 
+
+### XML Namespaces
+
+```
+xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
+```
+
+### XML API
+
+The DFDL cartridge opens up Smooks to an incredible number of data formats (e.g., SWIFT, ISO8583, HL7). In fact, this cartridge 
+forms the foundations of the EDI and EDIFACT cartridges. The DFDL cartridge deserialises (i.e., parses) non-XML data and serialises 
+(i.e., unparses) XML according to the structure described in a DFDL schema. As an example, we can describe [the underneath CSV data in DFDL](https://github.com/DFDLSchemas/CSV/blob/master/src/main/resources/com/tresys/csv/xsd/csv.dfdl.xsd):
+
+```csv
+last,first,middle,DOB
+smith,robert,brandon,1988-03-24
+johnson,john,henry,1986-01-23
+jones,arya,cat,1986-02-19
+```
+
+The DFDL resource configuration to parse the above CSV would look like:
+
+```xml
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
+                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
+
+    <dfdl:parser schemaURI="/csv.dfdl.xsd"/>
+
+    ...
+
+</smooks-resource-list>
+```
+
+Set in the _schemaURI_ attribute of the _dfdl:parser_ element is the DFDL schema driving the parsing behaviour. For the given CSV,
+_dfdl:parser_ generates the XML stream:
+
+```xml
+<ex:file xmlns:ex="http://example.com">
+	<header>
+		<title>last</title>
+		<title>first</title>
+		<title>middle</title>
+		<title>DOB</title>
+	</header>
+	<record>
+		<item>smith</item>
+		<item>robert</item>
+		<item>brandon</item>
+		<item>1988-03-24</item>
+	</record>
+	<record>
+		<item>johnson</item>
+		<item>john</item>
+		<item>henry</item>
+		<item>1986-01-23</item>
+	</record>
+	<record>
+		<item>jones</item>
+		<item>arya</item>
+		<item>cat</item>
+		<item>1986-02-19</item>
+	</record>
+</ex:file>
+```
+
+Shown in the next snippet is the _dfdl:unparser_ visitor serialising the root element from above stream back to the original CSV:
+
+```xml
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
+                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
+
+    ...
+
+    <dfdl:unparser schemaURI="/csv.dfdl.xsd" unparseOnElement="file"/>
+
+</smooks-resource-list>
+```
+
+The DFDL cartridge supports variables, on disk caching, and trace debugging. Consult the XSD documentation for further
+information.
+
 
 EDI Cartridge
 -------------
@@ -1554,7 +1648,7 @@ encloses the "CUS" and "ORD" segments:
 
 #### Data Elements
 
-Segment data elements are children within a sequence element referencing DFDL format _ibmEdiFmt:EDISegmentSequenceFormat_:
+Segment data elements are children within a sequence element referencing the DFDL format _ibmEdiFmt:EDISegmentSequenceFormat_:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -1724,7 +1818,7 @@ xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
 
 ### XML API
 
-A flavour of the _edi:parser_ supports UN/EDIFACT Interchanges:
+A flavour of the _edi:parser_ supports UN/EDIFACT interchanges:
 
 ```xml
 <?xml version="1.0"?>
@@ -1806,7 +1900,7 @@ dependency to your application's POM (translate as appropriate for Ivy, etc...):
 ```
 
 Once you add an EDIFACT schema pack set to the application's classpath, you configure Smooks to use the schemas by 
-referencing the entry point schema in _schemaURI_ attribute of the _edifact:parser_ or _edifact:unparser_ configuration (_\<version\>/EDIFACT-Messages.dfdl.xsd_):
+referencing the root schema in _schemaURI_ attribute of the _edifact:parser_ or _edifact:unparser_ configuration (_\<version\>/EDIFACT-Messages.dfdl.xsd_):
 
 ```xml
 <?xml version="1.0"?>
@@ -5120,14 +5214,14 @@ Implementing a Fragment Visitor
 
 Visitors are the workhorse of Smooks. Most of the out-of-the-box functionality in Smooks (Java binding, templating, persistence, etc...) was created by creating one or more visitors. Visitors often collaborate through the _ExecutionContext_ and _ApplicationContext_ context objects, accomplishing a common goal by working together.
 
-Smooks supports two types of Visitor implementation:
+Smooks supports two types of visitor implementations:
 
 1.  **SAX** based implementations based on the [SAXVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXVisitor.html) sub-interfaces.
 2.  **DOM** based implementations based on the [DOMVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMVisitor.html) sub-interfaces.
 
-Your implementation can support both SAX and DOM, but in general, we recommend people to stick with implementing a SAX only Visitor. As yet, we have not found a use case that could not be solved through the SAX based implementations, while at the same time, the SAX based implementations are usually easier to create, and offer clear advantages in terms of performance. For this reason, we will concentrate on the SAX only here.
+Your implementation can support both SAX and DOM, but in general, we recommend people to stick with implementing a SAX-only visitor. As yet, we have not found a use case that could not be solved through the SAX based implementations, while at the same time, the SAX based implementations are usually easier to create, and offer clear advantages in terms of performance. For this reason, we will concentrate on the SAX only here.
 
-**Note**: All Visitor implementations are treated as stateless objects. A single Visitor instance must be usable concurrently across multiple messages i.e. across multiple concurrent calls to the _Smooks.filterSource_ method. All state associated with the current _Smooks.filterSource_ execution must be stored in the _ExecutionContext_. For more details see the [ExecutionContext and ApplicationContex](#executioncontext-and-applicationcontext) section.
+**Note**: Smooks treats all visitors as stateless objects. A visitor instance must be usable concurrently across multiple messages i.e. across multiple concurrent calls to the _Smooks.filterSource_ method. All state associated with the current _Smooks.filterSource_ execution must be stored in the _ExecutionContext_. For more details see the [ExecutionContext and ApplicationContex](#executioncontext-and-applicationcontext) section.
 
 ### The SAX Visitor API
 
@@ -5302,9 +5396,9 @@ public class MyVisitor implements SAXVisitAfter {
 
 _SAXVisitor_ configuration works in exactly the same way as any other Smooks component. See [Configuring Smooks Components](#configuring-smooks-components).
 
-The most important thing to note with respect to configuring of Smooks Visitor instances is the fact that the configuration _selector_ is interpreted as an XPath (like) expression. For more on this see the docs on [Selectors](#selectors).
+The most important thing to note with respect to configuring visitor instances is the fact that the _selector_ attribute is interpreted as an XPath (like) expression. For more on this see the docs on [Selectors](#selectors).
 
-Also note that Visitor instances can be programatically configured on a Smooks instance. Among other things, this is very useful for unit testing.
+Also note that visitors can be programatically configured on a Smooks instance. Among other things, this is very useful for unit testing.
 
 #### Example Visitor Configuration
 
@@ -5350,7 +5444,7 @@ Of course it would be really nice to be able to define a cleaner and more strong
 ```
 For details on this, see the section on [Defining Custom Configuration Namespaces](#defining-custom-configuration-namespaces).
 
-This Visitor could also be programmatically configured on a Smooks as follows:
+This visitor could also be programmatically configured on a Smooks as follows:
 ```java
 Smooks smooks = new Smooks();  
    
@@ -5360,9 +5454,9 @@ smooks.filterSource(new StreamSource(inReader), new StreamResult(outWriter));
 ```
 ### Visitor Instance Lifecycle
 
-One aspect of Visitor lifecycle has already been discussed in the general context of Smooks component [initialization and uninitialization](#initialize-and-uninitialize).
+One aspect of the visitor lifecycle has already been discussed in the general context of Smooks component [initialization and uninitialization](#initialize-and-uninitialize).
 
-Smooks supports two additional component lifecycle events, specific to Visitor components, via the _ExecutionLifecycleCleanable_ and _VisitLifecycleCleanable_ interfaces.
+Smooks supports two additional component lifecycle events, specific to visitor components, via the _ExecutionLifecycleCleanable_ and _VisitLifecycleCleanable_ interfaces.
 
 #### ExecutionLifecycleCleanable
 
@@ -5440,7 +5534,7 @@ This lifecycle method allows you to ensure that resources scoped around a single
 
 Smooks provides these two Context objects for storing of state information.
 
-The _ExecutionContext_ is scoped specifically around a single execution of a _Smooks.filterSource_ method. All Smooks Visitor implementations must be stateless within the context of a single _Smooks.filterSource_ execution, allowing the Visitor implementation to be used across multiple concurrent executions of the _Smooks.filterSource_ method. All data stored in an _ExecutionContext_ instance will be lost on completion of the 'Smooks.filterSource _execution. The_ ExecutionContext _is supplied in all Visitor API message event calls._
+The _ExecutionContext_ is scoped specifically around a single execution of a _Smooks.filterSource_ method. All Smooks visitors must be stateless within the context of a single _Smooks.filterSource_ execution, allowing the visitor to be used across multiple concurrent executions of the _Smooks.filterSource_ method. All data stored in an _ExecutionContext_ instance will be lost on completion of the 'Smooks.filterSource _execution. The_ ExecutionContext _is supplied in all visitor API message event calls._
 
 The _ApplicationContext_ is scoped around the associated _Smooks_ instance i.e. only one _ApplicationContext_ instance exists per _Smooks_ instance. This context object can be used to store data that needs to be maintained (and accessible) across multiple 'Smooks.filterSource _executions. Components (any component, including_ SAXVisitor _components) can gain access to their associated_ ApplicationContext _instance by declaring an_ ApplicationContext _class property and annotating it with the_ @AppContext _annotation:_
 ```java
@@ -5504,24 +5598,24 @@ Using the SmooksProcessor gives you full control over Smooks, for example if you
 
 Below is an example of using the SmooksProcessor in a Camel route:
 ```java
-Smooks smooks = new Smooks("edi-to-xml-smooks-config.xml");  
-ExecutionContext context = smooks.createExecutionContext();  
+Smooks smooks = new Smooks("edi-to-xml-smooks-config.xml");
+ExecutionContext context = smooks.createExecutionContext();
 ...  
-SmooksProcessor processor = new SmooksProcessor(smooks, context);  
+SmooksProcessor processor = new SmooksProcessor(smooks, context);
    
-from("file://input?noop=true")  
-.process(processor)  
+from("file://input?noop=true")
+.process(processor)
 .to("mock:result");
 ```
 Similar to the SmooksComponent we have not specified the result type that Smooks produces (if any that is). Instead this is expressed in the Smooks configuration using the [exports](#exporting-results) element or you can do the same programmatically like this:
 ```java
-Smooks smooks = new Smooks();  
-ExecutionContext context = smooks.createExecutionContext();  
-smooks.setExports(new Exports(StringResult.class));  
-SmooksProcessor processor = new SmooksProcessor(smooks, context);  
-...  
-from("file://input?noop=true")  
-.process(processor)  
+Smooks smooks = new Smooks();
+ExecutionContext context = smooks.createExecutionContext();
+smooks.setExports(new Exports(StringResult.class));
+SmooksProcessor processor = new SmooksProcessor(smooks, context);
+...
+from("file://input?noop=true")
+.process(processor)
 .to("mock:result");
 ```
   
