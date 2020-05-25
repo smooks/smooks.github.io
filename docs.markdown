@@ -257,7 +257,7 @@ In the process of building this fragment-based transformation solution, we reali
 * Java Binding: Bind message fragment data to a POJO.
 * Splitting: Perform complex splitting of messages fragments, routing the split message fragments over a range of different transports/destinations e.g. filesystem, JMS, database, ESB.
 * Enrichment: Enrich message fragments with data from a database.
-* Persistence: Persist message fragment data to a database using raw SQL, or by reusing your existing JPA, Hibernate or iBATIS resources.
+* Persistence: Persist message fragment data to a database using raw SQL, or by reusing your existing JPA, Hibernate or MyBatis resources.
 * Validation: Perform basic or complex validation on message fragment data. This is more than simple type/value-range validation. Complex rules based validation is also possible. 
 
 Smooks now also supports a wide range of message source formats - XML, EDI, JSON, CSV, Java (Java to Java!). Smooks has a pluggable Reader interface which allows you to plug in a Reader implementation for any data format. 
@@ -3832,7 +3832,7 @@ Enriching Output Data
 There are three out of the box methods for enriching your output data:
 
 *   Use a JDBC Datasource to access a database and use SQL statements to read from and write to the database. This capability is provided through the Smooks Routing Cartridge. See the section on [Routing to a Database using SQL](#routing-to-a-database-using-sql).
-*   Use an entity persistence framework (like Ibatis, Hibernate or any JPA compatible framework) to access a database and use it's query language or CRUD methods to read from it or write to it. See the section on [Entity Persistence Frameworks](#entity-persistence-frameworks).
+*   Use an entity persistence framework (like MyBatis, Hibernate or any JPA compatible framework) to access a database and use it's query language or CRUD methods to read from it or write to it. See the section on [Entity Persistence Frameworks](#entity-persistence-frameworks).
 *   Use custom Data Access Objects (DAO's) to access a database and use it's CRUD methods to read from it or write to it. Again, see [DAO Support](#DAO_Support).
 
 **Note**: _Be sure to read the section on [Java Binding](#java-binding)_.
