@@ -286,7 +286,7 @@ files and unparse XML. This opens up Smooks to an incredible number of file form
 * Independent release cycles for all cartridges and one [Maven BOM](/maven#bill-of-materials--bom-) (bill of materials) to track them all
 * Numerous dependency updates
 * Maven coordinates change
-    * We are now publishing Smooks artefacts under Maven group IDs prefixed with "org.smooks".
+    * We are now publishing Smooks artifacts under Maven group IDs prefixed with "org.smooks".
      
 Getting Started
 ---------------
@@ -298,7 +298,7 @@ Migrating from Smooks 1.7 to 2.0
 
 1. Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.
 2. Replace references to Java packages "org.milyn" or "org.milyn.smooks" with "org.smooks"
-3. Replace Smooks Maven coordinates to match the coordinates as described in the [Maven guide](/maven#artefact-ids).
+3. Replace Smooks Maven coordinates to match the coordinates as described in the [Maven guide](/maven#artifact-ids).
 
 FAQs
 ----

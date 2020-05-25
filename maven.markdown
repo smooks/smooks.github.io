@@ -6,11 +6,11 @@ If your building Smooks from source using Maven, please use:
 1. Java 8
 2. [Maven 3](https://maven.apache.org/download.cgi) 
 
-## Artefact IDs
+## Artifact IDs
 The Maven group ID for Smooks cartridges, excluding the EDI and EDIFACT cartridges, is "_org.smooks.cartridges_". For the EDI and EDIFACT cartridges,
-the group ID is "_org.smooks.cartridges.edi_". All remaining Smooks artefacts have the groupId "_org.smooks_".
+the group ID is "_org.smooks.cartridges.edi_". All remaining Smooks artifacts have the groupId "_org.smooks_".
 
-The artefact ID for each of the Smooks artefact is as follows:
+The artifact ID for each of the Smooks artifact is as follows:
 
 * Smooks Core: "smooks-core"
 * [Smooks Cartridges](documentation/#smooks-cartridges):
@@ -26,7 +26,7 @@ The artefact ID for each of the Smooks artefact is as follows:
     * Persistence: "smooks-persistence-cartridge"
     * Validation: "smooks-validation-cartridge" 
     * DFDL: "smooks-dfdl-cartridge"
-* Commons: "smooks-commons" (all artefacts depend on Commons, so no need to specify a dependency on this module if you are already dependent on one of the others)
+* Commons: "smooks-commons" (all artifacts depend on Commons, so no need to specify a dependency on this module if you are already dependent on one of the others)
 
 **Note**: All cartridges depend on "smooks-core". Therefore, if your project depends on one of the cartridges, there's no need to specify the dependency on smooks-core.
 
@@ -42,7 +42,7 @@ See the POMs in the [examples](https://github.com/smooks/smooks-examples) for re
 
 ## Bill of Materials (BOM)
 
-In order to guarantee compatibility between Smooks artefacts, we recommend you import the Smooks BOM from your POM 
+In order to guarantee compatibility between Smooks artifacts, we recommend you import the Smooks BOM from your POM 
 before declaring dependencies on Smooks:
 
 ```xml
