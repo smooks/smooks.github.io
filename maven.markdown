@@ -43,7 +43,7 @@ See the POMs in the [examples](https://github.com/smooks/smooks-examples) for re
 ## Bill of Materials (BOM)
 
 In order to guarantee compatibility between Smooks artefacts, we recommend you import the Smooks BOM from your POM 
-before declaring Smooks dependencies:
+before declaring dependencies on Smooks:
 
 ```xml
 ...

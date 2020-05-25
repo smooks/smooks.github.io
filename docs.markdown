@@ -7,7 +7,7 @@ permalink: /documentation/
 
 ### Examples
 
-Examples are always a great place to learn. We have quite a few ["general" examples as well as UN/EDIFACT examples on GitHub](https://github.com/smooks/smooks-exmaples/tree/v2.0.0).
+Examples are always a great place to learn. We have quite a few [general examples as well as UN/EDIFACT examples on GitHub](https://github.com/smooks/smooks-exmaples/tree/v2.0.0).
 
 ### User Guide
 
