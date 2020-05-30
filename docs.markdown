@@ -12,7 +12,7 @@ Examples are always a great place to learn. We have quite a few [general example
 ### User Guide
 
 - [Introduction](#introduction)
-  * [Why Smooks?](#why-smooks-)
+  * [Why Smooks?](#why-smooks)
   * [Fragment-Based Data Processing with Smooks](#fragment-based-data-processing-with-smooks)
   * [What's new in Smooks 2?](#whats-new-in-smooks-2)
   * [Getting Started](#getting-started)
