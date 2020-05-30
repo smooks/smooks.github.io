@@ -47,10 +47,10 @@ Examples are always a great place to learn. We have quite a few [general example
   * [XML](#xml)
   * [CSV Cartridge](#csv-cartridge)
     + [Maven Coordinates](#maven-coordinates)
-    + [XML Namespaces](#xml-namespaces)
+    + [XML Namespace](#xml-namespace)
     + [XML API](#xml-api)
       - [Defining fields](#defining-fields)
-      - [Multi Record Field Definitions](#multi-record-field-definitions)
+      - [Multi-Record Field Definitions](#multi-record-field-definitions)
       - [String manipulation functions](#string-manipulation-functions)
       - [Ignoring Fields](#ignoring-fields)
       - [Binding CSV Records to Java](#binding-csv-records-to-java)
@@ -59,22 +59,22 @@ Examples are always a great place to learn. We have quite a few [general example
       - [CSV List and Map Binders](#csv-list-and-map-binders)
   * [Fixed Length Cartridge](#fixed-length-cartridge)
     + [Maven Coordinates](#maven-coordinates-1)
-    + [XML Namespaces](#xml-namespaces-1)
+    + [XML Namespace](#xml-namespace-1)
     + [XML API](#xml-api-1)
       - [Defining fields](#defining-fields-1)
       - [String manipulation functions](#string-manipulation-functions-1)
       - [Ignoring Fields](#ignoring-fields-1)
       - [Binding fixed length Records to Java](#binding-fixed-length-records-to-java)
-    + [JAVA API](#java-api)
+    + [Java API](#java-api-1)
       - [Configuring Directly on the Smooks Instance](#configuring-directly-on-the-smooks-instance-1)
       - [Fixed length List and Map Binders](#fixed-length-list-and-map-binders)
   * [DFDL Cartridge](#dfdl-cartridge)
     + [Maven Coordinates](#maven-coordinates-2)
-    + [XML Namespaces](#xml-namespaces-2)
+    + [XML Namespace](#xml-namespace-2)
     + [XML API](#xml-api-2)
   * [EDI Cartridge](#edi-cartridge)
     + [Maven Coordinates](#maven-coordinates-3)
-    + [XML Namespaces](#xml-namespaces-3)
+    + [XML Namespaces](#xml-namespaces)
     + [XML API](#xml-api-3)
     + [EDI DFDL Schema](#edi-dfdl-schema)
       - [Segments](#segments)
@@ -86,22 +86,22 @@ Examples are always a great place to learn. We have quite a few [general example
       - [Type Support](#type-support)
   * [EDIFACT Cartridge](#edifact-cartridge)
     + [Maven Coordinates](#maven-coordinates-4)
-    + [XML Namespaces](#xml-namespaces-4)
+    + [XML Namespaces](#xml-namespaces-1)
     + [XML API](#xml-api-4)
     + [Schema Packs](#schema-packs)
   * [JSON Cartridge](#json-cartridge)
     + [Maven Coordinates](#maven-coordinates-5)
-    + [XML Namespaces](#xml-namespaces-5)
+    + [XML Namespace](#xml-namespace-3)
     + [XML API](#xml-api-5)
-    + [Java API](#java-api-1)
+    + [Java API](#java-api-2)
   * [YAML Cartridge](#yaml-cartridge)
     + [Maven Coordinates](#maven-coordinates-6)
-    + [XML Namespaces](#xml-namespaces-6)
+    + [XML Namespace](#xml-namespace-4)
     + [XML API](#xml-api-6)
-    + [Java API](#java-api-2)
+    + [Java API](#java-api-3)
   * [JavaBean Cartridge](#javabean-cartridge)
     + [Maven Coordinates](#maven-coordinates-7)
-    + [XML Namespaces](#xml-namespaces-7)
+    + [XML Namespace](#xml-namespace-5)
     + [Source and Target Object Models](#source-and-target-object-models)
     + [Source Model Event Stream](#source-model-event-stream)
     + [XML API](#xml-api-7)
@@ -284,6 +284,10 @@ files and unparse XML. This opens up Smooks to an incredible number of file form
     * New functionality for serialising EDI documents.
     * As in previous Smooks versions, incorporated special support for EDIFACT.
 * Independent release cycles for all cartridges and one [Maven BOM](/maven#bill-of-materials--bom-) (bill of materials) to track them all
+* License change 
+    * After reaching consensus among code contributors, we've dual-licensed Smooks under [LGPL v3.0](https://choosealicense.com/licenses/lgpl-3.0/) 
+and [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/). This license change keeps Smooks open source while adopting 
+a permissive stance to modifications.
 * Numerous dependency updates
 * Maven coordinates change
     * We are now publishing Smooks artifacts under Maven group IDs prefixed with "org.smooks".
@@ -929,7 +933,7 @@ CSV Cartridge
 </dependency>    
 ``` 
 
-### XML Namespaces
+### XML Namespace
 
 ```
 xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd"
@@ -937,9 +941,7 @@ xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd"
 
 ### XML API
 
-CSV processing through the CSV Reader is configured through the [https://www.smooks.org/xsd/smooks/csv-1.6.xsd](https://www.smooks.org/xsd/smooks/csv-1.6.xsd "https://www.smooks.org/xsd/smooks/csv-1.6.xsd") configuration namespace.
-
-A simple/basic configuration.
+The next example shows an XML resource configuration of a CSV reader:
 
 ```xml
 <?xml version="1.0"?>  
@@ -977,7 +979,7 @@ The above configuration will generate an event stream of the form:
 
 #### Defining fields
 
-Fields can be defined in either of 2 ways:
+Fields can be defined in either of two ways:
 
 1.  On the 'fields' attribute of the \<csv:reader> configuration (as shown above).
 2.  As the first record in the message after setting the 'fieldsInMessage' attribute of the \<csv:reader> configuration to 'true'.
@@ -991,9 +993,9 @@ The field names must follow the same naming rules like XML element names:
 
 By setting the **rootElementName** and **recordElementName** attributes you can modify the <csv-set> and <csv-record> element names. The same naming rules apply for these names.
 
-#### Multi Record Field Definitions
+#### Multi-Record Field Definitions
 
-All Flat File based reader configurations (including the CSV reader) support **Multi Record Field Definitions**, which means that the reader can support CSV message streams that contain varying (multiple different types) CSV record types.
+All Flat File based reader configurations (including the CSV reader) support **Multi-Record Field Definitions**, which means that the reader can support CSV message streams containing varying (multiple different types) CSV record types.
 
 Take the following CSV message example:
 
@@ -1151,7 +1153,7 @@ Person mike = people.get("Mike");
 
 ### Java API
 
-Programmatically configuring the CSV Reader on a Smooks instance is trivial (i.e. no XML required). A number of options are available.
+Programmatically configuring the CSV Reader on a Smooks instance is trivial. A number of options are available.
 
 #### Configuring Directly on the Smooks Instance
 
@@ -1211,7 +1213,7 @@ Fixed Length Cartridge
 </dependency>    
 ``` 
 
-### XML Namespaces
+### XML Namespace
 
 ```
 xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd"
@@ -1380,9 +1382,9 @@ Person mike = people.get("Maurice");
 
 [Virtual Models](#virtual-object-models-maps--lists) are also supported, so you can define the **class** attribute as a java.util.Map and have the fixed length field values bound into Map instances, which are in turn added to a List or a Map.
 
-### JAVA API
+### Java API
 
-Programmatically configuring the FixedLengthReader on a Smooks instance is trivial (i.e. no XML required). A number of options are available.
+Programmatically configuring the FixedLengthReader on a Smooks instance is trivial. A number of options are available.
 
 #### Configuring Directly on the Smooks Instance
 
@@ -1442,7 +1444,7 @@ DFDL Cartridge
 </dependency>    
 ``` 
 
-### XML Namespaces
+### XML Namespace
 
 ```
 xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
@@ -1452,7 +1454,50 @@ xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
 
 The DFDL cartridge opens up Smooks to an incredible number of data formats (e.g., SWIFT, ISO8583, HL7). In fact, this cartridge 
 forms the foundations of the EDI and EDIFACT cartridges. The DFDL cartridge deserialises (i.e., parses) non-XML data and serialises 
-(i.e., unparses) XML according to the structure described in a DFDL schema. As an example, we can describe [the subsequent CSV data in DFDL](https://github.com/DFDLSchemas/CSV/blob/master/src/main/resources/com/tresys/csv/xsd/csv.dfdl.xsd):
+(i.e., unparses) XML according to a structure described in [DFDL](https://daffodil.apache.org/docs/dfdl/). Take the subsequent DFDL schema as an example:
+
+```xml
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2005/xpath-functions"
+  xmlns:dfdl="http://www.ogf.org/dfdl/dfdl-1.0/" xmlns:ex="http://example.com"
+  targetNamespace="http://example.com" elementFormDefault="unqualified">
+
+  <xs:include schemaLocation="org/apache/daffodil/xsd/DFDLGeneralFormat.dfdl.xsd" />
+
+  <xs:annotation>
+    <xs:appinfo source="http://www.ogf.org/dfdl/">
+      <dfdl:format ref="ex:GeneralFormatPortable" separator="" initiator=""
+        terminator="" textTrimKind="none" initiatedContent="no" ignoreCase="no"
+        separatorPosition="infix" occursCountKind="implicit"
+        emptyValueDelimiterPolicy="both" representation="text" textNumberRep="standard"
+        lengthKind="delimited" encoding="ASCII" encodingErrorPolicy="error" />
+    </xs:appinfo>
+  </xs:annotation>
+
+  <xs:element name="file">
+    <xs:complexType>
+      <xs:sequence dfdl:separator="%NL;" dfdl:separatorPosition="postfix">
+        <xs:element name="header" minOccurs="0" maxOccurs="1"
+          dfdl:occursCountKind="implicit">
+          <xs:complexType>
+            <xs:sequence dfdl:separator=",">
+              <xs:element name="title" type="xs:string" maxOccurs="unbounded" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="record" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence dfdl:separator=",">
+              <xs:element name="item" type="xs:string" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+```
+
+The schema describes the structure of CSV data like the one below:
 
 ```csv
 last,first,middle,DOB
@@ -1461,7 +1506,8 @@ johnson,john,henry,1986-01-23
 jones,arya,cat,1986-02-19
 ```
 
-The DFDL resource configuration to parse the above CSV would be like:
+Assuming the file "csv.dfdl.xsd" holds the DFDL schema describing the CSV structure, the DFDL resource configuration to parse the above CSV would be 
+written as:
 
 ```xml
 <?xml version="1.0"?>
@@ -1481,7 +1527,7 @@ _dfdl:parser_ generates the XML stream:
 ```xml
 <ex:file xmlns:ex="http://example.com">
 	<header>
-		<title>last</title>
+	    <title>last</title>
 		<title>first</title>
 		<title>middle</title>
 		<title>DOB</title>
@@ -1544,6 +1590,8 @@ EDI Cartridge
 xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
 xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
 ```
+
+Note: the DFDL namespace is required because the EDI cartridge inherits from the DFDL cartridge.
 
 ### XML API
 
@@ -1822,7 +1870,7 @@ The _type_ attribute on segment data elements allows datatype specification for 
 EDIFACT Cartridge
 -----------------
 
-Smooks 2 provides out-of-the-box support for UN/EDIFACT interchanges in terms of pregenerated EDI DFDL schemas generated from 
+Smooks 2 provides out-of-the-box support for UN/EDIFACT interchanges in terms of pre-generated EDI DFDL schemas derived from 
 the [official UN/EDIFACT message definition zip directories](http://www.unece.org/trade/untdid/down_index.htm). This 
 allows you to easily convert a UN/EDIFACT message interchange into a consumable XML document.
 
@@ -1846,9 +1894,11 @@ xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
 xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"
 ```
 
+Note: the DFDL and EDI namespaces are required because the EDIFACT cartridge inherits from both cartridges.
+
 ### XML API
 
-Specialised edi:parser and edi:unparser resources support UN/EDIFACT interchanges as shown in the next example:
+Specialised _edi:parser_ and _edi:unparser_ resources support UN/EDIFACT interchanges as shown in the next example:
 
 ```xml
 <?xml version="1.0"?>
@@ -1865,7 +1915,7 @@ Specialised edi:parser and edi:unparser resources support UN/EDIFACT interchange
 ```
   
 The _edifact:parser_ and _edifact:unparser_, analogous to the _edi:parser_ and _edi:unparser_, convert the stream according 
-to the pregenerated DFDL schema referenced in the _schemaURI_ attribute. Given that an EDIFACT schema can be very big compared 
+to the pre-generated DFDL schema referenced in the _schemaURI_ attribute. Given that an EDIFACT schema can be very big compared 
 to your average EDI schema, it may take minutes for the parser to compile it. Even having the _onDiskCache_ attribute enabled 
 may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring 
 ahead of time which message types the parser will process: 
@@ -1963,7 +2013,7 @@ JSON Cartridge
 </dependency>    
 ``` 
 
-### XML Namespaces
+### XML Namespace
 
 ```
 xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd"
@@ -2040,7 +2090,7 @@ YAML Cartridge
 </dependency>    
 ``` 
 
-### XML Namespaces
+### XML Namespace
 
 ```
 xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd"
@@ -2134,7 +2184,7 @@ JavaBean Cartridge
 </dependency>    
 ``` 
 
-### XML Namespaces
+### XML Namespace
 
 ```
 xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"
