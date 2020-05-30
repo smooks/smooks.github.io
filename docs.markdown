@@ -14,7 +14,7 @@ Examples are always a great place to learn. We have quite a few [general example
 - [Introduction](#introduction)
   * [Why Smooks?](#why-smooks-)
   * [Fragment-Based Data Processing with Smooks](#fragment-based-data-processing-with-smooks)
-  * [What's new in Smooks 2?](#what-s-new-in-smooks-2-)
+  * [What's new in Smooks 2?](#what-s-new-in-smooks-2)
   * [Getting Started](#getting-started)
   * [Migrating from Smooks 1.7 to 2.0](#migrating-from-smooks-17-to-20)
   * [FAQs](#faqs)
