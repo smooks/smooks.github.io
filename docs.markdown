@@ -285,7 +285,7 @@ files and unparse XML. This opens up Smooks to an incredible number of file form
     * As in previous Smooks versions, incorporated special support for EDIFACT.
 * Independent release cycles for all cartridges and one [Maven BOM](/maven#bill-of-materials--bom-) (bill of materials) to track them all
 * License change 
-    * After reaching consensus among code contributors, we've dual-licensed Smooks under [LGPL v3.0](https://choosealicense.com/licenses/lgpl-3.0/) 
+    * After reaching consensus among our code contributors, we've dual-licensed Smooks under [LGPL v3.0](https://choosealicense.com/licenses/lgpl-3.0/) 
 and [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/). This license change keeps Smooks open source while adopting 
 a permissive stance to modifications.
 * Numerous dependency updates
@@ -301,7 +301,7 @@ Migrating from Smooks 1.7 to 2.0
 --------------------------------
 
 1. Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.
-2. Replace references to Java packages "org.milyn" or "org.milyn.smooks" with "org.smooks"
+2. Replace references to Java packages "org.milyn" or "org.milyn.smooks" with "org.smooks".
 3. Replace Smooks Maven coordinates to match the coordinates as described in the [Maven guide](/maven#artifact-ids).
 
 FAQs
