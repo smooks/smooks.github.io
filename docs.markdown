@@ -421,8 +421,8 @@ Central to how Smooks works is the concept of a visitor. A visitor is a Java cla
 
 When writing a visitor, you have the choice of supporting your logic through either the SAX and/or DOM Filters by implementing one or both of the following interfaces:
 
-* [org.milyn.delivery.sax.SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor)
-* [org.milyn.delivery.dom.DOMElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMElementVisitor)
+* [org.smooks.delivery.sax.SAXElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/sax/SAXElementVisitor)
+* [org.smooks.delivery.dom.DOMElementVisitor](/javadoc/v1.7.1/smooks/org/milyn/delivery/dom/DOMElementVisitor)
 
 ### Selectors
 
@@ -540,7 +540,7 @@ The DomModelCreator can be configured in Smooks to create models for the "order"
 
 ```xml
 <resource-config selector="order,order-item">  
-    <resource>org.milyn.delivery.DomModelCreator</resource>  
+    <resource>org.smooks.delivery.DomModelCreator</resource>  
 </resource-config>
 ```
 
@@ -567,7 +567,7 @@ See the following examples that utilize this mixed DOM + SAX approach:
 The Bean Context
 ----------------
 
-The **bean context** (also known as "bean map") is a container for Objects which can be accessed within the Smooks filter process. One bean context is created per execution context (i.e. per Smooks.filterSource operation). Every bean, created by the cartridge, is put into this context under its **beanId**. If you want the contents of the bean context to be returned at the end of the Smooks.filterSource process, supply a **org.milyn.delivery.java.JavaResult** object in the call to Smooks.filterSource method. The following example illustrates this principal:
+The **bean context** (also known as "bean map") is a container for Objects which can be accessed within the Smooks filter process. One bean context is created per execution context (i.e. per Smooks.filterSource operation). Every bean, created by the cartridge, is put into this context under its **beanId**. If you want the contents of the bean context to be returned at the end of the Smooks.filterSource process, supply a **org.smooks.delivery.java.JavaResult** object in the call to Smooks.filterSource method. The following example illustrates this principal:
 
 ```Java
 //Get the data to filter  
@@ -1104,7 +1104,7 @@ Using a config of the form:
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
         <!-- Note how the field names match the property names on the Person class. -->  
-        <csv:listBinding beanId="people" class="org.milyn.csv.Person" />  
+        <csv:listBinding beanId="people" class="org.smooks.csv.Person" />  
     </csv:reader>  
    
 </smooks-resource-list>
@@ -1129,7 +1129,7 @@ Smooks also supports creation of Maps from the CSV record set:
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
-        <csv:mapBinding beanId="people" class="org.milyn.csv.Person" keyField="firstname" />  
+        <csv:mapBinding beanId="people" class="org.smooks.csv.Person" keyField="firstname" />  
     </csv:reader>  
    
 </smooks-resource-list>
@@ -1335,7 +1335,7 @@ Using a config of the form:
    
     <fl:reader fields="firstname[10]?trim,lastname[10]?trim,gende[1],age[3]?trim,country[2]">  
         <!-- Note how the field names match the property names on the Person class. -->  
-        <fl:listBinding beanId="people" class="org.milyn.fixedlength.Person" />  
+        <fl:listBinding beanId="people" class="org.smooks.fixedlength.Person" />  
     </fl:reader>  
    
 </smooks-resource-list>
@@ -1360,7 +1360,7 @@ Smooks also supports creation of Maps from the fixed length record set:
                       xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">
  
     <csv:reader fields="firstname,lastname,gender,age,country">
-        <csv:mapBinding beanId="people" class="org.milyn.csv.Person" keyField="firstname" />
+        <csv:mapBinding beanId="people" class="org.smooks.csv.Person" keyField="firstname" />
     </csv:reader>
  
 </smooks-resource-list>
@@ -2252,7 +2252,7 @@ The Smooks configuration for performing this transform ("smooks-config.xml") is 
 
 #### Smooks Execution
 
-The source object model is provided to Smooks via a **org.milyn.delivery.JavaSource** Object. This object is created by passing the constructor the root object of the source model. The resulting JavaSource object is used in the **Smooks#filter** method. The resulting code could look like as follows:
+The source object model is provided to Smooks via a **org.smooks.delivery.JavaSource** Object. This object is created by passing the constructor the root object of the source model. The resulting JavaSource object is used in the **Smooks#filter** method. The resulting code could look like as follows:
 
 ```java
 protected LineOrder runSmooksTransform(Order srcOrder) throws [IOException](http://www.google.com/search?hl=en&q=allinurl%3Aioexception+java.sun.com&btnI=I%27m%20Feeling%20Lucky), SAXException {  
@@ -2351,10 +2351,10 @@ An example of a ruleBase configuration is as follows:
                       xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
    
     <rules:ruleBases>  
-        <rules:ruleBase name="regexAddressing" src="/org/milyn/validation/address.properties" 
-                        provider="org.milyn.rules.regex.RegexProvider" />  
-        <rules:ruleBase name="order" src="/org/milyn/validation/order/rules/order-rules.csv" 
-                        provider="org.milyn.rules.mvel.MVELProvider"/>  
+        <rules:ruleBase name="regexAddressing" src="/org/smooks/validation/address.properties" 
+                        provider="org.smooks.rules.regex.RegexProvider" />  
+        <rules:ruleBase name="order" src="/org/smooks/validation/order/rules/order-rules.csv" 
+                        provider="org.smooks.rules.mvel.MVELProvider"/>  
     </rules:ruleBases>  
    
 </smooks-resource-list>
@@ -2369,7 +2369,7 @@ The following are the configuration options for the <rules:ruleBase> configurati
 
 ### RuleProvider Implementations
 
-Rule Providers implement the **org.milyn.rules.RuleProvider** interface.
+Rule Providers implement the **org.smooks.rules.RuleProvider** interface.
 
 Smooks v1.2 supports 2 RuleProvider implementations out of the box:
 
@@ -2389,8 +2389,8 @@ Configuration of a Regex ruleBase would look like this:
                       xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
    
     <rules:ruleBases>  
-        <rules:ruleBase name="customer" src="/org/milyn/validation/order/rules/customer.properties" 
-                        provider="org.milyn.rules.regex.RegexProvider"/>  
+        <rules:ruleBase name="customer" src="/org/smooks/validation/order/rules/customer.properties" 
+                        provider="org.smooks.rules.regex.RegexProvider"/>  
     </rules:ruleBases>  
    
 </smooks-resource-list>
@@ -2432,7 +2432,7 @@ Configuration of an MVEL ruleBase would look like this:
                       xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
    
     <rules:ruleBases>  
-        <rules:ruleBase name="order" src="/org/milyn/validation/order/rules/order-rules.csv" provider="org.milyn.rules.mvel.MVELProvider"/>  
+        <rules:ruleBase name="order" src="/org/smooks/validation/order/rules/order-rules.csv" provider="org.smooks.rules.mvel.MVELProvider"/>  
     </rules:ruleBases>  
    
 </smooks-resource-list>
@@ -2524,7 +2524,7 @@ As you can see from the above code, individual warning, error etc validation res
 
 ### Localized Validation Messages
 
-The Validation Cartridge provides support for specifying localized messages relating to Validation failures. These messages can be defined in standard Java ResourceBundle files (.properties format). A convention is used here, based on the rule source name ("src"). The validation message bundle base name is derived from the rule source ("src") by dropping the rule source file extension and adding an extra folder named "i18n" e.g. for an MVEL ruleBase source of "/org/milyn/validation/order/rules/order-rules.csv", the corresponding validation message bundle base name would be "/org/milyn/validation/order/rules/i18n/order-rules".
+The Validation Cartridge provides support for specifying localized messages relating to Validation failures. These messages can be defined in standard Java ResourceBundle files (.properties format). A convention is used here, based on the rule source name ("src"). The validation message bundle base name is derived from the rule source ("src") by dropping the rule source file extension and adding an extra folder named "i18n" e.g. for an MVEL ruleBase source of "/org/smooks/validation/order/rules/order-rules.csv", the corresponding validation message bundle base name would be "/org/smooks/validation/order/rules/i18n/order-rules".
 
 The validation cartridge supports application of **FreeMarker templates** on the localized messages, allowing the messages to contain contextual data from the bean context, as well as data about the actual rule failure. FreeMarker based messages must be prefixed with "ftl:" and the contextual data is references using the normal FreeMarker notation. The beans from the bean context can be referenced directly, while the RuleEvalResult and rule failure path can be referenced through the "ruleResult" and "path" beans.
 
@@ -2903,7 +2903,7 @@ As an example for solving the numeric decoding issue described above:
 
 ```xml
 <!-- A bean property binding example: -->  
-<jb:bean beanId="orderItem" class="org.milyn.javabean.OrderItem" createOnElement="price">  
+<jb:bean beanId="orderItem" class="org.smooks.javabean.OrderItem" createOnElement="price">  
     <jb:value property="price" data="price" decoder="Double">  
         <jb:decodeParam name="valuePreprocess">value.replace("_", "").replace("!", ".")</jb:decodeParam>  
     </jb:value>  
@@ -2966,17 +2966,17 @@ There are three methods to declare which definition language you want to use:
 1.  Each definition language can have an alias. For instance MVEL has the alias 'mvel'. To define that you want to use MVEL for a specific factory definition you put 'mvel:' in front of the definition. e.g. 'mvel:some.package.ListFactory.getInstance().newList()'. The alias of the default basic language is 'basic'.
 2.  To set a language as a global default you need to set the ‘factory.definition.parser.class’ global parameter to the full class path of the class that implements the FactoryDefinitionParser interface for the language that you want to use.  
     **Note:**If you have a definition with your default language that includes a ':' then you must prefix that definition with 'default:' else you will run into an Exception.
-3.  Instead of using an alias you can also set the full class path of the class that implements the FactoryDefinitionParser interface for the language that you want to use. e.g. 'org.milyn.javabean.factory.MVELFactoryDefinitionParser:some.package.ListFactory.getInstance().newList()'. You probably only should use this for test purposes only. It is much better to define an alias for your language.
+3.  Instead of using an alias you can also set the full class path of the class that implements the FactoryDefinitionParser interface for the language that you want to use. e.g. 'org.smooks.javabean.factory.MVELFactoryDefinitionParser:some.package.ListFactory.getInstance().newList()'. You probably only should use this for test purposes only. It is much better to define an alias for your language.
 
-If you want to define your own language then you need to implement the 'org.milyn.javabean.factory.FactoryDefinitionParser' interface. Take a look at the 'org.milyn.javabean.factory.MVELFactoryDefinitionParser' or 'org.milyn.javabean.factory.BasicFactoryDefinitionParser' for a good example.
+If you want to define your own language then you need to implement the 'org.smooks.javabean.factory.FactoryDefinitionParser' interface. Take a look at the 'org.smooks.javabean.factory.MVELFactoryDefinitionParser' or 'org.smooks.javabean.factory.BasicFactoryDefinitionParser' for a good example.
 
-To define the alias for a definition language you need to add the 'org.milyn.javabean.factory.Alias' annotation with the alias name to your FactoryDefinitionParser class.
+To define the alias for a definition language you need to add the 'org.smooks.javabean.factory.Alias' annotation with the alias name to your FactoryDefinitionParser class.
 
 For Smooks to find your alias you need create the file 'META-INF/smooks-javabean-factory-definition-parsers.inf' on the root of your classpath. This file must contain the full class path of all the files that implement the FactoryDefinitionParser interface having the Alias annotation (separated by new lines).
 
 ###### MVEL as factory definition language
 
-MVEL has some advantages over the basic default definition language, for example you can use objects from the bean context as the factory object or you can call factory methods with parameters. These parameters can be defined within the definition or they can be objects from the bean context. To be able to use MVEL use the alias 'mvel' or you can set the ‘factory.definition.parser.class’ global parameter to ‘org.milyn.javabean.factory.MVELFactoryDefinitionParser’.
+MVEL has some advantages over the basic default definition language, for example you can use objects from the bean context as the factory object or you can call factory methods with parameters. These parameters can be defined within the definition or they can be objects from the bean context. To be able to use MVEL use the alias 'mvel' or you can set the ‘factory.definition.parser.class’ global parameter to ‘org.smooks.javabean.factory.MVELFactoryDefinitionParser’.
 
 Here is an example with the same use case as before but then with MVEL:
 
@@ -3188,7 +3188,7 @@ Taking the "classic" Order message as an example and getting the order number, n
 
 ##### Programmatic Configuration
 
-The value binder can be programmatic configured using the **org.milyn.javabean.Value** Object.
+The value binder can be programmatic configured using the **org.smooks.javabean.Value** Object.
 
 ###### Example
 
@@ -3299,7 +3299,7 @@ smooks.filterSource(new StreamSource(orderMessageStream), result);
 Order order = (Order) result.getBean("order");
 ```
 
-The API supports factories. You can provide a factory object of the type org.milyn.javabean.factory.Factory, that will be called when a new bean instance needs to be created.
+The API supports factories. You can provide a factory object of the type org.smooks.javabean.factory.Factory, that will be called when a new bean instance needs to be created.
 
 Here is an example where an anonymous Factory class is defined and used:
 
@@ -3366,11 +3366,11 @@ See the [xml-read-write-transform](https://github.com/smooks/smooks/tree/v1.7.1/
 
 ### Generating the Smooks Binding Configuration
 
-The Javabean Cartridge contains the **org.milyn.javabean.gen.ConfigGenerator** utility class that can be used to generate a binding configuration template. This template can then be used as the basis for defining a binding.
+The Javabean Cartridge contains the **org.smooks.javabean.gen.ConfigGenerator** utility class that can be used to generate a binding configuration template. This template can then be used as the basis for defining a binding.
 
 From the commandline:
 
-$JAVA\_HOME/bin/java -classpath <classpath> org.milyn.javabean.gen.ConfigGenerator -c <rootBeanClass> -o <outputFilePath> \[-p <propertiesFilePath>\]
+$JAVA\_HOME/bin/java -classpath <classpath> org.smooks.javabean.gen.ConfigGenerator -c <rootBeanClass> -o <outputFilePath> \[-p <propertiesFilePath>\]
 
 *   The "**\-c'**" commandline arg specifies the root class of the model whose binding config is to be generated.
 *   The "**\-o**" commandline arg specifies the path and filename for the generated config output.
@@ -3397,13 +3397,13 @@ The following is an example of a generated configuration. Note the "$TODO$" toke
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
    
-    <jb:bean beanId="order" class="org.milyn.javabean.Order" createOnElement="$TODO$">  
+    <jb:bean beanId="order" class="org.smooks.javabean.Order" createOnElement="$TODO$">  
         <jb:wiring property="header" beanIdRef="header" />  
         <jb:wiring property="orderItems" beanIdRef="orderItems" />  
         <jb:wiring property="orderItemsArray" beanIdRef="orderItemsArray" />  
     </jb:bean>  
    
-    <jb:bean beanId="header" class="org.milyn.javabean.Header" createOnElement="$TODO$">  
+    <jb:bean beanId="header" class="org.smooks.javabean.Header" createOnElement="$TODO$">  
         <jb:value property="date" decoder="$TODO$" data="$TODO$" />  
         <jb:value property="customerNumber" decoder="Long" data="$TODO$" />  
         <jb:value property="customerName" decoder="String" data="$TODO$" />  
@@ -3415,18 +3415,18 @@ The following is an example of a generated configuration. Note the "$TODO$" toke
         <jb:wiring beanIdRef="orderItems_entry" />  
     </jb:bean>  
    
-    <jb:bean beanId="orderItems_entry" class="org.milyn.javabean.OrderItem" createOnElement="$TODO$">  
+    <jb:bean beanId="orderItems_entry" class="org.smooks.javabean.OrderItem" createOnElement="$TODO$">  
         <jb:value property="productId" decoder="Long" data="$TODO$" />  
         <jb:value property="quantity" decoder="Integer" data="$TODO$" />  
         <jb:value property="price" decoder="Double" data="$TODO$" />  
         <jb:wiring property="order" beanIdRef="order" />  
     </jb:bean>  
    
-    <jb:bean beanId="orderItemsArray" class="org.milyn.javabean.OrderItem[]" createOnElement="$TODO$">  
+    <jb:bean beanId="orderItemsArray" class="org.smooks.javabean.OrderItem[]" createOnElement="$TODO$">  
         <jb:wiring beanIdRef="orderItemsArray_entry" />  
     </jb:bean>  
    
-    <jb:bean beanId="orderItemsArray_entry" class="org.milyn.javabean.OrderItem" createOnElement="$TODO$">  
+    <jb:bean beanId="orderItemsArray_entry" class="org.smooks.javabean.OrderItem" createOnElement="$TODO$">  
         <jb:value property="productId" decoder="Long" data="$TODO$" />  
         <jb:value property="quantity" decoder="Integer" data="$TODO$" />  
         <jb:value property="price" decoder="Double" data="$TODO$" />  
@@ -3634,7 +3634,7 @@ To use this facility in Smooks, you need to define an additional resource that d
          (i.e. there's max 1 order-item in memory at any one time).  
      -->  
      <resource-config selector="order,order-item">  
-        <resource>org.milyn.delivery.DomModelCreator</resource>  
+        <resource>org.smooks.delivery.DomModelCreator</resource>  
      </resource-config>  
    
      <!--  
@@ -3825,7 +3825,7 @@ To declare the type of result that Smooks produces you use the 'exports' element
 ```xml
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
    <core:exports>  
-      <core:result type="org.milyn.payload.JavaResult"/>  
+      <core:result type="org.smooks.payload.JavaResult"/>  
    </core:exports>  
 </smooks-resource-list>
 ```
@@ -3852,7 +3852,7 @@ There might also be cases where you only want a portion of the result extracted 
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
                       xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
    <core:exports>  
-      <core:result type="org.milyn.payload.JavaResult" extract="orderBean"/>  
+      <core:result type="org.smooks.payload.JavaResult" extract="orderBean"/>  
    </core:exports>  
 </smooks-resource-list>
 ```
@@ -4203,9 +4203,9 @@ Example configuration:
 **Usage Tips**
 
 1.  **Imports**: Imports can be added via the "imports" element. A number of classes are automatically imported:
-    *   org.milyn.xml.DomUtils
-    *   org.milyn.javabean.context.BeanContext
-    *   org.milyn.javabean.repository.BeanRepository
+    *   org.smooks.xml.DomUtils
+    *   org.smooks.javabean.context.BeanContext
+    *   org.smooks.javabean.repository.BeanRepository
     *   org.w3c.dom.\*
     *   groovy.xml.dom.DOMCategory, groovy.xml.dom.DOMUtil, groovy.xml.DOMBuilder
 2.  **Visited Element**: The visited element is available to the script through the variable "**element**". It is also available under a variable name equal to the element name, but only if the element name contains alpha-numeric characters only.
@@ -4218,7 +4218,7 @@ A number of variables and methods are made directly available to groovy scriptle
 
 _**Variables**_:
 
-*   **element**: The DOM/SAX Element (depending on which filter type is in use) i.e. _org.w3c.dom.Element_ or _org.milyn.delivery.sax.SAXElement_.
+*   **element**: The DOM/SAX Element (depending on which filter type is in use) i.e. _org.w3c.dom.Element_ or _org.smooks.delivery.sax.SAXElement_.
 *   **executionContext**: The Smooks _ExecutionContext_ instance associated with the Smooks filtering operation.
 *   **nodeModels**: A Map containing all the DOM NodeModels currently available (i.e. Map<String, Element>).
 
@@ -4496,7 +4496,7 @@ Configuring Smooks to capture multiple NodeModels for use by the FreeMarker temp
         (header, etc...) and then one for the "order-item" elements...  
      -->  
     <resource-config selector="order,order-item">  
-        <resource>org.milyn.delivery.DomModelCreator</resource>  
+        <resource>org.smooks.delivery.DomModelCreator</resource>  
     </resource-config>  
    
     <!-- FreeMarker templating configs to be added below... -->
@@ -4754,7 +4754,7 @@ The following is an example <[jms:router](https://www.smooks.org/xsd/smooks/jms-
         <core:filterSettings type="SAX" />  
    
 (1)     <resource-config selector="order,order-item">  
-            <resource>org.milyn.delivery.DomModelCreator</resource>  
+            <resource>org.smooks.delivery.DomModelCreator</resource>  
         </resource-config>  
    
 (2)     <jms:router routeOnElement="order-item" beanId="orderItem_xml" destination="smooks.exampleQueue">  
@@ -4828,7 +4828,7 @@ The Datasource configuration (namespace [https://www.smooks.org/xsd/smooks/datas
     <ds:direct bindOnElement="#document"  
               datasource="DBExtractTransformLoadDS"  
               driver="org.hsqldb.jdbcDriver"  
-              url="jdbc:hsqldb:hsql://localhost:9201/milyn-hsql-9201"  
+              url="jdbc:hsqldb:hsql://localhost:9201/smooks-hsql-9201"  
               username="sa"  
               password=""  
               autoCommit="false"/>  
@@ -5066,7 +5066,7 @@ Implementing a Source Reader
 
 Implementing and configuring a new Source Reader for Smooks is straightforward. The Smooks specific parts of the process are easy and are not really the issue. The level of effort involved is a function of the complexity of the Source data format for which you are implementing the reader.
 
-Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting & Routing, etc... So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the [org.milyn.xml.SmooksXMLReader](/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html) interface (which is just an extension of [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html")). So, you can easily use (or extend) an existing [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") implementation, or implement a new Reader from scratch.
+Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting & Routing, etc... So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the [org.smooks.xml.SmooksXMLReader](/javadoc/v1.7.1/smooks/org/milyn/xml/SmooksXMLReader.html) interface (which is just an extension of [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html")). So, you can easily use (or extend) an existing [org.xml.sax.XMLReader](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html") implementation, or implement a new Reader from scratch.
 
 Let's now look at a simple example of implementing a Reader for use with Smooks. In this example, we will implement a Reader that can read a stream of Comma Separated Value (CSV) records, converting the CSV stream into a stream of SAX events that can be processed by Smooks, allowing you to do all the things Smooks allows (Java Binding, etc...).
 
@@ -5288,7 +5288,7 @@ The API is composed of 2 interfaces plus a number of support classes. These inte
 /**
  * {@link RecordParser} factory class.
  * <p/>
- * Configurable by the Smooks {@link org.milyn.cdr.annotation.Configurator}
+ * Configurable by the Smooks {@link org.smooks.cdr.annotation.Configurator}
  */
 public interface RecordParserFactory {
  
