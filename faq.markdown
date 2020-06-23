@@ -150,7 +150,7 @@ For more on the profiling we carried out, [see blog](https://jbossesb.blogspot.c
 
 #### **Can I use Java (or Groovy) to pre-process one fragment of a message and then apply an XSLT to the whole document?**
 
-Absolutely! This is a classic Smooks usecase. See the [xslt-groovy tutorial](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/xslt-groovy). It uses a Groovy Smooks resource ("extension") to pre-process a date field into XML nodes that are more consumable by XSLT, removing the convoluted date field processing logic from the XSLT, keeping the stylesheet nice and simple. The XSLT is then applied to the "$document" (root) node.
+Absolutely! This is a classic Smooks usecase. See the [xslt-groovy tutorial](https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/xslt-groovy). It uses a Groovy Smooks resource ("extension") to pre-process a date field into XML nodes that are more consumable by XSLT, removing the convoluted date field processing logic from the XSLT, keeping the stylesheet nice and simple. The XSLT is then applied to the "#document" (root) node.
 
 
 #### **Does Smooks support a Stream or SAX based processing model?**
@@ -184,7 +184,7 @@ We're sure there are other use cases where Java binding using Smooks makes sense
 
 #### **How do I target a resource at the document root fragment of a message without having to specify the name of the root Element?**
 
-Specify the selector as "$document".
+Specify the selector as "#document".
 
 
 #### **How do I target a resource at all Elements of a message?**

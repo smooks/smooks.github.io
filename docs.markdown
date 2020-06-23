@@ -267,7 +267,7 @@ Fragment-Based Data Processing with Smooks
 
 The primary design goals of Smooks were to provide a framework within which fragment-based data processing could be performed on hierarchical data (XML and non-XML) using existing data processing technologies (such as XSLT, plain vanilla Java, Groovy script), providing a degree of isolation between the different technologies.
 
-A [visitor](#visitors) targets a message fragment via the "selector" value on the visitor's resource configuration. The targeted message fragment can take in as much or as little of the message as you like. A message fragment is identified by the name of the Element enclosing the fragment. To target a resource at "the whole message" you simply target it at the root fragment using the root Element's name as the selector, or through the special "$document" selector.
+A [visitor](#visitors) targets a message fragment via the "selector" value on the visitor's resource configuration. The targeted message fragment can take in as much or as little of the message as you like. A message fragment is identified by the name of the Element enclosing the fragment. To target a resource at "the whole message" you simply target it at the root fragment using the root Element's name as the selector, or through the special "#document" selector.
 
 You may wonder why we use and mix the terms "Fragment" and "Element". Well the difference is a little subtle and often quite irrelevant, so it's often OK to interchange the terms. Anyway, an "Element" is just the outer node (only) of a "Fragment". A "Fragment" is an "Element" and all it's child Elements and content nodes (text etc). So, when a piece of visitor logic targets at a message fragment, that typically means that that piece of logic can not only process (transform etc) the outer "Element" of that fragment, but can also perform processing on child nodes i.e. the fragment as a whole. 
 
@@ -302,7 +302,8 @@ Migrating from Smooks 1.7 to 2.0
 
 1. Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.
 2. Replace references to Java packages "org.milyn" or "org.milyn.smooks" with "org.smooks".
-3. Replace Smooks Maven coordinates to match the coordinates as described in the [Maven guide](/maven#artifact-ids).
+3. Change legacy document root fragment selectors from "$document" to "#document".
+4. Replace Smooks Maven coordinates to match the coordinates as described in the [Maven guide](/maven#artifact-ids).
 
 FAQs
 ----
