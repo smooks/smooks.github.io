@@ -947,7 +947,7 @@ The next example shows an XML resource configuration of a CSV reader:
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <!--  
         Configure the CSV to parse the message into a stream of SAX events.  
@@ -1048,7 +1048,7 @@ String manipulation functions can be defined per field. These functions are exec
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="lastname?trim.capitalize,country?upper_case" />  
    
@@ -1062,7 +1062,7 @@ One or more fields of a CSV record can be ignored by specifying the **$ignore$**
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="firstname,$ignore$2,age,$ignore$+" />  
    
@@ -1101,7 +1101,7 @@ Using a config of the form:
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
         <!-- Note how the field names match the property names on the Person class. -->  
@@ -1127,7 +1127,7 @@ Smooks also supports creation of Maps from the CSV record set:
 ```xml
 <?xml version="1.0"?>  
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">  
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
         <csv:mapBinding beanId="people" class="org.smooks.csv.Person" keyField="firstname" />  
@@ -1358,7 +1358,7 @@ Smooks also supports creation of Maps from the fixed length record set:
 ```xml
 <?xml version="1.0"?>
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">
+                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd">
  
     <csv:reader fields="firstname,lastname,gender,age,country">
         <csv:mapBinding beanId="people" class="org.smooks.csv.Person" keyField="firstname" />
