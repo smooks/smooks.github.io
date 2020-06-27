@@ -508,7 +508,7 @@ The DOM processing model has the obvious:
 
 Smooks v1.1 added support for mixing these 2 models through the **DomModelCreator** class. When used with SAX filtering, this visitor will construct a DOM Fragment of the visited element. This allows DOM utilities to be used in a Streaming environment.
 
-When 1+ models are nested inside each other, outer models will never contain data from the inner models i.e. the same fragments will never coexist inside two models.
+When 1+ models are nested inside each other, outer models will never contain data from the inner models: the same fragments will never coexist inside two models.
 
 Take the following message as an example:
 
@@ -545,7 +545,7 @@ The DomModelCreator can be configured in Smooks to create models for the "order"
 </resource-config>
 ```
 
-In this case, the "order" model will never contain "order-item" model data (order-item elements are nested inside the order element). The in memory model for the "order" will simply be:
+In this case, the "order" model will never contain "order-item" model data (order-item elements are nested inside the order element). The in-memory model for the "order" will simply be:
 
 ```xml
 <order id='332'>  
@@ -3995,7 +3995,7 @@ To do this, we need the following Smooks configuration:
 ```xml
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
  xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"   
- xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-1.5.xsd">  
+ xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd">  
    
     <jb:bean beanId="order" class="example.entity.Order" createOnElement="order">  
         <jb:value property="ordernumber" data="ordernumber" />  
@@ -4123,7 +4123,7 @@ The Smooks configuration look likes this:
 ```xml
 <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-1.5.xsd">  
+                      xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd">  
    
     <jb:bean beanId="order" class="example.entity.Order" createOnElement="order">  
         <jb:value property="ordernumber" data="ordernumber"/>  
