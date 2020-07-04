@@ -473,7 +473,7 @@ This is done by Smooks based on the following criteria:
 
 1.  If all Visitor resources\* implement only the DOM Visitor interfaces (DOMElementVisitor or SerializationUnit), then the DOM processing model is selected.
 2.  If all Visitor resources\* implement only the SAX Visitor interface (SAXElementVisitor), then the SAX processing model is selected.
-3.  If all Visitor resources\* implement both the DOM and SAX Visitor interfaces, then the SAX processing model is selected, unless the Smooks resource configuration contains the \<core:filterSettings type="DOM" /> (see below).
+3.  If all Visitor resources\* implement both the DOM and SAX Visitor interfaces, then the SAX processing model is selected, unless the Smooks resource configuration contains _\<core:filterSettings type="DOM" />_ (see below).
 
 **\*** not including non element Visitor resources, like readers for example.
 
