@@ -3,46 +3,81 @@ All Smooks components are available from the Maven Central Repository.
 
 If your building Smooks from source using Maven, please use:
 
-1. Java 1.5 or 1.6
-2. [Maven v3](https://maven.apache.org/download.cgi) 
-
+1. Java 8
+2. [Maven 3](https://maven.apache.org/download.cgi) 
 
 ## Artifact IDs
-The **groupId** for all Smooks components is "**org.milyn**".
+The Maven group ID for Smooks cartridges, excluding the EDI and EDIFACT cartridges, is "_org.smooks.cartridges_". For the EDI and EDIFACT cartridges,
+the group ID is "_org.smooks.cartridges.edi_". All remaining Smooks artifacts have the groupId "_org.smooks_".
 
-The **artifactId** for each of the Smooks components are as follows:
+The artifact ID for each of the Smooks artifact is as follows:
 
-* Smooks Core: "milyn-smooks-core"
+* Smooks Core: "smooks-core"
 * [Smooks Cartridges](documentation/#smooks-cartridges):
-    * Calc:"milyn-smooks-calc"
-    * CSV: "milyn-smooks-csv"
-    * Fixed length reader: "milyn-smooks-fixed-length"
-    * EDI: "milyn-smooks-edi"
-    * Javabean: "milyn-smooks-javabean"
-    * JSON: "milyn-smooks-json"
-    * Routing: "milyn-smooks-routing"
-    * Templating: "milyn-smooks-templating"
-    * Persistence: "milyn-smooks-persistence"
-    * Validation: "milyn-smooks-validation" 
-* Commons: "milyn-commons" (all components depend on Commons, so no need to specify a dependency on this module if you are already dependent on one of the others)
-* EdiSax: "milyn-edisax"
+    * Calc: "smooks-calc-cartridge"
+    * CSV: "smooks-csv-cartridge"
+    * Fixed length reader: "smooks-fixed-length-cartridge"
+    * EDI: "smooks-edi-cartridge"
+    * EDIFACT: "smooks-edifact-cartridge"
+    * Javabean: "smooks-javabean-cartridge"
+    * JSON: "smooks-json-cartridge"
+    * Routing: "smooks-routing-cartridge"
+    * Templating: "smooks-templating-cartridge"
+    * Persistence: "smooks-persistence-cartridge"
+    * Validation: "smooks-validation-cartridge" 
+    * DFDL: "smooks-dfdl-cartridge"
+* Commons: "smooks-commons" (all artifacts depend on Commons, so no need to specify a dependency on this module if you are already dependent on one of the others)
 
-**Note**: All cartridges depend on Smooks Core (i.e. "milyn-smooks-core"). Therefore, if your project depends on one of the cartridges, there's no need to specify the dependency on Smooks Core.
+**Note**: All cartridges depend on "smooks-core". Therefore, if your project depends on one of the cartridges, there's no need to specify the dependency on smooks-core.
 
 ```xml
 <dependency>
-    <groupId>org.milyn</groupId>
-    <artifactId>milyn-smooks-javabean</artifactId>
-    <version>1.7.1</version>
+    <groupId>org.smooks.cartridges</groupId>
+    <artifactId>smooks-javabean-cartridge</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 
-See the POMs in the Examples as examples of Maven based applications that depend on different Smooks Cartridges.
+See the POMs in the [examples](https://github.com/smooks/smooks-examples) for references of Maven-based applications that depend on different Smooks Cartridges.
 
+## Bill of Materials (BOM)
+
+In order to guarantee compatibility between Smooks artifacts, we recommend you import the Smooks BOM from your POM 
+before declaring dependencies on Smooks:
+
+```xml
+...
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.smooks</groupId>
+            <artifactId>smooks-bom</artifactId>
+            <version>2.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+...
+```
+
+The BOM will manage the dependency versions therefore omit the _version_ element when declaring Smooks dependencies:
+
+```xml
+...
+<dependencies>
+    <dependency>
+        <groupId>org.smooks</groupId>
+        <artifactId>smooks-core</artifactId>
+    </dependency>
+    ...
+</dependencies>
+...
+```
 
 ## SNAPSHOTs
 
-Smooks SNAPSHOTs are available from [Sonatype OSSRH](https://oss.sonatype.org/content/repositories/snapshots). You need to list this Maven repo in your project POM e.g.
+Smooks SNAPSHOTs are available from [Sonatype OSSRH](https://oss.sonatype.org/content/repositories/snapshots). You need to declare the Maven repository in your project's POM:
 
 ```xml
 <repositories>

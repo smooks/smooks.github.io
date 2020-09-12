@@ -7,8 +7,7 @@ layout: default
     <img src="/assets/images/smooks-logo.png" />
 </div>
 
-__Smooks__ is an extensible framework for building applications for processing XML and non XML
-data (CSV, EDI, Java etc) using Java.
+__Smooks__ is an extensible Java framework for building XML and non-XML data (CSV, EDI, Java, etc...) processing applications.
 
 To use Smooks, simply add the following dependency to your project.
 
