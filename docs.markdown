@@ -441,8 +441,8 @@ Namespace prefix-to-URI mappings are configured through the core configuration n
 Example:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
- xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+ xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    
    <core:namespaces>  
         <core:namespace prefix="a" uri="http://a"/>  
@@ -480,8 +480,8 @@ This is done by Smooks based on the following criteria:
 The following is an example of setting the filter type to DOM (SAX is the default):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"   
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    
     <core:filterSettings type="DOM" />  
    
@@ -692,8 +692,8 @@ Sometimes you want/need to terminate the Smooks filtering process before reachin
 The following is an example configuration that terminates filtering at the end of the customer fragment of the message:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"   
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    
     <!-- Visitors... -->  
     <core:terminate onElement="customer"/>  
@@ -703,8 +703,8 @@ The following is an example configuration that terminates filtering at the end o
 The default behavior is to terminate at the end of the targeted fragment (i.e. on the "visitAfter" event). To terminate at the start (on the "visitBefore" event):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"   
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    
     <!-- Visitors... -->  
     <core:terminate onElement="customer" terminateBefore="true"/>  
@@ -744,8 +744,8 @@ public void visitAfter(final Element element, final ExecutionContext executionCo
 Default properties are properties that can be set on the root element of a Smooks configuration and have them applied to all resource configurations in smooks-conf.xml file. For example, if you have a resource configuration file in which all the resource configurations have the same selector value, you could specify a _default-selector=order_ to save specifying the selector on on every resource configuration:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:xsl="https://www.smooks.org/xsd/smooks/xsl-1.2.xsd" default-selector="order">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:xsl="http://www.milyn.org/xsd/smooks/xsl-1.1.xsd" default-selector="order">  
    
     <resource-config>  
         <resource>com.acme.VisitorA</resource>  
@@ -769,13 +769,13 @@ The following default configuration options are available:
 Filter Settings
 ---------------
 
-Filtering specific configurations are made through the **smooks-core** configuration namespace ([https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd](https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd "https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd")) introduced in Smooks v1.3.
+Filtering specific configurations are made through the **smooks-core** configuration namespace ([http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd](https://www.smooks.org/xsd/smooks/smooks-core-1.4.xsd "https://www.smooks.org/xsd/smooks/smooks-core-1.4.xsd")) introduced in Smooks v1.3.
 
 An example configuration:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"   
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    
     <core:filterSettings type="SAX" defaultSerialization="true" terminateOnException="true"   
                          readerPoolSize="3" closeSource="true" closeResult="true" rewriteEntities="true" />  
@@ -799,7 +799,7 @@ Configuration Modularization
 
 Smooks configurations are easily modularized through use of the _\<import>_ element. This allows you to split Smooks configurations into multiple reusable configuration files and then compose the top level configurations using the _\<import>_ element e.g.
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <import file="bindings/order-binding.xml" />  
     <import file="templates/order-template.xml" />  
@@ -810,7 +810,7 @@ Smooks configurations are easily modularized through use of the _\<import>_ elem
 You can also inject replacement tokens into the imported configuration by using _\<param>_ sub-elements on the _\<import>_. This allows you to make tweaks to the imported configuration.
 ```xml
 <!-- Top level configuration... -->  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <import file="bindings/order-binding.xml">  
         <param name="orderRootElement">order</param>  
@@ -820,8 +820,8 @@ You can also inject replacement tokens into the imported configuration by using 
 ``` 
 ```xml
 <!-- Imported parameterized bindings/order-binding.xml configuration... -->  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <jb:bean beanId="order" class="org.acme.Order" createOnElement="@orderRootElement@">  
         .....  
@@ -840,7 +840,7 @@ Smooks relies on a "Stream Reader" for generating a stream of SAX events from th
 By default, Smooks uses the default XMLReader ([XMLReaderFactory.createXMLReader()](http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/helpers/XMLReaderFactory.html#createXMLReader%28%29 "http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/helpers/XMLReaderFactory.html#createXMLReader%28%29")), but can be easily configured to read non-XML data Sources by configuring a specialized XMLReader:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <reader class="com.acme.ZZZZReader" />  
    
@@ -890,13 +890,13 @@ By default Smooks reads XML data. To set features on the default XML reader, sim
 CSV
 ---
 
-CSV processing through the CSV Reader is configured through the [https://www.smooks.org/xsd/smooks/csv-1.6.xsd](https://www.smooks.org/xsd/smooks/csv-1.6.xsd "https://www.smooks.org/xsd/smooks/csv-1.6.xsd") configuration namespace.
+CSV processing through the CSV Reader is configured through the [http://www.milyn.org/xsd/smooks/csv-1.6.xsd](https://www.smooks.org/xsd/smooks/csv-1.6.xsd "https://www.smooks.org/xsd/smooks/csv-1.6.xsd") configuration namespace.
 
 A simple/basic configuration.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.6.xsd">  
    
     <!--  
         Configure the CSV to parse the message into a stream of SAX events.  
@@ -987,8 +987,8 @@ _**Note**_: Multi Record Field Definitions are not supported when the fields are
 String manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after field name, separated with a question mark.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.6.xsd">  
    
     <csv:reader fields="lastname?trim.capitalize,country?upper_case" />  
    
@@ -1001,8 +1001,8 @@ Take a look at the [#String manipulation functions for readers](#string-manipula
 One or more fields of a CSV record can be ignored by specifying the **$ignore$** token in the fields configuration value. You can specify the number of fields to be ignored simply by following the $ignore$ token with a number e.g. "$ignore$3" to ignore the next 3 fields. "$ignore$+" ignores all fields to the end of the CSV record.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.6.xsd">  
    
     <csv:reader fields="firstname,$ignore$2,age,$ignore$+" />  
    
@@ -1037,8 +1037,8 @@ public enum Gender {
 Using a config of the form:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.6.xsd">  
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
         <!-- Note how the field names match the property names on the Person class. -->  
@@ -1059,8 +1059,8 @@ List<Person> people = (List<Person>) result.getBean("people");
 Smooks also supports creation of Maps from the CSV record set:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.6.xsd">  
    
     <csv:reader fields="firstname,lastname,gender,age,country">  
         <csv:mapBinding beanId="people" class="org.milyn.csv.Person" keyField="firstname" />  
@@ -1128,13 +1128,13 @@ If you need more control over the binding process, revert back to the lower leve
 Fixed Length Values
 -------------------
 
-Fixed Length processing through the Fixed Length Reader is configured through the [https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd](https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd "https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd") configuration namespace.
+Fixed Length processing through the Fixed Length Reader is configured through the [http://www.milyn.org/xsd/smooks/fixed-length-1.3.xsd](https://www.smooks.org/xsd/smooks/fixed-length-1.3.xsd "https://www.smooks.org/xsd/smooks/fixed-length-1.3.xsd") configuration namespace.
 
 A simple/basic configuration.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:fl="http://www.milyn.org/xsd/smooks/fixed-length-1.3.xsd">  
    
     <!-- Configure the Fixed length to parse the message into a stream of SAX events. -->  
     <fl:reader fields="firstname[10],lastname[10],gender[1],age[2],country[2]" skipLines="1" />  
@@ -1184,8 +1184,8 @@ By setting the **rootElementName** and **recordElementName** attributes you can 
 String manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after the field length definitiona and are optionally separated with a question mark.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:fl="http://www.milyn.org/xsd/smooks/fixed-length-1.3.xsd">  
    
     <!-- Configure the fixed length reader to parse the message into a stream of SAX events.  -->  
     <fl:reader fields="firstname[10]?trim,lastname[10]trim.capitalize,gender[1],age[2],country[2]" skipLines="1" />  
@@ -1199,8 +1199,8 @@ Take a look at the [#String manipulation functions for readers](#string-manipula
 Characters ranges of a fixed length record can be ignored by specifying the **$ignore$\[10\]** token in the fields configuration value. You must specify the number of characters that need be ignored, just as a normal field.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:fl="http://www.milyn.org/xsd/smooks/fixed-length-1.3.xsd">  
    
     <fl:reader fields="firstname,$ignore$[2],age,$ignore$[10]" />  
    
@@ -1228,8 +1228,8 @@ public class Person {
 Using a config of the form:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:fl="https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:fl="http://www.milyn.org/xsd/smooks/fixed-length-1.3.xsd">  
    
     <fl:reader fields="firstname[10]?trim,lastname[10]?trim,gende[1],age[3]?trim,country[2]">  
         <!-- Note how the field names match the property names on the Person class. -->  
@@ -1250,8 +1250,8 @@ List<Person> people = (List<Person>) result.getBean("people");
 Smooks also supports creation of Maps from the fixed length record set:
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.6.xsd">
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.6.xsd">
  
     <csv:reader fields="firstname,lastname,gender,age,country">
         <csv:mapBinding beanId="people" class="org.milyn.csv.Person" keyField="firstname" />
@@ -1319,13 +1319,13 @@ If you need more control over the binding process, revert back to the lower leve
 EDI
 ---
 
-EDI processing in Smooks supported through the [https://www.smooks.org/xsd/smooks/edi-1.5.xsd](https://www.smooks.org/xsd/smooks/edi-1.5.xsd "https://www.smooks.org/xsd/smooks/edi-1.5.xsd") configuration namespace.
+EDI processing in Smooks supported through the [http://www.milyn.org/xsd/smooks/edi-1.4.xsd](https://www.smooks.org/xsd/smooks/edi-1.4.xsd "https://www.smooks.org/xsd/smooks/edi-1.4.xsd") configuration namespace.
 
 The following is a simple/basic configuration:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:edi="https://www.smooks.org/xsd/smooks/edi-1.5.xsd">      
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:edi="http://www.milyn.org/xsd/smooks/edi-1.4.xsd">      
 	<!-- Configure the EDI Reader to parse the message stream into a stream of SAX events. -->  
     <edi:reader mappingModel="edi-to-xml-order-mapping.xml" validate="false"/>  
 </smooks-resource-list>
@@ -1335,7 +1335,7 @@ The following is a simple/basic configuration:
 
 ### EDI Mapping Models
 
-The EDI to SAX Event mapping is performed based on an "Mapping Model" supplied to the EDI Reader. This model must be based on the [https://www.smooks.org/xsd/smooks/edi-1.5.xsd](https://www.smooks.org/xsd/smooks/edi-1.5.xsd "https://www.smooks.org/xsd/smooks/edi-1.5.xsd") schema. From this schema, you can see that segment groups are supported (nested segments), including groups within groups, repeating segments and repeating segment groups. Be sure to review the schema.
+The EDI to SAX Event mapping is performed based on an "Mapping Model" supplied to the EDI Reader. This model must be based on the [http://www.milyn.org/xsd/smooks/edi-1.4.xsd](https://www.smooks.org/xsd/smooks/edi-1.4.xsd "https://www.smooks.org/xsd/smooks/edi-1.4.xsd") schema. From this schema, you can see that segment groups are supported (nested segments), including groups within groups, repeating segments and repeating segment groups. Be sure to review the schema.
 
 The following illustration attempts to create a visualisation of the mapping process. The "input-message.edi" file specifies the EDI input, "edi-to-xml-order-mapping.xml" describes how to map that EDI message to SAX events and "expected.xml" illustrates the XML event stream that would result from applying the mapping.
 
@@ -1383,7 +1383,7 @@ So, a \<field>, \<component> and \<sub-component> can be present in a message in
 Many message groups use the same segment definitions. Being able to define these segments once and import them into a top level configuration saves on a lot of duplication. A simple configuration demonstrating the import feature would be as follows:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>  
-<medi:edimap xmlns:medi="https://www.smooks.org/schema/edi-message-mapping-1.7.xsd">  
+<medi:edimap xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.6.xsd">  
    
     <medi:import truncatableSegments="true" truncatableFields="true" truncatableComponents="true" resource="example/edi-segment-definition.xml" namespace="def"/>  
    
@@ -1416,7 +1416,7 @@ Since version 1.2, the \<field>, \<component> and \<sub-component> elements supp
 The following example shows the type support:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>  
-<medi:edimap xmlns:medi="https://www.smooks.org/schema/edi-message-mapping-1.7.xsd">  
+<medi:edimap xmlns:medi="http://www.milyn.org/schema/edi-message-mapping-1.6.xsd">  
    
     <medi:description name="Segment Definition DVD Order" version="1.0"/>  
    
@@ -1538,11 +1538,11 @@ The following sections provide more details on these UN/EDIFACT capabilities.
 
 #### UNEdifactReader Reader Configuration
 
-UN/EDIFACT Interchanges are supported through a specialized variant of the base \<edi:reader>. This reader is configured through the [https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd](https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd "https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd") configuration namespace as follows:
+UN/EDIFACT Interchanges are supported through a specialized variant of the base \<edi:reader>. This reader is configured through the [http://www.milyn.org/xsd/smooks/unedifact-1.5.xsd](http://www.milyn.org/xsd/smooks/unedifact-1.5.xsd "http://www.milyn.org/xsd/smooks/unedifact-1.5.xsd") configuration namespace as follows:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:unedifact="https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:unedifact="http://www.milyn.org/xsd/smooks/unedifact-1.5.xsd">  
    
     <unedifact:reader mappingModel="urn:org.milyn.edi.unedifact:d03b-mapping:*" ignoreNewLines="true" />  
    
@@ -1599,8 +1599,8 @@ In an effort to simplify the processing of UN/EDIFACT Interchanges, we have buil
 Once an application has added an EDI Mapping Model zip set to their application classpath, Smooks can be configured to use these Mapping Models by simply referencing the Maven artifact using a URN as the _mappingModel_ attribute value on the \<unedifact:reader> configuration (**urn:\<group-id>:\<artifact-id>:\<version>**):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:unedifact="https://www.smooks.org/xsd/smooks/unedifact-1.6.xsd">
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:unedifact="http://www.milyn.org/xsd/smooks/unedifact-1.5.xsd">
    
     <unedifact:reader mappingModel="urn:org.milyn.edi.unedifact:d03b-mapping:*" ignoreNewLines="true" />  
    
@@ -1703,8 +1703,8 @@ JSON
 Processing JSON with Smooks requires a JSON reader to be configured:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:json="http://www.milyn.org/xsd/smooks/json-1.2.xsd">  
    
     <json:reader/>  
    
@@ -1718,8 +1718,8 @@ The XML element name of the root element, the element name of document and the e
 JSON allowes characters in the key name that aren't allowed in XML element name. To workaround that problem the reader offers multiple solutions. The JSON reader can search and replace whitespaces, illegal characters and the number in key names that start with a number. It is also possible to replace one key name with a completely different name. The following example demonstrates all these features:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:json="http://www.milyn.org/xsd/smooks/json-1.2.xsd">  
    
     <json:reader keyWhitspaceReplacement="_" keyPrefixOnNumeric="n" illegalElementNameCharReplacement=".">  
         <json:keyMap>  
@@ -1758,8 +1758,8 @@ YAML
 Processing YAML with Smooks requires a YAML reader to be configured:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:yaml="http://www.milyn.org/xsd/smooks/yaml-1.4.xsd">  
    
     <yaml:reader/>  
    
@@ -1781,8 +1781,8 @@ The XML element name of the root element, the element name of document and the e
 YAML allowes characters in the key name that aren't allowed in XML element name. To workaround that problem the reader offers multiple solutions. The YAML reader can search and replace white spaces, illegal characters and the number in key names that start with a number. It is also possible to replace one key name with a completely different name. The following example demonstrates all these features:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:yaml="http://www.milyn.org/xsd/smooks/yaml-1.4.xsd">  
    
     <yaml:reader keyWhitspaceReplacement="_" keyPrefixOnNumeric="n" illegalElementNameCharReplacement=".">  
         <yaml:keyMap>  
@@ -1864,8 +1864,8 @@ So we need to target the Smooks Javabean resources at this event stream. This is
 The Smooks configuration for performing this transform ("smooks-config.xml") is as follows (see the Source Model Event Stream above):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <jb:bean beanId="lineOrder" class="example.trgmodel.LineOrder" createOnElement="example.srcmodel.Order">  
         <jb:wiring property="lineItems" beanIdRef="lineItems" />  
@@ -1929,7 +1929,7 @@ Or, by turning off the "http://www.smooks.org/sax/features/generate-java-event-s
 
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <reader>  
         <features>  
@@ -1981,8 +1981,8 @@ Rules are centrally defined through "ruleBase" definitions. A single Smooks conf
 An example of a ruleBase configuration is as follows:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:rules="http://www.milyn.org/xsd/smooks/rules-1.0.xsd">  
    
     <rules:ruleBases>  
         <rules:ruleBase name="regexAddressing" src="/org/milyn/validation/address.properties" 
@@ -2019,8 +2019,8 @@ As it's name suggests, the RegexProvider is based on regular expression. It allo
 Configuration of a Regex ruleBase would look like this:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:rules="http://www.milyn.org/xsd/smooks/rules-1.0.xsd">  
    
     <rules:ruleBases>  
         <rules:ruleBase name="customer" src="/org/milyn/validation/order/rules/customer.properties" 
@@ -2061,8 +2061,8 @@ The [MVEL](http://mvel.documentnode.com/) Provider allows rules to be defined as
 Configuration of an MVEL ruleBase would look like this:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:rules="http://www.milyn.org/xsd/smooks/rules-1.0.xsd">  
    
     <rules:ruleBases>  
         <rules:ruleBase name="order" src="/org/milyn/validation/order/rules/order-rules.csv" provider="org.milyn.rules.mvel.MVELProvider"/>  
@@ -2088,7 +2088,7 @@ The Smooks Validation Cartridge builds on the functionality provided by the [Rul
 
 The type of validation provided by the components of the Smooks Validation Cartridge allows you to perform more detailed validation (over the likes of XSD/Relax) on message fragments. As with everything in Smooks, the Validation functionality is supported across all supported data formats. This means you can perform strong validation on not just XML data, but also on EDI, JSON, CSV etc.
 
-Validation configurations are defined by the [https://www.smooks.org/xsd/smooks/validation-1.1.xsd](https://www.smooks.org/xsd/smooks/validation-1.1.xsd "https://www.smooks.org/xsd/smooks/validation-1.1.xsd") configuration namespace.
+Validation configurations are defined by the [http://www.milyn.org/xsd/smooks/validation-1.0.xsd](https://www.smooks.org/xsd/smooks/validation-1.0.xsd "https://www.smooks.org/xsd/smooks/validation-1.0.xsd") configuration namespace.
 
 ### Validation Configuration
 
@@ -2233,13 +2233,13 @@ As you know, Smooks supports a range of source data formats (XML, EDI, CSV, Java
 ```
 In some examples we will use different XML message data. Where this happens, the data is explicitly defined there then.
 
-The JavaBean Cartridge is used via the [https://www.smooks.org/xsd/smooks/javabean-1.6.xsd](https://www.smooks.org/xsd/smooks/javabean-1.6.xsd "https://www.smooks.org/xsd/smooks/javabean-1.6.xsd") configuration namespace. Install the schema in your IDE and avail of autocompletion.
+The JavaBean Cartridge is used via the [http://www.milyn.org/xsd/smooks/javabean-1.5.xsd](https://www.smooks.org/xsd/smooks/javabean-1.5.xsd "https://www.smooks.org/xsd/smooks/javabean-1.5.xsd") configuration namespace. Install the schema in your IDE and avail of autocompletion.
 
 An example configuration:
 
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <jb:bean beanId="order" class="example.model.Order" createOnElement="#document" />  
    
@@ -2291,7 +2291,7 @@ public class OrderItem {
 The Smooks config required to bind the data from the order XML and into this object model is as follows:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
 (1)   <jb:bean beanId="order" class="com.acme.Order" createOnElement="order">  
 (1.a)     <jb:wiring property="header" beanIdRef="header" />  
@@ -2597,8 +2597,8 @@ MVEL has some advantages over the basic default definition language, for example
 
 Here is an example with the same use case as before but then with MVEL:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <jb:bean beanId="orders" class="java.util.List" factory="mvel:some.package.ListFactory.getInstance().newList()"  
              createOnElement="orders">  
@@ -2610,7 +2610,7 @@ Here is an example with the same use case as before but then with MVEL:
   
 In the next example we use MVEL to extract a List object from an existing bean in the bean context. The Order object in this example has method that returns a list which we must use to add the order lines to:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <jb:bean beanId="order" class="some.package.Order" createOnElement="order">  
         <!-- ... bindings -->  
@@ -2667,8 +2667,8 @@ It is possible to create a complete object model without writing your own Bean c
 The following example demonstrates the principle:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd"  
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
     <!--  
         Bind data from the message into a Virtual Object model in the bean context....  
@@ -2741,7 +2741,7 @@ The **ValueBinder** class is the visitor that does the value binding.
 
 ##### Configuration
 
-The value binding XML configuration is part of the JavaBean schema from Smooks 1.3 on: [https://www.smooks.org/xsd/smooks/javabean-1.6.xsd](https://www.smooks.org/xsd/smooks/javabean-1.6.xsd). The element for the value binding is **\<value>**.
+The value binding XML configuration is part of the JavaBean schema from Smooks 1.3 on: [http://www.milyn.org/xsd/smooks/javabean-1.5.xsd](https://www.smooks.org/xsd/smooks/javabean-1.5.xsd). The element for the value binding is **\<value>**.
 
 The **\<value>** has the following attributes:
 
@@ -2771,8 +2771,8 @@ Taking the "classic" Order message as an example and getting the order number, n
 ###### The Configuration
 ```xml
 <?xml version="1.0"?>  
- <smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                       xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+ <smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                       xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <jb:value beanId="customerName" data="customer" default="unknown"/>  
    
@@ -2981,8 +2981,8 @@ Determining the selector values can sometimes be difficult, especially for non X
 The following is an example of a generated configuration. Note the "$TODO$" tokens.
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <jb:bean beanId="order" class="org.milyn.javabean.Order" createOnElement="$TODO$">  
         <jb:wiring property="header" beanIdRef="header" />  
@@ -3029,8 +3029,8 @@ Users should note that there is **no guarantee** as to the exact contents of a [
 You can restrict the Bean set returned in a JavaResult by using a **\<jb:result>** configuration in the Smooks configuration. In the following example configuration, we tell Smooks to only retain the "order" bean in the ResultSet:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <!-- Capture some data from the message into the bean context... -->  
     <jb:bean beanId="order" class="com.acme.Order" createOnElement="order">  
@@ -3081,12 +3081,12 @@ Smooks can also be extended (and will) to add support for other templating techn
 
 [FreeMarker](http://freemarker.org/ "http://freemarker.org") is a very powerful Templating Engine. Smooks allows FreeMarker to be used as a means of generating text based content that can then be inserted into a message stream (aka a "Fragment Transform"), or used as a "Split Message Fragment" for [routing to another process](#splitting--routing).
 
-Configuring FreeMarker templates in Smooks is done through the [https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd](https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd "https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
+Configuring FreeMarker templates in Smooks is done through the [http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd](https://www.smooks.org/xsd/smooks/freemarker-1.1.xsd "https://www.smooks.org/xsd/smooks/freemarker-1.1.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
 
 **Example - Inline Template**:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
     <ftl:freemarker applyOnElement="order">  
         <ftl:template><!--<orderId>${order.id}</orderId>--></ftl:template>  
     </ftl:freemarker>  
@@ -3094,8 +3094,8 @@ Configuring FreeMarker templates in Smooks is done through the [https://www.smoo
 ```
 **Example - External Template Reference**:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
     <ftl:freemarker applyOnElement="order">  
         <ftl:template>/templates/shop/ordergen.ftl</ftl:template>  
     </ftl:freemarker>  
@@ -3123,9 +3123,9 @@ Using **\<ftl:bindTo>**, you can bind the Templating result to the Smooks **bean
 
 **Example - Binding the Templating Result to the Smooks bean context**:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:jms="http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd"  
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
     <jms:router routeOnElement="order-item" beanId="orderItem_xml" destination="queue.orderItems" />  
    
@@ -3146,10 +3146,10 @@ Using **\<ftl:outputTo>**, you can direct Smooks to write the templating result 
 
 **Example - Writing the Template Result to an OutputStreamSource**:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:file="https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd"  
+                      xmlns:file="http://www.milyn.org/xsd/smooks/file-routing-1.2.xsd"  
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
     <!-- Create/open a file output stream. This is written to by the freemarker template (below).. -->  
     <file:outputStream openOnElement="order-item" resourceName="orderItemSplitStream">  
@@ -3190,9 +3190,9 @@ Smooks adds two additional capabilities here:
 To use this facility in Smooks, you need to define an additional resource that defines/declares the NodeModels to be captured (created in the case of SAX streaming):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
- xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
- xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+ xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd"  
+ xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
      <!--  
          Create 2 NodeModels. One high level model for the "order"  
@@ -3261,9 +3261,9 @@ In situations where using the NodeModel is not practical, Smooks allows you to u
 **Example (using a Virtual Model)**:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd"  
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
     <!-- Extract and decode data from the message. Used in the freemarker template (below). -->  
     <jb:bean beanId="order" class="java.util.Hashtable" createOnElement="order">  
@@ -3312,13 +3312,13 @@ smooks.addVisitor(new FreeMarkerTemplateProcessor(new TemplatingConfiguration("/
 
 ### XSL Templating
 
-Configuring XSL templates in Smooks is almost identical to that of configuring [FreeMarker templates](#freemarker-templating). It is done through the [https://www.smooks.org/xsd/smooks/xsl-1.2.xsd](https://www.smooks.org/xsd/smooks/xsl-1.2.xsd "https://www.smooks.org/xsd/smooks/xsl-1.2.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
+Configuring XSL templates in Smooks is almost identical to that of configuring [FreeMarker templates](#freemarker-templating). It is done through the [http://www.milyn.org/xsd/smooks/xsl-1.1.xsd](http://www.milyn.org/xsd/smooks/xsl-1.1.xsd "http://www.milyn.org/xsd/smooks/xsl-1.1.xsd") configuration namespace. Just configure this XSD into your IDE and you're in business!
 
 **Example**:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:xsl="https://www.smooks.org/xsd/smooks/xsl-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:xsl="http://www.milyn.org/xsd/smooks/xsl-1.1.xsd">  
    
     <xsl:xsl applyOnElement="#document">  
         <xsl:template><!--<xxxxxx/>--></xsl:template>  
@@ -3359,8 +3359,8 @@ Sometimes all you need to do is make a small modification to the message event s
 Example:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
- xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+ xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    
     <!-- Other configs, e.g. bean bindings etc -->  
    
@@ -3389,7 +3389,7 @@ When using Smooks standalone you are in full control of the type of output that 
 
 To declare the type of result that Smooks produces you use the 'exports' element as shown below:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    <core:exports>  
       <core:result type="org.milyn.payload.JavaResult"/>  
    </core:exports>  
@@ -3411,8 +3411,8 @@ if (exports.hasExports())
 ```
 There might also be cases where you only want a portion of the result extracted and returned. You can use the ‘extract’ attribute to specify this:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd">  
    <core:exports>  
       <core:result type="org.milyn.payload.JavaResult" extract="orderBean"/>  
    </core:exports>  
@@ -3547,9 +3547,9 @@ What we want to do here is to process and persist the <order>. First thing we ne
 
 To do this, we need the following Smooks configuration:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
- xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"   
- xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"   
+ xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd"   
+ xmlns:dao="http://www.milyn.org/xsd/smooks/persistence-1.4.xsd">  
    
     <jb:bean beanId="order" class="example.entity.Order" createOnElement="order">  
         <jb:value property="ordernumber" data="ordernumber" />  
@@ -3666,9 +3666,9 @@ When looking at this class, you should notice the @Lookup and @Param annotation.
 
 The Smooks configuration look likes this:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd"  
+                      xmlns:dao="http://www.milyn.org/xsd/smooks/persistence-1.4.xsd">  
    
     <jb:bean beanId="order" class="example.entity.Order" createOnElement="order">  
         <jb:value property="ordernumber" data="ordernumber"/>  
@@ -3723,13 +3723,13 @@ Scripting
 Groovy
 ------
 
-Support for [Groovy](https://groovy-lang.org/) based scripting is made available through the [https://www.smooks.org/xsd/smooks/groovy-1.2.xsd](https://www.smooks.org/xsd/smooks/groovy-1.2.xsd "https://www.smooks.org/xsd/smooks/groovy-1.2.xsd") configuration namespace. This adds support for DOM or SAX based Groovy scripting.
+Support for [Groovy](https://groovy-lang.org/) based scripting is made available through the [http://www.milyn.org/xsd/smooks/groovy-1.1.xsd](https://www.smooks.org/xsd/smooks/groovy-1.1.xsd "https://www.smooks.org/xsd/smooks/groovy-1.1.xsd") configuration namespace. This adds support for DOM or SAX based Groovy scripting.
 
 Example configuration:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:g="https://www.smooks.org/xsd/smooks/groovy-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:g="http://www.milyn.org/xsd/smooks/groovy-1.1.xsd">  
    
     <g:groovy executeOnElement="xxx">  
         <g:script>  
@@ -3807,9 +3807,9 @@ Take an XML message such as:
 Using Groovy, we want to modify the "supplies" category in the shopping list, adding 2 to the quantity, where the item is "Pens". To do this, we write a simple little Groovy script and target it at the <category> elements in the message. The script simple iterates over the <item> elements in the category and increments the quantity by 2, where the category type is "supplies" and the item is "Pens":
 ```xml
 <?xml version="1.0"?>
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"
-                      xmlns:g="https://www.smooks.org/xsd/smooks/groovy-1.2.xsd">
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd"
+                      xmlns:g="http://www.milyn.org/xsd/smooks/groovy-1.1.xsd">
  
     <core:filterSettings type="SAX" />
  
@@ -3881,12 +3881,12 @@ Smooks plugins are available for a number of ESBs:
 Camel
 -----
 
-It is possible to route fragments to Apache Camel endpoints using the **\<[camel:route](https://www.smooks.org/xsd/smooks/camel-1.5.xsd "https://www.smooks.org/xsd/smooks/camel-1.5.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/camel-1.5.xsd](https://www.smooks.org/xsd/smooks/camel-1.5.xsd "https://www.smooks.org/xsd/smooks/camel-1.5.xsd") configuration namespace.
+It is possible to route fragments to Apache Camel endpoints using the **\<[camel:route](http://www.milyn.org/xsd/smooks/camel-1.4.xsd "http://www.milyn.org/xsd/smooks/camel-1.4.xsd")>** configuration from the [http://www.milyn.org/xsd/smooks/camel-1.4.xsd](https://www.smooks.org/xsd/smooks/camel-1.4.xsd "https://www.smooks.org/xsd/smooks/camel-1.4.xsd") configuration namespace.
 
 For example, you can route to Camel endpoint by specifying the following in your Smooks configuration:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:camel="https://www.smooks.org/xsd/smooks/camel-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:camel="http://www.milyn.org/xsd/smooks/camel-1.4.xsd">  
    
   <!-- Create some bean instances from the input source... -->  
   <jb:bean beanId="orderItem"  ... ">  
@@ -4013,9 +4013,9 @@ So in this case, the most data that will be in memory at any one time is the mai
 Configuring Smooks to capture multiple NodeModels for use by the FreeMarker templates is just a matter of configuring the **DomModelCreator** Visitor, targeting it at the root node of each of the models. Note again that Smooks also makes this available to SAX filtering (the key to processing huge message). The Smooks configuration for creating the NodeModels for this message are:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"   
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd"  
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
      <!--  
          Filter the message using the SAX Filter (i.e. not DOM, so no  
@@ -4114,13 +4114,13 @@ With the more complex approach outlined above, the key to processing huge messag
 
 #### Basic Splitting and Routing
 
-As stated above, the easiest way to split and route fragments of a message is to use the basic \<frag:serialize> and <\*:router> components (\<jms:router>, \<file:router> etc) from the Routing Cartridge. The \<frag:serialize> component has its own configuration in the [https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd](https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd "https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd") namespace.
+As stated above, the easiest way to split and route fragments of a message is to use the basic \<frag:serialize> and <\*:router> components (\<jms:router>, \<file:router> etc) from the Routing Cartridge. The \<frag:serialize> component has its own configuration in the [http://www.milyn.org/xsd/smooks/fragment-routing-1.4.xsd](https://www.smooks.org/xsd/smooks/fragment-routing-1.4.xsd "https://www.smooks.org/xsd/smooks/fragment-routing-1.4.xsd") namespace.
 
 The following is an example for serializing the contents of a SOAP message body and storing it in the Bean Context under the beanId of "soapBody":
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:frag="https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:frag="http://www.milyn.org/xsd/smooks/fragment-routing-1.4.xsd">  
    
     <frag:serialize fragment="Envelope/Body" bindTo="soapBody" childContentOnly="true"/>  
    
@@ -4151,8 +4151,8 @@ The code snippets above only show how to create the split messages and bind them
 The following is a quick example, showing the config for routing split messages (this time <order-item> fragments) to a JMS Destination for processing:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:frag="https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd" xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:frag="http://www.milyn.org/xsd/smooks/fragment-routing-1.4.xsd" xmlns:jms="http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd">  
    
     <!-- Create the split messages for the order items... -->  
     <frag:serialize fragment="order-items/order-item" bindTo="orderItem" />  
@@ -4166,7 +4166,7 @@ For more details on the JMS routing aspects of the above example, see the JMS Ro
 
 #### Routing to File
 
-File based routing is performed via the the **\<file:outputStream>** configuration from the [https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd](https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd") configuration namespace.
+File based routing is performed via the the **\<file:outputStream>** configuration from the [http://www.milyn.org/xsd/smooks/file-routing-1.2.xsd](https://www.smooks.org/xsd/smooks/file-routing-1.2.xsd "https://www.smooks.org/xsd/smooks/file-routing-1.2.xsd") configuration namespace.
 
 This section illustrates how you can combine the following Smooks functionality to split a message out into smaller messages on the file system.
 
@@ -4181,11 +4181,11 @@ In the example, we want to process a huge order message and route the individual
 To achieve this with Smooks, we assemble the following Smooks configuration:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"  
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"  
-                      xmlns:file="https://www.smooks.org/xsd/smooks/file-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd"  
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd"  
+                      xmlns:file="http://www.milyn.org/xsd/smooks/file-routing-1.2.xsd"  
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
         <!--  
          Filter the message using the SAX Filter (i.e. not DOM, so no  
@@ -4252,15 +4252,15 @@ Smooks Resource configuration #4 defines the FreeMarker templating resource used
 ```
 #### Routing to JMS
 
-JMS routing is performed via the the **\<[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd")>** configuration from the [https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd") configuration namespace.
+JMS routing is performed via the the **\<[jms:router](http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd "http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd")>** configuration from the [http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd](https://www.smooks.org/xsd/smooks/jms-routing-1.2.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.2.xsd") configuration namespace.
 
-The following is an example <[jms:router](https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd "https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd")> configuration that routes an "orderItem\_xml" bean to a JMS Queue named "smooks.exampleQueue" (also read the "Routing to File" example):
+The following is an example <[jms:router](http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd "http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd")> configuration that routes an "orderItem\_xml" bean to a JMS Queue named "smooks.exampleQueue" (also read the "Routing to File" example):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.5.xsd"  
-                      xmlns:jms="https://www.smooks.org/xsd/smooks/jms-routing-1.3.xsd"  
-                      xmlns:ftl="https://www.smooks.org/xsd/smooks/freemarker-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:core="http://www.milyn.org/xsd/smooks/smooks-core-1.4.xsd"  
+                      xmlns:jms="http://www.milyn.org/xsd/smooks/jms-routing-1.2.xsd"  
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">  
    
         <!--  
          Filter the message using the SAX Filter (i.e. not DOM, so no  
@@ -4308,8 +4308,8 @@ So we take the same scenario as with the File Routing example above, but this ti
 First we need to define a set of Java bindings that extract the order and order-item data from the data stream:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"   
-                      xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"   
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <!-- Extract the order data... -->  
     <jb:bean beanId="order" class="java.util.Hashtable" createOnElement="order">  
@@ -4330,11 +4330,11 @@ First we need to define a set of Java bindings that extract the order and order-
 ```
 Next we need to define datasource configuration and a number of \<db:executor> configurations that will use that datasource to insert the data that was bound into the Java Object model into the database.
 
-The Datasource configuration (namespace [https://www.smooks.org/xsd/smooks/datasource-1.4.xsd](https://www.smooks.org/xsd/smooks/datasource-1.4.xsd "https://www.smooks.org/xsd/smooks/datasource-1.4.xsd")) for retrieving direct database connection:
+The Datasource configuration (namespace [http://www.milyn.org/xsd/smooks/datasource-1.3.xsd](https://www.smooks.org/xsd/smooks/datasource-1.3.xsd "https://www.smooks.org/xsd/smooks/datasource-1.3.xsd")) for retrieving direct database connection:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ds="https://www.smooks.org/xsd/smooks/datasource-1.4.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:ds="http://www.milyn.org/xsd/smooks/datasource-1.3.xsd">  
    
     <ds:direct bindOnElement="#document"  
               datasource="DBExtractTransformLoadDS"  
@@ -4349,8 +4349,8 @@ The Datasource configuration (namespace [https://www.smooks.org/xsd/smooks/datas
 or it is possible to use a JNDI datasource for retrieving a database connection:
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ds="https://www.smooks.org/xsd/smooks/datasource-1.4.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:ds="http://www.milyn.org/xsd/smooks/datasource-1.3.xsd">  
    
     <!-- This JNDI datasource can handle JDBC and JTA transactions or   
          it can leave the transaction managment to an other external component.  
@@ -4368,11 +4368,11 @@ or it is possible to use a JNDI datasource for retrieving a database connection:
 ```
 The datasource schema describes and documents how you can configure the datasource.
 
-The \<db:executor> configurations (namespace [https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd](https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd "https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd")):
+The \<db:executor> configurations (namespace [http://www.milyn.org/xsd/smooks/db-routing-1.1.xsd](https://www.smooks.org/xsd/smooks/db-routing-1.1.xsd "https://www.smooks.org/xsd/smooks/db-routing-1.1.xsd")):
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd"  
-                      xmlns:db="https://www.smooks.org/xsd/smooks/db-routing-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"  
+                      xmlns:db="http://www.milyn.org/xsd/smooks/db-routing-1.1.xsd">  
    
     <!-- Assert whether it's an insert or update. Need to do this just before we do the insert/update... -->  
     <db:executor executeOnElement="order-items" datasource="DBExtractTransformLoadDS" executeBefore="true">  
@@ -4420,9 +4420,9 @@ Configuring Smooks Components
 
 All Smooks components are configured in exactly the same way. As far as the Smooks Core code is concerned, all Smooks components are "resources" and are configured via a SmooksResourceConfiguration instance, which we talked about in earlier sections.
 
-Smooks provides mechanisms for constructing namespace (XSD) specific XML configurations for components, but the most basic configuration (and the one that maps directly to the SmooksResourceConfiguration class) is the basic <resource-config> XML configuration from the base configuration namespace ([https://www.smooks.org/xsd/smooks-1.2.xsd](https://www.smooks.org/xsd/smooks-1.2.xsd "https://www.smooks.org/xsd/smooks-1.2.xsd")).
+Smooks provides mechanisms for constructing namespace (XSD) specific XML configurations for components, but the most basic configuration (and the one that maps directly to the SmooksResourceConfiguration class) is the basic <resource-config> XML configuration from the base configuration namespace ([http://www.milyn.org/xsd/smooks-1.1.xsd](https://www.smooks.org/xsd/smooks-1.1.xsd "https://www.smooks.org/xsd/smooks-1.1.xsd")).
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <resource-config selector="">  
         <resource></resource>  
@@ -4463,7 +4463,7 @@ public class DataSeeder {
 ```
 We configure this component in Smooks as follows:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <resource-config selector="dataSeeder">  
         <resource>com.acme.DataSeeder</resource>  
@@ -4552,7 +4552,7 @@ Smooks supports a mechanism for defining custom configuration namespaces for com
 
 The basic process involves:
 
-1.  Writing an configuration XSD for your component that extends the base [https://www.smooks.org/xsd/smooks-1.2.xsd](https://www.smooks.org/xsd/smooks-1.2.xsd "https://www.smooks.org/xsd/smooks-1.2.xsd") configuration namespace. This XSD must be supplied on the classpath with your component. It must be located in the _/META-INF_ folder and have the same path as the namespace URI. For example, if your extended namespace URI is "[http://www.acme.com/schemas/smooks/acme-core-1.0.xsd](http://www.acme.com/schemas/smooks/acme-core-1.0.xsd "http://www.acme.com/schemas/smooks/acme-core-1.0.xsd")", then the physical XSD file must be supplied on the classpath in "/META-INF/schemas/smooks/acme-core-1.0.xsd".
+1.  Writing an configuration XSD for your component that extends the base [http://www.milyn.org/xsd/smooks-1.1.xsd](https://www.smooks.org/xsd/smooks-1.1.xsd "https://www.smooks.org/xsd/smooks-1.1.xsd") configuration namespace. This XSD must be supplied on the classpath with your component. It must be located in the _/META-INF_ folder and have the same path as the namespace URI. For example, if your extended namespace URI is "[http://www.acme.com/schemas/smooks/acme-core-1.0.xsd](http://www.acme.com/schemas/smooks/acme-core-1.0.xsd "http://www.acme.com/schemas/smooks/acme-core-1.0.xsd")", then the physical XSD file must be supplied on the classpath in "/META-INF/schemas/smooks/acme-core-1.0.xsd".
 2.  Writing a Smooks configuration namespace mapping configuration file that maps the custom namespace configuration into a _SmooksResourceConfiguration_ instance. This file must be named (by convention) based on the name of the namespace it is mapping and must be physically located on the classpath in the same folder as the XSD. Extending the above example, the Smooks mapping file would be "/META-INF/schemas/smooks/acme-core-1.0.xsd-smooks.xml". Note the "-smooks.xml" postfix.
 
 The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, [as can be seen in the source](https://github.com/smooks/smooks/smooks-core/src/main/resources/META-INF/xsd/smooks/ "https://github.com/smooks/smooks/smooks-core/src/main/resources/META-INF/xsd/smooks/").
@@ -4615,7 +4615,7 @@ Second thing we need is a test Smooks configuration to configure Smooks with our
 (_mycsvread-config.xml_)
 ```xml
 <?xml version="1.0"?>  
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <reader class="com.acme.MyCSVReader">  
         <params>  
@@ -4711,7 +4711,7 @@ Now you can use your reader to perform all sorts of operations supported by Smoo
 
 _(java-binding-config.xml)_
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.5.xsd">  
    
     <reader class="com.acme.MyCSVReader">  
         <params>  
@@ -4818,8 +4818,8 @@ The _RecordParser_ implementation is responsible for parsing out each _Records_ 
   
 Configuring your implementation in the Smooks configuration is as simple as the following:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ff="https://www.smooks.org/xsd/smooks/flatfile-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:ff="http://www.milyn.org/xsd/smooks/flatfile-1.5.xsd">  
    
     <ff:reader fields="first,second,third" parserFactory="com.acme.ARecordParserFactory">  
         <params>  
@@ -4837,8 +4837,8 @@ Configuring your implementation in the Smooks configuration is as simple as the 
   
 The Flat File configuration also supports basic Java binding configurations, inlined in the reader configuration.
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ff="https://www.smooks.org/xsd/smooks/flatfile-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:ff="http://www.milyn.org/xsd/smooks/flatfile-1.5.xsd">  
    
     <ff:reader fields="firstname,lastname,gender,age,country" parserFactory="com.acme.PersonRecordParserFactory">  
         <!-- The field names must match the property names on the Person class. -->  
@@ -4860,8 +4860,8 @@ List<Person> people = (List<Person>) result.getBean("people");
   
 Smooks also supports creation of Maps from the record set:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
-                      xmlns:ff="https://www.smooks.org/xsd/smooks/flatfile-1.6.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
+                      xmlns:ff="http://www.milyn.org/xsd/smooks/flatfile-1.5.xsd">  
    
     <ff:reader fields="firstname,lastname,gender,age,country" parserFactory="com.acme.PersonRecordParserFactory">  
         <ff:mapBinding beanId="people" class="com.acme.Person" keyField="firstname" />  
@@ -5108,7 +5108,7 @@ public class ChangeItemState implements SAXVisitAfter {
 ```
 Declaratively configuring _ChangeItemState_ to fire on <order-item> fragments having a status of "OK" is as simple as:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd">  
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">  
    
     <resource-config selector="order-items/order-item[@status = 'OK']">  
         <resource>com.acme.ChangeItemState </resource>  
@@ -5119,7 +5119,7 @@ Declaratively configuring _ChangeItemState_ to fire on <order-item> fragments ha
 ```
 Of course it would be really nice to be able to define a cleaner and more strongly typed configuration for the _ChangeItemState_ component, such that it could be configured something like:
 ```xml
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-1.2.xsd" 
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd" 
                       xmlns:order="http://www.acme.com/schemas/smooks/order.xsd">  
    
     <order:changeItemState itemElement="order-items/order-item[@status = 'OK']" newState="COMPLETED" />  
