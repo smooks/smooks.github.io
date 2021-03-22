@@ -24,7 +24,7 @@ See [Maven Central](https://mvnrepository.com/artifact/org.milyn/milyn-smooks-al
 # What can it be used for?
 
 While Smooks can be used as a lightweight platform on which to build your own custom processing logic (for a wide
-range of data formats "out of the box"), it comes with some very useful features that can be used individually,
+range of data formats "out-of-the-box"), it comes with some very useful features that can be used individually,
 or seamlessly combined together.
 
 ### Java Binding
