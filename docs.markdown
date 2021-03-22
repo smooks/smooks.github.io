@@ -5495,7 +5495,7 @@ public interface BeforeVisitor extends Visitor {
 ```java
 public interface ChildrenVisitor extends Visitor {  
 
-    void visitChildText(Element element, ExecutionContext executionContext) throws SmooksException, IOException;  
+    void visitChildText(CharacterData characterData, ExecutionContext executionContext) throws SmooksException, IOException;  
 
     void visitChildElement(Element childElement, ExecutionContext executionContext) throws SmooksException, IOException;  
 }
@@ -5546,8 +5546,8 @@ implementation of your _SaxNgVisitor_ as shown below:
 public class MyVisitor implements ChildrenVisitor, AfterVisitor {
 
     @Override
-    public void visitChildText(Element element, ExecutionContext executionContext) {
-        executionContext.getMementoCaretaker().stash(new TextAccumulatorMemento(new NodeVisitable(element), this), textAccumulatorMemento -> textAccumulatorMemento.accumulateText(element.getTextContent()));
+    public void visitChildText(CharacterData characterData, ExecutionContext executionContext) {
+        executionContext.getMementoCaretaker().stash(new TextAccumulatorMemento(new NodeVisitable(characterData.getParentNode()), this), textAccumulatorMemento -> textAccumulatorMemento.accumulateText(characterData.getTextContent()));
     }
 
     @Override
@@ -5607,7 +5607,7 @@ public class MyVisitor implements ElementVisitor {
     }
 
     @Override
-    public void visitChildText(Element element, ExecutionContext executionContext) {        
+    public void visitChildText(CharacterData characterData, ExecutionContext executionContext) {        
         Writer writer = executionContext.getWriter();
 
         // ... write the child text...
@@ -5663,9 +5663,9 @@ public class MyVisitor implements ElementVisitor {
     }
 
     @Override
-    public void visitChildText(Element childElement, ExecutionContext executionContext) {
+    public void visitChildText(CharacterData characterData, ExecutionContext executionContext) {
         try {
-            xmlWriter.writeText(childElement, executionContext.getWriter());
+            xmlWriter.writeText(characterData, executionContext.getWriter());
         } catch (IOException e) {
             throw new SmooksException(e);
         }
