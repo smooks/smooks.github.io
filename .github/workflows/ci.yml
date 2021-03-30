@@ -1,0 +1,25 @@
+name: Jekyll Deploy
+
+on:
+  push
+      
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache gems
+        uses: actions/cache@v1
+        with:
+          path: vendor/gems
+          key: ${{ runner.os }}-build-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Build & Deploy to GitHub Pages
+        uses: DavidS/jekyll-deploy@main
+        env:
+          GH_PAGES_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
