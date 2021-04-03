@@ -1,2 +1,11 @@
 title: Smooks
-theme: jekyll-theme-cayman
+theme: minima
+baseurl: /v2
+asciidoc: {}
+asciidoctor:
+  base_dir: :docdir
+  safe: unsafe
+  attributes:
+    - idseparator=_
+    - source-highlighter=rouge
+    - stylesdir=assets/css
