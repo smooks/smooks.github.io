@@ -2601,165 +2601,13 @@ on the Smooks Instance</a></p>
 <div class="sect2">
 <h3 id="dfdl_cartridge">DFDL Cartridge</h3>
 <div class="paragraph">
-<p><span class="image"><img src="https://img.shields.io/maven-central/v/org.smooks.cartridges/smooks-dfdl-cartridge" alt="Maven Central"></span>
-<span class="image"><img src="https://img.shields.io/nexus/s/org.smooks.cartridges/smooks-dfdl-cartridge?server=https%3A%2F%2Foss.sonatype.org" alt="Sonatype Nexus (Snapshots)"></span>
-<span class="image"><img src="https://github.com/smooks/smooks-dfdl-cartridge/workflows/CI/badge.svg" alt="Build Status"></span></p>
-</div>
-<div class="paragraph">
-<p>The DFDL cartridge opens up Smooks to an incredible number of data formats (e.g., SWIFT, ISO8583, HL7). In fact, this cartridge forms the foundations of the EDI and EDIFACT cartridges. The DFDL cartridge deserialises (i.e., parses) non-XML data and serialises (i.e., unparses) XML according to a structure described in <a href="https://daffodil.apache.org/docs/dfdl/">DFDL</a>. Take the subsequent DFDL schema as an example:</p>
-</div>
-<div class="listingblock">
-<div class="title">csv.dfdl.xsd</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;xs:schema</span> <span class="na">xmlns:xs=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span> <span class="na">xmlns:fn=</span><span class="s">"http://www.w3.org/2005/xpath-functions"</span>
-  <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span> <span class="na">xmlns:ex=</span><span class="s">"http://example.com"</span>
-  <span class="na">targetNamespace=</span><span class="s">"http://example.com"</span> <span class="na">elementFormDefault=</span><span class="s">"unqualified"</span><span class="nt">&gt;</span>
-
-  <span class="nt">&lt;xs:include</span> <span class="na">schemaLocation=</span><span class="s">"org/apache/daffodil/xsd/DFDLGeneralFormat.dfdl.xsd"</span> <span class="nt">/&gt;</span>
-
-  <span class="nt">&lt;xs:annotation&gt;</span>
-    <span class="nt">&lt;xs:appinfo</span> <span class="na">source=</span><span class="s">"http://www.ogf.org/dfdl/"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;dfdl:format</span> <span class="na">ref=</span><span class="s">"ex:GeneralFormatPortable"</span> <span class="na">separator=</span><span class="s">""</span> <span class="na">initiator=</span><span class="s">""</span>
-        <span class="na">terminator=</span><span class="s">""</span> <span class="na">textTrimKind=</span><span class="s">"none"</span> <span class="na">initiatedContent=</span><span class="s">"no"</span> <span class="na">ignoreCase=</span><span class="s">"no"</span>
-        <span class="na">separatorPosition=</span><span class="s">"infix"</span> <span class="na">occursCountKind=</span><span class="s">"implicit"</span>
-        <span class="na">emptyValueDelimiterPolicy=</span><span class="s">"both"</span> <span class="na">representation=</span><span class="s">"text"</span> <span class="na">textNumberRep=</span><span class="s">"standard"</span>
-        <span class="na">lengthKind=</span><span class="s">"delimited"</span> <span class="na">encoding=</span><span class="s">"ASCII"</span> <span class="na">encodingErrorPolicy=</span><span class="s">"error"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/xs:appinfo&gt;</span>
-  <span class="nt">&lt;/xs:annotation&gt;</span>
-
-  <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"file"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;xs:complexType&gt;</span>
-      <span class="nt">&lt;xs:sequence</span> <span class="na">dfdl:separator=</span><span class="s">"%NL;"</span> <span class="na">dfdl:separatorPosition=</span><span class="s">"postfix"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"header"</span> <span class="na">minOccurs=</span><span class="s">"0"</span> <span class="na">maxOccurs=</span><span class="s">"1"</span>
-          <span class="na">dfdl:occursCountKind=</span><span class="s">"implicit"</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;xs:complexType&gt;</span>
-            <span class="nt">&lt;xs:sequence</span> <span class="na">dfdl:separator=</span><span class="s">","</span><span class="nt">&gt;</span>
-              <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"title"</span> <span class="na">type=</span><span class="s">"xs:string"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span> <span class="nt">/&gt;</span>
-            <span class="nt">&lt;/xs:sequence&gt;</span>
-          <span class="nt">&lt;/xs:complexType&gt;</span>
-        <span class="nt">&lt;/xs:element&gt;</span>
-        <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"record"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">&gt;</span>
-          <span class="nt">&lt;xs:complexType&gt;</span>
-            <span class="nt">&lt;xs:sequence</span> <span class="na">dfdl:separator=</span><span class="s">","</span><span class="nt">&gt;</span>
-              <span class="nt">&lt;xs:element</span> <span class="na">name=</span><span class="s">"item"</span> <span class="na">type=</span><span class="s">"xs:string"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/xs:sequence&gt;</span>
-          <span class="nt">&lt;/xs:complexType&gt;</span>
-        <span class="nt">&lt;/xs:element&gt;</span>
-      <span class="nt">&lt;/xs:sequence&gt;</span>
-    <span class="nt">&lt;/xs:complexType&gt;</span>
-  <span class="nt">&lt;/xs:element&gt;</span>
-<span class="nt">&lt;/xs:schema&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The schema describes the structure of CSV data like the one below:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="csv">last,first,middle,DOB
-smith,robert,brandon,1988-03-24
-johnson,john,henry,1986-01-23
-jones,arya,cat,1986-02-19</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Assuming the file "csv.dfdl.xsd" holds the DFDL schema describing the
-CSV structure, the DFDL resource configuration to parse the above CSV
-would be written as:</p>
-</div>
-<div class="listingblock">
-<div class="title">smooks-config.xml</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:dfdl=</span><span class="s">"https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;dfdl:parser</span> <span class="na">schemaURI=</span><span class="s">"/csv.dfdl.xsd"</span><span class="nt">/&gt;</span>
-
-    ...
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The <em>dfdl:parser</em> element <em>schemaURI</em> attribute references the DFDL schema driving the parsing behaviour. For the above CSV, <em>dfdl:parser</em> generates the XML stream:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;ex:file</span> <span class="na">xmlns:ex=</span><span class="s">"http://example.com"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;header&gt;</span>
-        <span class="nt">&lt;title&gt;</span>last<span class="nt">&lt;/title&gt;</span>
-        <span class="nt">&lt;title&gt;</span>first<span class="nt">&lt;/title&gt;</span>
-        <span class="nt">&lt;title&gt;</span>middle<span class="nt">&lt;/title&gt;</span>
-        <span class="nt">&lt;title&gt;</span>DOB<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;/header&gt;</span>
-    <span class="nt">&lt;record&gt;</span>
-        <span class="nt">&lt;item&gt;</span>smith<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>robert<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>brandon<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>1988-03-24<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;/record&gt;</span>
-    <span class="nt">&lt;record&gt;</span>
-        <span class="nt">&lt;item&gt;</span>johnson<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>john<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>henry<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>1986-01-23<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;/record&gt;</span>
-    <span class="nt">&lt;record&gt;</span>
-        <span class="nt">&lt;item&gt;</span>jones<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>arya<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>cat<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>1986-02-19<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;/record&gt;</span>
-<span class="nt">&lt;/ex:file&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Shown in the next snippet is the <em>dfdl:unparser</em> visitor serialising the root element from above stream back to the original CSV:</p>
-</div>
-<div class="listingblock">
-<div class="title">smooks-config.xml</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:dfdl=</span><span class="s">"https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"</span><span class="nt">&gt;</span>
-
-    ...
-
-    <span class="nt">&lt;dfdl:unparser</span> <span class="na">schemaURI=</span><span class="s">"/csv.dfdl.xsd"</span> <span class="na">unparseOnElement=</span><span class="s">"file"</span><span class="nt">/&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The DFDL cartridge supports variables, on disk caching, and trace debugging. Consult the <a href="/xsd/smooks/dfdl-1.0.xsd">XSD documentation</a> for further information.</p>
-</div>
-<div class="sect4">
-<h5 id="maven_coordinates_3">Maven Coordinates</h5>
-<div class="listingblock">
-<div class="title">pom.xml</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>smooks-dfdl-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.0.0-M3<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="xml_namespace_3">XML Namespace</h5>
-<div class="literalblock">
-<div class="content">
-<pre>xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"</pre>
-</div>
-</div>
+<p>Unresolved directive in docs.adoc - include::https://raw.githubusercontent.com/smooks/smooks-dfdl-cartridge/readme/README.adoc[lines=2..-1,leveloffset=3]</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="edi_cartridge">EDI Cartridge</h3>
 <div class="sect3">
-<h4 id="maven_coordinates_4">Maven Coordinates</h4>
+<h4 id="maven_coordinates_3">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
@@ -3139,7 +2987,7 @@ UN/EDIFACT message interchange into a consumable XML document.</p>
 capabilities.</p>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_5">Maven Coordinates</h4>
+<h4 id="maven_coordinates_4">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
@@ -3292,7 +3140,7 @@ further reference.</p>
 <div class="sect2">
 <h3 id="json_cartridge">JSON Cartridge</h3>
 <div class="sect3">
-<h4 id="maven_coordinates_6">Maven Coordinates</h4>
+<h4 id="maven_coordinates_5">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
@@ -3304,7 +3152,7 @@ further reference.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml_namespace_4">XML Namespace</h4>
+<h4 id="xml_namespace_3">XML Namespace</h4>
 <div class="literalblock">
 <div class="content">
 <pre>xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd"</pre>
@@ -3429,7 +3277,7 @@ class.</p>
 <div class="sect2">
 <h3 id="yaml_cartridge">YAML Cartridge</h3>
 <div class="sect3">
-<h4 id="maven_coordinates_7">Maven Coordinates</h4>
+<h4 id="maven_coordinates_6">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
@@ -3441,7 +3289,7 @@ class.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml_namespace_5">XML Namespace</h4>
+<h4 id="xml_namespace_4">XML Namespace</h4>
 <div class="literalblock">
 <div class="content">
 <pre>xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd"</pre>
@@ -3603,7 +3451,7 @@ class.</p>
 <div class="sect2">
 <h3 id="javabean_cartridge">JavaBean Cartridge</h3>
 <div class="sect3">
-<h4 id="maven_coordinates_8">Maven Coordinates</h4>
+<h4 id="maven_coordinates_7">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
@@ -3615,7 +3463,7 @@ class.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml_namespace_6">XML Namespace</h4>
+<h4 id="xml_namespace_5">XML Namespace</h4>
 <div class="literalblock">
 <div class="content">
 <pre>xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</pre>
