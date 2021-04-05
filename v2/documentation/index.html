@@ -2609,6 +2609,7 @@ on the Smooks Instance</a></p>
 <p>The DFDL cartridge opens up Smooks to an incredible number of data formats (e.g., SWIFT, ISO8583, HL7). In fact, this cartridge forms the foundations of the EDI and EDIFACT cartridges. The DFDL cartridge deserialises (i.e., parses) non-XML data and serialises (i.e., unparses) XML according to a structure described in <a href="https://daffodil.apache.org/docs/dfdl/">DFDL</a>. Take the subsequent DFDL schema as an example:</p>
 </div>
 <div class="listingblock">
+<div class="title">csv.dfdl.xsd</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;xs:schema</span> <span class="na">xmlns:xs=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span> <span class="na">xmlns:fn=</span><span class="s">"http://www.w3.org/2005/xpath-functions"</span>
   <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span> <span class="na">xmlns:ex=</span><span class="s">"http://example.com"</span>
@@ -2667,6 +2668,7 @@ CSV structure, the DFDL resource configuration to parse the above CSV
 would be written as:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -2716,6 +2718,7 @@ would be written as:</p>
 <p>Shown in the next snippet is the <em>dfdl:unparser</em> visitor serialising the root element from above stream back to the original CSV:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -2734,6 +2737,7 @@ would be written as:</p>
 <div class="sect4">
 <h5 id="maven_coordinates_3">Maven Coordinates</h5>
 <div class="listingblock">
+<div class="title">pom.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
