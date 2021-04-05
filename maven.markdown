@@ -1,4 +1,5 @@
 ---
+layout: default
 ---
 <br/>
 All Smooks components are available from the Maven Central Repository.
