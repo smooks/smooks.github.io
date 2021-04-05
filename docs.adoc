@@ -1841,7 +1841,7 @@ on the Smooks Instance]
 * link:#java-binding[Java Binding]
 
 === DFDL Cartridge
-include::https://raw.githubusercontent.com/claudemamo/smooks-dfdl-cartridge/readme/README.adoc[lines=2..-1,leveloffset=3]
+include::https://raw.githubusercontent.com/smooks/smooks-dfdl-cartridge/master/README.adoc[lines=2..-1,leveloffset=3]
 
 === EDI Cartridge
 
