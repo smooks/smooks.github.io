@@ -1,0 +1,64 @@
+<p><br />
+All Smooks components are available from the Maven Central Repository.</p>
+
+<p>If your building Smooks from source using Maven, please use:</p>
+
+<ol>
+  <li>Java 1.5 or 1.6</li>
+  <li><a href="https://maven.apache.org/download.cgi">Maven v3</a></li>
+</ol>
+
+<h2 id="artifact-ids">Artifact IDs</h2>
+<p>The <strong>groupId</strong> for all Smooks components is “<strong>org.milyn</strong>”.</p>
+
+<p>The <strong>artifactId</strong> for each of the Smooks components are as follows:</p>
+
+<ul>
+  <li>Smooks Core: “milyn-smooks-core”</li>
+  <li><a href="documentation/#smooks-cartridges">Smooks Cartridges</a>:
+    <ul>
+      <li>Calc:”milyn-smooks-calc”</li>
+      <li>CSV: “milyn-smooks-csv”</li>
+      <li>Fixed length reader: “milyn-smooks-fixed-length”</li>
+      <li>EDI: “milyn-smooks-edi”</li>
+      <li>Javabean: “milyn-smooks-javabean”</li>
+      <li>JSON: “milyn-smooks-json”</li>
+      <li>Routing: “milyn-smooks-routing”</li>
+      <li>Templating: “milyn-smooks-templating”</li>
+      <li>Persistence: “milyn-smooks-persistence”</li>
+      <li>Validation: “milyn-smooks-validation”</li>
+    </ul>
+  </li>
+  <li>Commons: “milyn-commons” (all components depend on Commons, so no need to specify a dependency on this module if you are already dependent on one of the others)</li>
+  <li>EdiSax: “milyn-edisax”</li>
+</ul>
+
+<p><strong>Note</strong>: All cartridges depend on Smooks Core (i.e. “milyn-smooks-core”). Therefore, if your project depends on one of the cartridges, there’s no need to specify the dependency on Smooks Core.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.milyn<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>milyn-smooks-javabean<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.7.1<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
+
+<p>See the POMs in the Examples as examples of Maven based applications that depend on different Smooks Cartridges.</p>
+
+<h2 id="snapshots">SNAPSHOTs</h2>
+
+<p>Smooks SNAPSHOTs are available from <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype OSSRH</a>. You need to list this Maven repo in your project POM e.g.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;repositories&gt;</span>
+    ....
+    <span class="nt">&lt;repository&gt;</span>
+        <span class="nt">&lt;id&gt;</span>oss.sonatype.org-snapshot<span class="nt">&lt;/id&gt;</span>
+         <span class="nt">&lt;url&gt;</span>http://oss.sonatype.org/content/repositories/snapshots<span class="nt">&lt;/url&gt;</span>
+         <span class="nt">&lt;releases&gt;</span>
+            <span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+         <span class="nt">&lt;/releases&gt;</span>
+         <span class="nt">&lt;snapshots&gt;</span>
+            <span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+         <span class="nt">&lt;/snapshots&gt;</span>
+    <span class="nt">&lt;/repository&gt;</span>
+<span class="nt">&lt;/repositories&gt;</span>
+</code></pre></div></div>
