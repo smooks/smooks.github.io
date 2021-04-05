@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Smooks</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1" />
+    <link rel="shortcut icon" href="/smooks.github.io/assets/images/smooks-favicon.png"/>
+    <link rel="stylesheet" href="/smooks.github.io/assets/css/styles.css" type="text/css"/>
+    <link rel="stylesheet" href="/smooks.github.io/assets/css/asciidoctor.min.css"/>
+    <link rel="stylesheet" media="print" href="/smooks.github.io/assets/css/commonPrint.css" type="text/css"/>
+    <link rel="stylesheet" media="print" href="/smooks.github.io/assets/css/gumax_print.css" type="text/css"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="./index">Smooks</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/smooks.github.io/index">Home</a></li>
+            <li><a href="/smooks.github.io/documentation">Documentation</a></li>
+            <li><a href="/smooks.github.io/community">Community</a></li>
+            <li><a href="https://github.com/smooks">GitHub</a></li>
+            <li><a href="/smooks.github.io/faq">FAQ</a></li>
+            <li><a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples">Examples</a></li>
+            <li><a href="/smooks.github.io/maven">Maven</a></li>
+            <li><a href="/smooks.github.io/ant">Ant</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+      <a href="https://github.com/smooks"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+    </nav>
+
+    <div class="main container">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title"></h1>
+  </header>
+
+  <div class="post-content">
+    <div class="paragraph">
+<p>All Smooks components are available from the Maven Central Repository.</p>
+</div>
+<div class="paragraph">
+<p>If your building Smooks from source using Maven, please use:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Java 8</p>
+</li>
+<li>
+<p><a href="https://maven.apache.org/download.cgi">Maven 3</a></p>
+</li>
+</ol>
+</div>
+<div class="sect1">
+<h2 id="artifact_ids">Artifact IDs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Maven group ID for Smooks cartridges, excluding the EDI and EDIFACT
+cartridges, is "<em>org.smooks.cartridges</em>". For the EDI and EDIFACT
+cartridges, the group ID is "<em>org.smooks.cartridges.edi</em>". All remaining
+Smooks artifacts have the groupId "<em>org.smooks</em>".</p>
+</div>
+<div class="paragraph">
+<p>The artifact ID for each of the Smooks artifact is as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Smooks Core: "smooks-core"</p>
+</li>
+<li>
+<p><a href="documentation/#smooks-cartridges">Smooks Cartridges</a>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Calc: "smooks-calc-cartridge"</p>
+</li>
+<li>
+<p>CSV: "smooks-csv-cartridge"</p>
+</li>
+<li>
+<p>Fixed-length reader: "smooks-fixed-length-cartridge"</p>
+</li>
+<li>
+<p>EDI: "smooks-edi-cartridge"</p>
+</li>
+<li>
+<p>EDIFACT: "smooks-edifact-cartridge"</p>
+</li>
+<li>
+<p>Javabean: "smooks-javabean-cartridge"</p>
+</li>
+<li>
+<p>JSON: "smooks-json-cartridge"</p>
+</li>
+<li>
+<p>Routing: "smooks-routing-cartridge"</p>
+</li>
+<li>
+<p>Templating: "smooks-templating-cartridge"</p>
+</li>
+<li>
+<p>Persistence: "smooks-persistence-cartridge"</p>
+</li>
+<li>
+<p>Validation: "smooks-validation-cartridge"</p>
+</li>
+<li>
+<p>DFDL: "smooks-dfdl-cartridge"</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Commons: "smooks-commons" (all artifacts depend on Commons, so no need
+to specify a dependency on this module if you are already dependent on
+one of the others)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Note</strong>: All cartridges depend on "smooks-core". Therefore, if your
+project depends on one of the cartridges, there&#8217;s no need to specify the
+dependency on smooks-core.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-javabean-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M2<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the POMs in the <a href="https://github.com/smooks/smooks-examples">examples</a>
+for references of Maven-based applications that depend on different
+Smooks Cartridges.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="bill_of_materials_bom">Bill of Materials (BOM)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to guarantee compatibility between Smooks artifacts, we
+recommend you import the Smooks BOM from your POM before declaring
+dependencies on Smooks:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml">...
+<span class="nt">&lt;dependencyManagement&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.smooks<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>smooks-bom<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>2.0.0-M2<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;/dependencyManagement&gt;</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The BOM will manage the dependency versions therefore omit the <em>version</em>
+element when declaring Smooks dependencies:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml">...
+<span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.smooks<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>smooks-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+    ...
+<span class="nt">&lt;/dependencies&gt;</span>
+...</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="snapshots">SNAPSHOTs</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Smooks SNAPSHOTs are available from
+<a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype OSSRH</a>.
+You need to declare the Maven repository in your project&#8217;s POM:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;repositories&gt;</span>
+    ....
+    <span class="nt">&lt;repository&gt;</span>
+        <span class="nt">&lt;id&gt;</span>oss.sonatype.org-snapshot<span class="nt">&lt;/id&gt;</span>
+         <span class="nt">&lt;url&gt;</span>http://oss.sonatype.org/content/repositories/snapshots<span class="nt">&lt;/url&gt;</span>
+         <span class="nt">&lt;releases&gt;</span>
+            <span class="nt">&lt;enabled&gt;</span>false<span class="nt">&lt;/enabled&gt;</span>
+         <span class="nt">&lt;/releases&gt;</span>
+         <span class="nt">&lt;snapshots&gt;</span>
+            <span class="nt">&lt;enabled&gt;</span>true<span class="nt">&lt;/enabled&gt;</span>
+         <span class="nt">&lt;/snapshots&gt;</span>
+    <span class="nt">&lt;/repository&gt;</span>
+<span class="nt">&lt;/repositories&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+  </div>
+
+</article>
+
+    </div><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/smooks.github.io/assets/js/jquery-3.1.0.min.js"></script>
+    <script src="/smooks.github.io/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/smooks.github.io/assets/js/smooks.js"></script>
+  </body>
+</html>
+
