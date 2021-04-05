@@ -9,3 +9,4 @@ asciidoctor:
     - idseparator=_
     - source-highlighter=rouge
     - stylesdir=assets/css
+    - allow-uri-read=
