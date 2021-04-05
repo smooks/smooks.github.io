@@ -27,7 +27,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git fetch --all && git checkout gh-pages && cp -r jekyll_build/* . && rm -rf jekyll_build/
+          git clone --branch gh-pages https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git && cp -r jekyll_build/* smooks.github.io/ && cd smooks.github.io
           touch .nojekyll
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
