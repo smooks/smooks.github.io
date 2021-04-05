@@ -8,7 +8,7 @@ layout: default
 <p>
     <span data-page-nav="{{ '/index' | prepend: site.baseurl }}"></span>
 </p>
-<div class="main-page-logo">
+<div style="padding: 20px;text-align: center">
     <img src="{{ '/assets/images/smooks-logo.png' | prepend: site.baseurl }}" />
 </div>
 ++++
