@@ -86,6 +86,9 @@
 <li><a href="#fixed_length_cartridge">Fixed Length Cartridge</a></li>
 <li><a href="#dfdl_cartridge">DFDL Cartridge</a></li>
 <li><a href="#edi_cartridge">EDI Cartridge</a></li>
+<li><a href="#edi_dfdl_schema">EDI DFDL Schema</a></li>
+<li><a href="#maven_coordinates_4">Maven Coordinates</a></li>
+<li><a href="#xml_namespaces">XML Namespaces</a></li>
 <li><a href="#edifact_cartridge">EDIFACT Cartridge</a></li>
 <li><a href="#json_cartridge">JSON Cartridge</a></li>
 <li><a href="#yaml_cartridge">YAML Cartridge</a></li>
@@ -2663,9 +2666,7 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Assuming the file "csv.dfdl.xsd" holds the DFDL schema describing the
-CSV structure, the DFDL resource configuration to parse the above CSV
-would be written as:</p>
+<p>Assuming the file "csv.dfdl.xsd" holds the DFDL schema describing the CSV structure, the DFDL resource configuration to parse the above CSV would be written as:</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -2758,104 +2759,84 @@ would be written as:</p>
 </div>
 <div class="sect2">
 <h3 id="edi_cartridge">EDI Cartridge</h3>
-<div class="sect3">
-<h4 id="maven_coordinates_4">Maven Coordinates</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>smooks-edi-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_namespaces">XML Namespaces</h4>
-<div class="literalblock">
-<div class="content">
-<pre>xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_api_3">XML API</h4>
 <div class="paragraph">
-<p>The EDI cartridge provides a reader for parsing EDI documents, and a
-visitor for serialising the XML stream into EDI.</p>
+<p><span class="image"><img src="https://img.shields.io/maven-central/v/org.smooks.cartridges.edi/smooks-edi-cartridge" alt="Maven Central"></span>
+<span class="image"><img src="https://img.shields.io/nexus/s/org.smooks.cartridges.edi/smooks-edi-cartridge?server=https%3A%2F%2Foss.sonatype.org" alt="Sonatype Nexus (Snapshots)"></span>
+<span class="image"><img src="https://github.com/smooks/smooks-edi-cartridge/workflows/CI/badge.svg" alt="Build Status"></span></p>
 </div>
 <div class="paragraph">
-<p>In the following pass-through configuration, Smooks parses an EDI
-document and then serialises, or unparses, the generated XML stream to
-produce an EDI document identical to the parsed document.</p>
+<p>The EDI cartridge provides a reader for parsing EDI documents, and a visitor for serialising the event stream into EDI.</p>
+</div>
+<div class="paragraph">
+<p>In the following pass-through configuration, Smooks parses an EDI document and then serialises, or unparses in DFDL lingo, the generated event stream to produce an EDI document identical to the parsed document.</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:edi=</span><span class="s">"https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</span><span class="nt">&gt;</span>
 
     <span class="c">&lt;!-- Configure the reader to parse the EDI stream into a stream of SAX events. --&gt;</span>
-    <span class="nt">&lt;edi:parser</span> <span class="na">schemaURI=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span>
-                <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;edi:parser</span> <span class="na">schemaURI=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
+                <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
+                <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span><span class="nt">/&gt;</span> // <b class="conum">(3)</b>
 
     <span class="c">&lt;!-- Configure the writer to serialise the XML stream into EDI. --&gt;</span>
-    <span class="nt">&lt;edi:unparser</span> <span class="na">unparseOnElement=</span><span class="s">"/Order"</span> <span class="na">schemaURI=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span>
-                  <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;edi:unparser</span> <span class="na">schemaURI=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
+                  <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
+                  <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span> // <b class="conum">(3)</b>
+                  <span class="na">unparseOnElement=</span><span class="s">"/Order"</span><span class="nt">/&gt;</span> // <b class="conum">(4)</b>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Attributes common to the parser and unparser resources are: *
-<strong>schemaURI</strong>: the DFDL schema describing the structure of the EDI
-document to be parser or unparsed. * <strong>segmentTerminator</strong>: the terminator
-for groups of related data elements. DFDL interprets <em>%NL;</em> as a
-newline. * <strong>compositeDataElementSeparator</strong>: the delimiter for compound
-data elements.</p>
-</div>
-<div class="paragraph">
-<p>The <em>unparseOnElement</em> attribute is exclusive to the unparser visitor.
-It tells the unparser which fragment to intercept and serialise. Consult
-with EDI cartridge&#8217;s <a href="/xsd/smooks/edi-2.0.xsd">XSD documentation</a> for
-the complete list of attributes and elements.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="edi_dfdl_schema">EDI DFDL Schema</h4>
-<div class="paragraph">
-<p>The user-defined DFDL schema supplied to the <em>parser</em>/<em>unparser</em> element
-drives the event mapping, whether it is EDI to SAX or SAX to EDI. This
-schema must import the bundled <em>IBM_EDI_Format.dfdl.xsd</em> DFDL schema
-which defines common EDI constructs like segments and data elements.</p>
-</div>
-<div class="paragraph">
-<p>The following illustration visualises the mapping process.
-<em>input-message.edi</em> is the EDI document,
-<em>edi-to-xml-order-mapping.dfdl.xsd</em> describes the EDI to SAX events
-mapping, and <em>expected.xml</em> illustrates the XML event stream that would
-result from applying the mapping.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="../assets/images/Edi-mapping.svg" alt="Image:Edi-mapping.svg"></span></p>
-</div>
-<div class="paragraph">
-<p>The above illustration highlights the:</p>
+<p>Config attributes common to the parser and unparser resources are:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Nesting of segments (segment groups). In this case, the first two
-segments are part of a group.</p>
+<p><em>schemaURI</em>: the DFDL schema describing the structure of the EDI document to be parser or unparsed.</p>
 </li>
 <li>
-<p>Mapping of actual field and component values to the target SAX events
-(to generate the XML).</p>
+<p><em>segmentTerminator</em>: the terminator for groups of related data elements. DFDL interprets <em>%NL;</em> as a newline.</p>
+</li>
+<li>
+<p><em>compositeDataElementSeparator</em>: the delimiter for compound data elements.</p>
 </li>
 </ol>
 </div>
-<div class="sect4">
-<h5 id="segments">Segments</h5>
+<div class="paragraph">
+<p>The <em>unparseOnElement</em> attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge&#8217;s <a href="/xsd/smooks/edi-2.0.xsd">XSD documentation</a> for the complete list of config attributes and elements.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="edi_dfdl_schema">EDI DFDL Schema</h3>
+<div class="paragraph">
+<p>The user-defined DFDL schema supplied to the <em>parser</em> and <em>unparser</em> config elements  drives the event mapping, whether it is EDI to SAX or SAX to EDI. This schema must import the bundled <em>IBM_EDI_Format.dfdl.xsd</em> DFDL schema which defines common EDI constructs like segments and data elements.</p>
+</div>
+<div class="paragraph">
+<p>The following figure illustrates the mapping process:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="docs/images/Edi-mapping.svg" alt="Image:Edi-mapping.svg"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>input-message.edi</em> is the input/output EDI document.</p>
+</li>
+<li>
+<p><em>edi-to-xml-order-mapping.dfdl.xsd</em> describes the EDI to SAX, or SAX to EDI, event mapping.</p>
+</li>
+<li>
+<p><em>expected.xml</em> is the result event stream from applying the mapping.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="segments">Segments</h4>
 <div class="paragraph">
 <p>The next snippet shows a segment declaration in DFDL:</p>
 </div>
@@ -2874,7 +2855,9 @@ segments are part of a group.</p>
         <span class="nt">&lt;/xsd:appinfo&gt;</span>
     <span class="nt">&lt;/xsd:annotation&gt;</span>
 
-    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> <span class="na">name=</span><span class="s">"header"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> // <b class="conum">(1)</b>
+                 <span class="na">name=</span><span class="s">"header"</span> // <b class="conum">(2)</b>
+                 <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span><span class="nt">&gt;</span> // <b class="conum">(3)</b>
         <span class="nt">&lt;xsd:complexType&gt;</span>
             ...
         <span class="nt">&lt;/xsd:complexType&gt;</span>
@@ -2882,25 +2865,27 @@ segments are part of a group.</p>
 <span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><em>dfdl:initiator</em> identifies the segment code .</p>
+</li>
+<li>
+<p><em>name</em> attribute specifies the segment&#8217;s XML mapping.</p>
+</li>
+<li>
+<p><em>ibmEdiFmt:EDISegmentFormat</em> holds the segment structure definition; it is important to reference it from within the <em>dfdl:ref</em> attribute.</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="segment_cardinality">Segment Cardinality</h5>
 <div class="paragraph">
-<p><em>dfdl:initiator</em> identifies the segment code whereas the <em>name</em>
-attribute specifies the segment&#8217;s XML mapping.
-<em>ibmEdiFmt:EDISegmentFormat</em> holds the segment structure definition; it
-is important to reference it from within the <em>dfdl:ref</em> attribute.</p>
-</div>
-<div class="sect5">
-<h6 id="segment_cardinality">Segment Cardinality</h6>
-<div class="paragraph">
-<p>What is not shown in the previous section is how a segment element
-supports the two optional attributes <em>minOccurs</em> and <em>maxOccurs</em>
-(default value of 1 in both cases). These attributes can be used to
-control the optional and required characteristics of a segment. An
-<em>unbounded</em> maxOccurs indicates that the segment can repeat any number
-of times in that location of the EDI document.</p>
+<p>What is not demonstrated in the previous section is the segment element&#8217;s optional attributes <em>minOccurs</em> and <em>maxOccurs</em> (default value of 1 in both cases). These attributes can be used to control the optional and required characteristics of a segment. An <em>unbounded</em> maxOccurs indicates that the segment can repeat any number of times in that location of the EDI document.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="segment_groups">Segment Groups</h6>
+<div class="sect4">
+<h5 id="segment_groups">Segment Groups</h5>
 <div class="paragraph">
 <p>You implicitly create segment groups when:</p>
 </div>
@@ -2915,8 +2900,7 @@ of times in that location of the EDI document.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>The "HDR" segment in the next example is a segment group because it is
-unbounded, and it encloses the "CUS" and "ORD" segments:</p>
+<p>The <em>HDR</em> segment in the next example is a segment group because it is unbounded, and it encloses the <em>CUS</em> and <em>ORD</em> segments:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2958,11 +2942,10 @@ unbounded, and it encloses the "CUS" and "ORD" segments:</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="data_elements">Data Elements</h5>
+<div class="sect3">
+<h4 id="data_elements">Data Elements</h4>
 <div class="paragraph">
-<p>Segment data elements are children within a sequence element referencing
-the DFDL format <em>ibmEdiFmt:EDISegmentSequenceFormat</em>:</p>
+<p>Segment data elements are children within a sequence element referencing the DFDL format <em>ibmEdiFmt:EDISegmentSequenceFormat</em>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2995,15 +2978,12 @@ the DFDL format <em>ibmEdiFmt:EDISegmentSequenceFormat</em>:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Each child <em>xsd:element</em> within <em>xsd:sequence</em> represents an EDI data
-element. The <em>name</em> attribute is the name of the target XML element
-capturing the data element&#8217;s value.</p>
+<p>Each child <em>xsd:element</em> within <em>xsd:sequence</em> represents an EDI data element. The <em>name</em> attribute is the name of the target XML element capturing the data element&#8217;s value.</p>
 </div>
-<div class="sect5">
-<h6 id="composite_data_elements">Composite Data Elements</h6>
+<div class="sect4">
+<h5 id="composite_data_elements">Composite Data Elements</h5>
 <div class="paragraph">
-<p>Data elements made up of components are yet another <em>xsd:sequence</em>
-referencing the DFDL format <em>ibmEdiFmt:EDICompositeSequenceFormat</em>:</p>
+<p>Data elements made up of components are yet another <em>xsd:sequence</em> referencing the DFDL format <em>ibmEdiFmt:EDICompositeSequenceFormat</em>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3041,13 +3021,10 @@ referencing the DFDL format <em>ibmEdiFmt:EDICompositeSequenceFormat</em>:</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="imports">Imports</h5>
+<div class="sect3">
+<h4 id="imports">Imports</h4>
 <div class="paragraph">
-<p>Many EDI messages use the same segment definitions. Being able to define
-these segments once and import them into a top-level configuration saves
-on a lot of duplication. A simple configuration demonstrating the import
-feature would be as follows:</p>
+<p>Many EDI messages use the same segment definitions. Being able to define these segments once and import them into a top-level configuration saves on duplication. A simple configuration demonstrating the import feature would be as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3081,16 +3058,13 @@ feature would be as follows:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The above schema demonstrates the use of the <em>import</em> element, where
-just about anything can be moved into its own file for reuse.</p>
+<p>The above schema demonstrates the use of the <em>import</em> element, where just about anything can be moved into its own file for reuse.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="type_support">Type Support</h5>
+<div class="sect3">
+<h4 id="type_support">Type Support</h4>
 <div class="paragraph">
-<p>The <em>type</em> attribute on segment data elements allows datatype
-specification for validation. The following example shows the type
-support:</p>
+<p>The <em>type</em> attribute on segment data elements allows datatype specification for validation. The following example shows type support in action:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3122,6 +3096,26 @@ support:</p>
 <span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="maven_coordinates_4">Maven Coordinates</h3>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-edi-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="xml_namespaces">XML Namespaces</h3>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</pre>
 </div>
 </div>
 </div>
@@ -3159,7 +3153,7 @@ capabilities.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml_api_4">XML API</h4>
+<h4 id="xml_api_3">XML API</h4>
 <div class="paragraph">
 <p>Specialised <em>edi:parser</em> and <em>edi:unparser</em> resources support UN/EDIFACT
 interchanges as shown in the next example:</p>
@@ -3312,7 +3306,7 @@ further reference.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml_api_5">XML API</h4>
+<h4 id="xml_api_4">XML API</h4>
 <div class="paragraph">
 <p>Processing JSON with Smooks requires a JSON reader to be configured:</p>
 </div>
@@ -3449,7 +3443,7 @@ class.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml_api_6">XML API</h4>
+<h4 id="xml_api_5">XML API</h4>
 <div class="paragraph">
 <p>Processing YAML with Smooks requires a YAML reader to be configured:</p>
 </div>
@@ -3674,7 +3668,7 @@ This is shown in the Smooks Configuration.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="xml_api_7">XML API</h4>
+<h4 id="xml_api_6">XML API</h4>
 <div class="paragraph">
 <p>The Smooks configuration for performing this transform
 ("smooks-config.xml") is as follows (see the Source Model Event Stream
