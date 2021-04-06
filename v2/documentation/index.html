@@ -86,13 +86,7 @@
 <li><a href="#fixed_length_cartridge">Fixed Length Cartridge</a></li>
 <li><a href="#dfdl_cartridge">DFDL Cartridge</a></li>
 <li><a href="#edi_cartridge">EDI Cartridge</a></li>
-<li><a href="#edi_dfdl_schema">EDI DFDL Schema</a></li>
-<li><a href="#maven_coordinates_4">Maven Coordinates</a></li>
-<li><a href="#xml_namespaces">XML Namespaces</a></li>
 <li><a href="#edifact_cartridge">EDIFACT Cartridge</a></li>
-<li><a href="#schema_packs">Schema Packs</a></li>
-<li><a href="#maven_coordinates_5">Maven Coordinates</a></li>
-<li><a href="#xml_namespaces_2">XML Namespaces</a></li>
 <li><a href="#json_cartridge">JSON Cartridge</a></li>
 <li><a href="#yaml_cartridge">YAML Cartridge</a></li>
 <li><a href="#javabean_cartridge">JavaBean Cartridge</a></li>
@@ -2803,9 +2797,8 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="paragraph">
 <p>The <em>unparseOnElement</em> attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge&#8217;s <a href="/xsd/smooks/edi-2.0.xsd">XSD documentation</a> for the complete list of config attributes and elements.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="edi_dfdl_schema">EDI DFDL Schema</h3>
+<div class="sect5">
+<h6 id="edi_dfdl_schema">EDI DFDL Schema</h6>
 <div class="paragraph">
 <p>The user-defined DFDL schema supplied to the <em>parser</em> and <em>unparser</em> config elements  drives the event mapping, whether it is EDI to SAX or SAX to EDI. This schema must import the bundled <em>IBM_EDI_Format.dfdl.xsd</em> DFDL schema which defines common EDI constructs like segments and data elements.</p>
 </div>
@@ -2828,8 +2821,8 @@ jones,arya,cat,1986-02-19</code></pre>
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="segments">Segments</h4>
+<div class="sect6">
+<h7 id="segments">Segments</h7>
 <div class="paragraph">
 <p>The next snippet shows a segment declaration in DFDL:</p>
 </div>
@@ -2871,14 +2864,14 @@ jones,arya,cat,1986-02-19</code></pre>
 </li>
 </ol>
 </div>
-<div class="sect4">
-<h5 id="segment_cardinality">Segment Cardinality</h5>
+<div class="sect7">
+<h8 id="segment_cardinality">Segment Cardinality</h8>
 <div class="paragraph">
 <p>What is not demonstrated in the previous section is the segment element&#8217;s optional attributes <em>minOccurs</em> and <em>maxOccurs</em> (default value of 1 in both cases). These attributes can be used to control the optional and required characteristics of a segment. An <em>unbounded</em> maxOccurs indicates that the segment can repeat any number of times in that location of the EDI document.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="segment_groups">Segment Groups</h5>
+<div class="sect7">
+<h8 id="segment_groups">Segment Groups</h8>
 <div class="paragraph">
 <p>You implicitly create segment groups when:</p>
 </div>
@@ -2935,8 +2928,8 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="data_elements">Data Elements</h4>
+<div class="sect6">
+<h7 id="data_elements">Data Elements</h7>
 <div class="paragraph">
 <p>Segment data elements are children within a sequence element referencing the DFDL format <em>ibmEdiFmt:EDISegmentSequenceFormat</em>:</p>
 </div>
@@ -2973,8 +2966,8 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="paragraph">
 <p>Each child <em>xsd:element</em> within <em>xsd:sequence</em> represents an EDI data element. The <em>name</em> attribute is the name of the target XML element capturing the data element&#8217;s value.</p>
 </div>
-<div class="sect4">
-<h5 id="composite_data_elements">Composite Data Elements</h5>
+<div class="sect7">
+<h8 id="composite_data_elements">Composite Data Elements</h8>
 <div class="paragraph">
 <p>Data elements made up of components are yet another <em>xsd:sequence</em> referencing the DFDL format <em>ibmEdiFmt:EDICompositeSequenceFormat</em>:</p>
 </div>
@@ -3014,8 +3007,8 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="imports">Imports</h4>
+<div class="sect6">
+<h7 id="imports">Imports</h7>
 <div class="paragraph">
 <p>Many EDI messages use the same segment definitions. Being able to define these segments once and import them into a top-level configuration saves on duplication. A simple configuration demonstrating the import feature would be as follows:</p>
 </div>
@@ -3054,8 +3047,8 @@ jones,arya,cat,1986-02-19</code></pre>
 <p>The above schema demonstrates the use of the <em>import</em> element, where just about anything can be moved into its own file for reuse.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="type_support">Type Support</h4>
+<div class="sect6">
+<h7 id="type_support">Type Support</h7>
 <div class="paragraph">
 <p>The <em>type</em> attribute on segment data elements allows datatype specification for validation. The following example shows type support in action:</p>
 </div>
@@ -3091,8 +3084,8 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="maven_coordinates_4">Maven Coordinates</h3>
+<div class="sect5">
+<h6 id="maven_coordinates_4">Maven Coordinates</h6>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -3104,11 +3097,12 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="xml_namespaces">XML Namespaces</h3>
+<div class="sect5">
+<h6 id="xml_namespaces">XML Namespaces</h6>
 <div class="literalblock">
 <div class="content">
 <pre>xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</pre>
+</div>
 </div>
 </div>
 </div>
@@ -3181,9 +3175,8 @@ process:</p>
 <span class="n">etc</span><span class="o">...</span></code></pre>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="schema_packs">Schema Packs</h3>
+<div class="sect5">
+<h6 id="schema_packs">Schema Packs</h6>
 <div class="paragraph">
 <p>In an effort to simplify the processing of UN/EDIFACT Interchanges, we have created tools to generate EDIFACT schema packs from <a href="http://www.unece.org/trade/untdid/down_index.htm">the official UN/EDIFACT message definition zip directories</a>. The generated schema packs are deployed to a public Maven repository from where users can easily access the EDIFACT schemas for the UN/EDIFACT message sets they need to support.</p>
 </div>
@@ -3229,8 +3222,8 @@ process:</p>
 <p>See the <a href="https://github.com/smooks/smooks-examples">EDIFACT examples</a> for further reference.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="maven_coordinates_5">Maven Coordinates</h3>
+<div class="sect5">
+<h6 id="maven_coordinates_5">Maven Coordinates</h6>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -3242,11 +3235,12 @@ process:</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="xml_namespaces_2">XML Namespaces</h3>
+<div class="sect5">
+<h6 id="xml_namespaces_2">XML Namespaces</h6>
 <div class="literalblock">
 <div class="content">
 <pre>xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"</pre>
+</div>
 </div>
 </div>
 </div>
