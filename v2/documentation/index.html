@@ -2752,19 +2752,490 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="sect2">
 <h3 id="edi_cartridge">EDI Cartridge</h3>
 <div class="paragraph">
-<p>Unresolved directive in docs.adoc - include::https://raw.githubusercontent.com/smooks/smooks-edi-cartridge/master/README.adoc[tag=smooks-edi-cartridge,leveloffset=1]</p>
+<p>The EDI cartridge provides a reader for parsing EDI documents, and a visitor for serialising the event stream into EDI.</p>
+</div>
+<div class="paragraph">
+<p>In the following pass-through configuration, Smooks parses an EDI document and then serialises, or unparses in DFDL lingo, the generated event stream to produce an EDI document identical to the parsed document.</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:edi=</span><span class="s">"https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- Configure the reader to parse the EDI stream into a stream of SAX events. --&gt;</span>
+    <span class="nt">&lt;edi:parser</span> <span class="na">schemaURI=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
+                <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
+                <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span><span class="nt">/&gt;</span> // <b class="conum">(3)</b>
+
+    <span class="c">&lt;!-- Configure the writer to serialise the XML stream into EDI. --&gt;</span>
+    <span class="nt">&lt;edi:unparser</span> <span class="na">schemaURI=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
+                  <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
+                  <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span> // <b class="conum">(3)</b>
+                  <span class="na">unparseOnElement=</span><span class="s">"/Order"</span><span class="nt">/&gt;</span> // <b class="conum">(4)</b>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Config attributes common to the parser and unparser resources are:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>schemaURI</em>: the DFDL schema describing the structure of the EDI document to be parser or unparsed.</p>
+</li>
+<li>
+<p><em>segmentTerminator</em>: the terminator for groups of related data elements. DFDL interprets <em>%NL;</em> as a newline.</p>
+</li>
+<li>
+<p><em>compositeDataElementSeparator</em>: the delimiter for compound data elements.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The <em>unparseOnElement</em> attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge&#8217;s <a href="/xsd/smooks/edi-2.0.xsd">XSD documentation</a> for the complete list of config attributes and elements.</p>
+</div>
+<div class="sect3">
+<h4 id="edi_dfdl_schema">EDI DFDL Schema</h4>
+<div class="paragraph">
+<p>The user-defined DFDL schema supplied to the <em>parser</em> and <em>unparser</em> config elements  drives the event mapping, whether it is EDI to SAX or SAX to EDI. This schema must import the bundled <em>IBM_EDI_Format.dfdl.xsd</em> DFDL schema which defines common EDI constructs like segments and data elements.</p>
+</div>
+<div class="paragraph">
+<p>The following figure illustrates the mapping process:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="https://raw.githubusercontent.com/smooks/smooks-edi-cartridge/master/docs/images/Edi-mapping.svg" alt="Image:Edi-mapping.svg"></span></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>input-message.edi</em> is the input/output EDI document.</p>
+</li>
+<li>
+<p><em>edi-to-xml-order-mapping.dfdl.xsd</em> describes the EDI to SAX, or SAX to EDI, event mapping.</p>
+</li>
+<li>
+<p><em>expected.xml</em> is the result event stream from applying the mapping.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="segments">Segments</h5>
+<div class="paragraph">
+<p>The next snippet shows a segment declaration in DFDL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span>
+<span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+            <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span>
+            <span class="na">xmlns:ibmEdiFmt=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;xsd:import</span> <span class="na">namespace=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span> <span class="na">schemaLocation=</span><span class="s">"/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;xsd:annotation&gt;</span>
+        <span class="nt">&lt;xsd:appinfo</span> <span class="na">source=</span><span class="s">"http://www.ogf.org/dfdl/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;dfdl:format</span> <span class="na">ref=</span><span class="s">"ibmEdiFmt:EDIFormat"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/xsd:appinfo&gt;</span>
+    <span class="nt">&lt;/xsd:annotation&gt;</span>
+
+    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> // <b class="conum">(1)</b>
+                 <span class="na">name=</span><span class="s">"header"</span> // <b class="conum">(2)</b>
+                 <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span><span class="nt">&gt;</span> // <b class="conum">(3)</b>
+        <span class="nt">&lt;xsd:complexType&gt;</span>
+            ...
+        <span class="nt">&lt;/xsd:complexType&gt;</span>
+    <span class="nt">&lt;/xsd:element&gt;</span>
+<span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><em>dfdl:initiator</em> identifies the segment code .</p>
+</li>
+<li>
+<p><em>name</em> attribute specifies the segment&#8217;s XML mapping.</p>
+</li>
+<li>
+<p><em>ibmEdiFmt:EDISegmentFormat</em> holds the segment structure definition; it is important to reference it from within the <em>dfdl:ref</em> attribute.</p>
+</li>
+</ol>
+</div>
+<div class="sect5">
+<h6 id="segment_cardinality">Segment Cardinality</h6>
+<div class="paragraph">
+<p>What is not demonstrated in the previous section is the segment element&#8217;s optional attributes <em>minOccurs</em> and <em>maxOccurs</em> (default value of 1 in both cases). These attributes can be used to control the optional and required characteristics of a segment. An <em>unbounded</em> maxOccurs indicates that the segment can repeat any number of times in that location of the EDI document.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="segment_groups">Segment Groups</h6>
+<div class="paragraph">
+<p>You implicitly create segment groups when:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Setting the "maxOccurs" in a segment element to more than one, and</p>
+</li>
+<li>
+<p>Adding within the segment element other segment elements</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The <em>HDR</em> segment in the next example is a segment group because it is unbounded, and it encloses the <em>CUS</em> and <em>ORD</em> segments:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span>
+<span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+            <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span>
+            <span class="na">xmlns:ibmEdiFmt=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;xsd:import</span> <span class="na">namespace=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span> <span class="na">schemaLocation=</span><span class="s">"/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;xsd:annotation&gt;</span>
+        <span class="nt">&lt;xsd:appinfo</span> <span class="na">source=</span><span class="s">"http://www.ogf.org/dfdl/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;dfdl:format</span> <span class="na">ref=</span><span class="s">"ibmEdiFmt:EDIFormat"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/xsd:appinfo&gt;</span>
+    <span class="nt">&lt;/xsd:annotation&gt;</span>
+
+    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> <span class="na">name=</span><span class="s">"order"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:complexType&gt;</span>
+            <span class="nt">&lt;xsd:sequence&gt;</span>
+                <span class="nt">&lt;xsd:sequence</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span><span class="nt">&gt;</span>
+                    ...
+                <span class="nt">&lt;/xsd:sequence&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"CUS"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"customer-details"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;xsd:complexType&gt;</span>
+                        ...
+                    <span class="nt">&lt;/xsd:complexType&gt;</span>
+                <span class="nt">&lt;/xsd:element&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"ORD"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"order-item"</span>
+                             <span class="na">maxOccurs=</span><span class="s">"unbounded"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;xsd:complexType&gt;</span>
+                        ...
+                    <span class="nt">&lt;/xsd:complexType&gt;</span>
+                <span class="nt">&lt;/xsd:element&gt;</span>
+            <span class="nt">&lt;/xsd:sequence&gt;</span>
+        <span class="nt">&lt;/xsd:complexType&gt;</span>
+    <span class="nt">&lt;/xsd:element&gt;</span>
+<span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="data_elements">Data Elements</h5>
+<div class="paragraph">
+<p>Segment data elements are children within a sequence element referencing the DFDL format <em>ibmEdiFmt:EDISegmentSequenceFormat</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span>
+<span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+            <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span>
+            <span class="na">xmlns:ibmEdiFmt=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;xsd:import</span> <span class="na">namespace=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span> <span class="na">schemaLocation=</span><span class="s">"/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;xsd:annotation&gt;</span>
+        <span class="nt">&lt;xsd:appinfo</span> <span class="na">source=</span><span class="s">"http://www.ogf.org/dfdl/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;dfdl:format</span> <span class="na">ref=</span><span class="s">"ibmEdiFmt:EDIFormat"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/xsd:appinfo&gt;</span>
+    <span class="nt">&lt;/xsd:annotation&gt;</span>
+
+    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"header"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:complexType&gt;</span>
+            <span class="nt">&lt;xsd:sequence</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentSequenceFormat"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"order-id"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"status-code"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"net-amount"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"total-amount"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"tax"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"date"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/xsd:sequence&gt;</span>
+        <span class="nt">&lt;/xsd:complexType&gt;</span>
+    <span class="nt">&lt;/xsd:element&gt;</span>
+<span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each child <em>xsd:element</em> within <em>xsd:sequence</em> represents an EDI data element. The <em>name</em> attribute is the name of the target XML element capturing the data element&#8217;s value.</p>
+</div>
+<div class="sect5">
+<h6 id="composite_data_elements">Composite Data Elements</h6>
+<div class="paragraph">
+<p>Data elements made up of components are yet another <em>xsd:sequence</em> referencing the DFDL format <em>ibmEdiFmt:EDICompositeSequenceFormat</em>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span>
+<span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+            <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span>
+            <span class="na">xmlns:ibmEdiFmt=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;xsd:import</span> <span class="na">namespace=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span> <span class="na">schemaLocation=</span><span class="s">"/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;xsd:annotation&gt;</span>
+        <span class="nt">&lt;xsd:appinfo</span> <span class="na">source=</span><span class="s">"http://www.ogf.org/dfdl/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;dfdl:format</span> <span class="na">ref=</span><span class="s">"ibmEdiFmt:EDIFormat"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/xsd:appinfo&gt;</span>
+    <span class="nt">&lt;/xsd:annotation&gt;</span>
+
+    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"CUS"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"customer-details"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:complexType&gt;</span>
+            <span class="nt">&lt;xsd:sequence</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentSequenceFormat"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"username"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"name"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;xsd:complexType&gt;</span>
+                        <span class="nt">&lt;xsd:sequence</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDICompositeSequenceFormat"</span><span class="nt">&gt;</span>
+                            <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"firstname"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                            <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"lastname"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                        <span class="nt">&lt;/xsd:sequence&gt;</span>
+                    <span class="nt">&lt;/xsd:complexType&gt;</span>
+                <span class="nt">&lt;/xsd:element&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"state"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/xsd:sequence&gt;</span>
+        <span class="nt">&lt;/xsd:complexType&gt;</span>
+    <span class="nt">&lt;/xsd:element&gt;</span>
+<span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="imports">Imports</h5>
+<div class="paragraph">
+<p>Many EDI messages use the same segment definitions. Being able to define these segments once and import them into a top-level configuration saves on duplication. A simple configuration demonstrating the import feature would be as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span>
+<span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+            <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span>
+            <span class="na">xmlns:ibmEdiFmt=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span>
+            <span class="na">xmlns:def=</span><span class="s">"def"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;xsd:import</span> <span class="na">namespace=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span> <span class="na">schemaLocation=</span><span class="s">"/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;xsd:import</span> <span class="na">namespace=</span><span class="s">"def"</span> <span class="na">schemaLocation=</span><span class="s">"example/edi-segment-definition.xml"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;xsd:annotation&gt;</span>
+        <span class="nt">&lt;xsd:appinfo</span> <span class="na">source=</span><span class="s">"http://www.ogf.org/dfdl/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;dfdl:format</span> <span class="na">ref=</span><span class="s">"ibmEdiFmt:EDIFormat"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/xsd:appinfo&gt;</span>
+    <span class="nt">&lt;/xsd:annotation&gt;</span>
+
+    <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"Order"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:complexType&gt;</span>
+            <span class="nt">&lt;xsd:sequence&gt;</span>
+                <span class="nt">&lt;xsd:sequence</span> <span class="na">dfdl:initiatedContent=</span><span class="s">"yes"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"header"</span> <span class="na">type=</span><span class="s">"def:HDR"</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"CUS"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"customer-details"</span> <span class="na">type=</span><span class="s">"def:CUS"</span><span class="nt">/&gt;</span>
+                    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"ORD"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"order-item"</span> <span class="na">maxOccurs=</span><span class="s">"unbounded"</span> <span class="na">type=</span><span class="s">"def:ORD"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;/xsd:sequence&gt;</span>
+            <span class="nt">&lt;/xsd:sequence&gt;</span>
+        <span class="nt">&lt;/xsd:complexType&gt;</span>
+    <span class="nt">&lt;/xsd:element&gt;</span>
+<span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above schema demonstrates the use of the <em>import</em> element, where just about anything can be moved into its own file for reuse.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="type_support">Type Support</h5>
+<div class="paragraph">
+<p>The <em>type</em> attribute on segment data elements allows datatype specification for validation. The following example shows type support in action:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?&gt;</span>
+<span class="nt">&lt;xsd:schema</span> <span class="na">xmlns:xsd=</span><span class="s">"http://www.w3.org/2001/XMLSchema"</span>
+            <span class="na">xmlns:dfdl=</span><span class="s">"http://www.ogf.org/dfdl/dfdl-1.0/"</span>
+            <span class="na">xmlns:ibmEdiFmt=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;xsd:import</span> <span class="na">namespace=</span><span class="s">"http://www.ibm.com/dfdl/EDI/Format"</span> <span class="na">schemaLocation=</span><span class="s">"/EDIFACT-Common/IBM_EDI_Format.dfdl.xsd"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;xsd:annotation&gt;</span>
+        <span class="nt">&lt;xsd:appinfo</span> <span class="na">source=</span><span class="s">"http://www.ogf.org/dfdl/"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;dfdl:format</span> <span class="na">ref=</span><span class="s">"ibmEdiFmt:EDIFormat"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/xsd:appinfo&gt;</span>
+    <span class="nt">&lt;/xsd:annotation&gt;</span>
+
+    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span> <span class="na">name=</span><span class="s">"header"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;xsd:complexType&gt;</span>
+            <span class="nt">&lt;xsd:sequence</span> <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentSequenceFormat"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"order-id"</span> <span class="na">type=</span><span class="s">"xsd:string"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"status-code"</span> <span class="na">type=</span><span class="s">"xsd:int"</span> <span class="na">dfdl:textNumberPattern=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"net-amount"</span> <span class="na">type=</span><span class="s">"xsd:decimal"</span> <span class="na">dfdl:textNumberPattern=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"total-amount"</span> <span class="na">type=</span><span class="s">"xsd:decimal"</span> <span class="na">dfdl:textNumberPattern=</span><span class="s">"#.#"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"tax"</span> <span class="na">type=</span><span class="s">"xsd:decimal"</span> <span class="na">dfdl:textNumberPattern=</span><span class="s">"#.#"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;xsd:element</span> <span class="na">name=</span><span class="s">"date"</span> <span class="na">type=</span><span class="s">"xsd:date"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/xsd:sequence&gt;</span>
+        <span class="nt">&lt;/xsd:complexType&gt;</span>
+    <span class="nt">&lt;/xsd:element&gt;</span>
+<span class="nt">&lt;/xsd:schema&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="maven_coordinates_4">Maven Coordinates</h4>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-edi-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="xml_namespaces">XML Namespaces</h4>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="edifact_cartridge">EDIFACT Cartridge</h3>
 <div class="paragraph">
-<p>Unresolved directive in docs.adoc - include::https://raw.githubusercontent.com/smooks/smooks-edi-cartridge/master/README.adoc[tag=smooks-edifact-cartridge,leveloffset=1]</p>
+<p>Smooks 2 provides out-of-the-box support for UN/EDIFACT interchanges in terms of pre-generated EDI DFDL schemas derived from the <a href="http://www.unece.org/trade/untdid/down_index.htm">official UN/EDIFACT
+message definition zip directories</a>. This allows you to easily convert a UN/EDIFACT message interchange into a consumable XML document. Specialised <em>edifact:parser</em> and <em>edifact:unparser</em> resources support UN/EDIFACT interchanges as shown in the next example:</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:edifact=</span><span class="s">"https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;edifact:parser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnElement=</span><span class="s">"/Interchange"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <em>edifact:parser</em> and <em>edifact:unparser</em>, analogous to the <em>edi:parser</em> and <em>edi:unparser</em>, convert the stream according to the pre-generated DFDL schema referenced in the <em>schemaURI</em> attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the <em>onDiskCache</em> attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:edifact=</span><span class="s">"https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;edifact:parser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;edifact:messageTypes&gt;</span>
+            <span class="nt">&lt;edifact:messageType&gt;</span>ORDERS<span class="nt">&lt;/edifact:messageType&gt;</span>
+            <span class="nt">&lt;edifact:messageType&gt;</span>INVOIC<span class="nt">&lt;/edifact:messageType&gt;</span>
+        <span class="nt">&lt;/edifact:messageTypes&gt;</span>
+    <span class="nt">&lt;/edifact:parser&gt;</span>
+
+    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnElement=</span><span class="s">"/Interchange"</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;edifact:messageTypes&gt;</span>
+            <span class="nt">&lt;edifact:messageType&gt;</span>ORDERS<span class="nt">&lt;/edifact:messageType&gt;</span>
+            <span class="nt">&lt;edifact:messageType&gt;</span>INVOIC<span class="nt">&lt;/edifact:messageType&gt;</span>
+        <span class="nt">&lt;/edifact:messageTypes&gt;</span>
+    <span class="nt">&lt;/edifact:unparser&gt;</span>
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The schema compilation time is directly proportional to the number of declared message types. The EDIFACT resources will reject any message which does not have its message type declared within the <em>messageTypes</em> child element. Apart from XML configuration, it is also possible to programmatically control the EDIFACT parser message types via a <em>EdifactReaderConfigurator</em> instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">();</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">setReaderConfig</span><span class="o">(</span><span class="k">new</span> <span class="nc">EdifactReaderConfigurator</span><span class="o">(</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span><span class="o">).</span><span class="na">setMessageTypes</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">"ORDERS"</span><span class="o">,</span> <span class="s">"INVOIC"</span><span class="o">)));</span>
+
+<span class="n">etc</span><span class="o">...</span></code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="schema_packs">Schema Packs</h4>
+<div class="paragraph">
+<p>In an effort to simplify the processing of UN/EDIFACT Interchanges, we have created tools to generate EDIFACT schema packs from <a href="http://www.unece.org/trade/untdid/down_index.htm">the official UN/EDIFACT message definition zip directories</a>. The generated schema packs are deployed to a public Maven repository from where users can easily access the EDIFACT schemas for the UN/EDIFACT message sets they need to support.</p>
+</div>
+<div class="paragraph">
+<p>Schema packs are available for most of the UN/EDIFACT directories. These are available from the Maven Snapshot and Central repositories and can be added to your application using standard Maven dependency management.</p>
+</div>
+<div class="paragraph">
+<p>As an example, to add the D93A DFDL schema pack to your application classpath, add the following dependency to your application&#8217;s POM:</p>
+</div>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="c">&lt;!-- The mapping model sip set for the D93A directory... --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>edifact-schemas<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;classifier&gt;</span>d93a<span class="nt">&lt;/classifier&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you add an EDIFACT schema pack set to the application&#8217;s classpath, you configure Smooks to use the schemas by referencing the root schema in <em>schemaURI</em> attribute of the <em>edifact:parser</em> or <em>edifact:unparser</em> configuration (<em>&lt;version&gt;/EDIFACT-Messages.dfdl.xsd</em>):</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:edifact=</span><span class="s">"https://www.smooks.org/xsd/smooks/edifact-1.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;edifact:parser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;edifact:messages&gt;</span>
+            <span class="nt">&lt;edifact:message&gt;</span>ORDERS<span class="nt">&lt;/edifact:message&gt;</span>
+            <span class="nt">&lt;edifact:message&gt;</span>INVOIC<span class="nt">&lt;/edifact:message&gt;</span>
+        <span class="nt">&lt;/edifact:messages&gt;</span>
+    <span class="nt">&lt;/edifact:parser&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See the <a href="https://github.com/smooks/smooks-examples">EDIFACT examples</a> for further reference.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="maven_coordinates_5">Maven Coordinates</h4>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-edifact-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="xml_namespaces_2">XML Namespaces</h4>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"</pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="json_cartridge">JSON Cartridge</h3>
 <div class="sect3">
-<h4 id="maven_coordinates_4">Maven Coordinates</h4>
+<h4 id="maven_coordinates_6">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
@@ -2901,7 +3372,7 @@ class.</p>
 <div class="sect2">
 <h3 id="yaml_cartridge">YAML Cartridge</h3>
 <div class="sect3">
-<h4 id="maven_coordinates_5">Maven Coordinates</h4>
+<h4 id="maven_coordinates_7">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
@@ -3075,7 +3546,7 @@ class.</p>
 <div class="sect2">
 <h3 id="javabean_cartridge">JavaBean Cartridge</h3>
 <div class="sect3">
-<h4 id="maven_coordinates_6">Maven Coordinates</h4>
+<h4 id="maven_coordinates_8">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
