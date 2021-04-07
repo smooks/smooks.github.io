@@ -90,7 +90,6 @@
 <li><a href="#json_cartridge">JSON Cartridge</a></li>
 <li><a href="#yaml_cartridge">YAML Cartridge</a></li>
 <li><a href="#javabean_cartridge">JavaBean Cartridge</a></li>
-<li><a href="#java_to_text_xml_csv_edi_etc">Java to Text (XML, CSV, EDI, etc&#8230;&#8203;)</a></li>
 <li><a href="#string_manipulation_functions_for_readers">String manipulation functions for readers</a></li>
 </ul>
 </li>
@@ -3599,6 +3598,86 @@ class.</p>
 </div>
 </div>
 <div class="sect3">
+<h4 id="java_to_java">Java to Java</h4>
+<div class="paragraph">
+<p>The source object is provided to Smooks via a <code>org.smooks.io.payload.JavaSource</code> instance. This object is created by passing the constructor the root object of the source model. The resulting <code>JavaSource</code> object is used in the <code>Smooks#filter</code> method. The resulting code could look like as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">protected</span> <span class="nc">LineOrder</span> <span class="nf">runSmooksTransform</span><span class="o">(</span><span class="nc">Order</span> <span class="n">srcOrder</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="s">"smooks-config.xml"</span><span class="o">);</span>
+    <span class="nc">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
+
+    <span class="c1">// Transform the source Order to the target LineOrder via a</span>
+    <span class="c1">// JavaSource and JavaResult instance...</span>
+    <span class="nc">JavaSource</span> <span class="n">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSource</span><span class="o">(</span><span class="n">srcOrder</span><span class="o">);</span>
+    <span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+
+    <span class="c1">// Configure the execution context to generate a report...</span>
+    <span class="n">executionContext</span><span class="o">.</span><span class="na">setEventListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">HtmlReportGenerator</span><span class="o">(</span><span class="s">"target/report/report.html"</span><span class="o">));</span>
+
+    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+
+    <span class="k">return</span> <span class="o">(</span><span class="nc">LineOrder</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"lineOrder"</span><span class="o">);</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="java_to_text_xml_csv_edi_etc">Java to Text (XML, CSV, EDI, etc&#8230;&#8203;)</h4>
+<div class="paragraph">
+<p>The Smooks core runtime works by processing a stream of SAX events produced by an input source of some type (XML, EDI, Java, etc&#8230;&#8203;) and using those events to fire visitors. In the case of a Java source (see previous section on "Java to Java"), Smooks uses XStream to generate this stream of SAX events.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes, however, you just want to apply a template (e.g. a FreeMarker template) to a Java Source object model and produce XML, CSV, EDI, etc&#8230;&#8203; You don&#8217;t want to incur the wasted overhead of generating a stream of SAX events that you are not going to use. To do this, you need to tell the Smooks core runtime to not generate the stream of events. This can be done in one of two ways.</p>
+</div>
+<div class="paragraph">
+<p>By calling <code>setEventStreamRequired(false)</code> on the <code>JavaSource</code> instance being supplied to <code>Smooks.filterSource</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">JavaSource</span> <span class="n">javaSource</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSource</span><span class="o">(</span><span class="n">orderBean</span><span class="o">);</span>
+
+<span class="c1">// Turn streaming off via the JavaSource...</span>
+<span class="n">javaSource</span><span class="o">.</span><span class="na">setEventStreamRequired</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">javaSource</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or, by turning off the "http://www.smooks.org/sax/features/generate-java-event-stream" <code>&lt;reader&gt;</code> feature in the Smooks configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;reader&gt;</span>
+        <span class="nt">&lt;features&gt;</span>
+            <span class="nt">&lt;setOff</span> <span class="na">feature=</span><span class="s">"http://www.smooks.org/sax/features/generate-java-event-stream"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/features&gt;</span>
+    <span class="nt">&lt;/reader&gt;</span>
+
+    <span class="c">&lt;!-- Other Smooks configurations e.g. a FreeMarker template... --&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When applying the FreeMarker template, the name of the templating context beans (i.e. the names used in your template) depends on the Object type in the JavaSource:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the object is a <code>Map</code>, then that Map instance becomes the templating context and so you can just use the Map entry keys as the bean names in your template.</p>
+</li>
+<li>
+<p>For non-map objects, the <code>JavaSource</code> class takes the Object Class SimpleName and creates a JavaBean property name from it. This is the name of the context bean used for the templating. So, if the bean class name is <code>com.acme.Order</code>, then the context bean name, for the purpose of templating, will be "order".</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
 <h4 id="java_binding">Java Binding</h4>
 <div class="paragraph">
 <p>The JavaBean Cartridge allows you to create and populate Java POJOs from your message data (i.e., bind data).</p>
@@ -3688,7 +3767,7 @@ class.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="basics_of_java_binding">Basics Of Java Binding</h5>
+<h5 id="basics_of_java_binding">Basics of Java Binding</h5>
 <div class="paragraph">
 <p>As you know, Smooks supports a range of source data formats (XML, EDI, CSV, Java, etc&#8230;&#8203;), but for the purposes of this topic, we will always refer to the message data in terms of an XML format. In the examples, we will continuously refer to the following XML message:</p>
 </div>
@@ -3786,7 +3865,7 @@ class.</p>
 <p><code>&lt;jb:wiring&gt;</code>: This is used to "wire" another bean instance from the bean context into a bean property on the target bean. This is the configuration that allows you to construct an object graph (Vs just a loose bag of Java object instances). Beans can be wired in based on their "beanId", their Java class type, or by Annotation (by being annotated with a specific Annotation).</p>
 </li>
 <li>
-<p><code>&lt;jb:expression&gt;</code>: As it&#8217;s name suggests, this configuration is used to bind in a value calculated from an expression (in the <a href="http://mvel.documentnode.com/">MVEL</a> language), a simple example being the binding of an order item total value into an OrderItem bean based on the result of an expression that calculates the value from the items price and quantity (e.g. "price * quantity"). The <code>execOnElement</code> attribute expression defines the element on which the expression is to be evaluated and the result bound. If not defined, the expression is executed based on the value of the parent . The value of the targeted element is available in the expression as a String variable under the name '_VALUE' (notice the underscore).</p>
+<p><code>&lt;jb:expression&gt;</code>: As it&#8217;s name suggests, this configuration is used to bind in a value calculated from an expression (in the <a href="http://mvel.documentnode.com/">MVEL</a> language), a simple example being the binding of an order item total value into an OrderItem bean based on the result of an expression that calculates the value from the items price and quantity (e.g. "price * quantity"). The <code>execOnElement</code> attribute expression defines the element on which the expression is to be evaluated and the result bound. If not defined, the expression is executed based on the value of the parent . The value of the targeted element is available in the expression as a String variable under the name <code>_VALUE</code> (notice the underscore).</p>
 </li>
 </ul>
 </div>
@@ -4162,7 +4241,7 @@ class.</p>
 <p>Sometimes it is necessary to perform some rudimentary "pre-processing" on the String data value before the decode step (between steps #1 and #2 above). An example of this might be where the source data has some characters not supported by the <strong>locale</strong> configuration on <a href="#number-decoding">Numeric Decoding</a> e.g. the numeric value 876592.00 might be represented as "876_592!00" (who knows why). In order to decode this value as (for example) a double value, we need to eliminate the underscore and exclamation mark characters, replacing the exclamation mark with a period i.e. we need to convert it to "876592.00" before decoding.</p>
 </div>
 <div class="paragraph">
-<p>One way of doing this is to write a custom <strong>DataDecoder</strong> implementation (which is recommended if it&#8217;s a recurring decoding operation), but if you need a quick-n-dirty solution, you can specify a "valuePreprocess", which is a simple expression to be applied to the Sting value before decoding.</p>
+<p>One way of doing this is to write a custom <strong>DataDecoder</strong> implementation (which is recommended if it&#8217;s a recurring decoding operation), but if you need a quick-n-dirty solution, you can specify a <code>valuePreprocess</code>, which is a simple expression to be applied to the Sting value before decoding.</p>
 </div>
 <div class="paragraph">
 <p>As an example for solving the numeric decoding issue described above:</p>
@@ -4425,7 +4504,7 @@ methods. However there are plans to use byte code generation instead of reflecti
 </div>
 </div>
 <div class="paragraph">
-<p>Note above how we always define the <strong>decoder</strong> attribute for a Virtual Model (Map). This is because Smooks has no way of auto-detecting the decode type for data binding to a Map. So, if you need typed values bound into your Virtual Model, you need to specify an appropriate decoder. If the decoder is not specified in this case, Smooks will simply bind the data into the Virtual Model as a String.</p>
+<p>Note above how we always define the <code>decoder</code> attribute for a Virtual Model (Map). This is because Smooks has no way of auto-detecting the decode type for data binding to a Map. So, if you need typed values bound into your Virtual Model, you need to specify an appropriate decoder. If the decoder is not specified in this case, Smooks will simply bind the data into the Virtual Model as a String.</p>
 </div>
 <div class="paragraph">
 <p>Take a look at the <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples">model-driven-basic
@@ -4434,7 +4513,7 @@ and model-driven-basic-virtual examples</a>.</p>
 <div class="sect6">
 <h7 id="wildcard_bindings">Wildcard Bindings</h7>
 <div class="paragraph">
-<p>Virtual models also support "wildcard" bindings. That is, you can bind all the child elements of an element into a Map using a single configuration, where the child element names act as the Map entry key and the child element text value acts as the Map entry value. To do this, you simply omit the <em>property</em> attribute from the configuration and use a wildcard in the <em>data</em> attribute.</p>
+<p>Virtual models also support "wildcard" bindings. That is, you can bind all the child elements of an element into a Map using a single configuration, where the child element names act as the Map entry key and the child element text value acts as the Map entry value. To do this, you simply omit the <em>property</em> attribute from the configuration and use a wildcard in the <code>data</code> attribute.</p>
 </div>
 <div class="paragraph">
 <p>In the following example, we have a element containing some values that we wish to populate into a Map.</p>
@@ -4944,110 +5023,6 @@ example.</p>
 <pre>xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="smooks_execution">Smooks Execution</h5>
-<div class="paragraph">
-<p>The source object model is provided to Smooks via a
-<strong>org.smooks.io.payload.JavaSource</strong> Object. This object is created by
-passing the constructor the root object of the source model. The
-resulting JavaSource object is used in the <strong>Smooks#filter</strong> method. The
-resulting code could look like as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">protected</span> <span class="nc">LineOrder</span> <span class="nf">runSmooksTransform</span><span class="o">(</span><span class="nc">Order</span> <span class="n">srcOrder</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
-    <span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="s">"smooks-config.xml"</span><span class="o">);</span>
-    <span class="nc">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
-
-    <span class="c1">// Transform the source Order to the target LineOrder via a</span>
-    <span class="c1">// JavaSource and JavaResult instance...</span>
-    <span class="nc">JavaSource</span> <span class="n">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSource</span><span class="o">(</span><span class="n">srcOrder</span><span class="o">);</span>
-    <span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
-
-    <span class="c1">// Configure the execution context to generate a report...</span>
-    <span class="n">executionContext</span><span class="o">.</span><span class="na">setEventListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">HtmlReportGenerator</span><span class="o">(</span><span class="s">"target/report/report.html"</span><span class="o">));</span>
-
-    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
-
-    <span class="k">return</span> <span class="o">(</span><span class="nc">LineOrder</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"lineOrder"</span><span class="o">);</span>
-<span class="o">}</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="java_to_text_xml_csv_edi_etc">Java to Text (XML, CSV, EDI, etc&#8230;&#8203;)</h3>
-<div class="paragraph">
-<p>As stated in other parts of this guide, the Smooks core runtime works by
-processing a stream of SAX events produced by an input Source of some
-type (XML, EDI, Java, etc&#8230;&#8203;) and using those events to fire visitors.
-In the case of a Java source (see previous section on "Java to Java"),
-Smooks uses XStream to generate this stream of SAX events.</p>
-</div>
-<div class="paragraph">
-<p>Sometimes, however, you just want to apply a template (e.g. a FreeMarker
-template) to a Java Source object model and produce XML, CSV, EDI,
-etc&#8230;&#8203; You don&#8217;t want to incur the wasted overhead of generating a
-stream of SAX events that you are not going to use. To do this, you need
-to tell the Smooks core runtime to not generate the stream of events.
-This can be done in one of 2 ways.</p>
-</div>
-<div class="paragraph">
-<p>By calling <em>setEventStreamRequired(false)</em> on the <em>JavaSource</em> instance
-being supplied to <em>Smooks.filterSource</em>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">JavaSource</span> <span class="n">javaSource</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSource</span><span class="o">(</span><span class="n">orderBean</span><span class="o">);</span>
-
-<span class="c1">// Turn streaming off via the JavaSource...</span>
-<span class="n">javaSource</span><span class="o">.</span><span class="na">setEventStreamRequired</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">javaSource</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Or, by turning off the
-"http://www.smooks.org/sax/features/generate-java-event-stream" &lt;reader&gt;
-feature in the Smooks configuration:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;reader&gt;</span>
-        <span class="nt">&lt;features&gt;</span>
-            <span class="nt">&lt;setOff</span> <span class="na">feature=</span><span class="s">"http://www.smooks.org/sax/features/generate-java-event-stream"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;/features&gt;</span>
-    <span class="nt">&lt;/reader&gt;</span>
-
-    <span class="c">&lt;!-- Other Smooks configurations e.g. a FreeMarker template... --&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When applying the FreeMarker template, the name of the templating
-context beans (i.e. the names used in your template) depends on the
-Object type in the JavaSource:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>If the object is a <em>Map</em>, then that Map instance becomes the
-templating context and so you can just use the Map entry keys as the
-bean names in your template.</p>
-</li>
-<li>
-<p>For non-Map objects, the <em>JavaSource</em> class takes the Object Class
-SimpleName and creates a JavaBean property name from it. This is the
-name of the context bean used for the templating. So, if the bean class
-name is <em>com.acme.Order</em>, then the context bean name, for the purpose of
-templating, will be "order".</p>
-</li>
-</ol>
 </div>
 </div>
 <div class="sect2">
