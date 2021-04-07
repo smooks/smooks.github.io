@@ -3546,7 +3546,7 @@ class.</p>
 <p>Consider an <em>Order</em> object needing to be mapped to a <em>LineOrder</em> object. Conceptually,  the mapping from the source to target object model would be:</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="https://raw.githubusercontent.com/claudemamo/smooks-javabean-cartridge/add-readme/docs/images/Java-to-java3.gif" alt="Image:java-to-java3.gif"></span></p>
+<p><span class="image"><img src="https://raw.githubusercontent.com/smooks/smooks-javabean-cartridge/master/docs/images/Java-to-java3.gif" alt="Image:java-to-java3.gif"></span></p>
 </div>
 <div class="paragraph">
 <p>One can easily view the event stream produced from the source object (i.e., <em>Order</em>) if Smooks&#8217;s <em>HTML Report Generator</em> is running:</p>
@@ -3985,7 +3985,7 @@ class.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Set it to the root element (or "#document"): For bean instances where only a single instance will exist in the model.</p>
+<p>Set it to the root element (or <code>#document</code>): For bean instances where only a single instance will exist in the model.</p>
 </li>
 <li>
 <p>Set it to the recurring element: For Collection bean instances. If you don&#8217;t specify the correct element in this case, you could loose data.</p>
@@ -4777,10 +4777,10 @@ and model-driven-basic-virtual examples</a>.</p>
 <div class="sect4">
 <h5 id="xml_to_java_reading_and_writing">XML to Java Reading and Writing</h5>
 <div class="paragraph">
-<p>The XMLBinding class is a special utility wrapper class around the Smooks runtime. It was introduced in Smooks v1.5 and it is designed specifically for reading and writing XML data to and from Java object models using nothing more than standard configurations i.e. no need to write a template for serializing the Java objects to an output character based format, as with Smooks v1.4 and before.</p>
+<p>The <code>XMLBinding</code> class is a special utility wrapper class around the Smooks runtime. It was introduced in Smooks v1.5 and it is designed specifically for reading and writing XML data to and from Java object models using nothing more than standard configurations i.e. no need to write a template for serializing the Java objects to an output character based format, as with Smooks v1.4 and before.</p>
 </div>
 <div class="paragraph">
-<p>So basically, this functionality allows you to do what you can do with frameworks like JAXB or JiBX i.e. read <em>*and write*</em> between Java and XML using a single configuration, but with the added advantage of being able to easily handle multiple versions of an XML schema/model in a single Java model. You can read and write multiple versions of an XML message into a single/common Java object model. This is very useful in itself, but also means you can easily transform messages from one version to another by reading the XML into the common Java object model using an XMLBinding instance configured for one version of the XML, and then writing those Java objects back out using an XMLBinding instance configured for the other version of the XML.</p>
+<p>So basically, this functionality allows you to do what you can do with frameworks like JAXB or JiBX i.e. read <em>*and write*</em> between Java and XML using a single configuration, but with the added advantage of being able to easily handle multiple versions of an XML schema/model in a single Java model. You can read and write multiple versions of an XML message into a single/common Java object model. This is very useful in itself, but also means you can easily transform messages from one version to another by reading the XML into the common Java object model using an <code>XMLBinding</code> instance configured for one version of the XML, and then writing those Java objects back out using an <code>XMLBinding</code> instance configured for the other version of the XML.</p>
 </div>
 <div class="sect5">
 <h6 id="simple_xmlbinding_use_case">Simple XMLBinding Use Case</h6>
@@ -4793,21 +4793,21 @@ and model-driven-basic-virtual examples</a>.</p>
 <p>write a standard <a href="#java-binding-configuration-details">Smooks Java Binding Configuration</a>,</p>
 </li>
 <li>
-<p><strong>add</strong> it to the XMLBinding instance,</p>
+<p><code>add</code> it to the XMLBinding instance,</p>
 </li>
 <li>
-<p><strong>initialize</strong> the XMLBinding instance,</p>
+<p><code>initialize</code> the XMLBinding instance,</p>
 </li>
 <li>
-<p>call the <strong>fromXML</strong> and <strong>toXML</strong> methods on the XMLBinding instance.</p>
+<p>call the <code>fromXML</code> and <code>toXML</code> methods on the XMLBinding instance.</p>
 </li>
 </ol>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Create and initilize the XMLBinding instance...</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="c1">// Create and initialize the XMLBinding instance...</span>
 <span class="nc">XMLBinding</span> <span class="n">xmlBinding</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">XMLBinding</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="s">"/smooks-configs/order-xml-binding.xml"</span><span class="o">);</span>
-<span class="n">xmlBinding</span><span class="o">.</span><span class="na">intiailize</span><span class="o">();</span>
+<span class="n">xmlBinding</span><span class="o">.</span><span class="na">initialize</span><span class="o">();</span>
 
 <span class="c1">// Read the order XML into the Order object model...</span>
 <span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="n">xmlBinding</span><span class="o">.</span><span class="na">fromXML</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">inputReader</span><span class="o">),</span> <span class="nc">Order</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
@@ -4856,33 +4856,34 @@ example.</p>
 <div class="paragraph">
 <p>From the commandline:</p>
 </div>
-<div class="paragraph">
-<p>$JAVA_HOME/bin/java -classpath org.smooks.javabean.gen.ConfigGenerator
--c -o [-p ]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>$JAVA_HOME/bin/java -classpath org.smooks.javabean.gen.ConfigGenerator -c -o [-p ]</code></pre>
+</div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>The "<strong>-c'</strong>" commandline arg specifies the root class of the model whose binding config is to be generated.</p>
+<p>The <code>-c</code> commandline arg specifies the root class of the model whose binding config is to be generated.</p>
 </li>
 <li>
-<p>The "<strong>-o</strong>" commandline arg specifies the path and filename for the generated config output.</p>
+<p>The <code>-o</code> commandline arg specifies the path and filename for the generated config output.</p>
 </li>
 <li>
-<p>The "<strong>-p</strong>```" commandline arg specifies the path and filename optional binding configuration file that specifies aditional binding parameters.</p>
+<p>The <code>-p</code> commandline arg specifies the path and filename optional binding configuration file that specifies additional binding parameters.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The optional "-p" properties file parameter allows specification of additional config parameters:</p>
+<p>The optional <code>-p</code> properties file parameter allows specification of additional config parameters:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>packages.included</strong>: Semi-colon separated list of packages. Any fields in the class matching these packages will be included in the binding configuration generated.</p>
+<p><code>packages.included</code>: Semi-colon separated list of packages. Any fields in the class matching these packages will be included in the binding configuration generated.</p>
 </li>
 <li>
-<p><strong>packages.excluded</strong>: Semi-colon separated list of packages. Any fields in the class matching these packages will be excluded from the binding configuration generated.</p>
+<p><code>packages.excluded</code>: Semi-colon separated list of packages. Any fields in the class matching these packages will be excluded from the binding configuration generated.</p>
 </li>
 </ul>
 </div>
@@ -4901,8 +4902,7 @@ example.</p>
 <p>Check the <code>&lt;jb:value decoder&gt;</code> attributes. Not all will be set, depending on the actual property type. These must be configured by hand e.g. you may need to configure <code>&lt;jb:decodeParam&gt;</code> sub-elements for the decoder on some of the bindings. E.g. for a date field.</p>
 </li>
 <li>
-<p>Double-check the binding config elements (<code>&lt;jb:value&gt;</code> and
-<code>&lt;jb:wiring&gt;</code>), making sure all Java properties have been covered in the generated configuration.</p>
+<p>Double-check the binding config elements (<code>&lt;jb:value&gt;</code> and <code>&lt;jb:wiring&gt;</code>), making sure all Java properties have been covered in the generated configuration.</p>
 </li>
 </ol>
 </div>
@@ -4999,7 +4999,7 @@ example.</p>
 <p>So after applying this configuration, calls to the JavaResult.getBean(String) method for anything other than the "order" bean will return null. This will work fine in cases such as the above example, because the other bean instances are wired into the "order" graph.</p>
 </div>
 <div class="paragraph">
-<p>Note that as of Smooks v1.2, if a <a href="/javadoc/v1.7.1/smooks/org/milyn/payload/JavaSource.html">JavaSource</a> instance is supplied to the Smooks.filterSource method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html">ExecutionContect</a> for that Smooks.filterSource invocation. This will mean that some of the JavaSource bean instances may be visible in the JavaResult.</p>
+<p>Note that as of Smooks v1.2, if a <a href="/javadoc/v1.7.1/smooks/org/milyn/payload/JavaSource.html">JavaSource</a> instance is supplied to the <code>Smooks#filterSource</code> method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html">ExecutionContect</a> for that Smooks.filterSource invocation. This will mean that some JavaSource bean instances may be visible in the JavaResult.</p>
 </div>
 </div>
 </div>
