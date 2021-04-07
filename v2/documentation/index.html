@@ -1839,32 +1839,11 @@ reader, simply omit the class name from the configuration:</p>
 </div>
 <div class="sect2">
 <h3 id="csv_cartridge">CSV Cartridge</h3>
-<div class="sect3">
-<h4 id="maven_coordinates">Maven Coordinates</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>smooks-csv-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_namespace">XML Namespace</h4>
-<div class="literalblock">
-<div class="content">
-<pre>xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd"</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_api">XML API</h4>
 <div class="paragraph">
-<p>The next example shows an XML resource configuration of a CSV reader:</p>
+<p>This example shows an XML resource configuration of a CSV reader:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -1901,26 +1880,23 @@ reader, simply omit the class name from the configuration:</p>
 <span class="nt">&lt;/csv-set&gt;</span></code></pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="defining_fields">Defining fields</h5>
+<div class="sect3">
+<h4 id="defining_fields">Defining fields</h4>
 <div class="paragraph">
 <p>Fields can be defined in either of two ways:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>On the 'fields' attribute of the &lt;csv:reader&gt; configuration (as shown
-above).</p>
+<p>On the <code>fields</code> attribute of the <code>&lt;csv:reader&gt;</code> configuration (as shown above).</p>
 </li>
 <li>
-<p>As the first record in the message after setting the 'fieldsInMessage'
-attribute of the &lt;csv:reader&gt; configuration to 'true'.</p>
+<p>As the first record in the message after setting the <code>fieldsInMessage</code> attribute of the <code>&lt;csv:reader&gt;</code> configuration to <code>true</code>.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>The field names must follow the same naming rules like XML element
-names:</p>
+<p>The field names must follow the same naming rules like XML element names:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1939,18 +1915,12 @@ names:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>By setting the <strong>rootElementName</strong> and <strong>recordElementName</strong> attributes you
-can modify the and element names. The same naming rules apply for these
-names.</p>
-</div>
+<p>By setting the <code>rootElementName</code> and <code>recordElementName</code> attributes you can modify the and element names. The same naming rules apply for these names.</p>
 </div>
 <div class="sect4">
 <h5 id="multi_record_field_definitions">Multi-Record Field Definitions</h5>
 <div class="paragraph">
-<p>All Flat File based reader configurations (including the CSV reader)
-support <strong>Multi-Record Field Definitions</strong>, which means that the reader
-can support CSV message streams containing varying (multiple different
-types) CSV record types.</p>
+<p>All Flat File based reader configurations (including the CSV reader) support <em>Multi-Record Field Definitions</em>, which means that the reader can support CSV message streams containing varying (multiple different types) CSV record types.</p>
 </div>
 <div class="paragraph">
 <p>Take the following CSV message example:</p>
@@ -1964,17 +1934,16 @@ book,The Finkler Question,Howard Jacobson</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In this stream, we have 2 record types of "book" and "magazine". We
-configure the CSV reader to process this stream as follows:</p>
+<p>In this stream, we have 2 record types of "book" and "magazine". We configure the CSV reader to process this stream as follows:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;csv:reader</span> <span class="na">fields=</span><span class="s">"book[name,author] | magazine[*]"</span> <span class="na">rootElementName=</span><span class="s">"sales"</span> <span class="na">indent=</span><span class="s">"true"</span> <span class="nt">/&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This reader configuration will generate the following output for the
-above sample message:</p>
+<p>This reader configuration will generate the following output for the above sample message:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2001,31 +1970,28 @@ above sample message:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Note the syntax in the 'fields' attribute. Each record definition is
-separated by the pipe character '|'. Each record definition is
-constructed as <em>record-name[field-name,field-name]</em>. <em>record-name</em> is
-matched against the first field in the incoming message and so used to
-select the appropriate recodr definition to be used for outputting that
-record. Also note how you can use an astrix character ('*') when you
-don&#8217;t want to name the record fields. In this case (as when
-extra/unexpected fields are present in a record), the reader will
-generate the output field elements using a generated element name e.g.
-"field_0", "field_1", etc&#8230;&#8203; See the "magazine" record in the previous
-example.</p>
+<p>Note the syntax in the <code>fields</code> attribute. Each record definition is separated by the pipe character <code>|</code>. Each record definition is constructed as <em>record-name[field-name,field-name]</em>. <em>record-name</em> is matched against the first field in the incoming message and so used to select the appropriate record definition to be used for outputting that record. Also note how you can use an astrix character ('*') when you don&#8217;t want to name the record fields. In this case (as when extra/unexpected fields are present in a record), the reader will generate the output field elements using a generated element name e.g. "field_0", "field_1", etc&#8230;&#8203; See the "magazine" record in the previous example.</p>
 </div>
-<div class="paragraph">
-<p><em>*Note*</em>: Multi Record Field Definitions are not supported when the
-fields are defined in the messase (fieldsInMessage="true").</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Multi Record Field Definitions are not supported when the fields are defined in the message (<code>fieldsInMessage="true"</code>).
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect4">
 <h5 id="string_manipulation_functions">String manipulation functions</h5>
 <div class="paragraph">
-<p>String manipulation functions can be defined per field. These functions
-are executed before that the data is converted into SAX events. The
-functions are defined after field name, separated with a question mark.</p>
+<p>String manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after field name, separated with a question mark.</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -2037,22 +2003,16 @@ functions are defined after field name, separated with a question mark.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Take a look at the
-<a href="#string-manipulation-functions-for-readers">#String manipulation
-functions for readers</a> chapter for the available functions and how the
-functions can be chained.</p>
+<p>Take a look at the <a href="#string-manipulation-functions-for-readers">#String manipulation functions for readers</a> chapter for the available functions and how the functions can be chained.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="ignoring_fields">Ignoring Fields</h5>
 <div class="paragraph">
-<p>One or more fields of a CSV record can be ignored by specifying the
-<strong>$ignore$</strong> token in the fields configuration value. You can specify the
-number of fields to be ignored simply by following the $ignore$ token
-with a number e.g. "$ignore$3" to ignore the next 3 fields. "$ignore$+"
-ignores all fields to the end of the CSV record.</p>
+<p>One or more fields of a CSV record can be ignored by specifying the <code>$ignore$</code> token in the fields configuration value. You can specify the number of fields to be ignored simply by following the $ignore$ token with a number e.g. <code>$ignore$3</code> to ignore the next 3 fields. <code>$ignore$+</code> ignores all fields to the end of the CSV record.</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -2067,14 +2027,19 @@ ignores all fields to the end of the CSV record.</p>
 <div class="sect4">
 <h5 id="binding_csv_records_to_java">Binding CSV Records to Java</h5>
 <div class="paragraph">
-<p>Smooks v1.2 added support for making the binding of CSV records to Java
-Objects a very trivial task. You no longer need to use the Javabean
-Cartridge directly (i.e. Smooks main Java binding functionality).</p>
+<p>Smooks v1.2 added support for making the binding of CSV records to Java objects a very trivial task. You no longer need to use the Javabean Cartridge directly (i.e. Smooks main Java binding functionality).</p>
 </div>
-<div class="paragraph">
-<p><em>*Note*</em>: This feature is not supported for Multi Record Field
-Definitions (see above), or when the fields are defined in the incoming
-message (fieldsInMessage="true").</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This feature is not supported for Multi Record Field Definitions (see above), or when the fields are defined in the incoming message (<code>fieldsInMessage="true"</code>).
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>A Persons CSV record set such as:</p>
@@ -2108,6 +2073,7 @@ Mike,Fennelly,Male,2,Ireland</pre>
 <p>Using a config of the form:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -2138,6 +2104,7 @@ Mike,Fennelly,Male,2,Ireland</pre>
 <p>Smooks also supports creation of Maps from the CSV record set:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -2151,9 +2118,7 @@ Mike,Fennelly,Male,2,Ireland</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The above configuration would produce a Map of Person instances, keyed
-by the "firstname" value of each Person. It would be executed as
-follows:</p>
+<p>The above configuration would produce a map of Person instances, keyed by the "firstname" value of each Person. It would be executed as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2169,25 +2134,19 @@ follows:</p>
 </div>
 </div>
 <div class="paragraph">
-<p><a href="#virtual-object-models-maps&#8212;&#8203;lists">Virtual Models</a> are also
-supported, so you can define the <strong>class</strong> attribute as a java.util.Map
-and have the CSV field values bound into Map instances, which are in
-turn added to a List or a Map.</p>
+<p><a href="#virtual-object-models-maps&#8212;&#8203;lists">Virtual Models</a> are also supported, so you can define the <code>class</code> attribute as a <code>java.util.Map</code> and have the CSV field values bound into Map instances, which are in turn added to a List or a Map.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="java_api">Java API</h4>
 <div class="paragraph">
-<p>Programmatically configuring the CSV Reader on a Smooks instance is
-trivial. A number of options are available.</p>
+<p>Programmatically configuring the CSV Reader on a Smooks instance is trivial. A number of options are available.</p>
 </div>
 <div class="sect4">
 <h5 id="configuring_directly_on_the_smooks_instance">Configuring Directly on the Smooks Instance</h5>
 <div class="paragraph">
-<p>The following code configures a Smooks instance with a CSVReader for
-reading a people record set (see above), binding the record set into a
-List of Person instances:</p>
+<p>The following code configures a Smooks instance with a <code>CSVReader</code> for reading a people record set (see above), binding the record set into a List of Person instances:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2203,21 +2162,16 @@ List of Person instances:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Of course configuring the Java binding is totally optional. The Smooks
-instance could instead (or in conjunction with) be programmatically
-configured with other visitors for carrying out other forms of
-processing on the CSV record set.</p>
+<p>Of course configuring the Java binding is totally optional. The Smooks instance could instead (or in conjunction with) be programmatically configured with other visitors for carrying out other forms of processing on the CSV record set.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="csv_list_and_map_binders">CSV List and Map Binders</h5>
 <div class="paragraph">
-<p>If you&#8217;re just interested in binding CSV Records directly onto a List or
-Map of a Java type that reflects the data in your CSV records, then you
-can use the CSVListBinder or CSVMapBinder classes.</p>
+<p>If you&#8217;re just interested in binding CSV records directly onto a <code>List</code> or <code>Map</code> of a Java type that reflects the data in your CSV records, then you can use the <code>CSVListBinder</code> or <code>CSVMapBinder</code> classes.</p>
 </div>
 <div class="paragraph">
-<p><strong>CSVListBinder:</strong></p>
+<p>CSVListBinder:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2228,7 +2182,7 @@ can use the CSVListBinder or CSVMapBinder classes.</p>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>CSVMapBinder:</strong></p>
+<p>CSVMapBinder:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2239,19 +2193,38 @@ can use the CSVListBinder or CSVMapBinder classes.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If you need more control over the binding process, revert back to the
-lower level APIs:</p>
+<p>If you need more control over the binding process, revert back to the lower level APIs:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="#configuring-directly-on-the-smooks-instance">Configuring Directly
-on the Smooks Instance</a></p>
+<p><a href="#configuring-directly-on-the-smooks-instance">Configuring Directly on the Smooks Instance</a></p>
 </li>
 <li>
 <p><a href="#java-binding">Java Binding</a></p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="maven_coordinates">Maven Coordinates</h4>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-csv-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="xml_namespace">XML Namespace</h4>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:csv="https://www.smooks.org/xsd/smooks/csv-1.7.xsd"</pre>
 </div>
 </div>
 </div>
