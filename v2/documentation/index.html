@@ -3228,32 +3228,11 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
 </div>
 <div class="sect2">
 <h3 id="json_cartridge">JSON Cartridge</h3>
-<div class="sect3">
-<h4 id="maven_coordinates_6">Maven Coordinates</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>smooks-json-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_namespace_4">XML Namespace</h4>
-<div class="literalblock">
-<div class="content">
-<pre>xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd"</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_api_3">XML API</h4>
 <div class="paragraph">
 <p>Processing JSON with Smooks requires a JSON reader to be configured:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -3265,29 +3244,23 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
 </div>
 </div>
 <div class="paragraph">
-<p>The XML element name of the root element, the element name of document
-and the element name of array elements can be configured with the
-following configuration options:</p>
+<p>The XML element name of the root element, the element name of document and the element name of array elements can be configured with the following configuration options:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>rootName</strong>: The name of the root element. Default: <strong>json</strong>.</p>
+<p><code>rootName</code>: The name of the root element. Default: <code>json</code>.</p>
 </li>
 <li>
-<p><strong>elementName</strong>: The name of a sequence element. Default: <strong>element</strong>.</p>
+<p><code>elementName</code>: The name of a sequence element. Default: <code>element</code>.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>JSON allows characters in the key name that aren&#8217;t allowed in XML
-element name. To workaround that problem the reader offers multiple
-solutions. The JSON reader can search and replace whitespaces, illegal
-characters and the number in key names that start with a number. It is
-also possible to replace one key name with a completely different name.
-The following example demonstrates all these features:</p>
+<p>JSON allows characters in the key name that aren&#8217;t allowed in XML element name. To workaround that problem the reader offers multiple solutions. The JSON reader can search and replace whitespaces, illegal characters and the number in key names that start with a number. It is also possible to replace one key name with a completely different name. The following example demonstrates all these features:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -3306,19 +3279,13 @@ The following example demonstrates all these features:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>keyWhitspaceReplacement</strong>: The replacement character for whitespaces
-in a json map key. By default this not defined, so that the reader
-doesn&#8217;t search for white spaces.</p>
+<p><code>keyWhitspaceReplacement</code>: The replacement character for whitespaces in a json map key. By default this not defined, so that the reader doesn&#8217;t search for white spaces.</p>
 </li>
 <li>
-<p><strong>keyPrefixOnNumeric</strong>: The prefix character to add if the JSON node
-name starts with a number. By default this is not defined, so that the
-reader doesn&#8217;t search for element names that start with a number.</p>
+<p><code>keyPrefixOnNumeric</code>: The prefix character to add if the JSON node name starts with a number. By default this is not defined, so that the reader doesn&#8217;t search for element names that start with a number.</p>
 </li>
 <li>
-<p><strong>illegalElementNameCharReplacement</strong>: If illegal characters are
-encountered in a JSON element name then they are replaced with this
-value.</p>
+<p><code>illegalElementNameCharReplacement</code>: If illegal characters are encountered in a JSON element name then they are replaced with this value.</p>
 </li>
 </ul>
 </div>
@@ -3328,26 +3295,31 @@ value.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>nullValueReplacement</strong>: The replacement string for JSON NULL values.
+<p><code>nullValueReplacement</code>: The replacement string for JSON NULL values.
 Default is an empty string.</p>
 </li>
 <li>
-<p><strong>encoding</strong>: The default encoding of any JSON message InputStream
-processed by this Reader. Default of 'UTF-8'. <strong>NOTE</strong>: You shouldn&#8217;t need
-this configuration parameter and <em>it will be removed in a future
-realese</em>. Instead, you should manage the JSON stream Source character
-encoding by supplying a <em>java.io.Reader</em> to the Smooks.filterSource()
-method.</p>
+<p><code>encoding</code>: The default encoding of any JSON message InputStream
+processed by this Reader. Default of 'UTF-8'.</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You shouldn&#8217;t need this configuration parameter and <strong>it will be removed in a future release</strong>. Instead, you should manage the JSON stream Source character encoding by supplying a <code>java.io.Reader</code> to the <code>Smooks.filterSource()</code> method.
+</td>
+</tr>
+</table>
 </div>
 <div class="sect3">
 <h4 id="java_api_3">Java API</h4>
 <div class="paragraph">
-<p>Smooks is programmatically configured to read a JSON configuration using
-the
-<a href="/javadoc/v1.7.1/smooks/org/milyn/json/JSONReaderConfigurator.html">JSONReaderConfigurator</a>
+<p>Smooks is programmatically configured to read a JSON configuration using the <a href="/javadoc/v1.7.1/smooks/org/milyn/json/JSONReaderConfigurator.html">JSONReaderConfigurator</a>
 class.</p>
 </div>
 <div class="listingblock">
@@ -3358,7 +3330,29 @@ class.</p>
         <span class="o">.</span><span class="na">setRootName</span><span class="o">(</span><span class="s">"root"</span><span class="o">)</span>
         <span class="o">.</span><span class="na">setArrayElementName</span><span class="o">(</span><span class="s">"e"</span><span class="o">));</span>
 
-<span class="c1">// Use Smooks as normal...</span></code></pre>
+<span class="c1">// Use Smooks as normal...</span>
+<span class="o">...</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="maven_coordinates_6">Maven Coordinates</h4>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-json-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="xml_namespace_4">XML Namespace</h4>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:json="https://www.smooks.org/xsd/smooks/json-1.3.xsd"</pre>
 </div>
 </div>
 </div>
