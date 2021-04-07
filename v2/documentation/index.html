@@ -3365,32 +3365,11 @@ class.</p>
 </div>
 <div class="sect2">
 <h3 id="yaml_cartridge">YAML Cartridge</h3>
-<div class="sect3">
-<h4 id="maven_coordinates_7">Maven Coordinates</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>smooks-yaml-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_namespace_5">XML Namespace</h4>
-<div class="literalblock">
-<div class="content">
-<pre>xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd"</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="xml_api_4">XML API</h4>
 <div class="paragraph">
 <p>Processing YAML with Smooks requires a YAML reader to be configured:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -3402,9 +3381,7 @@ class.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>YAML stream can contain multiple documents. The reader handles this by
-adding a element as a child of the root element. An XML serialized YAML
-stream with one empty YAML document looks like this:</p>
+<p>YAML stream can contain multiple documents. The reader handles this by adding an element as a child of the root element. An XML serialized YAML stream with one empty YAML document looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3415,30 +3392,23 @@ stream with one empty YAML document looks like this:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The XML element name of the root element, the element name of document
-and the element name of array elements can be configured with the
-following configuration options:</p>
+<p>The XML element name of the root element, the element name of the document, and the element name of array elements can be configured with the following configuration options:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>rootName</strong>: The name of the root element. Default: <strong>yaml</strong>.</p>
+<p><code>rootName</code>: The name of the root element. Default: <code>yaml</code>.</p>
 </li>
 <li>
-<p><strong>documentName</strong>: The name of the document element. Default: <strong>document</strong>.</p>
+<p><code>documentName</code>: The name of the document element. Default: <code>document</code>.</p>
 </li>
 <li>
-<p><strong>elementName</strong>: The name of a sequence element. Default: <strong>element</strong>.</p>
+<p><code>elementName</code>: The name of a sequence element. Default: <code>element</code>.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>YAML allows characters in the key name that aren&#8217;t allowed in XML
-element name. To workaround that problem the reader offers multiple
-solutions. The YAML reader can search and replace white spaces, illegal
-characters and the number in key names that start with a number. It is
-also possible to replace one key name with a completely different name.
-The following example demonstrates all these features:</p>
+<p>YAML allows characters in the key name that aren&#8217;t allowed in XML element name. To workaround that problem the reader offers multiple solutions. The YAML reader can search and replace white spaces, illegal characters and the number in key names that start with a number. It is also possible to replace one key name with a completely different name. The following example demonstrates all these features:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3459,66 +3429,39 @@ The following example demonstrates all these features:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>keyWhitspaceReplacement</strong>: The replacement character for whitespaces
-in a yaml map key. By default this not defined, so that the reader
-doesn&#8217;t search for white spaces.</p>
+<p><code>keyWhitspaceReplacement</code>: The replacement character for whitespaces in a yaml map key. By default this not defined, so that the reader doesn&#8217;t search for white spaces.</p>
 </li>
 <li>
-<p><strong>keyPrefixOnNumeric</strong>: The prefix character to add if the YAML node
-name starts with a number. By default this is not defined, so that the
-reader doesn&#8217;t search for element names that start with a number.</p>
+<p><code>keyPrefixOnNumeric</code>: The prefix character to add if the YAML node name starts with a number. By default this is not defined, so that the reader doesn&#8217;t search for element names that start with a number.</p>
 </li>
 <li>
-<p><strong>illegalElementNameCharReplacement</strong>: If illegal characters are
-encountered in a YAML element name then they are replaced with this
-value. By default this is not defined, so that the reader doesn&#8217;t search
-for element names with illegal characters.</p>
+<p><code>illegalElementNameCharReplacement</code>: If illegal characters are encountered in a YAML element name then they are replaced with this value. By default this is not defined, so that the reader doesn&#8217;t search for element names with illegal characters.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>YAML has the concept of anchors and aliasses. The YAML reader can handle
-anchors and aliasses with three different strategies. The strategy is
-defined via the <strong>aliasStrategy</strong> configuration option. This option can
-have the following values:</p>
+<p>YAML has the concept of anchors and aliases. The YAML reader can handle anchors and aliasses with three different strategies. The strategy is defined via the <code>aliasStrategy</code> configuration option. This option can have the following values:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>REFER</strong>: The reader creates reference attributes on the element that
-have an anchor or an alias. The element with the anchor gets the <strong>id</strong>
-attribute containing the name from the anchor as the attribute value.
-The element with the alias gets the <strong>ref</strong> attribute also containing the
-name of the anchor as the attribute value. The anchor and alias
-attribute names can be defined by the <strong>anchorAttributeName</strong> and
-<strong>aliasAttributeName</strong>.</p>
+<p><code>REFER</code>: The reader creates reference attributes on the element that have an anchor or an alias. The element with the anchor gets the <code>id</code> attribute containing the name from the anchor as the attribute value. The element with the alias gets the <code>ref</code> attribute also containing the name of the anchor as the attribute value. The anchor and alias attribute names can be defined by the <code>anchorAttributeName</code> and <code>aliasAttributeName</code>.</p>
 </li>
 <li>
-<p><strong>RESOLVE</strong>: The reader resolves the value or the data structure of an
-anchor when its alias is encountered. This means that the SAX events of
-the anchor are repeated as child events of the alias element. When a
-YAML document contains a lot of anchors or anchors with a huge data
-structure then this can lead to memory problems.</p>
+<p><code>RESOLVE</code>: The reader resolves the value or the data structure of an anchor when its alias is encountered. This means that the SAX events of the anchor are repeated as child events of the alias element. When a YAML document contains a lot of anchors or anchors with a huge data structure then this can lead to memory problems.</p>
 </li>
 <li>
-<p><strong>REFER_RESOLVE</strong>: This is a combination of <strong>REFER</strong> and <strong>RESOLVE</strong>. The
-anchor and alias attributes are set but the anchor value or data
-structure is also resolved. This option is useful when the name of the
-anchor has a business meaning.</p>
+<p><code>REFER_RESOLVE</code>: This is a combination of <code>REFER</code> and <code>RESOLVE</code>. The anchor and alias attributes are set but the anchor value or data structure is also resolved. This option is useful when the name of the anchor has a business meaning.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>By the default the YAML reader uses the <strong>REFER</strong> strategy.</p>
-</div>
+<p>By the default the YAML reader uses the <code>REFER</code> strategy.</p>
 </div>
 <div class="sect3">
 <h4 id="java_api_4">Java API</h4>
 <div class="paragraph">
-<p>Smooks is programmatically configured to read a YAML configuration using
-the
-<a href="/javadoc/v1.7.1/smooks/org/milyn/yaml/YamlReaderConfigurator.html">YamlReaderConfigurator</a>
-class.</p>
+<p>Smooks is programmatically configured to read a YAML configuration using the <a href="/javadoc/v1.7.1/smooks/org/milyn/yaml/YamlReaderConfigurator.html">YamlReaderConfigurator</a> class.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3533,6 +3476,27 @@ class.</p>
         <span class="o">.</span><span class="na">setAliasAttributeName</span><span class="o">(</span><span class="s">"alias"</span><span class="o">);</span>
 
 <span class="c1">// Use Smooks as normal...</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="maven_coordinates_7">Maven Coordinates</h4>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-yaml-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="xml_namespace_5">XML Namespace</h4>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:yaml="https://www.smooks.org/xsd/smooks/yaml-1.5.xsd"</pre>
 </div>
 </div>
 </div>
