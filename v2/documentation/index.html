@@ -51,13 +51,12 @@
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#examples">Examples</a></li>
+<li><a href="#getting_started">Getting Started</a></li>
 <li><a href="#introduction">Introduction</a>
 <ul class="sectlevel2">
 <li><a href="#why_smooks">Why Smooks?</a></li>
 <li><a href="#fragment_based_processing">Fragment-Based Processing</a></li>
 <li><a href="#whats_new_in_smooks_2">What&#8217;s new in Smooks 2?</a></li>
-<li><a href="#getting_started">Getting Started</a></li>
 <li><a href="#migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</a></li>
 <li><a href="#faqs">FAQs</a></li>
 <li><a href="#maven">Maven</a></li>
@@ -169,12 +168,10 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="examples">Examples</h2>
+<h2 id="getting_started">Getting Started</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Examples are always a great place to learn. We have quite a few
-<a href="https://github.com/smooks/smooks-examples/tree/v2.0.0">general examples
-as well as UN/EDIFACT examples on GitHub</a>.</p>
+<p>The easiest way to get started with Smooks is to download and try out some <a href="https://github.com/smooks/smooks-examples/tree/v2.0.0">examples</a>. The examples are the perfect base upon which to integrate Smooks into your application.</p>
 </div>
 </div>
 </div>
@@ -182,14 +179,10 @@ as well as UN/EDIFACT examples on GitHub</a>.</p>
 <h2 id="introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Smooks is an extensible Java framework for building XML and non-XML data
-(CSV, EDI, Java, etc&#8230;&#8203;) streaming applications.</p>
+<p>Smooks is an extensible Java framework for building XML and non-XML data (CSV, EDI, Java, etc&#8230;&#8203;) fragment-based applications.</p>
 </div>
 <div class="paragraph">
-<p>While Smooks can be used as a lightweight framework on which to hook
-your own processing logic for a wide range of data formats,
-out-of-the-box it ships with useful features that can be used
-individually or seamlessly together:</p>
+<p>While Smooks can be used as a lightweight framework on which to hook your own processing logic for a wide range of data formats, out-of-the-box it ships with useful features that can be used individually or seamlessly together:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -491,16 +484,6 @@ with "org.smooks".</p>
 <a href="https://github.com/FasterXML/woodstox">FasterXML&#8217;s Woodstox</a></p>
 </li>
 </ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="getting_started">Getting Started</h3>
-<div class="paragraph">
-<p>The easiest way to get started with Smooks is to download and try out
-some of the
-<a href="https://github.com/smooks/smooks-examples/tree/v2.0.0">examples</a>. The
-examples are the perfect base upon which to integrate Smooks into your
-application.</p>
 </div>
 </div>
 <div class="sect2">
@@ -5413,7 +5396,7 @@ the Validation Example</a>.</p>
 <div class="sect2">
 <h3 id="templating">Templating</h3>
 <div class="paragraph">
-<p>Smooks provides two main Templating options:</p>
+<p>Smooks provides two main templating options:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -5426,69 +5409,55 @@ the Validation Example</a>.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>What Smooks adds here is the ability to use these Templating
-technologies within the context of a Smooks filtering process. This
-means that these technologies:</p>
+<p>What Smooks adds here is the ability to use these templating technologies within the context of a Smooks filtering process. This means that these technologies:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Can be applied to a source message on a per fragment basis Vs the
-whole message i.e. "Fragment-Based Transformations". This is useful in
-situations where (for example) you only wish to insert a piece of data
-into a message at a specific point (e.g. add headers to a SOAP message),
-but you don&#8217;t wish to interfere with the rest of the message stream. In
-this case you can "target" (apply) the template to the fragment of
-interest.</p>
+<p>Can be applied to a source message on a per fragment basis vs the whole message i.e. "Fragment-Based Transformations". This is useful in situations where (for example) you only wish to insert a piece of data into a message at a specific point (e.g. add headers to a SOAP message), but you don&#8217;t wish to interfere with the rest of the message stream. In this case you can "target" (apply) the template to the fragment of interest.</p>
 </li>
 <li>
-<p>Can take advantage of other Smooks technologies (Cartridges) such as
-the <a href="#java-binding">Javabean Cartridge</a>. In this scenario, you can
-use the Javabean Cartridge to decode and bind data from the message into
-the Smooks bean context and then use (reference) that decoded data from
+<p>Can take advantage of other Smooks technologies (cartridges) such as the <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc">Javabean cartridge</a>. In this scenario, you can use the Javabean cartridge to decode and bind data from the message into the Smooks bean context and then use (reference) that decoded data from
 inside your FreeMarker template (Smooks makes this data available to
 FreeMarker).</p>
 </li>
 <li>
-<p>Can be used to process huge message streams (GBs), while at the same
-time maintain a relatively simple processing model, with a low memory
-footprint. See <a href="#processing-huge-messages-gbs">Processing Huge
-Messages</a>.</p>
+<p>Can be used to process huge message streams (GBs), while at the same time maintain a relatively simple processing model, with a low memory footprint. See <a href="https://www.smooks.org/v2/documentation/#processing_huge_messages_gbs">Processing Huge Messages</a>.</p>
 </li>
 <li>
-<p>Can be used for generating "Split Message Fragments" that can then be
-routed (using <a href="#splitting&#8212;&#8203;routing">Smooks Routing components</a>) to
-physical endpoints (File, JMS), or logical endpoints on an ESB (a
-"Service").</p>
+<p>Can be used for generating "Split Message Fragments" that can then be routed (using <a href="https://www.smooks.org/v2/documentation/#splitting_routing">Smooks Routing components</a>) to physical endpoints (File, JMS), or logical endpoints on an ESB (a "Service").</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Smooks can also be extended (and will) to add support for other
-templating technologies.</p>
+<p>Smooks can also be extended (and will) to add support for other templating technologies.</p>
 </div>
-<div class="paragraph">
-<p><strong>Note</strong>: <em>Be sure to read the section on <a href="#java-binding">Java
-Binding</a></em>.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Be sure to read the section on <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc#java-binding">Java
+Binding</a>.
+</td>
+</tr>
+</table>
 </div>
 <div class="sect3">
 <h4 id="freemarker_templating">FreeMarker Templating</h4>
 <div class="paragraph">
-<p><a href="http://freemarker.org/">FreeMarker</a> is a very powerful Templating Engine.
-Smooks allows FreeMarker to be used as a means of generating text based
-content that can then be inserted into a message stream (aka a "Fragment
-Transform"), or used as a "Split Message Fragment" for
-<a href="#splitting&#8212;&#8203;routing">routing to another process</a>.</p>
+<p><a href="http://freemarker.org/">FreeMarker</a> is a powerful templating engine. Smooks allows FreeMarker to be used as a means of generating textual content that can then be inserted into a message stream (aka a "Fragment Transform"), or used as a "Split Message Fragment" for <a href="https://www.smooks.org/v2/documentation/#splitting_routing">routing to another process</a>.</p>
 </div>
 <div class="paragraph">
-<p>Configuring FreeMarker templates in Smooks is done through the
-<a href="https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd" class="bare">https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd</a> configuration
-namespace. Just configure this XSD into your IDE and you&#8217;re in business!</p>
+<p>Configuring FreeMarker templates in Smooks is done through the <code>https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd</code> configuration namespace. Just configure this XSD into your IDE and you&#8217;re in business!</p>
 </div>
 <div class="paragraph">
 <p><strong>Example - Inline Template</strong>:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:ftl=</span><span class="s">"https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd"</span><span class="nt">&gt;</span>
@@ -5502,6 +5471,7 @@ namespace. Just configure this XSD into your IDE and you&#8217;re in business!</
 <p><strong>Example - External Template Reference</strong>:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:ftl=</span><span class="s">"https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd"</span><span class="nt">&gt;</span>
@@ -5514,11 +5484,7 @@ namespace. Just configure this XSD into your IDE and you&#8217;re in business!</
 <div class="sect4">
 <h5 id="freemarker_transformations_using_nodemodels">FreeMarker Transformations using NodeModels</h5>
 <div class="paragraph">
-<p>The easiest way to construct message transformations in FreeMarker is to
-use FreeMarker&#8217;s
-<a href="http://freemarker.org/docs/xgui_expose_dom.html">NodeModel</a> facility.
-This is where FreeMarker uses a W3C DOM as the Templating model,
-referencing the DOM nodes directly from inside the FreeMarker template.</p>
+<p>The easiest way to construct message transformations in FreeMarker is to use FreeMarker&#8217;s <a href="http://freemarker.org/docs/xgui_expose_dom.html">NodeModel</a> facility. This is where FreeMarker uses a W3C DOM as the Templating model, referencing the DOM nodes directly from inside the FreeMarker template.</p>
 </div>
 <div class="paragraph">
 <p>Smooks adds two additional capabilities here:</p>
@@ -5526,13 +5492,10 @@ referencing the DOM nodes directly from inside the FreeMarker template.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>The ability to perform this on a fragment basis i.e. you don&#8217;t have to
-use the full message as the DOM model, just the targeted fragment.</p>
+<p>The ability to perform this on a fragment basis i.e. you don&#8217;t have to use the full message as the DOM model, just the targeted fragment.</p>
 </li>
 <li>
-<p>The ability to use
-<a href="http://freemarker.org/docs/xgui_expose_dom.html">NodeModel</a> in a
-streaming filter process (see <a href="#sax-ng">SAX NG</a>).</p>
+<p>The ability to use <a href="http://freemarker.org/docs/xgui_expose_dom.html">NodeModel</a> in a streaming filter process.</p>
 </li>
 <li>
 <p>The ability to use it on non-XML messages (CSV, EDI, etc&#8230;&#8203;).</p>
@@ -5540,11 +5503,10 @@ streaming filter process (see <a href="#sax-ng">SAX NG</a>).</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>To use this facility in Smooks, you need to define an additional
-resource that defines/declares the NodeModels to be captured (created in
-the case of SAX streaming):</p>
+<p>To use this facility in Smooks, you need to define an additional resource that defines/declares the NodeModels to be captured (created in the case of SAX streaming):</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -5608,32 +5570,32 @@ the case of SAX streaming):</p>
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>(<em>See full example in the
-<a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/freemarker-huge-transform">freemarker-huge-transform</a>
-tutorial</em>)</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+See full example in the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/freemarker-huge-transform">freemarker-huge-transform</a> tutorial
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect4">
 <h5 id="freemarker_and_the_javabean_cartridge">FreeMarker and the Javabean Cartridge</h5>
 <div class="paragraph">
-<p>FreeMarker NodeModel is very powerful and easy to use. The tradeoff is
-obviously that of performance. Constructing W3C DOMs is not cheap. It
-also may be the case that the required data has already been extracted
-and populated into a Java Object model anyway e.g. where the data also
-needs to be routed to a a JMS endpoint as Java Objects.</p>
+<p>FreeMarker NodeModel is very powerful and easy to use. The tradeoff is obviously that of performance. Constructing W3C DOMs is not cheap. It also may be the case that the required data has already been extracted and populated into a Java Object model anyway e.g. where the data also needs to be routed to a a JMS endpoint as Java Objects.</p>
 </div>
 <div class="paragraph">
-<p>In situations where using the NodeModel is not practical, Smooks allows
-you to use the Javabean Cartridge to populate a proper Java Object Model
-(or a Virtual Model). This model can then be used in the FreeMarker
-Templating process. See the docs on the <a href="#java-binding">Javabean
-Cartridge</a> for more details.</p>
+<p>In situations where using the NodeModel is not practical, Smooks allows you to use the Javabean Cartridge to populate a POJO (or a Virtual Model). This model can then be used in the FreeMarker Templating process. See the docs on the <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc">JavaBean Cartridge</a> for more details.</p>
 </div>
 <div class="paragraph">
 <p><strong>Example (using a Virtual Model)</strong>:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -5672,21 +5634,23 @@ Cartridge</a> for more details.</p>
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>(<em>See full example in the
-<a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/file-router">file-router</a>
-example</em>)</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+See full example in the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/file-router">file-router</a> example
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect4">
 <h5 id="programmatic_configuration_3">Programmatic Configuration</h5>
 <div class="paragraph">
-<p>FreeMarker templating configurations can be programmatically added to a
-Smooks instance simply by configuring and adding a
-<a href="/javadoc/v1.7.1/smooks/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html">FreeMarkerTemplateProcessor</a>
-instance to the Smooks instance. The following example configures a
-Smooks instance with a Java Binding configuration and a FreeMarker
-templating configuration:</p>
+<p>FreeMarker templating configurations can be programmatically added to a Smooks instance simply by configuring and adding a <a href="/javadoc/v1.7.1/smooks/org/milyn/templating/freemarker/FreeMarkerTemplateProcessor.html"><code>FreeMarkerTemplateProcessor</code></a> instance to the Smooks instance. The following example configures a Smooks instance with a Java Binding configuration and a FreeMarker templating configuration:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5703,16 +5667,13 @@ templating configuration:</p>
 <div class="sect3">
 <h4 id="xsl_templating">XSL Templating</h4>
 <div class="paragraph">
-<p>Configuring XSL templates in Smooks is almost identical to that of
-configuring <a href="#freemarker-templating">FreeMarker templates</a>. It is
-done through the <a href="https://www.smooks.org/xsd/smooks/xsl-2.0.xsd" class="bare">https://www.smooks.org/xsd/smooks/xsl-2.0.xsd</a>
-configuration namespace. Just configure this XSD into your IDE and
-you&#8217;re in business!</p>
+<p>Configuring XSL templates in Smooks is almost identical to that of configuring <a href="#freemarker-templating">FreeMarker templates</a>. It is done through the <code>https://www.smooks.org/xsd/smooks/xsl-2.0.xsd</code> configuration namespace. Just configure this XSD into your IDE and you&#8217;re in business!</p>
 </div>
 <div class="paragraph">
 <p><strong>Example</strong>:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -5726,15 +5687,10 @@ you&#8217;re in business!</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As with FreeMarker, external templates can be configured via URI
-reference in the element.</p>
+<p>As with FreeMarker, external templates can be configured via URI reference in the element.</p>
 </div>
 <div class="paragraph">
-<p>As already stated, configuring XSL templates in Smooks is almost
-identical to that of configuring FreeMarker templates (See above). For
-this reason, please consult the FreeMarker configuration docs.
-Translating to XSL equivalents is simply a matter of changing the
-configuration namepace. Please read the following sections however.</p>
+<p>As already stated, configuring XSL templates in Smooks is almost identical to that of configuring FreeMarker templates (See above). For this reason, please consult the FreeMarker configuration docs.Translating to XSL equivalents is simply a matter of changing the configuration namespace. Please read the following sections however.</p>
 </div>
 <div class="sect4">
 <h5 id="points_to_note_regarding_xsl_support">Points to Note Regarding XSL Support</h5>
@@ -5745,34 +5701,19 @@ configuration namepace. Please read the following sections however.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>You need to perform a fragment transform i.e. you are not transforming
-the whole message.</p>
+<p>You need to perform a fragment transform i.e. you are not transforming the whole message.</p>
 </li>
 <li>
-<p>You need to use other Smooks functionality to perform other operations
-on the message, such as message splitting, persistence, etc&#8230;&#8203;</p>
+<p>You need to use other Smooks functionality to perform other operations on the message, such as message splitting, persistence, etc&#8230;&#8203;</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Smooks applies XSLs on a message fragment basis (i.e. DOM Element
-Nodes) Vs to the whole document (i.e. DOM Document Node). This can be
-very useful for fragmenting/modularizing your XSLs, but don&#8217;t assume
-that an XSL written and working standalone (externally to Smooks and on
-the whole document) will automatically work through Smooks without
-modification. For this reason, Smooks does handle XSLs targeted at the
-document root node differently in that it applies the XSL to the DOM
-Document Node (Vs the root DOM Element). The basic point here is that if
-you already have XSLs and are porting them to Smooks, you may need to
-make some tweaks to the Stylesheet.</p>
+<p>Smooks applies XSLs on a message fragment basis (i.e. DOM Element Nodes) Vs to the whole document (i.e. DOM Document Node). This can be very useful for fragmenting/modularizing your XSLs, but don&#8217;t assume that an XSL written and working standalone (externally to Smooks and on the whole document) will automatically work through Smooks without modification. For this reason, Smooks does handle XSLs targeted at the document root node differently in that it applies the XSL to the DOM Document Node (Vs the root DOM Element). The basic point here is that if you already have XSLs and are porting them to Smooks, you may need to make some tweaks to the Stylesheet.</p>
 </li>
 <li>
-<p>XSLs typically contain a template matched to the root element. Because
-Smooks applies XSLs on a fragment basis, matching against the "root
-element" is no longer valid. You need to make sure the Stylesheet
-contains a template that matches against the context node (i.e. the
-targeted fragment).</p>
+<p>XSLs typically contain a template matched to the root element. Because Smooks applies XSLs on a fragment basis, matching against the "root element" is no longer valid. You need to make sure the Stylesheet contains a template that matches against the context node (i.e. the targeted fragment).</p>
 </li>
 </ol>
 </div>
@@ -5780,12 +5721,20 @@ targeted fragment).</p>
 <div class="sect4">
 <h5 id="my_xslt_works_outside_smooks_but_not_inside">My XSLT Works Outside Smooks, but not Inside?</h5>
 <div class="paragraph">
-<p>This can happen and is most likely going to be a result of your
-stylesheet containing a template that&#8217;s using an absolute path reference
-to the document root node. This will cause issues in the Smooks
-Fragment-based Processing Model because the element being targeted by
-Smooks is not the document root node. Your XSLT needs to contain a
-template that matches against the context node being targeted by Smooks.</p>
+<p>This can happen and is most likely going to be a result of your stylesheet containing a template that&#8217;s using an absolute path reference to the document root node. This will cause issues in the Smooks fragment-based processing model because the element being targeted by Smooks is not the document root node. Your XSLT needs to contain a template that matches against the context node being targeted by Smooks.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="maven_coordinates_9">Maven Coordinates</h4>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-templating-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </div>
