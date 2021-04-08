@@ -6398,15 +6398,13 @@ resolved by there position.</p>
 <div class="sect2">
 <h3 id="groovy">Groovy</h3>
 <div class="paragraph">
-<p>Support for <a href="https://groovy-lang.org/">Groovy</a> based scripting is made
-available through the <a href="https://www.smooks.org/xsd/smooks/groovy-2.0.xsd" class="bare">https://www.smooks.org/xsd/smooks/groovy-2.0.xsd</a>
-configuration namespace. This adds support for DOM or SAX based Groovy
-scripting.</p>
+<p>Support for <a href="https://groovy-lang.org/">Groovy</a> scripting is made available through the <code>https://www.smooks.org/xsd/smooks/groovy-2.0.xsd</code> configuration namespace.</p>
 </div>
 <div class="paragraph">
 <p>Example configuration:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -6430,197 +6428,91 @@ scripting.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Imports</strong>: Imports can be added via the "imports" element. A number of
-classes are automatically imported:</p>
+<p>Imports can be added via the <code>imports</code> element. A number of classes are automatically imported:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>org.smooks.support.DomUtils</p>
+<p><code>org.smooks.support.DomUtils</code></p>
 </li>
 <li>
-<p>org.smooks.api.bean.context.BeanContext</p>
+<p><code>org.smooks.api.bean.context.BeanContext</code></p>
 </li>
 <li>
-<p>org.smooks.api.bean.repository.BeanRepository</p>
+<p><code>org.smooks.api.bean.repository.BeanRepository</code></p>
 </li>
 <li>
-<p>org.w3c.dom.*</p>
+<p><code>org.w3c.dom.*</code></p>
 </li>
 <li>
-<p>groovy.xml.dom.DOMCategory, groovy.xml.dom.DOMUtil,
-groovy.xml.DOMBuilder</p>
+<p><code>groovy.xml.dom.DOMCategory</code>, <code>groovy.xml.dom.DOMUtil</code>, <code>groovy.xml.DOMBuilder</code></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><strong>Visited Element</strong>: The visited element is available to the script
-through the variable "<strong>element</strong>". It is also available under a variable
-name equal to the element name, but only if the element name contains
-alpha-numeric characters only.</p>
+<p>The visited element is available to the script through the variable <code>element</code>. It is also available under a variable name equal to the element name, but only if the element name contains alpha-numeric characters only.</p>
 </li>
 <li>
-<p><strong>Execute Before/After</strong>: By default, the script is executed on the
-visitAfter event. You can direct it to be executed on the visitBefore by
-setting the "<strong>executeBefore</strong>" attribute to "true".</p>
+<p>By default, the script is executed on the <em>visitAfter</em> event. You can direct it to be executed on the <em>visitBefore</em> by setting the <code>executeBefore</code> attribute to <code>true</code>.</p>
 </li>
 <li>
-<p><strong>Comment/CDATA Script Wrapping</strong>: If the script contains special XML
-characters, it can be wrapped in an XML Comment or CDATA section.</p>
+<p>If the script contains special XML characters, it can be wrapped in an XML Comment or CDATA section.</p>
 </li>
 </ol>
 </div>
-<div class="sect3">
-<h4 id="groovy_scriptlet_variables_and_methods">Groovy Scriptlet Variables and Methods</h4>
+<div class="sect4">
+<h5 id="groovy_scriptlet_variables_and_methods">Groovy Scriptlet Variables and Methods</h5>
 <div class="paragraph">
-<p>A number of variables and methods are made directly available to groovy
-scriptlet code i.e. you can references them directly in your scriptlet.</p>
+<p>A number of variables and methods are made directly available to groovy scriptlet code i.e. you can reference them directly in your scriptlet.</p>
 </div>
-<div class="paragraph">
-<p><em>*Variables*</em>:</p>
-</div>
+<div class="sect5">
+<h6 id="variables">Variables</h6>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>element</strong>: The DOM/SAX Element (depending on which filter type is in
-use) i.e. <em>org.w3c.dom.Element</em> or
-<em>org.api.smooks.delivery.sax.SAXElement</em>.</p>
+<p><code>element</code>: The DOM/SAX Element (depending on which filter type is in use) i.e. <code>org.w3c.dom.Element</code> or <code>org.api.smooks.delivery.sax.SAXElement</code>.</p>
 </li>
 <li>
-<p><strong>executionContext</strong>: The Smooks <em>ExecutionContext</em> instance associated
-with the Smooks filtering operation.</p>
+<p><code>executionContext</code>: The Smooks <code>ExecutionContext</code> instance associated with the Smooks filtering operation.</p>
 </li>
 <li>
-<p><strong>nodeModels</strong>: A Map containing all the DOM NodeModels currently
-available (i.e. Map&lt;String, Element&gt;).</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><em>*Methods*</em>:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Object getBean(String beanId)</strong>: Get a bean from the <em>BeanContext</em>.</p>
+<p><code>nodeModels</code>: A map containing all the DOM NodeModels currently available (i.e., <code>Map&lt;String, Element&gt;</code>).</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="adding_beans_to_the_beancontext">Adding Beans to the BeanContext</h4>
-<div class="paragraph">
-<p>As shown above, all scriptlet code can access the beans in the
-<em>BeanContext</em> by calling the <em>getBean</em> method from inside the scriptlet
-code. One oversight when implementing this feature was that we didn&#8217;t
-provide an <em>addBean</em> method for adding beans to the bean context.
-However, it is still possible to do so in a slightly more longwinded
-method via the <em>executionContext</em> e.g.:</p>
-</div>
-<div class="paragraph">
-<p>executionContext.getBeanContext().addBean("myBean", myBeanInstance);</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="mixed_dom_and_sax_with_groovy">Mixed DOM and SAX with Groovy</h4>
-<div class="paragraph">
-<p>Because <a href="https://groovy-lang.org/">Groovy</a> has a number of very useful DOM
-processing features, we added support for the mixed DOM and SAX
-processing models.</p>
-</div>
-<div class="paragraph">
-<p>What this means is that you can use Groovy&#8217;s DOM utilities to process
-the targeted message fragment. The "<strong>element</strong>" received by the Groovy
-script will be a DOM Element, even when using the SAX filter. This makes
-Groovy scripting via the SAX filter a lot easier, while at the same time
-maintaining the ability to process huge messages in a streamed fashion.</p>
-</div>
-<div class="paragraph">
-<p><strong>Mixed SAX and DOM Gotchas</strong></p>
-</div>
+<div class="sect5">
+<h6 id="methods">Methods</h6>
 <div class="ulist">
 <ul>
 <li>
-<p>Only available in default mode i.e. when "<strong>executeBefore</strong>" equals
-"<strong>false</strong>". If "<strong>executeBefore</strong>" is configured "<strong>true</strong>", this facility is
-not available and the Groovy script will only have access to the element
-as a SAXElement.</p>
-</li>
-<li>
-<p>To write the DOM fragment to a Smooks.filterSource StreamResult,
-"writeFragment" must be called. See example below.</p>
-</li>
-<li>
-<p>There is an obvious performance overhead incurred using this facility
-(DOM construction). That said, it can still be used to process huge
-messages because of how the <a href="#mixing-dom-and-sax">DomModelCreator</a>
-works for SAX. So, it can still process huge message, but it might take
-a little longer. The tradeoff is usability Vs performance.</p>
+<p>Get a bean from <code>Object BeanContext#getBean(String beandId)</code>.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="mixed_dom_and_sax_example">Mixed DOM and SAX Example</h4>
+</div>
+<div class="sect4">
+<h5 id="adding_beans_to_the_beancontext">Adding Beans to the BeanContext</h5>
 <div class="paragraph">
-<p>Take an XML message such as:</p>
+<p>As shown above, all scriptlet code can access the beans by calling <code>BeanContext#getBean(String)</code> from inside the scriptlet code. One oversight when implementing this feature was that we didn&#8217;t provide an <code>addBean</code> method for adding beans to the bean context. However, it is still possible to do so in a slightly more long-winded method via the <code>executionContext</code> e.g.:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;shopping&gt;</span>
-    <span class="nt">&lt;category</span> <span class="na">type=</span><span class="s">"groceries"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;item&gt;</span>Chocolate<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item&gt;</span>Coffee<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;/category&gt;</span>
-    <span class="nt">&lt;category</span> <span class="na">type=</span><span class="s">"supplies"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;item&gt;</span>Paper<span class="nt">&lt;/item&gt;</span>
-        <span class="nt">&lt;item</span> <span class="na">quantity=</span><span class="s">"4"</span><span class="nt">&gt;</span>Pens<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;/category&gt;</span>
-        <span class="nt">&lt;category</span> <span class="na">type=</span><span class="s">"present"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;item</span> <span class="na">when=</span><span class="s">"Aug 10"</span><span class="nt">&gt;</span>Kathryn's Birthday<span class="nt">&lt;/item&gt;</span>
-    <span class="nt">&lt;/category&gt;</span>
-<span class="nt">&lt;/shopping&gt;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="n">executionContext</span><span class="o">.</span><span class="na">getBeanContext</span><span class="o">().</span><span class="na">addBean</span><span class="o">(</span><span class="s">"myBean"</span><span class="o">,</span> <span class="n">myBeanInstance</span><span class="o">);</span></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Using Groovy, we want to modify the "supplies" category in the shopping
-list, adding 2 to the quantity, where the item is "Pens". To do this, we
-write a simple little Groovy script and target it at the elements in the
-message. The script simple iterates over the elements in the category
-and increments the quantity by 2, where the category type is "supplies"
-and the item is "Pens":</p>
 </div>
+<div class="sect4">
+<h5 id="maven_coordinates_10">Maven Coordinates</h5>
 <div class="listingblock">
+<div class="title">pom.xml</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
-                      <span class="na">xmlns:g=</span><span class="s">"https://www.smooks.org/xsd/smooks/groovy-2.0.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;core:filterSettings</span> <span class="na">type=</span><span class="s">"SAX"</span> <span class="nt">/&gt;</span>
-
-    <span class="nt">&lt;g:groovy</span> <span class="na">executeOnElement=</span><span class="s">"category"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;g:script&gt;</span>
-        <span class="c">&lt;!--
-        use(DOMCategory) {
-            // Modify "supplies": we need an extra 2 pens...
-            if (category.'@type' == 'supplies') {
-                category.item.each { item -&gt;
-                    if (item.text() == 'Pens') {
-                        item['@quantity'] = item.'@quantity'.toInteger() + 2;
-                    }
-                }
-            }
-        }
-
-        // When using the SAX filter, we need to explicitly write the fragment
-        // to the result stream...
-        writeFragment(category);
-        --&gt;</span>
-        <span class="nt">&lt;/g:script&gt;</span>
-    <span class="nt">&lt;/g:groovy&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-scripting-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
 </div>
