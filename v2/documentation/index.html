@@ -120,7 +120,7 @@
 <li><a href="#java">Java</a></li>
 <li><a href="#jms">JMS</a></li>
 <li><a href="#esb_support">ESB Support</a></li>
-<li><a href="#camel">Camel</a></li>
+<li><a href="#apache_camel">Apache Camel</a></li>
 </ul>
 </li>
 <li><a href="#performance_tuning">Performance Tuning</a>
@@ -146,14 +146,6 @@
 <li><a href="#configuring_smooks_components">Configuring Smooks Components</a></li>
 <li><a href="#implementing_a_source_reader">Implementing a Source Reader</a></li>
 <li><a href="#implementing_a_fragment_visitor">Implementing a Fragment Visitor</a></li>
-</ul>
-</li>
-<li><a href="#apache_camel_integration">Apache Camel Integration</a>
-<ul class="sectlevel2">
-<li><a href="#smookscomponent">SmooksComponent</a></li>
-<li><a href="#smooksdataformat">SmooksDataformat</a></li>
-<li><a href="#smooksprocessor">SmooksProcessor</a></li>
-<li><a href="#apache_camel_examples">Apache Camel Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -6621,18 +6613,15 @@ Synapse/WS02</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="camel">Camel</h3>
+<h3 id="apache_camel">Apache Camel</h3>
 <div class="paragraph">
-<p>It is possible to route fragments to Apache Camel endpoints using the
-<strong>&lt;<a href="https://www.smooks.org/xsd/smooks/camel-1.5.xsd">camel:route</a>&gt;</strong>
-configuration from the <a href="https://www.smooks.org/xsd/smooks/camel-1.5.xsd" class="bare">https://www.smooks.org/xsd/smooks/camel-1.5.xsd</a>
-configuration namespace.</p>
+<p>It is possible to route fragments to Apache Camel endpoints using the <code>&lt;camel:route&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/camel-1.5.xsd</code> configuration namespace.</p>
 </div>
 <div class="paragraph">
-<p>For example, you can route to Camel endpoint by specifying the following
-in your Smooks configuration:</p>
+<p>For example, you can route to Camel endpoint by specifying the following in your Smooks configuration:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:camel=</span><span class="s">"https://www.smooks.org/xsd/smooks/camel-1.5.xsd"</span><span class="nt">&gt;</span>
@@ -6644,22 +6633,138 @@ in your Smooks configuration:</p>
 
   <span class="c">&lt;!-- Route bean to camel endpoints... --&gt;</span>
   <span class="nt">&lt;camel:route</span> <span class="na">beanid=</span><span class="s">"orderItem"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;camel:to</span> <span class="na">endpoint=</span><span class="s">"direct:slow"</span> <span class="na">if=</span><span class="s">"orderItem.priority == 'Normal'"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;camel:to</span> <span class="na">endpoint=</span><span class="s">"direct:express"</span> <span class="na">if=</span><span class="s">"orderItem.priority == 'High'"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;camel:to</span> <span class="na">endpoint=</span><span class="s">"direct:slow"</span> <span class="na">if=</span><span class="s">"orderItem.priority == 'Normal'"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;camel:to</span> <span class="na">endpoint=</span><span class="s">"direct:express"</span> <span class="na">if=</span><span class="s">"orderItem.priority == 'High'"</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;/camel:route&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In the above example, we route Java Beans from the Smooks BeanContext to
-the Camel Endpoints. Note that you can also apply templates (e.g.
-FreeMarker) to these same beans and route the templating result instead
-of beans (e.g. as XML, CSV or other).</p>
+<p>In the above example, we route Java Beans from Smooks&#8217;s <code>BeanContext</code> to the Camel Endpoints. Note that you can also apply templates (e.g., FreeMarker) to these same beans and route the templating result instead of beans (e.g., as XML, CSV or other).</p>
 </div>
 <div class="paragraph">
-<p>The above configuration shows routing using the ‘beanId’ attribute. It
-is also possible to route using an attribute named ‘routeOnElement'</p>
+<p>The above configuration shows routing using the <code>beanId</code> attribute. It is also possible to route using an attribute named <code>routeOnElement</code>.</p>
+</div>
+<div class="sect4">
+<h5 id="apache_camel_integration">Apache Camel Integration</h5>
+<div class="paragraph">
+<p>Integrating Smooks from Apache Camel lets you to access all the features of Smooks from within Camel. You can take an existing Smooks configuration and use this in your Camel routes using one of the options that are described in this chapter.</p>
+</div>
+<div class="paragraph">
+<p>Using Smooks in Camel can be done in three ways:</p>
+</div>
+<div class="sect5">
+<h6 id="smookscomponent">SmooksComponent</h6>
+<div class="paragraph">
+<p>The <code>SmooksComponent</code> is a Camel <a href="https://camel.apache.org/component.html">Component</a> which can used when  you want to process the Camel Message Body using Smooks. You can do this by adding a route in your Camel route configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="n">from</span><span class="o">(</span><span class="s">"file://inputDir?noop=true"</span><span class="o">)</span>
+<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"smooks://smooks-config.xml"</span><span class="o">)</span>
+<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"jms:queue:order"</span><span class="o">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Smooks Component is configured with a mandatory configuration file, which is <em>smooks-config-xml</em> in the example above. By just looking at the above route definition it is not clear what type of output that the SmooksComponent is producing. This is actually expressed in the Smooks configuration using the <a href="https://www.smooks.org/v2/documentation/#exporting_results">exports</a> element.</p>
+</div>
+<div class="paragraph">
+<p>If you prefer/require programmatic configuration of Smooks you can use the <a href="#smooksprocessor"><code>SmooksProcessor</code></a> to achieve this.</p>
+</div>
+<div class="sect6">
+<h7 id="options">Options</h7>
+<div class="paragraph">
+<p>An Apache Component can take options that are specified after the Smooks configuration file. Currently only one option is available for the SmooksComponent:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>reportPath</code> which is path (including the file name) to the Smooks Execution Report to be generated.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="smooksdataformat">SmooksDataFormat</h6>
+<div class="paragraph">
+<p><code>SmooksDataFormat</code> is a Camel DataFormat which is capable of transforming from one data format to another and back again. You would use this when you are only interested in transforming from one format to another and not interested in other Smooks features.</p>
+</div>
+<div class="paragraph">
+<p>Below is an example of using <code>SmooksDataFormat</code> to transform a comma separated value string into a <code>java.util.List</code> of Customer object instances:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">SmooksDataFormat</span> <span class="n">sdf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SmooksDataFormat</span><span class="o">(</span><span class="s">"csv-smooks-unmarshal-config.xml"</span><span class="o">);</span>
+<span class="n">from</span><span class="o">(</span><span class="s">"direct:unmarshal"</span><span class="o">)</span>
+<span class="o">.</span><span class="na">unmarshal</span><span class="o">(</span><span class="n">sdf</span><span class="o">)</span>
+<span class="o">.</span><span class="na">convertBodyTo</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"mock:result"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="smooksprocessor">SmooksProcessor</h6>
+<div class="paragraph">
+<p>Using <code>SmooksProcessor</code> gives you full control over Smooks, for example if you want to programatically create the underlying Smooks instance you’d use <code>SmooksProcessor</code>. When using <code>SmooksProcessor</code>, you can pass a Smooks instance to its constructor and prior to that programmatically configure Smooks.</p>
+</div>
+<div class="paragraph">
+<p>Below is an example of using the <code>SmooksProcessor</code> in a Camel route:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="s">"edi-to-xml-smooks-config.xml"</span><span class="o">);</span>
+<span class="nc">ExecutionContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
+<span class="o">...</span>
+<span class="nc">SmooksProcessor</span> <span class="n">processor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SmooksProcessor</span><span class="o">(</span><span class="n">smooks</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
+
+<span class="n">from</span><span class="o">(</span><span class="s">"file://input?noop=true"</span><span class="o">)</span>
+<span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="n">processor</span><span class="o">)</span>
+<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"mock:result"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similar to the <code>SmooksComponent</code> we have not specified the result type that Smooks produces (if any that is). Instead this is expressed in the Smooks configuration using the <a href="https://www.smooks.org/v2/documentation/#exporting_results">exports</a> element, or you can do the same programmatically like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">();</span>
+<span class="nc">ExecutionContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">setExports</span><span class="o">(</span><span class="k">new</span> <span class="nc">Exports</span><span class="o">(</span><span class="nc">StringResult</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+<span class="nc">SmooksProcessor</span> <span class="n">processor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SmooksProcessor</span><span class="o">(</span><span class="n">smooks</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
+<span class="o">...</span>
+<span class="n">from</span><span class="o">(</span><span class="s">"file://input?noop=true"</span><span class="o">)</span>
+<span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="n">processor</span><span class="o">)</span>
+<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"mock:result"</span><span class="o">);</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Apache Camel examples</a> in the examples page.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="maven_coordinates_11">Maven Coordinates</h5>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-camel-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -9130,152 +9235,6 @@ annotating it with _@Inject:</p>
 <span class="o">}</span></code></pre>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="apache_camel_integration">Apache Camel Integration</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The Camel-Smooks integration lets you to access all the features of
-Smooks from within Camel. You can take an existing Smooks configuration
-and use this in your Camel routes using one of the options that are
-described in this chapter. If you are interested in routing from Smooks
-to Camel endpoints the please refer to the Camel section in
-<a href="#camel">Routing</a> chapter.</p>
-</div>
-<div class="paragraph">
-<p>Using Smooks in Camel can be done in three ways:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><a href="#smookscomponent">SmooksComponent</a></p>
-</li>
-<li>
-<p><a href="#smooksdataformat">SmooksDataformat</a></p>
-</li>
-<li>
-<p><a href="#smooksprocessor">SmooksProcessor</a></p>
-</li>
-</ol>
-</div>
-<div class="sect2">
-<h3 id="smookscomponent">SmooksComponent</h3>
-<div class="paragraph">
-<p>The SmooksComponent is a Camel
-<a href="https://camel.apache.org/component.html">Component</a> which can used when
-you want to process the Camel Message Body using Smooks. You can do this
-by adding a route in your Camel route configuration:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="n">from</span><span class="o">(</span><span class="s">"file://inputDir?noop=true"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"smooks://smooks-config.xml"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"jms:queue:order"</span><span class="o">)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The Smooks Component is configured with a mandatory configuration file,
-which is 'smooks-config-xml' in the example above. By just looking at
-the above route definition it is not clear what type of output that the
-SmooksComponent is producing. This is actually expressed in the Smooks
-configuration using the <a href="#exporting-results">exports</a> element.</p>
-</div>
-<div class="paragraph">
-<p>If you prefer/require programmatic configuration of Smooks you can use
-the <a href="#smooksprocessor">SmooksProcessor</a> to achieve this.</p>
-</div>
-<div class="sect3">
-<h4 id="options">Options</h4>
-<div class="paragraph">
-<p>An Apache Component can take options that are specified after the Smooks
-configuration file. Currently only one option is available for the
-SmooksComponent:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>reportPath</strong> which is path (including the file name) to the Smooks
-Excecution Report to be generated.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="smooksdataformat">SmooksDataformat</h3>
-<div class="paragraph">
-<p>SmooksDataFormat is a Camel DataFormat which is capable of transforming
-from one dataformat to another and back again. You would use this when
-you are only interested in transforming from one format to another and
-not interested in other Smooks features.</p>
-</div>
-<div class="paragraph">
-<p>Below is an example of using SmooksDataFormat to transform a comma
-separated value string into a java.util.List of Customer object
-instances:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">SmooksDataFormat</span> <span class="n">sdf</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SmooksDataFormat</span><span class="o">(</span><span class="s">"csv-smooks-unmarshal-config.xml"</span><span class="o">);</span>
-<span class="n">from</span><span class="o">(</span><span class="s">"direct:unmarshal"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">unmarshal</span><span class="o">(</span><span class="n">sdf</span><span class="o">)</span>
-<span class="o">.</span><span class="na">convertBodyTo</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"mock:result"</span><span class="o">);</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="smooksprocessor">SmooksProcessor</h3>
-<div class="paragraph">
-<p>Using the <em>SmooksProcessor</em> gives you full control over Smooks, for
-example if you want to programatically create the underlying Smooks
-instance you’d use the SmooksProcessor. When using the SmooksProcessor
-you can pass a Smooks instance to its constructor and prior to that
-programmatically configure Smooks.</p>
-</div>
-<div class="paragraph">
-<p>Below is an example of using the SmooksProcessor in a Camel route:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="s">"edi-to-xml-smooks-config.xml"</span><span class="o">);</span>
-<span class="nc">ExecutionContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
-<span class="o">...</span>
-<span class="nc">SmooksProcessor</span> <span class="n">processor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SmooksProcessor</span><span class="o">(</span><span class="n">smooks</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
-
-<span class="n">from</span><span class="o">(</span><span class="s">"file://input?noop=true"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="n">processor</span><span class="o">)</span>
-<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"mock:result"</span><span class="o">);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Similar to the SmooksComponent we have not specified the result type
-that Smooks produces (if any that is). Instead this is expressed in the
-Smooks configuration using the <a href="#exporting-results">exports</a> element
-or you can do the same programmatically like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">();</span>
-<span class="nc">ExecutionContext</span> <span class="n">context</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
-<span class="n">smooks</span><span class="o">.</span><span class="na">setExports</span><span class="o">(</span><span class="k">new</span> <span class="nc">Exports</span><span class="o">(</span><span class="nc">StringResult</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
-<span class="nc">SmooksProcessor</span> <span class="n">processor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SmooksProcessor</span><span class="o">(</span><span class="n">smooks</span><span class="o">,</span> <span class="n">context</span><span class="o">);</span>
-<span class="o">...</span>
-<span class="n">from</span><span class="o">(</span><span class="s">"file://input?noop=true"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="n">processor</span><span class="o">)</span>
-<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">"mock:result"</span><span class="o">);</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="apache_camel_examples">Apache Camel Examples</h3>
-<div class="paragraph">
-<p>Please see the
-<a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/camel">Apache
-Camel examples</a> in the examples page.</p>
 </div>
 </div>
 </div>
