@@ -68,6 +68,7 @@
 <li><a href="#simple_example">Simple Example</a></li>
 <li><a href="#smooks_resources_visitors_etc">Smooks Resources (Visitors, etc&#8230;&#8203;)</a></li>
 <li><a href="#cartridge">Cartridge</a></li>
+<li><a href="#pipeline">Pipeline</a></li>
 <li><a href="#filter">Filter</a></li>
 <li><a href="#the_bean_context">The Bean Context</a></li>
 <li><a href="#multiple_outputsresults">Multiple Outputs/Results</a></li>
@@ -97,7 +98,6 @@
 <li><a href="#rules">Rules</a></li>
 <li><a href="#rule_based_validation">Rule Based Validation</a></li>
 <li><a href="#templating">Templating</a></li>
-<li><a href="#pipeline">Pipeline</a></li>
 <li><a href="#exporting_results">Exporting Results</a></li>
 </ul>
 </li>
@@ -940,6 +940,175 @@ provide "ready to use" support for a specific type of XML processing.</p>
 <p>For a complete list of the cartridges supported by Smooks, see the
 <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges">Cartridges
 page</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="pipeline">Pipeline</h3>
+<div class="paragraph">
+<p>A pipeline is a flexible, yet simple, Smooks construct that isolates the
+processing of a targeted event from its main processing as well as from
+the processing of other pipelines. In practice, this means being able to
+compose any series of transformations on an event outside the main
+execution context before directing the pipeline output to the execution
+result stream or to other destinations. With pipelines, you can enrich
+data, rename/remove elements or attributes, and much more.</p>
+</div>
+<div class="paragraph">
+<p>Under the hood, a pipeline is just another instance of Smooks, made
+self-evident from the Smooks config element declaring a pipeline:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span><span class="nt">&gt;</span>
+
+   <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"..."</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;core:action&gt;</span>
+           ...
+       <span class="nt">&lt;/core:action&gt;</span>
+       <span class="nt">&lt;core:config&gt;</span>
+           <span class="nt">&lt;smooks-resource-list&gt;</span>
+               ...
+           <span class="nt">&lt;/smooks-resource-list&gt;</span>
+       <span class="nt">&lt;/core:config&gt;</span>
+   <span class="nt">&lt;/core:smooks&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>core:smooks</em> fires a nested Smooks execution whenever an event in the
+stream matches the <em>filterSourceOn</em> selector. The pipeline within the
+inner <em>smooks-resource-list</em> element visits the selected event and its
+child events. It is worth highlighting that the inner
+<em>smooks-resource-list</em> element behaves identically to the outer one, and
+therefore, it accepts resources like visitors, readers, and even
+pipelines (a pipeline within a pipeline!). Moreover, a pipeline is
+transparent to its nested resources: a resource’s behaviour remains the
+same whether it’s declared inside a pipeline or outside it.</p>
+</div>
+<div class="paragraph">
+<p>The optional <em>core:action</em> element tells the nested Smooks instance what
+to do with the pipeline’s output. The next sections list the supported
+actions.</p>
+</div>
+<div class="sect3">
+<h4 id="inline">Inline</h4>
+<div class="paragraph">
+<p>Merges the pipeline&#8217;s output with the result stream. Config Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml">...
+<span class="nt">&lt;core:action&gt;</span>
+    <span class="nt">&lt;core:inline&gt;</span>
+        ...
+    <span class="nt">&lt;/core:inline&gt;</span>
+<span class="nt">&lt;/core:action&gt;</span>
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As described in the subsequent sections, an inline action replaces,
+prepends, or appends content.</p>
+</div>
+<div class="sect4">
+<h5 id="replace">Replace</h5>
+<div class="paragraph">
+<p>Substitutes the selected fragment with the pipeline output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml">...
+<span class="nt">&lt;core:inline&gt;</span>
+    <span class="nt">&lt;core:replace/&gt;</span>
+<span class="nt">&lt;/core:inline&gt;</span>
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="prepend_before">Prepend Before</h5>
+<div class="paragraph">
+<p>Adds the output before the selector start tag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
+    <span class="nt">&lt;core:prepend-before/&gt;</span>
+<span class="nt">&lt;/core:inline&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="prepend_after">Prepend After</h5>
+<div class="paragraph">
+<p>Adds the output after the selector start tag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
+    <span class="nt">&lt;core:prepend-after/&gt;</span>
+<span class="nt">&lt;/core:inline&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="append_before">Append Before</h5>
+<div class="paragraph">
+<p>Adds the output before the selector end tag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
+    <span class="nt">&lt;core:append-before/&gt;</span>
+<span class="nt">&lt;/core:inline&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="append_after">Append After</h5>
+<div class="paragraph">
+<p>Adds the output after the selector end tag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
+    <span class="nt">&lt;core:append-after/&gt;</span>
+<span class="nt">&lt;/core:inline&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="bind_to">Bind To</h4>
+<div class="paragraph">
+<p>Binds the output to the execution context’s bean store:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml">...
+<span class="nt">&lt;core:action&gt;</span>
+    <span class="nt">&lt;core:bind-to</span> <span class="na">id=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/core:action&gt;</span>
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="output_to">Output To</h4>
+<div class="paragraph">
+<p>Directs the output to a different stream other than the result stream:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml">...
+<span class="nt">&lt;core:action&gt;</span>
+    <span class="nt">&lt;core:output-to</span> <span class="na">outputStreamResource=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/core:action&gt;</span>
+...</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -5732,175 +5901,6 @@ See full example in the <a href="https://github.com/smooks/smooks-examples/tree/
 </div>
 </div>
 <div class="sect2">
-<h3 id="pipeline">Pipeline</h3>
-<div class="paragraph">
-<p>A pipeline is a flexible, yet simple, Smooks construct that isolates the
-processing of a targeted event from its main processing as well as from
-the processing of other pipelines. In practice, this means being able to
-compose any series of transformations on an event outside the main
-execution context before directing the pipeline output to the execution
-result stream or to other destinations. With pipelines, you can enrich
-data, rename/remove elements or attributes, and much more.</p>
-</div>
-<div class="paragraph">
-<p>Under the hood, a pipeline is just another instance of Smooks, made
-self-evident from the Smooks config element declaring a pipeline:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span><span class="nt">&gt;</span>
-
-   <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"..."</span><span class="nt">&gt;</span>
-       <span class="nt">&lt;core:action&gt;</span>
-           ...
-       <span class="nt">&lt;/core:action&gt;</span>
-       <span class="nt">&lt;core:config&gt;</span>
-           <span class="nt">&lt;smooks-resource-list&gt;</span>
-               ...
-           <span class="nt">&lt;/smooks-resource-list&gt;</span>
-       <span class="nt">&lt;/core:config&gt;</span>
-   <span class="nt">&lt;/core:smooks&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><em>core:smooks</em> fires a nested Smooks execution whenever an event in the
-stream matches the <em>filterSourceOn</em> selector. The pipeline within the
-inner <em>smooks-resource-list</em> element visits the selected event and its
-child events. It is worth highlighting that the inner
-<em>smooks-resource-list</em> element behaves identically to the outer one, and
-therefore, it accepts resources like visitors, readers, and even
-pipelines (a pipeline within a pipeline!). Moreover, a pipeline is
-transparent to its nested resources: a resource’s behaviour remains the
-same whether it’s declared inside a pipeline or outside it.</p>
-</div>
-<div class="paragraph">
-<p>The optional <em>core:action</em> element tells the nested Smooks instance what
-to do with the pipeline’s output. The next sections list the supported
-actions.</p>
-</div>
-<div class="sect3">
-<h4 id="inline">Inline</h4>
-<div class="paragraph">
-<p>Merges the pipeline&#8217;s output with the result stream. Config Example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml">...
-<span class="nt">&lt;core:action&gt;</span>
-    <span class="nt">&lt;core:inline&gt;</span>
-        ...
-    <span class="nt">&lt;/core:inline&gt;</span>
-<span class="nt">&lt;/core:action&gt;</span>
-...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As described in the subsequent sections, an inline action replaces,
-prepends, or appends content.</p>
-</div>
-<div class="sect4">
-<h5 id="replace">Replace</h5>
-<div class="paragraph">
-<p>Substitutes the selected fragment with the pipeline output:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml">...
-<span class="nt">&lt;core:inline&gt;</span>
-    <span class="nt">&lt;core:replace/&gt;</span>
-<span class="nt">&lt;/core:inline&gt;</span>
-...</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="prepend_before">Prepend Before</h5>
-<div class="paragraph">
-<p>Adds the output before the selector start tag:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
-    <span class="nt">&lt;core:prepend-before/&gt;</span>
-<span class="nt">&lt;/core:inline&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="prepend_after">Prepend After</h5>
-<div class="paragraph">
-<p>Adds the output after the selector start tag:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
-    <span class="nt">&lt;core:prepend-after/&gt;</span>
-<span class="nt">&lt;/core:inline&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="append_before">Append Before</h5>
-<div class="paragraph">
-<p>Adds the output before the selector end tag:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
-    <span class="nt">&lt;core:append-before/&gt;</span>
-<span class="nt">&lt;/core:inline&gt;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="append_after">Append After</h5>
-<div class="paragraph">
-<p>Adds the output after the selector end tag:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;core:inline&gt;</span>
-    <span class="nt">&lt;core:append-after/&gt;</span>
-<span class="nt">&lt;/core:inline&gt;</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="bind_to">Bind To</h4>
-<div class="paragraph">
-<p>Binds the output to the execution context’s bean store:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml">...
-<span class="nt">&lt;core:action&gt;</span>
-    <span class="nt">&lt;core:bind-to</span> <span class="na">id=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/core:action&gt;</span>
-...</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="output_to">Output To</h4>
-<div class="paragraph">
-<p>Directs the output to a different stream other than the result stream:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml">...
-<span class="nt">&lt;core:action&gt;</span>
-    <span class="nt">&lt;core:output-to</span> <span class="na">outputStreamResource=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/core:action&gt;</span>
-...</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
 <h3 id="exporting_results">Exporting Results</h3>
 <div class="paragraph">
 <p>When using Smooks standalone you are in full control of the type of
@@ -7394,10 +7394,10 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <div class="sect5">
 <h6 id="routing_to_jms">Routing to JMS</h6>
 <div class="paragraph">
-<p>JMS routing is performed via the <code>&lt;jms:router]</code> configuration from the <code>https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd</code> configuration namespace.</p>
+<p>JMS routing is performed via the <code>&lt;jms:router&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd</code> configuration namespace.</p>
 </div>
 <div class="paragraph">
-<p>The following is an example <code>&lt;jms:router]</code> configuration that routes an <code>orderItem_xml</code> bean to a JMS Queue named <code>smooks.exampleQueue</code> (also read the "Routing to File" example):</p>
+<p>The following is an example <code>&lt;jms:router&gt;</code> configuration that routes an <code>orderItem_xml</code> bean to a JMS Queue named <code>smooks.exampleQueue</code> (also read the "Routing to File" example):</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -7451,15 +7451,6 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
     <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="license">License</h6>
-<div class="paragraph">
-<p>Smooks Routing Cartridge is open source and licensed under the terms of the Apache License Version 2.0, or the GNU Lesser General Public License version 3.0 or later. You may use Smooks Routing Cartridge according to either of these licenses as is most appropriate for your project.</p>
-</div>
-<div class="paragraph">
-<p><code>SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later</code></p>
 </div>
 </div>
 <div class="sect4">
