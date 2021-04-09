@@ -90,7 +90,6 @@
 <li><a href="#json_cartridge">JSON Cartridge</a></li>
 <li><a href="#yaml_cartridge">YAML Cartridge</a></li>
 <li><a href="#javabean_cartridge">JavaBean Cartridge</a></li>
-<li><a href="#string_manipulation_functions_for_readers">String manipulation functions for readers</a></li>
 </ul>
 </li>
 <li><a href="#validating_data">Validating Data</a>
@@ -2130,9 +2129,9 @@ Multi Record Field Definitions are not supported when the fields are defined in 
 </div>
 </div>
 <div class="sect4">
-<h5 id="string_manipulation_functions">String manipulation functions</h5>
+<h5 id="string_manipulation_functions">String Manipulation Functions</h5>
 <div class="paragraph">
-<p>String manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after field name, separated with a question mark.</p>
+<p>Like the fixed-length cartridge, string manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after field name, separated with a question mark.</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -2147,7 +2146,7 @@ Multi Record Field Definitions are not supported when the fields are defined in 
 </div>
 </div>
 <div class="paragraph">
-<p>Take a look at the <a href="#string-manipulation-functions-for-readers">#String manipulation functions for readers</a> chapter for the available functions and how the functions can be chained.</p>
+<p>Take a look at the fixed-length cartridge&#8217;s <a href="https://github.com/smooks/smooks-fixed-length-cartridge/blob/master/README.adoc#string-manipulation-functions">string manipulation functions</a> to learn about the available functions and how the functions can be chained.</p>
 </div>
 </div>
 <div class="sect4">
@@ -2385,7 +2384,7 @@ Mike,Fennelly,Male,2,Ireland</pre>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:fl=</span><span class="s">"https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd"</span><span class="nt">&gt;</span>
 
-    <span class="c">&lt;!-- Configure the Fixed length to parse the message into a stream of SAX events. --&gt;</span>
+    <span class="c">&lt;!-- Configure the fixed-length reader to parse the message into a stream of SAX events. --&gt;</span>
     <span class="nt">&lt;fl:reader</span> <span class="na">fields=</span><span class="s">"firstname[10],lastname[10],gender[1],age[2],country[2]"</span> <span class="na">skipLines=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
@@ -2427,13 +2426,10 @@ Maurice  Zeijen     M 27 NL</pre>
 <div class="sect3">
 <h4 id="defining_fields_2">Defining fields</h4>
 <div class="paragraph">
-<p>Fields are defined in the 'fields' attribute as a comma separated list
-of names and field lengths. The field lengths must be defined between
-the brackets after the field name (see the example above).</p>
+<p>Fields are defined in the 'fields' attribute as a comma separated list of names and field lengths. The field lengths must be defined between the brackets after the field name (see the example above).</p>
 </div>
 <div class="paragraph">
-<p>The field names must follow the same naming rules like XML element
-names:</p>
+<p>The field names must follow the same naming rules like XML element names:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2452,17 +2448,12 @@ names:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>By setting the <code>rootElementName</code> and <code>recordElementName</code> attributes you
-can modify the and element names. The same naming rules apply for these
-names.</p>
+<p>By setting the <code>rootElementName</code> and <code>recordElementName</code> attributes you can modify the and element names. The same naming rules apply for these names.</p>
 </div>
 <div class="sect4">
 <h5 id="string_manipulation_functions_2">String manipulation functions</h5>
 <div class="paragraph">
-<p>String manipulation functions can be defined per field. These functions
-are executed before that the data is converted into SAX events. The
-functions are defined after the field length definitions and are
-optionally separated with a question mark.</p>
+<p>String manipulation functions can be defined per field. These functions are executed before that the data is converted into SAX events. The functions are defined after the field length definitions and are optionally separated with a question mark.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2470,23 +2461,51 @@ optionally separated with a question mark.</p>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:fl=</span><span class="s">"https://www.smooks.org/xsd/smooks/fixed-length-1.4.xsd"</span><span class="nt">&gt;</span>
 
-    <span class="c">&lt;!-- Configure the fixed length reader to parse the message into a stream of SAX events.  --&gt;</span>
+    <span class="c">&lt;!-- Configure the fixed-length reader to parse the message into a stream of SAX events.  --&gt;</span>
     <span class="nt">&lt;fl:reader</span> <span class="na">fields=</span><span class="s">"firstname[10]?trim,lastname[10]trim.capitalize,gender[1],age[2],country[2]"</span> <span class="na">skipLines=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Take a look at the <a href="#string-manipulation-functions-for-readers">#String manipulation functions for readers</a> chapter for the available functions and how the functions can be chained.</p>
+<p>The following functions are available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>upper_case</code>: Returns the upper case version of the string.</p>
+</li>
+<li>
+<p><code>lower_case</code>: Returns the lower case version of the string.</p>
+</li>
+<li>
+<p><code>cap_first</code>: Returns the string with the very first word of the string capitalized.</p>
+</li>
+<li>
+<p><code>uncap_first</code>: Returns the string with the very first word of the string un-capitalized. The opposite to <code>cap_first</code>.</p>
+</li>
+<li>
+<p><code>capitalize</code>: Returns the string with all words capitalized.</p>
+</li>
+<li>
+<p><code>trim</code>: Returns the string without leading and trailing white-spaces.</p>
+</li>
+<li>
+<p><code>left_trim</code>: Returns the string without leading white-spaces.</p>
+</li>
+<li>
+<p><code>right_trim</code>: Returns the string without trailing white-spaces.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Functions can be chained via the point separator: <code>trim.upper_case</code>. It depends on the reader how the functions are defined per field. Please look at the individual chapters of the readers for that information.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="ignoring_fields_2">Ignoring Fields</h5>
 <div class="paragraph">
-<p>Characters ranges of a fixed length record can be ignored by specifying
-the <code>$ignore$[10]</code> token in the fields configuration value. You must
-specify the number of characters that need be ignored, just as a normal
-field.</p>
+<p>Characters ranges of a fixed-length record can be ignored by specifying the <code>$ignore$[10]</code> token in the fields configuration value. You must specify the number of characters that need be ignored, just as a normal field.</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -2503,15 +2522,12 @@ field.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="binding_fixed_length_records_to_java">Binding fixed length Records to Java</h4>
+<h4 id="binding_fixed_length_records_to_java">Binding Fixed-Length Records to Java</h4>
 <div class="paragraph">
-<p>Smooks v1.2 has added support for making the binding of fixed length
-records to Java Objects a very trivial task. You don&#8217;t need to use the
-Javabean Cartridge directly (i.e. Smooks main Java binding
-functionality).</p>
+<p>Smooks v1.2 has added support for making the binding of fixed-length records to Java Objects a very trivial task. You don&#8217;t need to use the Javabean Cartridge directly (i.e. Smooks main Java binding functionality).</p>
 </div>
 <div class="paragraph">
-<p>A Persons fixed length record set such as:</p>
+<p>A Persons fixed-length record set such as:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -2566,7 +2582,7 @@ Maurice  Zeijen     M 27 NL</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Smooks also supports creation of maps from the fixed length record set:</p>
+<p>Smooks also supports creation of maps from the fixed-length record set:</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -2599,7 +2615,7 @@ Maurice  Zeijen     M 27 NL</pre>
 </div>
 </div>
 <div class="paragraph">
-<p><a href="#virtual-object-models-maps&#8212;&#8203;lists">Virtual Models</a> are also supported, so you can define the <code>class</code> attribute as a <code>java.util.Map</code> and have the fixed length field values bound into Map instances, which are in turn added to a list or a map.</p>
+<p><a href="#virtual-object-models-maps&#8212;&#8203;lists">Virtual Models</a> are also supported, so you can define the <code>class</code> attribute as a <code>java.util.Map</code> and have the fixed-length field values bound into Map instances, which are in turn added to a list or a map.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2626,13 +2642,13 @@ Maurice  Zeijen     M 27 NL</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Of course configuring the Java Binding is totally optional. The Smooks instance could instead (or in conjunction with) be programmatically configured with other visitor for carrying out other forms of processing on the fixed length record set.</p>
+<p>Of course configuring the Java Binding is totally optional. The Smooks instance could instead (or in conjunction with) be programmatically configured with other visitor for carrying out other forms of processing on the fixed-length record set.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="fixed_length_list_and_map_binders">Fixed length List and Map Binders</h5>
+<h5 id="fixed_length_list_map_binders">Fixed-Length List &amp; Map Binders</h5>
 <div class="paragraph">
-<p>If you&#8217;re just interested in binding fixed length Records directly onto a List or Map of a Java type that reflects the data in your fixed length records, then you can use the <code>FixedLengthListBinder</code> or <code>FixedLengthMapBinder</code> classes.</p>
+<p>If you&#8217;re just interested in binding fixed-length records directly onto a List or Map of a Java type that reflects the data in your fixed-length records, then you can use the <code>FixedLengthListBinder</code> or <code>FixedLengthMapBinder</code> classes.</p>
 </div>
 <div class="paragraph">
 <p>FixedLengthListBinder:</p>
@@ -5082,52 +5098,6 @@ example.</p>
 <pre>xmlns:jb="https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="string_manipulation_functions_for_readers">String manipulation functions for readers</h3>
-<div class="paragraph">
-<p>The CSV and Fixed Length readers support string manipulation functions
-that are executed on the input data before that the data is converted
-into SAX events. The following functions are available:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>upper_case</strong>: Returns the upper case version of the string.</p>
-</li>
-<li>
-<p><strong>lower_case</strong>: Returns the lower case version of the string.</p>
-</li>
-<li>
-<p><strong>cap_first</strong>: Returns the string with the very first word of the string
-capitalized.</p>
-</li>
-<li>
-<p><strong>uncap_first</strong>: Returns the string with the very first word of the
-string un-capitalized. The opposite to <strong>cap_first</strong>.</p>
-</li>
-<li>
-<p><strong>capitalize</strong>: Returns the string with all words capitalized.</p>
-</li>
-<li>
-<p><strong>trim</strong>: Returns the string without leading and trailing white-spaces.</p>
-</li>
-<li>
-<p><strong>left_trim</strong>: Returns the string without leading white-spaces.</p>
-</li>
-<li>
-<p><strong>right_trim</strong>: Returns the string without trailing white-spaces.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Functions can be chained via the point separator. Example:
-<strong>trim.upper_case</strong></p>
-</div>
-<div class="paragraph">
-<p>It depends on the reader how the functions are defined per field. Please
-look at the individual chapters of the readers for that information.</p>
 </div>
 </div>
 </div>
