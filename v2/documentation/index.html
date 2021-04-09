@@ -5138,30 +5138,21 @@ look at the individual chapters of the readers for that information.</p>
 <div class="sect2">
 <h3 id="rules">Rules</h3>
 <div class="paragraph">
-<p>Rules in Smooks refer to a general concept and is not specific to any
-cartridge. A RuleProvider can be configured and referenced from other
-components. As of Smooks v1.2, the only Cartridge using Rules
-functionality is the <a href="#validation">Validation Cartridge</a>.</p>
+<p>Rules in Smooks refer to a general concept and is not specific to any cartridge. A RuleProvider can be configured and referenced from other components. As of Smooks v1.2, the only Cartridge using Rules functionality is the <a href="https://github.com/smooks/smooks-validation-cartridge/blob/master/README.adoc">Validation Cartridge</a>.</p>
 </div>
 <div class="paragraph">
-<p>So, lets start by looking at what rules in Smooks are, and how they are
-used.</p>
+<p>So, lets start by looking at what rules in Smooks are, and how they are used.</p>
 </div>
-<div class="sect3">
-<h4 id="rule_configuration">Rule Configuration</h4>
+<div class="sect4">
+<h5 id="rule_configuration">Rule Configuration</h5>
 <div class="paragraph">
-<p>Rules are centrally defined through "ruleBase" definitions. A single
-Smooks config can reference many "ruleBase" definitions. A rulesBase
-configuration as a <strong>name</strong>, a rule <strong>src</strong> and a rule <strong>provider</strong>. The
-format of the rule source ("src") is entirely dependent on the provider
-implementation. The only requirement is that the individual rules be
-named (unique within the context of a single source) so as they can be
-referenced by their name.</p>
+<p>Rules are centrally defined through <code>ruleBase</code> definitions. A single Smooks config can reference many <code>ruleBase</code> definitions. A <code>rulesBase</code> configuration consists of a <code>name</code>, a rule <code>src</code>, and a rule <code>provider</code>. The format of the rule source is entirely dependent on the provider implementation. The only requirement is that the individual rules be named (unique within the context of a single source) so as they can be referenced by their name.</p>
 </div>
 <div class="paragraph">
-<p>An example of a ruleBase configuration is as follows:</p>
+<p>An example of a <code>ruleBase</code> configuration is as follows:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -5177,37 +5168,30 @@ referenced by their name.</p>
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="rulebase_configuration_options">Rulebase Configuration Options</h5>
+<div class="sect5">
+<h6 id="rule_base_configuration_options">Rule Base Configuration Options</h6>
 <div class="paragraph">
-<p>The following are the configuration options for the configuration
-element.</p>
+<p>The following are the configuration options for the configuration element.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>name</strong>: Is used to reference this rule from other components, like
-from a validation configuration that we will look at shortly. Required.</p>
+<p><code>name</code>: Is used to reference this rule from other components, like from a validation configuration that we will look at shortly. Required.</p>
 </li>
 <li>
-<p><strong>src</strong>: Is a file or anything meaningful to the RuleProvider. This
-could be a file containing rules for example. Required.</p>
+<p><code>src</code>: Is a file or anything meaningful to the RuleProvider. This could be a file containing rules for example. Required.</p>
 </li>
 <li>
-<p><strong>provider</strong>: Is the actual provider implementation that you want to
-use. This is where the different technologies come into play. In the
-above configuration we have one RuleProvider that uses regular
-expression. As you might have guessed you can specify multiple ruleBase
-element and have as many RuleProviders you need. Required.</p>
+<p><code>provider</code>: Is the actual provider implementation that you want to use. This is where the different technologies come into play. In the above configuration we have one RuleProvider that uses regular expression. As you might have guessed you can specify multiple ruleBase element and have as many RuleProviders you need. Required.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="ruleprovider_implementations">RuleProvider Implementations</h4>
+<div class="sect4">
+<h5 id="ruleprovider_implementations">RuleProvider Implementations</h5>
 <div class="paragraph">
-<p>Rule Providers implement the <strong>org.smooks.rules.RuleProvider</strong> interface.</p>
+<p>Rule Providers implement the <code>org.smooks.rules.RuleProvider</code> interface.</p>
 </div>
 <div class="paragraph">
 <p>Smooks v1.2 supports 2 RuleProvider implementations out-of-the-box:</p>
@@ -5223,22 +5207,18 @@ element and have as many RuleProviders you need. Required.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>You can easily create custom RuleProvider implementations. Future
-versions of Smooks will probably include support for e.g. a Drools
-RuleProvider.</p>
+<p>You can easily create custom RuleProvider implementations. Future versions of Smooks will probably include support for e.g. a Drools RuleProvider.</p>
 </div>
-<div class="sect4">
-<h5 id="regexprovider">RegexProvider</h5>
+<div class="sect5">
+<h6 id="regexprovider">RegexProvider</h6>
 <div class="paragraph">
-<p>As it&#8217;s name suggests, the RegexProvider is based on regular expression.
-It allows you to define low level rules specific to the format of
-specific fields of data in the message being filtered e.g. that a
-particular field is a valid email address.</p>
+<p>As it&#8217;s name suggests, the RegexProvider is based on regular expression.It allows you to define low level rules specific to the format of specific fields of data in the message being filtered e.g. that a particular field is a valid email address.</p>
 </div>
 <div class="paragraph">
-<p>Configuration of a Regex ruleBase would look like this:</p>
+<p>Configuration of a Regex <code>ruleBase</code> would look like this:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -5253,22 +5233,20 @@ particular field is a valid email address.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Regex expressions are defined in standard .properties file format. An
-example of a "customer.properties" Regex rule definition file (from the
-above example) might be as follows:</p>
+<p>Regex expressions are defined in standard <em>.properties</em> file format. An example of a <em>customer.properties</em> Regex rule definition file (from the above example) might be as follows:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
+<div class="title">customer.properties</div>
 <div class="content">
-<pre># Customer data rules...
-customerId=[A-Z][0-9]{5}
-customerName=[A-Z][a-z]*, [A-Z][a-z]</pre>
+<pre class="rouge highlight"><code data-lang="properties"><span class="c"># Customer data rules...
+</span><span class="py">customerId</span><span class="p">=</span><span class="s">[A-Z][0-9]{5}</span>
+<span class="py">customerName</span><span class="p">=</span><span class="s">[A-Z][a-z]*, [A-Z][a-z]</span></code></pre>
 </div>
 </div>
-<div class="sect5">
-<h6 id="useful_regular_expressions">Useful Regular Expressions</h6>
+<div class="sect6">
+<h7 id="useful_regular_expressions">Useful Regular Expressions</h7>
 <div class="paragraph">
-<p>The following is a list of "useful" regular expressions that we hope to
-grow over time as a resource for people use Regex Rules.</p>
+<p>The following is a list of "useful" regular expressions that we hope to grow over time as a resource for people use Regex Rules.</p>
 </div>
 <div class="paragraph">
 <p>See the <a href="http://regexlib.com/">Regular Expression Library</a>.</p>
@@ -5287,26 +5265,28 @@ grow over time as a resource for people use Regex Rules.</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="mvelprovider">MVELProvider</h5>
+<div class="sect5">
+<h6 id="mvelprovider">MVELProvider</h6>
 <div class="paragraph">
-<p>The <a href="http://mvel.documentnode.com/">MVEL</a> Provider allows rules to be
-defined as MVEL expressions. These expressions are executed on the
-contents of the Smooks Javabean bean context. That means they require
-Data to be bound (from the message being filtered) into Java objects in
-the Smooks bean context. This allows you to define more complex (higher
-level) rules on message fragments, such as "is the product in the
-targeted order item fragment within the age eligibility constraints of
-the customer specified in the order header details".</p>
+<p>The <a href="http://mvel.documentnode.com/">MVEL</a> Provider allows rules to be defined as MVEL expressions. These expressions are executed on the contents of the Smooks Javabean bean context. That means they require Data to be bound (from the message being filtered) into Java objects in the Smooks bean context. This allows you to define more complex (higher level) rules on message fragments, such as "is the product in the targeted order item fragment within the age eligibility constraints of the customer specified in the order header details".</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Be sure to read the section on <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc#java-binding">Java Binding</a>.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p><strong>Note</strong>: <em>Be sure to read the section on <a href="#java-binding">Java
-Binding</a></em>.</p>
-</div>
-<div class="paragraph">
-<p>Configuration of an MVEL ruleBase would look like this:</p>
+<p>Configuration of an MVEL <code>ruleBase</code> would look like this:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -5320,9 +5300,7 @@ Binding</a></em>.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>MVEL rules must be defined as Comma Separated Value (CSV) files. The
-easiest way to edit these files is through a Spreadsheet Application
-(e.g. OpenOffice or Excel). Each rule record contains 2 fields:</p>
+<p>MVEL rules must be defined as Comma Separated Value (CSV) files. The easiest way to edit these files is through a Spreadsheet Application (e.g. OpenOffice or Excel). Each rule record contains 2 fields:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -5335,15 +5313,44 @@ easiest way to edit these files is through a Spreadsheet Application
 </ol>
 </div>
 <div class="paragraph">
-<p>Comment/header rows can be added by prefixing the first field with a
-hash ('#') character.</p>
+<p>Comment/header rows can be added by prefixing the first field with a hash ('#') character.</p>
 </div>
 <div class="paragraph">
 <p>An example of an MVEL rule CSV file as seen in OpenOffice is as follows:</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="../assets/images/MVEL-csv-rulebase.png" alt="Image:MVEL-csv-rulebase.png"></span></p>
+<p><span class="image"><img src="https://raw.githubusercontent.com/smooks/smooks-rules-cartridge/master/docs/images/MVEL-csv-rulebase.png" alt="Image:MVEL-csv-rulebase.png"></span></p>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="maven_coordinates_9">Maven Coordinates</h5>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-rules-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="xml_namespace_7">XML Namespace</h5>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:rules="https://www.smooks.org/xsd/smooks/rules-1.1.xsd</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="license">License</h5>
+<div class="paragraph">
+<p>Smooks Rules Cartridge is open source and licensed under the terms of the Apache License Version 2.0, or the GNU Lesser General Public License version 3.0 or later. You may use Smooks Rules Cartridge according to either of these licenses as is most appropriate for your project.</p>
+</div>
+<div class="paragraph">
+<p><code>SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later</code></p>
 </div>
 </div>
 </div>
@@ -5887,7 +5894,7 @@ See full example in the <a href="https://github.com/smooks/smooks-examples/tree/
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_9">Maven Coordinates</h4>
+<h4 id="maven_coordinates_10">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -6496,7 +6503,7 @@ resolved by there position.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_10">Maven Coordinates</h5>
+<h5 id="maven_coordinates_11">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -6754,7 +6761,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_11">Maven Coordinates</h5>
+<h5 id="maven_coordinates_12">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -7441,7 +7448,7 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 </div>
 </div>
 <div class="sect5">
-<h6 id="maven_coordinates_12">Maven Coordinates</h6>
+<h6 id="maven_coordinates_13">Maven Coordinates</h6>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
