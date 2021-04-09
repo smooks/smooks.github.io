@@ -476,6 +476,153 @@ For a complete list of the cartridges supported by Smooks, see the
 https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges[Cartridges
 page].
 
+=== Pipeline
+
+A pipeline is a flexible, yet simple, Smooks construct that isolates the
+processing of a targeted event from its main processing as well as from
+the processing of other pipelines. In practice, this means being able to
+compose any series of transformations on an event outside the main
+execution context before directing the pipeline output to the execution
+result stream or to other destinations. With pipelines, you can enrich
+data, rename/remove elements or attributes, and much more.
+
+Under the hood, a pipeline is just another instance of Smooks, made
+self-evident from the Smooks config element declaring a pipeline:
+
+[source,xml]
+----
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">
+
+   <core:smooks filterSourceOn="...">
+       <core:action>
+           ...
+       </core:action>
+       <core:config>
+           <smooks-resource-list>
+               ...
+           </smooks-resource-list>
+       </core:config>
+   </core:smooks>
+
+</smooks-resource-list>
+----
+
+_core:smooks_ fires a nested Smooks execution whenever an event in the
+stream matches the _filterSourceOn_ selector. The pipeline within the
+inner _smooks-resource-list_ element visits the selected event and its
+child events. It is worth highlighting that the inner
+_smooks-resource-list_ element behaves identically to the outer one, and
+therefore, it accepts resources like visitors, readers, and even
+pipelines (a pipeline within a pipeline!). Moreover, a pipeline is
+transparent to its nested resources: a resource’s behaviour remains the
+same whether it’s declared inside a pipeline or outside it.
+
+The optional _core:action_ element tells the nested Smooks instance what
+to do with the pipeline’s output. The next sections list the supported
+actions.
+
+==== Inline
+
+Merges the pipeline's output with the result stream. Config Example:
+
+[source,xml]
+----
+...
+<core:action>
+    <core:inline>
+        ...
+    </core:inline>
+</core:action>
+...
+----
+
+As described in the subsequent sections, an inline action replaces,
+prepends, or appends content.
+
+===== Replace
+
+Substitutes the selected fragment with the pipeline output:
+
+[source,xml]
+----
+...
+<core:inline>
+    <core:replace/>
+</core:inline>
+...
+----
+
+===== Prepend Before
+
+Adds the output before the selector start tag:
+
+[source,xml]
+----
+<core:inline>
+    <core:prepend-before/>
+</core:inline>
+----
+
+===== Prepend After
+
+Adds the output after the selector start tag:
+
+[source,xml]
+----
+<core:inline>
+    <core:prepend-after/>
+</core:inline>
+----
+
+===== Append Before
+
+Adds the output before the selector end tag:
+
+[source,xml]
+----
+<core:inline>
+    <core:append-before/>
+</core:inline>
+----
+
+===== Append After
+
+Adds the output after the selector end tag:
+
+[source,xml]
+----
+<core:inline>
+    <core:append-after/>
+</core:inline>
+----
+
+==== Bind To
+
+Binds the output to the execution context’s bean store:
+
+[source,xml]
+----
+...
+<core:action>
+    <core:bind-to id="..."/>
+</core:action>
+...
+----
+
+==== Output To
+
+Directs the output to a different stream other than the result stream:
+
+[source,xml]
+----
+...
+<core:action>
+    <core:output-to outputStreamResource="..."/>
+</core:action>
+...
+----
+
 === Filter
 
 A Smooks filter is responsible for delivering generated events from a
@@ -1581,153 +1728,6 @@ the Validation Example].
 === Templating
 
 include::https://raw.githubusercontent.com/smooks/smooks-templating-cartridge/master/README.adoc[tag=smooks-templating-cartridge,leveloffset=2]
-
-=== Pipeline
-
-A pipeline is a flexible, yet simple, Smooks construct that isolates the
-processing of a targeted event from its main processing as well as from
-the processing of other pipelines. In practice, this means being able to
-compose any series of transformations on an event outside the main
-execution context before directing the pipeline output to the execution
-result stream or to other destinations. With pipelines, you can enrich
-data, rename/remove elements or attributes, and much more.
-
-Under the hood, a pipeline is just another instance of Smooks, made
-self-evident from the Smooks config element declaring a pipeline:
-
-[source,xml]
-----
-<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
-                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd">
-
-   <core:smooks filterSourceOn="...">
-       <core:action>
-           ...
-       </core:action>
-       <core:config>
-           <smooks-resource-list>
-               ...
-           </smooks-resource-list>
-       </core:config>
-   </core:smooks>
-
-</smooks-resource-list>
-----
-
-_core:smooks_ fires a nested Smooks execution whenever an event in the
-stream matches the _filterSourceOn_ selector. The pipeline within the
-inner _smooks-resource-list_ element visits the selected event and its
-child events. It is worth highlighting that the inner
-_smooks-resource-list_ element behaves identically to the outer one, and
-therefore, it accepts resources like visitors, readers, and even
-pipelines (a pipeline within a pipeline!). Moreover, a pipeline is
-transparent to its nested resources: a resource’s behaviour remains the
-same whether it’s declared inside a pipeline or outside it.
-
-The optional _core:action_ element tells the nested Smooks instance what
-to do with the pipeline’s output. The next sections list the supported
-actions.
-
-==== Inline
-
-Merges the pipeline's output with the result stream. Config Example:
-
-[source,xml]
-----
-...
-<core:action>
-    <core:inline>
-        ...
-    </core:inline>
-</core:action>
-...
-----
-
-As described in the subsequent sections, an inline action replaces,
-prepends, or appends content.
-
-===== Replace
-
-Substitutes the selected fragment with the pipeline output:
-
-[source,xml]
-----
-...
-<core:inline>
-    <core:replace/>  
-</core:inline>
-...
-----
-
-===== Prepend Before
-
-Adds the output before the selector start tag:
-
-[source,xml]
-----
-<core:inline>
-    <core:prepend-before/>  
-</core:inline>
-----
-
-===== Prepend After
-
-Adds the output after the selector start tag:
-
-[source,xml]
-----
-<core:inline>
-    <core:prepend-after/>  
-</core:inline>
-----
-
-===== Append Before
-
-Adds the output before the selector end tag:
-
-[source,xml]
-----
-<core:inline>
-    <core:append-before/>  
-</core:inline>
-----
-
-===== Append After
-
-Adds the output after the selector end tag:
-
-[source,xml]
-----
-<core:inline>
-    <core:append-after/>  
-</core:inline>
-----
-
-==== Bind To
-
-Binds the output to the execution context’s bean store:
-
-[source,xml]
-----
-...
-<core:action>
-    <core:bind-to id="..."/>
-</core:action>
-...
-----
-
-==== Output To
-
-Directs the output to a different stream other than the result stream:
-
-[source,xml]
-----
-...
-<core:action>
-    <core:output-to outputStreamResource="..."/>
-</core:action>
-...
-----
 
 === Exporting Results
 
