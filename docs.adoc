@@ -1382,29 +1382,6 @@ include::https://raw.githubusercontent.com/smooks/smooks-javabean-cartridge/mast
 
 :imagesdir:
 
-=== String manipulation functions for readers
-
-The CSV and Fixed Length readers support string manipulation functions
-that are executed on the input data before that the data is converted
-into SAX events. The following functions are available:
-
-* *upper_case*: Returns the upper case version of the string.
-* *lower_case*: Returns the lower case version of the string.
-* *cap_first*: Returns the string with the very first word of the string
-capitalized.
-* *uncap_first*: Returns the string with the very first word of the
-string un-capitalized. The opposite to *cap_first*.
-* *capitalize*: Returns the string with all words capitalized.
-* *trim*: Returns the string without leading and trailing white-spaces.
-* *left_trim*: Returns the string without leading white-spaces.
-* *right_trim*: Returns the string without trailing white-spaces.
-
-Functions can be chained via the point separator. Example:
-*trim.upper_case*
-
-It depends on the reader how the functions are defined per field. Please
-look at the individual chapters of the readers for that information.
-
 == Validating Data
 
 === Rules
