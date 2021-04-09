@@ -5344,92 +5344,65 @@ Be sure to read the section on <a href="https://github.com/smooks/smooks-javabea
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="license">License</h5>
-<div class="paragraph">
-<p>Smooks Rules Cartridge is open source and licensed under the terms of the Apache License Version 2.0, or the GNU Lesser General Public License version 3.0 or later. You may use Smooks Rules Cartridge according to either of these licenses as is most appropriate for your project.</p>
-</div>
-<div class="paragraph">
-<p><code>SPDX-License-Identifier: Apache-2.0 OR LGPL-3.0-or-later</code></p>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="rule_based_validation">Rule Based Validation</h3>
 <div class="paragraph">
-<p>The Smooks Validation Cartridge builds on the functionality provided by
-the <a href="#rules">Rules</a> Cartridge, to provide Rules based fragment
-validation.</p>
+<p>The Smooks Validation Cartridge builds on the functionality provided by the <a href="https://github.com/smooks/smooks-rules-cartridge/blob/master/README.adoc">rules cartridge</a>, to provide rules-based fragment validation.</p>
 </div>
 <div class="paragraph">
-<p>The type of validation provided by the components of the Smooks
-Validation Cartridge allows you to perform more detailed validation
-(over the likes of XSD/Relax) on message fragments. As with everything
-in Smooks, the Validation functionality is supported across all
-supported data formats. This means you can perform strong validation on
-not just XML data, but also on EDI, JSON, CSV, etc&#8230;&#8203;</p>
+<p>The type of validation provided by the components of the Smooks Validation Cartridge allows you to perform more detailed validation (over the likes of XSD/Relax) on message fragments. As with everything in Smooks, the Validation functionality is supported across all supported data formats. This means you can perform strong validation on not just XML data, but also on EDI, JSON, CSV, etc&#8230;&#8203;</p>
 </div>
 <div class="paragraph">
-<p>Validation configurations are defined by the
-<a href="https://www.smooks.org/xsd/smooks/validation-1.1.xsd" class="bare">https://www.smooks.org/xsd/smooks/validation-1.1.xsd</a> configuration
-namespace.</p>
+<p>Validation configurations are defined by the <code>https://www.smooks.org/xsd/smooks/validation-1.1.xsd configuration namespace</code>.</p>
 </div>
-<div class="sect3">
-<h4 id="validation_configuration">Validation Configuration</h4>
+<div class="sect4">
+<h5 id="validation_configuration">Validation Configuration</h5>
 <div class="paragraph">
-<p>Smooks supports a number of different Rule Provider types that can be
-used by the Validation Cartridge. They provide different levels of
-validation. These different forms of Validation are configured in
-exactly the same way. The Smooks Validation Cartridge sees a Rule
-Provider as an abstract resource that it can target at message fragments
-in order to perform validation on the data in that message fragment.</p>
+<p>Smooks supports a number of different Rule Provider types that can be used by the Validation Cartridge. They provide different levels of validation. These different forms of Validation are configured in exactly the same way. The Smooks Validation Cartridge sees a Rule Provider as an abstract resource that it can target at message fragments in order to perform validation on the data in that message fragment.</p>
 </div>
 <div class="paragraph">
-<p>A Validation rule configuration is very simple. You simply need to
-specify:</p>
+<p>A Validation rule configuration is very simple. You simply need to specify:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>executeOn</strong>: The fragment on which the rule is to be executed.</p>
+<p><code>executeOn</code>: The fragment on which the rule is to be executed.</p>
 </li>
 <li>
-<p><strong>excecuteOnNS</strong>: The fragment namespace (NS) that that 'executeOn'
+<p><code>excecuteOnNS</code>: The fragment namespace (NS) that that 'executeOn'
 belongs to.</p>
 </li>
 <li>
-<p><strong>name</strong>: The name of the rule to be applied. This is a
+<p><code>name</code>: The name of the rule to be applied. This is a
 <a href="#composite-rule-name">Composite Rule Name</a> that references a
-ruleBase and ruleName combination in a dot delimited format i.e.
-"ruleBaseName.ruleName".</p>
+<code>ruleBase</code> and <code>ruleName</code> combination in a dot delimited format i.e., <em>ruleBaseName.ruleName</em>.</p>
 </li>
 <li>
-<p><strong>onFail</strong>: The severity of a failed match for the Validation rule. See
+<p><code>onFail</code>: The severity of a failed match for the Validation rule. See
 <a href="#onfail">onFail</a> section for details.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>An example of a Validation rule configuratio0n would be as follows:</p>
+<p>An example of a validation rule configuration would be:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;validation:rule</span> <span class="na">executeOn=</span><span class="s">"order/header/email"</span> <span class="na">name=</span><span class="s">"regexAddressing.email"</span> <span class="na">onFail=</span><span class="s">"ERROR"</span> <span class="nt">/&gt;</span></code></pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="configuring_max_failures">Configuring Max Failures</h5>
+<div class="sect5">
+<h6 id="configuring_max_failures">Configuring Max Failures</h6>
 <div class="paragraph">
-<p>One can set a maximum number of validation failures per Smooks filter
-operation. An exception will be thrown if this max value is exceeded.
-Note that validations configured with <strong>OnFail.FATAL</strong> will always throw
-an exception and stop processing.</p>
+<p>One can set a maximum number of validation failures per Smooks filter operation. An exception will be thrown if this max value is exceeded.Note that validations configured with <code>onFail="FATAL"</code> will always throw an exception and stop processing.</p>
 </div>
 <div class="paragraph">
-<p>To configure the maximum validation failures add this following to you
-Smooks configuration:</p>
+<p>To configure the maximum validation failures add this following to you Smooks configuration:</p>
 </div>
 <div class="listingblock">
+<div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;params&gt;</span>
     <span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"validation.maxFails"</span><span class="nt">&gt;</span>5<span class="nt">&lt;/param&gt;</span>
@@ -5437,12 +5410,10 @@ Smooks configuration:</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="onfail">onFail</h5>
+<div class="sect5">
+<h6 id="onfail">onFail</h6>
 <div class="paragraph">
-<p>The onFail attribute in the validation configuration specified what
-action should be taken when a rule matches. This is all about reporting
-back valdiation failures.</p>
+<p>The <code>onFail</code> attribute in the validation configuration specified what action should be taken when a rule matches. This is all about reporting back validation failures.</p>
 </div>
 <div class="paragraph">
 <p>The following options are available:</p>
@@ -5450,31 +5421,24 @@ back valdiation failures.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>OK'</strong>: Save the validation as an ok validation. Calling
-ValidationResults.getOks will return all validation warnings. This can
-be useful for content based routing.</p>
+<p><code>OK</code>: Save the validation as an ok validation. Calling <code>ValidationResults.getOks</code> will return all validation warnings. This can be useful for content based routing.</p>
 </li>
 <li>
-<p><strong>WARN</strong>: Save the validation as a warning. Calling
-ValidationResults.getWarnings will return all validation warnings.</p>
+<p><code>WARN</code>: Save the validation as a warning. Calling <code>ValidationResults.getWarnings</code> will return all validation warnings.</p>
 </li>
 <li>
-<p><strong>ERROR</strong>: Save the validation as an error. Calling
-ValidationResults.getErrors will return all validation errors.</p>
+<p><code>ERROR</code>: Save the validation as an error. Calling <code>ValidationResults.getErrors</code> will return all validation errors.</p>
 </li>
 <li>
-<p><strong>FATAL</strong>: Will throw a ValidationException as soon as a validation
-failure occurs. Calling ValidationResults.getFatal will return the fatal
-validation failure.</p>
+<p><code>FATAL</code>: Will throw a <code>ValidationException</code> as soon as a validation failure occurs. Calling <code>ValidationResults.getFatal</code> will return the fatal validation failure.</p>
 </li>
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="composite_rule_name">Composite Rule Name</h5>
+<div class="sect5">
+<h6 id="composite_rule_name">Composite Rule Name</h6>
 <div class="paragraph">
-<p>When a RuleBase is references in Smooks you use a composite rule name in
-the following format:</p>
+<p>When a RuleBase is referenced in Smooks you use a composite rule name in the following format:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5482,26 +5446,20 @@ the following format:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>'<strong>ruleProviderName'</strong> Identifies the rule provider and maps to the 'name'
-attribute in the 'ruleBase' element.</p>
+<p><code>ruleProviderName</code> Identifies the rule provider and maps to the 'name' attribute in the 'ruleBase' element.</p>
 </div>
 <div class="paragraph">
-<p>'<strong>ruleName'</strong> Identifies a specific rule the rule provider knows about.
-This could be a rule defined in the 'src' file/resource.</p>
+<p><code>ruleName</code> Identifies a specific rule the rule provider knows about.This could be a rule defined in the 'src' file/resource.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="validation_results">Validation Results</h4>
+<div class="sect4">
+<h5 id="validation_results">Validation Results</h5>
 <div class="paragraph">
-<p>Validation results are captured by the Smooks.filterSource by specifying
-a ValidationResult instance in the filterSource method call. When the
-filterSource method returns, the ValidationResult instance will contain
-all validation data.</p>
+<p>Validation results are captured by the Smooks.filterSource by specifying a <code>ValidationResult</code> instance in the <code>filterSource</code> method call. When the <code>filterSource</code> method returns, the <code>ValidationResult</code> instance will contain all validation data.</p>
 </div>
 <div class="paragraph">
-<p>An example of executing Smooks in order to perform message fragment
-validation is as follows:</p>
+<p>An example of executing Smooks in order to perform message fragment validation is as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5514,35 +5472,16 @@ validation is as follows:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see from the above code, individual warning, error etc
-validation results are made available from the ValidationResult object
-in the form of <strong>OnFailResult</strong> instances. The OnFailResult object
-provides details about an individual failure.</p>
+<p>As you can see from the above code, individual warning, error, and other validation results are made available from the <code>ValidationResult</code> object in the form of <code>OnFailResult</code> instances. The <code>OnFailResult</code> object provides details about an individual failure.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="localized_validation_messages">Localized Validation Messages</h4>
+<div class="sect4">
+<h5 id="localized_validation_messages">Localized Validation Messages</h5>
 <div class="paragraph">
-<p>The Validation Cartridge provides support for specifying localized
-messages relating to Validation failures. These messages can be defined
-in standard Java ResourceBundle files (.properties format). A convention
-is used here, based on the rule source name ("src"). The validation
-message bundle base name is derived from the rule source ("src") by
-dropping the rule source file extension and adding an extra folder named
-"i18n" e.g. for an MVEL ruleBase source of
-"/org/smooks/validation/order/rules/order-rules.csv", the corresponding
-validation message bundle base name would be
-"/org/smooks/validation/order/rules/i18n/order-rules".</p>
+<p>The Validation Cartridge provides support for specifying localized messages relating to Validation failures. These messages can be defined in standard Java ResourceBundle files (<em>.properties</em> format). A convention is used here, based on the rule source name (<code>src</code>). The validation message bundle base name is derived from the rule source by dropping the rule source file extension and adding an extra folder named <em>i18n</em> e.g. for an MVEL ruleBase source of <em>/org/smooks/validation/order/rules/order-rules.csv</em>, the corresponding validation message bundle base name would be "/org/smooks/validation/order/rules/i18n/order-rules".</p>
 </div>
 <div class="paragraph">
-<p>The validation cartridge supports application of <strong>FreeMarker templates</strong>
-on the localized messages, allowing the messages to contain contextual
-data from the bean context, as well as data about the actual rule
-failure. FreeMarker based messages must be prefixed with "ftl:" and the
-contextual data is references using the normal FreeMarker notation. The
-beans from the bean context can be referenced directly, while the
-RuleEvalResult and rule failure path can be referenced through the
-"ruleResult" and "path" beans.</p>
+<p>The validation cartridge supports application of FreeMarker templates on the localized messages, allowing the messages to contain contextual data from the bean context, as well as data about the actual rule failure. FreeMarker based messages must be prefixed with <code>ftl:</code> and the contextual data is references using the normal FreeMarker notation. The beans from the bean context can be referenced directly, while the RuleEvalResult and rule failure path can be referenced through the <code>ruleResult</code> and <code>path</code> beans.</p>
 </div>
 <div class="paragraph">
 <p>Example message using RegexProvider rules:</p>
@@ -5553,11 +5492,23 @@ RuleEvalResult and rule failure path can be referenced through the
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="example_3">Example</h4>
+<div class="sect4">
+<h5 id="example_3">Example</h5>
 <div class="paragraph">
-<p><a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/validation-basic">See
-the Validation Example</a>.</p>
+<p><a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/validation-basic">See the Validation Example</a>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="maven_coordinates_10">Maven Coordinates</h5>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-validation-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -5894,7 +5845,7 @@ See full example in the <a href="https://github.com/smooks/smooks-examples/tree/
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_10">Maven Coordinates</h4>
+<h4 id="maven_coordinates_11">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -6503,7 +6454,7 @@ resolved by there position.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_11">Maven Coordinates</h5>
+<h5 id="maven_coordinates_12">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -6761,7 +6712,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_12">Maven Coordinates</h5>
+<h5 id="maven_coordinates_13">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -7448,7 +7399,7 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 </div>
 </div>
 <div class="sect5">
-<h6 id="maven_coordinates_13">Maven Coordinates</h6>
+<h6 id="maven_coordinates_14">Maven Coordinates</h6>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
