@@ -50,18 +50,83 @@
         <h1>User Guide</h1>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel2">
+<ul class="sectlevel1">
 <li><a href="#getting_started">Getting Started</a></li>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#basics">Basics</a></li>
-<li><a href="#consuming_input_data">Consuming Input Data</a></li>
-<li><a href="#enriching_output_data">Enriching Output Data</a></li>
-<li><a href="#routing_output_data">Routing Output Data</a></li>
+<li><a href="#introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#why_smooks">Why Smooks?</a></li>
+<li><a href="#fragment_based_processing">Fragment-Based Processing</a></li>
+<li><a href="#whats_new_in_smooks_2">What&#8217;s new in Smooks 2?</a></li>
+<li><a href="#migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</a></li>
+<li><a href="#faqs">FAQs</a></li>
+<li><a href="#maven">Maven</a></li>
+</ul>
+</li>
+<li><a href="#basics">Basics</a>
+<ul class="sectlevel2">
+<li><a href="#basic_processing_model">Basic Processing Model</a></li>
+<li><a href="#simple_example">Simple Example</a></li>
+<li><a href="#smooks_resources_visitors_etc">Smooks Resources (Visitors, etc&#8230;&#8203;)</a></li>
+<li><a href="#cartridge">Cartridge</a></li>
+<li><a href="#pipeline">Pipeline</a></li>
+<li><a href="#filter">Filter</a></li>
+<li><a href="#the_bean_context">The Bean Context</a></li>
+<li><a href="#multiple_outputsresults">Multiple Outputs/Results</a></li>
+<li><a href="#checking_the_smooks_execution_process">Checking the Smooks Execution Process</a></li>
+<li><a href="#terminating_the_filtering_process">Terminating the Filtering Process</a></li>
+<li><a href="#global_configurations">Global Configurations</a></li>
+<li><a href="#filter_settings">Filter Settings</a></li>
+<li><a href="#configuration_modularization">Configuration Modularization</a></li>
+</ul>
+</li>
+<li><a href="#consuming_input_data">Consuming Input Data</a>
+<ul class="sectlevel2">
+<li><a href="#xml">XML</a></li>
+</ul>
+</li>
+<li><a href="#enriching_output_data">Enriching Output Data</a>
+<ul class="sectlevel2">
+<li><a href="#sql_support">SQL Support</a></li>
+<li><a href="#entity_persistence_frameworks">Entity Persistence Frameworks</a></li>
+<li><a href="#data_access_object_support">Data Access Object Support</a></li>
+</ul>
+</li>
+<li><a href="#routing_output_data">Routing Output Data</a>
+<ul class="sectlevel2">
+<li><a href="#file">File</a></li>
+<li><a href="#database">Database</a></li>
+<li><a href="#java">Java</a></li>
+<li><a href="#jms">JMS</a></li>
+<li><a href="#esb_support">ESB Support</a></li>
+<li><a href="#apache_camel">Apache Camel</a></li>
+</ul>
+</li>
 <li><a href="#exporting_results">Exporting Results</a></li>
-<li><a href="#performance_tuning">Performance Tuning</a></li>
-<li><a href="#testing">Testing</a></li>
-<li><a href="#common_use_cases">Common use cases</a></li>
-<li><a href="#extending_smooks">Extending Smooks</a></li>
+<li><a href="#performance_tuning">Performance Tuning</a>
+<ul class="sectlevel2">
+<li><a href="#general">General</a></li>
+<li><a href="#smooks_cartridges">Smooks Cartridges</a></li>
+<li><a href="#javabean_cartridge">Javabean Cartridge</a></li>
+</ul>
+</li>
+<li><a href="#testing">Testing</a>
+<ul class="sectlevel2">
+<li><a href="#unit_testing">Unit Testing</a></li>
+</ul>
+</li>
+<li><a href="#common_use_cases">Common use cases</a>
+<ul class="sectlevel2">
+<li><a href="#processing_huge_messages_gbs">Processing Huge Messages (GBs)</a></li>
+<li><a href="#message_splitting_routing">Message Splitting &amp; Routing</a></li>
+</ul>
+</li>
+<li><a href="#extending_smooks">Extending Smooks</a>
+<ul class="sectlevel2">
+<li><a href="#configuring_smooks_components">Configuring Smooks Components</a></li>
+<li><a href="#implementing_a_source_reader">Implementing a Source Reader</a></li>
+<li><a href="#implementing_a_fragment_visitor">Implementing a Fragment Visitor</a></li>
+</ul>
+</li>
 <li><a href="#cartridges">Cartridges</a>
 <ul class="sectlevel2">
 <li><a href="#csv_cartridge">CSV Cartridge</a></li>
@@ -97,14 +162,17 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="getting_started">Getting Started</h3>
+<div class="sect1">
+<h2 id="getting_started">Getting Started</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>The easiest way to get started with Smooks is to download and try out some <a href="https://github.com/smooks/smooks-examples/tree/v2.0.0">examples</a>. The examples are the perfect base upon which to integrate Smooks into your application.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="introduction">Introduction</h3>
+</div>
+<div class="sect1">
+<h2 id="introduction">Introduction</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Smooks is an extensible Java framework for building XML and non-XML data (CSV, EDI, Java, etc&#8230;&#8203;) fragment-based applications.</p>
 </div>
@@ -141,8 +209,8 @@ functionality to perform Extract Transform Load (ETL) operations.</p>
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="why_smooks">Why Smooks?</h4>
+<div class="sect2">
+<h3 id="why_smooks">Why Smooks?</h3>
 <div class="paragraph">
 <p>Smooks started its life as a transformation solution. The main goal was
 to perform "fragment-based transformations" on messages. Supporting
@@ -197,8 +265,8 @@ rules based validation is also possible.</p>
 reader implementation for any data format.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="fragment_based_processing">Fragment-Based Processing</h4>
+<div class="sect2">
+<h3 id="fragment_based_processing">Fragment-Based Processing</h3>
 <div class="paragraph">
 <p>The primary design goals of Smooks are to provide a framework within
 which fragment-based processing can be performed on hierarchical data
@@ -227,8 +295,8 @@ that piece of logic can not only process (transform, etc&#8230;&#8203;) the oute
 nodes i.e. the fragment as a whole.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="whats_new_in_smooks_2">What&#8217;s new in Smooks 2?</h4>
+<div class="sect2">
+<h3 id="whats_new_in_smooks_2">What&#8217;s new in Smooks 2?</h3>
 <div class="paragraph">
 <p>Smooks 2 introduces the DFDL cartridge and revamps its EDI cartridge,
 while dropping support for Java 7 along with a few other notable
@@ -400,8 +468,8 @@ with <code>org.smooks</code>.</p>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</h4>
+<div class="sect2">
+<h3 id="migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -484,22 +552,24 @@ the <code>@ConfigParam</code> optional attribute.</p>
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="faqs">FAQs</h4>
+<div class="sect2">
+<h3 id="faqs">FAQs</h3>
 <div class="paragraph">
 <p>See the <a href="/faq">FAQ</a>.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="maven">Maven</h4>
+<div class="sect2">
+<h3 id="maven">Maven</h3>
 <div class="paragraph">
 <p>For details on how to integrate Smooks into your project via Maven, see
 the <a href="/maven">Maven guide</a>.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="basics">Basics</h3>
+</div>
+<div class="sect1">
+<h2 id="basics">Basics</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>The most commonly accepted definition of Smooks would be that it is a
 "Transformation Engine". However, at its core, Smooks makes no reference
@@ -535,8 +605,8 @@ high maintenance code.</p>
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="basic_processing_model">Basic Processing Model</h4>
+<div class="sect2">
+<h3 id="basic_processing_model">Basic Processing Model</h3>
 <div class="paragraph">
 <p>As stated above, the basic principle of Smooks is to take a data
 <strong>source</strong> of some kind (e.g., XML) and from it generate an <strong>event
@@ -595,8 +665,8 @@ nature of these events.</p>
 <p><span class="image"><img src="https://raw.githubusercontent.com/claudemamo/smooks/readme/docs/images/Event-model.gif" alt="Image:event-model.gif"></span></p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="simple_example">Simple Example</h4>
+<div class="sect2">
+<h3 id="simple_example">Simple Example</h3>
 <div class="paragraph">
 <p>In order to consume the SAX event stream produced from the source
 message, you need to implement one or more of the
@@ -646,8 +716,8 @@ use visitors. We bundle visitors based on functionality and call these
 bundles <strong>Cartridges</strong>.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="smooks_resources_visitors_etc">Smooks Resources (Visitors, etc&#8230;&#8203;)</h4>
+<div class="sect2">
+<h3 id="smooks_resources_visitors_etc">Smooks Resources (Visitors, etc&#8230;&#8203;)</h3>
 <div class="paragraph">
 <p>A Smooks execution consumes a data stream of one form or another (XML,
 EDI, Java, JSON, CSV, etc&#8230;&#8203;), and from it, generates an event stream
@@ -719,8 +789,8 @@ type e.g., the BeanPopulator for Java bindings.</p>
 </li>
 </ol>
 </div>
-<div class="sect4">
-<h5 id="visitors">Visitors</h5>
+<div class="sect3">
+<h4 id="visitors">Visitors</h4>
 <div class="paragraph">
 <p>Central to how Smooks works is the concept of a visitor. A visitor is a
 Java class performing a specific task on the targeted message fragment
@@ -728,8 +798,8 @@ such as applying an XSLT, binding fragment data to a Java object,
 performing message fragment validation, etc&#8230;&#8203;</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="selectors">Selectors</h5>
+<div class="sect3">
+<h4 id="selectors">Selectors</h4>
 <div class="paragraph">
 <p>Resource selectors are a very important part of Smooks and how it works.
 They instruct Smooks to apply configured visitors on message fragments,
@@ -805,8 +875,8 @@ details.</p>
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="namespace_declaration">Namespace Declaration</h5>
+<div class="sect3">
+<h4 id="namespace_declaration">Namespace Declaration</h4>
 <div class="paragraph">
 <p>You bind a selector prefix to a namespace by declaring the namespace
 using the <em>xmlns</em> attribute:</p>
@@ -848,8 +918,8 @@ legacy core configuration namespace element:</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="cartridge">Cartridge</h4>
+<div class="sect2">
+<h3 id="cartridge">Cartridge</h3>
 <div class="paragraph">
 <p>The basic functionality of Smooks can be extended through the creation
 of a "Smooks Cartridge". A cartridge is a Java archive (JAR) containing
@@ -862,8 +932,8 @@ provide "ready to use" support for a specific type of XML processing.</p>
 page</a>.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="pipeline">Pipeline</h4>
+<div class="sect2">
+<h3 id="pipeline">Pipeline</h3>
 <div class="paragraph">
 <p>A pipeline is a flexible, yet simple, Smooks construct that isolates the
 processing of a targeted event from its main processing as well as from
@@ -912,8 +982,8 @@ same whether it’s declared inside a pipeline or outside it.</p>
 to do with the pipeline’s output. The next sections list the supported
 actions.</p>
 </div>
-<div class="sect4">
-<h5 id="inline">Inline</h5>
+<div class="sect3">
+<h4 id="inline">Inline</h4>
 <div class="paragraph">
 <p>Merges the pipeline&#8217;s output with the result stream. Config Example:</p>
 </div>
@@ -932,8 +1002,8 @@ actions.</p>
 <p>As described in the subsequent sections, an inline action replaces,
 prepends, or appends content.</p>
 </div>
-<div class="sect5">
-<h6 id="replace">Replace</h6>
+<div class="sect4">
+<h5 id="replace">Replace</h5>
 <div class="paragraph">
 <p>Substitutes the selected fragment with the pipeline output:</p>
 </div>
@@ -947,8 +1017,8 @@ prepends, or appends content.</p>
 </div>
 </div>
 </div>
-<div class="sect5">
-<h6 id="prepend_before">Prepend Before</h6>
+<div class="sect4">
+<h5 id="prepend_before">Prepend Before</h5>
 <div class="paragraph">
 <p>Adds the output before the selector start tag:</p>
 </div>
@@ -960,8 +1030,8 @@ prepends, or appends content.</p>
 </div>
 </div>
 </div>
-<div class="sect5">
-<h6 id="prepend_after">Prepend After</h6>
+<div class="sect4">
+<h5 id="prepend_after">Prepend After</h5>
 <div class="paragraph">
 <p>Adds the output after the selector start tag:</p>
 </div>
@@ -973,8 +1043,8 @@ prepends, or appends content.</p>
 </div>
 </div>
 </div>
-<div class="sect5">
-<h6 id="append_before">Append Before</h6>
+<div class="sect4">
+<h5 id="append_before">Append Before</h5>
 <div class="paragraph">
 <p>Adds the output before the selector end tag:</p>
 </div>
@@ -986,8 +1056,8 @@ prepends, or appends content.</p>
 </div>
 </div>
 </div>
-<div class="sect5">
-<h6 id="append_after">Append After</h6>
+<div class="sect4">
+<h5 id="append_after">Append After</h5>
 <div class="paragraph">
 <p>Adds the output after the selector end tag:</p>
 </div>
@@ -1000,8 +1070,8 @@ prepends, or appends content.</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="bind_to">Bind To</h5>
+<div class="sect3">
+<h4 id="bind_to">Bind To</h4>
 <div class="paragraph">
 <p>Binds the output to the execution context’s bean store:</p>
 </div>
@@ -1015,8 +1085,8 @@ prepends, or appends content.</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="output_to">Output To</h5>
+<div class="sect3">
+<h4 id="output_to">Output To</h4>
 <div class="paragraph">
 <p>Directs the output to a different stream other than the result stream:</p>
 </div>
@@ -1031,8 +1101,8 @@ prepends, or appends content.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="filter">Filter</h4>
+<div class="sect2">
+<h3 id="filter">Filter</h3>
 <div class="paragraph">
 <p>A Smooks filter is responsible for delivering generated events from a
 reader to Smooks resources. Smooks 1 had the DOM and SAX filters. The
@@ -1181,8 +1251,8 @@ you fine-grained control over the visitor&#8217;s targeted element depth:</p>
 maximum tree depth the visitor can accept in its <em>visitAfter</em> method.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="the_bean_context">The Bean Context</h4>
+<div class="sect2">
+<h3 id="the_bean_context">The Bean Context</h3>
 <div class="paragraph">
 <p>The <strong>bean context</strong> (also known as "bean map") is a container for Objects
 which can be accessed within the Smooks filter process. One bean context
@@ -1231,8 +1301,8 @@ them as properties in the visitor object. You can then use them in the
 'visitBefore' and 'visitAfter' methods. The BeanId objects and the
 BeanIdStore are thread safe.</p>
 </div>
-<div class="sect4">
-<h5 id="pre_installed_beans">Pre Installed Beans</h5>
+<div class="sect3">
+<h4 id="pre_installed_beans">Pre Installed Beans</h4>
 <div class="paragraph">
 <p>A number of pre-installed beans are available in the Bean Context at
 runtime:</p>
@@ -1327,8 +1397,8 @@ Javadoc</a></p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="multiple_outputsresults">Multiple Outputs/Results</h4>
+<div class="sect2">
+<h3 id="multiple_outputsresults">Multiple Outputs/Results</h3>
 <div class="paragraph">
 <p>This section looks at the different ways in which Smooks can produce
 "Output" from the Filtering process.</p>
@@ -1361,8 +1431,8 @@ filtering pass of a message stream. It doesn&#8217;t need to filter a message
 stream multiple times in order to generate multiple outputs/results.
 This is critical in terms of performance/efficiency.</p>
 </div>
-<div class="sect4">
-<h5 id="in_result_instances">"In-Result" Instances</h5>
+<div class="sect3">
+<h4 id="in_result_instances">"In-Result" Instances</h4>
 <div class="paragraph">
 <p>A look at the Smooks API reveals that Smooks can be supplied with
 multiple
@@ -1421,8 +1491,8 @@ method call, but Smooks will only output to one of these
 <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html">StreamResult</a>
 instances (the first one).</em></p>
 </div>
-<div class="sect5">
-<h6 id="streamresults_domresults">StreamResults / DOMResults</h6>
+<div class="sect4">
+<h5 id="streamresults_domresults">StreamResults / DOMResults</h5>
 <div class="paragraph">
 <p>These
 <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/Result.html">Result</a>
@@ -1452,8 +1522,8 @@ character based transformation.</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="during_the_filtering_process">During the Filtering Process</h5>
+<div class="sect3">
+<h4 id="during_the_filtering_process">During the Filtering Process</h4>
 <div class="paragraph">
 <p>Smooks is also able to generate different types of output during the
 <a href="/javadoc/v1.7.1/smooks/org/milyn/Smooks.html#filterSource(javax.xml.transform.Source,%20javax.xml.transform.Result&#8230;&#8203;)">Smooks.filterSource</a>
@@ -1486,8 +1556,8 @@ way of handing messages of this magnitude is by streaming the process.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="checking_the_smooks_execution_process">Checking the Smooks Execution Process</h4>
+<div class="sect2">
+<h3 id="checking_the_smooks_execution_process">Checking the Smooks Execution Process</h3>
 <div class="paragraph">
 <p>As Smooks performs the filtering process (processing the Event Stream
 generated from the Source), it publishes events that can be captured and
@@ -1526,8 +1596,8 @@ Smooks transformation.</p>
 implementations.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="terminating_the_filtering_process">Terminating the Filtering Process</h4>
+<div class="sect2">
+<h3 id="terminating_the_filtering_process">Terminating the Filtering Process</h3>
 <div class="paragraph">
 <p>Sometimes you want/need to terminate the Smooks filtering process before
 reaching the end of a message. This can be done by using a configuration
@@ -1568,8 +1638,8 @@ the end of the customer fragment of the message:</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="global_configurations">Global Configurations</h4>
+<div class="sect2">
+<h3 id="global_configurations">Global Configurations</h3>
 <div class="paragraph">
 <p>Global configuration settings are, as the name implies, configuration
 options that can be set once and be applied to all resources in a
@@ -1603,8 +1673,8 @@ the following section.</p>
 </li>
 </ul>
 </div>
-<div class="sect4">
-<h5 id="global_configuration_parameters">Global Configuration Parameters</h5>
+<div class="sect3">
+<h4 id="global_configuration_parameters">Global Configuration Parameters</h4>
 <div class="paragraph">
 <p>Global properties differ from the default properties in that they are
 not specified on the root element and are not automatically applied to
@@ -1634,8 +1704,8 @@ e.g.:</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="default_properties">Default Properties</h5>
+<div class="sect3">
+<h4 id="default_properties">Default Properties</h4>
 <div class="paragraph">
 <p>Default properties are properties that can be set on the root element of
 a Smooks configuration and have them applied to all resource
@@ -1684,8 +1754,8 @@ defined condition.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="filter_settings">Filter Settings</h4>
+<div class="sect2">
+<h3 id="filter_settings">Filter Settings</h3>
 <div class="paragraph">
 <p>Filtering specific configurations are made through the <strong>smooks-core</strong>
 configuration namespace
@@ -1766,8 +1836,8 @@ applications threading model.</p>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="configuration_modularization">Configuration Modularization</h4>
+<div class="sect2">
+<h3 id="configuration_modularization">Configuration Modularization</h3>
 <div class="paragraph">
 <p>Smooks configurations are easily modularized through use of the
 <em>&lt;import&gt;</em> element. This allows you to split Smooks configurations into
@@ -1820,8 +1890,10 @@ make tweaks to the imported configuration.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="consuming_input_data">Consuming Input Data</h3>
+</div>
+<div class="sect1">
+<h2 id="consuming_input_data">Consuming Input Data</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Smooks relies on a "Stream Reader" for generating a stream of SAX events
 from the Source message data stream. A Stream Reader is a class that
@@ -1880,8 +1952,8 @@ parameters. Here is a full example configuration.</p>
 <p>As you can read in the subchapter of this chapter there are a number of
 non-XML Readers available with Smooks out-of-the-box.</p>
 </div>
-<div class="sect3">
-<h4 id="xml">XML</h4>
+<div class="sect2">
+<h3 id="xml">XML</h3>
 <div class="paragraph">
 <p>By default Smooks reads XML data. To set features on the default XML
 reader, simply omit the class name from the configuration:</p>
@@ -1900,8 +1972,10 @@ reader, simply omit the class name from the configuration:</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="enriching_output_data">Enriching Output Data</h3>
+</div>
+<div class="sect1">
+<h2 id="enriching_output_data">Enriching Output Data</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>There are three out-of-the-box methods for enriching your output data:</p>
 </div>
@@ -1933,8 +2007,8 @@ Binding</a></em>.</p>
 <div class="paragraph">
 <p>TODO: Rewrite / restructure this chapter</p>
 </div>
-<div class="sect3">
-<h4 id="sql_support">SQL Support</h4>
+<div class="sect2">
+<h3 id="sql_support">SQL Support</h3>
 <div class="paragraph">
 <p>See the <a href="#routing-to-a-database-using-sql">Routing to a Database
 using SQL</a> chapter for more information.</p>
@@ -1943,8 +2017,8 @@ using SQL</a> chapter for more information.</p>
 <p>TODO: Write this chapter</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="entity_persistence_frameworks">Entity Persistence Frameworks</h4>
+<div class="sect2">
+<h3 id="entity_persistence_frameworks">Entity Persistence Frameworks</h3>
 <div class="paragraph">
 <p>With the new Smooks Persistence cartridge in Smooks 1.2, you can
 directly use several entity persistence frameworks from within Smooks
@@ -2136,8 +2210,8 @@ object so that we can access the Hibernate Session from within Smooks.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="data_access_object_support">Data Access Object Support</h4>
+<div class="sect2">
+<h3 id="data_access_object_support">Data Access Object Support</h3>
 <div class="paragraph">
 <p>Now let’s take a look at a DAO based example. The example will read an
 XML file containing order information (note that this works just the
@@ -2289,8 +2363,10 @@ resolved by there position.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="routing_output_data">Routing Output Data</h3>
+</div>
+<div class="sect1">
+<h2 id="routing_output_data">Routing Output Data</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Smooks supports a number of different options when it comes to Splitting
 and Routing message fragments. The ability to split messages into
@@ -2341,35 +2417,35 @@ XML/JSON to a HTTP endpoint for logging.</p>
 <div class="paragraph">
 <p>See the section on <a href="#splitting&#8212;&#8203;routing">Splitting &amp; Routing</a>.</p>
 </div>
-<div class="sect3">
-<h4 id="file">File</h4>
+<div class="sect2">
+<h3 id="file">File</h3>
 <div class="paragraph">
 <p>See the <a href="#routing-to-file">Routing to File</a> chapter for more
 information.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="database">Database</h4>
+<div class="sect2">
+<h3 id="database">Database</h3>
 <div class="paragraph">
 <p>See the <a href="#enriching-output-data">Enriching Output Data</a> chapter for
 more information on database access (also for writing to the database)</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="java">Java</h4>
+<div class="sect2">
+<h3 id="java">Java</h3>
 <div class="paragraph">
 <p>See the <a href="#the-bean-context">Bean Context</a> chapter in th basics
 chapter for more information.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="jms">JMS</h4>
+<div class="sect2">
+<h3 id="jms">JMS</h3>
 <div class="paragraph">
 <p>See the <a href="#routing-to-jms">Routing to JMS</a> for more information.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="esb_support">ESB Support</h4>
+<div class="sect2">
+<h3 id="esb_support">ESB Support</h3>
 <div class="paragraph">
 <p>Smooks plugins are available for a number of ESBs:</p>
 </div>
@@ -2389,8 +2465,8 @@ Synapse/WS02</a>.</p>
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="apache_camel">Apache Camel</h4>
+<div class="sect2">
+<h3 id="apache_camel">Apache Camel</h3>
 <div class="paragraph">
 <p>It is possible to route fragments to Apache Camel endpoints using the <code>&lt;camel:route&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/camel-1.5.xsd</code> configuration namespace.</p>
 </div>
@@ -2545,8 +2621,10 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="exporting_results">Exporting Results</h3>
+</div>
+<div class="sect1">
+<h2 id="exporting_results">Exporting Results</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>When using Smooks standalone you are in full control of the type of
 output that Smooks produces since you specify it by passing a certain
@@ -2636,15 +2714,17 @@ framework:</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="performance_tuning">Performance Tuning</h3>
+</div>
+<div class="sect1">
+<h2 id="performance_tuning">Performance Tuning</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Like with any Software, when configured or used incorrectly, performance
 can be one of the first things to suffer. Smooks is no different in this
 regard.</p>
 </div>
-<div class="sect3">
-<h4 id="general">General</h4>
+<div class="sect2">
+<h3 id="general">General</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2689,14 +2769,14 @@ for the sake of performance.</p>
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="smooks_cartridges">Smooks Cartridges</h4>
+<div class="sect2">
+<h3 id="smooks_cartridges">Smooks Cartridges</h3>
 <div class="paragraph">
 <p>Every cartridge can have its own performance optimization tips.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="javabean_cartridge">Javabean Cartridge</h4>
+<div class="sect2">
+<h3 id="javabean_cartridge">Javabean Cartridge</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2708,10 +2788,12 @@ simple POJO&#8217;s and calling the setter methods.</p>
 </div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="testing">Testing</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="testing">Testing</h3>
-<div class="sect3">
-<h4 id="unit_testing">Unit Testing</h4>
+<h3 id="unit_testing">Unit Testing</h3>
 <div class="paragraph">
 <p>Unit testing with Smooks is simple:</p>
 </div>
@@ -2755,10 +2837,12 @@ simple POJO&#8217;s and calling the setter methods.</p>
 </div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="common_use_cases">Common use cases</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="common_use_cases">Common use cases</h3>
-<div class="sect3">
-<h4 id="processing_huge_messages_gbs">Processing Huge Messages (GBs)</h4>
+<h3 id="processing_huge_messages_gbs">Processing Huge Messages (GBs)</h3>
 <div class="paragraph">
 <p>One of the main features introduced in Smooks v1.0 is the ability to
 process huge messages (Gbs in size). Smooks supports the following types
@@ -2814,8 +2898,8 @@ Binding</a></em>.</p>
 </li>
 </ul>
 </div>
-<div class="sect4">
-<h5 id="one_to_one_transformation">One-to-One Transformation</h5>
+<div class="sect3">
+<h4 id="one_to_one_transformation">One-to-One Transformation</h4>
 <div class="paragraph">
 <p>If the requirement is to process a huge message by transforming it into
 a single message of another format, the easiest mechanism with Smooks is
@@ -2993,8 +3077,8 @@ database&#8217;s storage, query and paging features to perform the
 transformation.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="splitting_routing">Splitting &amp; Routing</h5>
+<div class="sect3">
+<h4 id="splitting_routing">Splitting &amp; Routing</h4>
 <div class="paragraph">
 <p>A common approach to processing large/huge messages is to split them out into smaller messages that can be processed independently. Of course splitting and routing is not just a solution for processing huge
 messages. It&#8217;s often needed with smaller messages as well (message size may be irrelevant) where, for example, order items in an order message need to be split out and routed (based on content - "Content Base Routing") to different departments or partners for processing. Under these conditions, the message formats required at the different destinations may also vary e.g.,</p>
@@ -3315,8 +3399,8 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 </div>
 </div>
 </div>
-<div class="sect5">
-<h6 id="routing_to_a_database_using_sql">Routing to a Database using SQL</h6>
+<div class="sect4">
+<h5 id="routing_to_a_database_using_sql">Routing to a Database using SQL</h5>
 <div class="paragraph">
 <p>Routing to a database is also quite easy. Please read the "Routing to
 File" section above before reading this section.</p>
@@ -3452,16 +3536,18 @@ datasource.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="message_splitting_routing">Message Splitting &amp; Routing</h4>
+<div class="sect2">
+<h3 id="message_splitting_routing">Message Splitting &amp; Routing</h3>
 <div class="paragraph">
 <p>Please refer to the <a href="#splitting&#8212;&#8203;routing">Splitting &amp; Routing</a>
 section in the previous section.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="extending_smooks">Extending Smooks</h3>
+</div>
+<div class="sect1">
+<h2 id="extending_smooks">Extending Smooks</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>All existing Smooks functionality (Java Binding, EDI processing, etc&#8230;&#8203;)
 is built through extension of a number of well defined APIs. We will
@@ -3489,8 +3575,8 @@ produced by a source/input reader.</p>
 components are configured. Because this is common to all Smooks
 components, we will look at this first.</p>
 </div>
-<div class="sect3">
-<h4 id="configuring_smooks_components">Configuring Smooks Components</h4>
+<div class="sect2">
+<h3 id="configuring_smooks_components">Configuring Smooks Components</h3>
 <div class="paragraph">
 <p>All Smooks components are configured in exactly the same way. As far as
 the Smooks Core code is concerned, all Smooks components are "resources"
@@ -3547,14 +3633,14 @@ interpret things like the selector e.g., if the resource is a visitor
 instance, it knows the selector is an XPath, selecting a Source message
 fragment.</p>
 </div>
-<div class="sect4">
-<h5 id="configuration_annotations">Configuration Annotations</h5>
+<div class="sect3">
+<h4 id="configuration_annotations">Configuration Annotations</h4>
 <div class="paragraph">
 <p>After your component has been created, you need to configure it with the
 element details. This is done using the <em>@Inject</em> annotation.</p>
 </div>
-<div class="sect5">
-<h6 id="inject">@Inject</h6>
+<div class="sect4">
+<h5 id="inject">@Inject</h5>
 <div class="paragraph">
 <p>The <em>Inject</em> annotation reflectively injects the named parameter (from
 the elements) having the same name as the annotated property itself (the
@@ -3656,8 +3742,8 @@ property type to constrain the value, raise exceptions, etc&#8230;&#8203;:</p>
 marks the property as being optional.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="postconstruct_and_predestroy">@PostConstruct and @PreDestroy</h6>
+<div class="sect4">
+<h5 id="postconstruct_and_predestroy">@PostConstruct and @PreDestroy</h5>
 <div class="paragraph">
 <p>The <em>@Inject</em> annotation is great for configuring your component with
 simple values, but sometimes your component needs more involved
@@ -3745,8 +3831,8 @@ component properties as input to the initialization process.</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="defining_custom_configuration_namespaces">Defining Custom Configuration Namespaces</h5>
+<div class="sect3">
+<h4 id="defining_custom_configuration_namespaces">Defining Custom Configuration Namespaces</h4>
 <div class="paragraph">
 <p>Smooks supports a mechanism for defining custom configuration namespaces
 for components. This allows you to support custom, XSD based
@@ -3791,8 +3877,8 @@ can be seen in the source</a>.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="implementing_a_source_reader">Implementing a Source Reader</h4>
+<div class="sect2">
+<h3 id="implementing_a_source_reader">Implementing a Source Reader</h3>
 <div class="paragraph">
 <p>Implementing and configuring a new Source Reader for Smooks is
 straightforward. The Smooks specific parts of the process are easy and
@@ -4127,8 +4213,8 @@ how to do this for your own custom Reader.</p>
 </li>
 </ul>
 </div>
-<div class="sect4">
-<h5 id="implementing_a_binary_source_reader">Implementing a Binary Source Reader</h5>
+<div class="sect3">
+<h4 id="implementing_a_binary_source_reader">Implementing a Binary Source Reader</h4>
 <div class="paragraph">
 <p>Prior to Smooks v1.5, binary readers needed to implement the
 <em>StreamReader</em> interface. This is no longer a requirement. All
@@ -4140,8 +4226,8 @@ means that all <em>XMLReader</em> instance are guaranteed to receive an
 instance.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="implementing_a_flat_file_source_reader">Implementing a Flat File Source Reader</h5>
+<div class="sect3">
+<h4 id="implementing_a_flat_file_source_reader">Implementing a Flat File Source Reader</h4>
 <div class="paragraph">
 <p>In Smooks v1.5 we tried to make it a little easier to implement a custom
 reader for reading flat file data formats. By flat file we mean "record"
@@ -4312,8 +4398,8 @@ supported, so you can define the <strong>class</strong> attribute as a java.util
 and have the record field values bound into Map instances, which are in
 turn added to a List or a Map.</p>
 </div>
-<div class="sect5">
-<h6 id="variablefieldrecordparser_and_variablefieldrecordparserfactory">VariableFieldRecordParser and VariableFieldRecordParserFactory</h6>
+<div class="sect4">
+<h5 id="variablefieldrecordparser_and_variablefieldrecordparserfactory">VariableFieldRecordParser and VariableFieldRecordParserFactory</h5>
 <div class="paragraph">
 <p>VariableFieldRecordParser and VariableFieldRecordParserFactory are
 abstract implementations of the <em>RecordParser</em> and <em>RecordParserFactory</em>
@@ -4358,8 +4444,8 @@ basis for your own custom flat file reader.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="implementing_a_fragment_visitor">Implementing a Fragment Visitor</h4>
+<div class="sect2">
+<h3 id="implementing_a_fragment_visitor">Implementing a Fragment Visitor</h3>
 <div class="paragraph">
 <p>Visitors are the workhorse of Smooks. Most of the out-of-the-box
 functionality in Smooks (Java binding, templating, persistence, etc&#8230;&#8203;)
@@ -4407,8 +4493,8 @@ must be stored in the <em>ExecutionContext</em>. For more details see the
 <a href="#executioncontext-and-applicationcontext">ExecutionContext and
 ApplicationContex</a> section.</p>
 </div>
-<div class="sect4">
-<h5 id="sax_ng_visitor_api">SAX NG Visitor API</h5>
+<div class="sect3">
+<h4 id="sax_ng_visitor_api">SAX NG Visitor API</h4>
 <div class="paragraph">
 <p>The SAX NG visitor API is made up of a number of interfaces. These
 interfaces are based on the
@@ -4495,8 +4581,8 @@ We&#8217;ll discuss text accumulation and <em>StreamResult</em> writing in the c
 sections.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="text_accumulation">Text Accumulation</h5>
+<div class="sect3">
+<h4 id="text_accumulation">Text Accumulation</h4>
 <div class="paragraph">
 <p>SAX is a stream based processing model. It doesn&#8217;t create a Document
 Object Model (DOM) of any form. It doesn&#8217;t "accumulate" event data in
@@ -4570,8 +4656,8 @@ need to implement the <em>ChildrenVisitor.visitChildText</em> method:</p>
 <em>AfterVisitor.visitAfter</em> event.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="streamresult_writingserialization">StreamResult Writing/Serialization</h5>
+<div class="sect3">
+<h4 id="streamresult_writingserialization">StreamResult Writing/Serialization</h4>
 <div class="paragraph">
 <p>The <em>Smooks.filterSource(Source, Result)</em> method can take one or more of
 a number of different <em>Result</em> type implementations, one of which is the
@@ -4686,8 +4772,8 @@ method:</p>
 <span class="o">}</span></code></pre>
 </div>
 </div>
-<div class="sect5">
-<h6 id="domtoxmlwriter">DomToXmlWriter</h6>
+<div class="sect4">
+<h5 id="domtoxmlwriter">DomToXmlWriter</h5>
 <div class="paragraph">
 <p>Smooks provides the <em>DomToXmlWriter</em> class to make serializing of
 <em>Element</em> data, as XML, a little easier. This class allows you to write
@@ -4766,8 +4852,8 @@ setting</a> for the associated Smooks instance:</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="visitor_configuration">Visitor Configuration</h5>
+<div class="sect3">
+<h4 id="visitor_configuration">Visitor Configuration</h4>
 <div class="paragraph">
 <p><em>SaxNgVisitor</em> configuration works in exactly the same way as any other
 Smooks component. See <a href="#configuring-smooks-components">Configuring
@@ -4783,8 +4869,8 @@ XPath (like) expression. For more on this see the docs on
 <p>Also note that visitors can be programmatically configured on a Smooks
 instance. Among other things, this is very useful for unit testing.</p>
 </div>
-<div class="sect5">
-<h6 id="example_visitor_configuration">Example Visitor Configuration</h6>
+<div class="sect4">
+<h5 id="example_visitor_configuration">Example Visitor Configuration</h5>
 <div class="paragraph">
 <p>Let&#8217;s assume we have a very simple <em>SaxNgVisitor</em> implementation as
 follows:</p>
@@ -4865,8 +4951,8 @@ follows:</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="visitor_instance_lifecycle">Visitor Instance Lifecycle</h5>
+<div class="sect3">
+<h4 id="visitor_instance_lifecycle">Visitor Instance Lifecycle</h4>
 <div class="paragraph">
 <p>One aspect of the visitor lifecycle has already been discussed in the
 general context of Smooks component
@@ -4877,8 +4963,8 @@ general context of Smooks component
 visitor components, via the <em>ExecutionLifecycleCleanable</em> and
 <em>VisitLifecycleCleanable</em> interfaces.</p>
 </div>
-<div class="sect5">
-<h6 id="executionlifecyclecleanable">ExecutionLifecycleCleanable</h6>
+<div class="sect4">
+<h5 id="executionlifecyclecleanable">ExecutionLifecycleCleanable</h5>
 <div class="paragraph">
 <p>Visitor components implementing this lifecycle interface will be able to
 perform post <em>Smooks.filterSource</em> lifecycle operations.</p>
@@ -4914,8 +5000,8 @@ the <em>Smooks.filterSource</em> execution lifecycle can be cleaned up for the
 associated <em>ExecutionContext</em>.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="visitlifecyclecleanable">VisitLifecycleCleanable</h6>
+<div class="sect4">
+<h5 id="visitlifecyclecleanable">VisitLifecycleCleanable</h5>
 <div class="paragraph">
 <p>Visitor components implementing this lifecycle interface will be able to
 perform post <em>AfterVisitor.visitAfter</em> lifecycle operations.</p>
@@ -4978,8 +5064,8 @@ cleaned up for the associated <em>ExecutionContext</em>.</p>
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="executioncontext_and_applicationcontext">ExecutionContext and ApplicationContext</h5>
+<div class="sect3">
+<h4 id="executioncontext_and_applicationcontext">ExecutionContext and ApplicationContext</h4>
 <div class="paragraph">
 <p>Smooks provides these two Context objects for storing of state
 information.</p>
@@ -5013,6 +5099,7 @@ annotating it with _@Inject:</p>
 
     <span class="c1">// etc...</span>
 <span class="o">}</span></code></pre>
+</div>
 </div>
 </div>
 </div>
