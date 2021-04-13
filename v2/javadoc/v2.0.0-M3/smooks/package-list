@@ -1,5 +1,3 @@
-com.fasterxml.aalto.in
-com.fasterxml.aalto.sax
 org.smooks
 org.smooks.annotation
 org.smooks.api
@@ -28,7 +26,6 @@ org.smooks.api.resource.visitor.sax
 org.smooks.api.resource.visitor.sax.ng
 org.smooks.archive
 org.smooks.assertion
-org.smooks.benchmark
 org.smooks.classpath
 org.smooks.engine
 org.smooks.engine.bean.context
