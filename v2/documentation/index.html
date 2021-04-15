@@ -103,6 +103,10 @@
 <li><a href="#enriching_output_data">Enriching Output Data</a>
 <ul class="sectlevel2">
 <li><a href="#sql_support">SQL Support</a></li>
+<li><a href="#entity_persistence_frameworks">Entity Persistence Frameworks</a></li>
+<li><a href="#data_access_object_support">Data Access Object Support</a></li>
+<li><a href="#maven_coordinates_12">Maven Coordinates</a></li>
+<li><a href="#xml_namespace_8">XML Namespace</a></li>
 </ul>
 </li>
 <li><a href="#scripting">Scripting</a>
@@ -5962,8 +5966,9 @@ using SQL</a> chapter for more information.</p>
 <div class="paragraph">
 <p>TODO: Write this chapter</p>
 </div>
-<div class="sect3">
-<h4 id="entity_persistence_frameworks">Entity Persistence Frameworks</h4>
+</div>
+<div class="sect2">
+<h3 id="entity_persistence_frameworks">Entity Persistence Frameworks</h3>
 <div class="paragraph">
 <p>With the Smooks Persistence Cartridge, you can directly use several entity persistence frameworks from within Smooks (Hibernate, JPA, etc&#8230;&#8203;).</p>
 </div>
@@ -6143,8 +6148,8 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="data_access_object_support">Data Access Object Support</h4>
+<div class="sect2">
+<h3 id="data_access_object_support">Data Access Object Support</h3>
 <div class="paragraph">
 <p>Now let’s take a look at a DAO based example. The example will read an XML file containing order information (note that this works just the same for EDI, CSV, etc&#8230;&#8203;). Using the javabean cartridge, it will bind the XML data into a set of entity beans. Using the id of the products within the order items (the element) it will locate the product entities and bind them to the order entity bean. Finally, the order bean will be persisted.</p>
 </div>
@@ -6278,8 +6283,8 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="maven_coordinates_12">Maven Coordinates</h4>
+<div class="sect2">
+<h3 id="maven_coordinates_12">Maven Coordinates</h3>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -6291,12 +6296,11 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="xml_namespace_8">XML Namespace</h4>
+<div class="sect2">
+<h3 id="xml_namespace_8">XML Namespace</h3>
 <div class="literalblock">
 <div class="content">
 <pre>xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</pre>
-</div>
 </div>
 </div>
 </div>
