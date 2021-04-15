@@ -103,8 +103,6 @@
 <li><a href="#enriching_output_data">Enriching Output Data</a>
 <ul class="sectlevel2">
 <li><a href="#sql_support">SQL Support</a></li>
-<li><a href="#entity_persistence_frameworks">Entity Persistence Frameworks</a></li>
-<li><a href="#data_access_object_support">Data Access Object Support</a></li>
 </ul>
 </li>
 <li><a href="#scripting">Scripting</a>
@@ -5964,23 +5962,16 @@ using SQL</a> chapter for more information.</p>
 <div class="paragraph">
 <p>TODO: Write this chapter</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="entity_persistence_frameworks">Entity Persistence Frameworks</h3>
+<div class="sect3">
+<h4 id="entity_persistence_frameworks">Entity Persistence Frameworks</h4>
 <div class="paragraph">
-<p>With the new Smooks Persistence cartridge in Smooks 1.2, you can
-directly use several entity persistence frameworks from within Smooks
-(Hibernate, JPA, etc&#8230;&#8203;).</p>
+<p>With the Smooks Persistence Cartridge, you can directly use several entity persistence frameworks from within Smooks (Hibernate, JPA, etc&#8230;&#8203;).</p>
 </div>
 <div class="paragraph">
-<p>Lets take a look at a Hibernate example. The same principals follow for
-any JPA compliant framework.</p>
+<p>Let us take a look at a Hibernate example. The same principals follow for any JPA compliant framework.</p>
 </div>
 <div class="paragraph">
-<p>The data we are going to process is an XML order message. It should be
-noted however, that the input data could also be CSV, JSON, EDI, Java or
-any other structured/hierarchical data format. The same principals
-apply, no matter what the data format is!</p>
+<p>The data we are going to process is an XML order message. It should be noted however, that the input data could also be CSV, JSON, EDI, Java or any other structured data format. The same principals apply, no matter what the data format is!</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6063,22 +6054,18 @@ apply, no matter what the data format is!</p>
 </div>
 </div>
 <div class="paragraph">
-<p>What we want to do here is to process and persist the . First thing we
-need to do is to bind the order data into the Order entities (Order,
-OrderLine and Product). To do this we need to:</p>
+<p>What we want to do here is to process and persist the <code>Order</code>. First thing we need to do is to bind the order data into the <code>Order</code> entities (<code>Order</code>, <code>OrderLine</code> and <code>Product</code>). To do this we need to:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong>Create</strong> and populate the Order and OrderLine entities using the
-<a href="#java-binding">Java Binding</a> framework.</p>
+<p><strong>Create</strong> and populate the Order and OrderLine entities using the <a href="#java-binding">Java Binding</a> framework.</p>
 </li>
 <li>
 <p><strong>Wire</strong> each OrderLine instance into the Order instance.</p>
 </li>
 <li>
-<p>Into each OrderLine instance, we need to <strong>lookup and wire</strong> in the
-associated order line Product entity.</p>
+<p>Into each OrderLine instance, we need to <strong>lookup and wire</strong> in the associated order line Product entity.</p>
 </li>
 <li>
 <p>And finally, we need to <strong>insert</strong> (persist) the Order instance.</p>
@@ -6119,8 +6106,7 @@ associated order line Product entity.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If we want to use the named query "productById" instead of the query
-string then the DAO locator configuration will look like this:</p>
+<p>If we want to use the named query <code>productById</code> instead of the query string then the DAO locator configuration will look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6132,8 +6118,7 @@ string then the DAO locator configuration will look like this:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The following code executes Smooks. Note that we use a SessionRegister
-object so that we can access the Hibernate Session from within Smooks.</p>
+<p>The following code executes Smooks. Note that we use a <code>SessionRegister</code> object so that we can access the Hibernate Session from within Smooks.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6158,16 +6143,10 @@ object so that we can access the Hibernate Session from within Smooks.</p>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="data_access_object_support">Data Access Object Support</h3>
+<div class="sect3">
+<h4 id="data_access_object_support">Data Access Object Support</h4>
 <div class="paragraph">
-<p>Now let’s take a look at a DAO based example. The example will read an
-XML file containing order information (note that this works just the
-same for EDI, CSV, etc&#8230;&#8203;). Using the javabean cartridge, it will bind
-the XML data into a set of entity beans. Using the id of the products
-within the order items (the element) it will locate the product entities
-and bind them to the order entity bean. Finally, the order bean will be
-persisted.</p>
+<p>Now let’s take a look at a DAO based example. The example will read an XML file containing order information (note that this works just the same for EDI, CSV, etc&#8230;&#8203;). Using the javabean cartridge, it will bind the XML data into a set of entity beans. Using the id of the products within the order items (the element) it will locate the product entities and bind them to the order entity bean. Finally, the order bean will be persisted.</p>
 </div>
 <div class="paragraph">
 <p>The order XML message looks like this:</p>
@@ -6212,13 +6191,10 @@ persisted.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>When looking at this class you should notice the @Dao and @Insert
-annotations. The @Dao annotation declares that the OrderDao is a DAO
-object. The @Insert annotation declares that the insertOrder method
-should be used to insert Order entities.</p>
+<p>When looking at this class you should notice the <code>@Dao</code> and <code>@Insert</code> annotations. The <code>@Dao</code> annotation declares that the <code>OrderDao</code> is a DAO object. The <code>@Insert</code> annotation declares that the <code>insertOrder</code> method should be used to insert <code>Order</code> entities.</p>
 </div>
 <div class="paragraph">
-<p>The following custom DAO will be used to lookup the Product entities:</p>
+<p>The following custom DAO will be used to lookup the <code>Product</code> entities:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6239,15 +6215,7 @@ should be used to insert Order entities.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>When looking at this class, you should notice the @Lookup and @Param
-annotation. The @Lookup annotation declares that the
-ProductDao#findByProductId method is used to lookup Product entities.
-The name parameter in the @Lookup annotation sets the lookup name
-reference for that method. When the name isn’t declared, the method name
-will be used. The optional @Param annotation let’s you name the
-parameters. This creates a better abstraction between Smooks and the
-DAO. If you don’t declare the @Param annotation the parameters are
-resolved by there position.</p>
+<p>When looking at this class, you should notice the <code>@Lookup</code> and <code>@Param</code> annotations. The <code>@Lookup</code> annotation declares that the <code>ProductDao#findByProductId</code> method is used to lookup <code>Product</code> entities. The name parameter in the <code>@Lookup</code> annotation sets the lookup name reference for that method. When the name isn’t declared, the method name will be used. The optional <code>@Param</code> annotation lets you name the  parameters. This creates a better abstraction between Smooks and the DAO. If you don’t declare the <code>@Param</code> annotation the parameters are resolved by there position.</p>
 </div>
 <div class="paragraph">
 <p>The Smooks configuration look likes this:</p>
@@ -6307,6 +6275,28 @@ resolved by there position.</p>
 <span class="n">smooks</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">messageIn</span><span class="o">),</span><span class="kc">null</span><span class="o">,</span><span class="n">executionContext</span><span class="o">);</span>
 
 <span class="n">tx</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="maven_coordinates_12">Maven Coordinates</h4>
+<div class="listingblock">
+<div class="title">pom.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-persistence-cartridge<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="xml_namespace_8">XML Namespace</h4>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</pre>
+</div>
 </div>
 </div>
 </div>
@@ -6424,7 +6414,7 @@ resolved by there position.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_12">Maven Coordinates</h5>
+<h5 id="maven_coordinates_13">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -6682,7 +6672,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_13">Maven Coordinates</h5>
+<h5 id="maven_coordinates_14">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -7369,7 +7359,7 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 </div>
 </div>
 <div class="sect5">
-<h6 id="maven_coordinates_14">Maven Coordinates</h6>
+<h6 id="maven_coordinates_15">Maven Coordinates</h6>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
