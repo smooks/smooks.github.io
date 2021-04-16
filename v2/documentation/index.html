@@ -82,6 +82,9 @@
 <li><a href="#database">Database</a></li>
 <li><a href="#java">Java</a></li>
 <li><a href="#jms">JMS</a></li>
+<li><a href="#basic_splitting_and_routing">Basic Splitting and Routing</a></li>
+<li><a href="#file_2">File</a></li>
+<li><a href="#jms_2">JMS</a></li>
 <li><a href="#apache_camel">Apache Camel</a></li>
 </ul>
 </li>
@@ -135,7 +138,7 @@
 <li><a href="#sql_support">SQL Support</a></li>
 <li><a href="#entity_persistence_frameworks">Entity Persistence Frameworks</a></li>
 <li><a href="#data_access_object_support">Data Access Object Support</a></li>
-<li><a href="#maven_coordinates_14">Maven Coordinates</a></li>
+<li><a href="#maven_coordinates_13">Maven Coordinates</a></li>
 <li><a href="#xml_namespace_8">XML Namespace</a></li>
 </ul>
 </li>
@@ -144,10 +147,6 @@
 <li><a href="#groovy">Groovy</a></li>
 </ul>
 </li>
-<li><a href="#file_2">File</a></li>
-<li><a href="#database_2">Database</a></li>
-<li><a href="#jms_2">JMS</a></li>
-<li><a href="#camel">Camel</a></li>
 </ul>
 </div>
 <div id="preamble">
@@ -1531,6 +1530,235 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 </div>
 </div>
 <div class="sect2">
+<h3 id="basic_splitting_and_routing">Basic Splitting and Routing</h3>
+<div class="paragraph">
+<p>As stated above, the easiest way to split and route fragments of a message is to use the basic <code>&lt;frag:serialize&gt;</code> and <em>&lt;*:router&gt;</em> components (<code>&lt;jms:router&gt;</code>, <code>&lt;file:router&gt;</code>, etc&#8230;&#8203;) from the Routing Cartridge. The <code>&lt;frag:serialize&gt;</code> component has its own configuration in the <code>https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd</code> namespace.</p>
+</div>
+<div class="paragraph">
+<p>The following is an example for serializing the contents of a SOAP message body and storing it in the Bean Context under the beanId of <code>soapBody</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:frag=</span><span class="s">"https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;frag:serialize</span> <span class="na">fragment=</span><span class="s">"Envelope/Body"</span> <span class="na">bindTo=</span><span class="s">"soapBody"</span> <span class="na">childContentOnly=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then the Smooks code for executing this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="n">configStream</span><span class="o">);</span>
+<span class="nc">JavaResult</span> <span class="n">javaResult</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">soapMessageStream</span><span class="o">),</span> <span class="n">javaResult</span><span class="o">);</span>
+
+<span class="nc">String</span> <span class="n">bodyContent</span> <span class="o">=</span> <span class="n">javaResult</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"soapBody"</span><span class="o">).</span><span class="na">toString</span><span class="o">().</span><span class="na">trim</span><span class="o">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And of course, you can do all of this programmatically too (i.e., no need for the XML config):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">();</span>
+
+<span class="n">smooks</span><span class="o">.</span><span class="na">addVisitor</span><span class="o">(</span><span class="k">new</span> <span class="nc">FragmentSerializer</span><span class="o">().</span><span class="na">setBindTo</span><span class="o">(</span><span class="s">"soapBody"</span><span class="o">),</span> <span class="s">"Envelope/Body"</span><span class="o">);</span>
+
+<span class="nc">JavaResult</span> <span class="n">javaResult</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">soapMessageStream</span><span class="o">),</span> <span class="n">javaResult</span><span class="o">);</span>
+
+<span class="nc">String</span> <span class="n">bodyContent</span> <span class="o">=</span> <span class="n">javaResult</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"soapBody"</span><span class="o">).</span><span class="na">toString</span><span class="o">().</span><span class="na">trim</span><span class="o">();</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The code snippets above only show how to create the split messages and bind them into the bean context, from where they can be accessed. How about routing these split messages to another endpoint for processing?Well it&#8217;s easy, just use one of the routing components as outlined in the following sections.</p>
+</div>
+<div class="paragraph">
+<p>The following is a quick example, showing the config for routing split messages (this time fragments) to a JMS Destination for processing:</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:frag=</span><span class="s">"https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd"</span> <span class="na">xmlns:jms=</span><span class="s">"https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- Create the split messages for the order items... --&gt;</span>
+    <span class="nt">&lt;frag:serialize</span> <span class="na">fragment=</span><span class="s">"order-items/order-item"</span> <span class="na">bindTo=</span><span class="s">"orderItem"</span> <span class="nt">/&gt;</span>
+
+    <span class="c">&lt;!-- Route each order items split mesage to the orderItem JMS processing queue... --&gt;</span>
+    <span class="nt">&lt;jms:router</span> <span class="na">routeOnElement=</span><span class="s">"order-items/order-item"</span> <span class="na">beanId=</span><span class="s">"orderItem"</span> <span class="na">destination=</span><span class="s">"orderItemProcessingQueue"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more details on the JMS routing aspects of the above example, see the JMS Router documentation (below). The &lt;jms:router&gt; could be substituted for any of the other routers e.g. if using with JBoss ESB, you could use the <code>&lt;esbr:routeBean&gt;</code> configuration to route the split message to any ESB endpoint.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="file_2">File</h3>
+<div class="paragraph">
+<p>File based routing is performed via the <code>&lt;file:outputStream&gt;</code> configuration from the
+<code>https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd</code> configuration namespace.</p>
+</div>
+<div class="paragraph">
+<p>This section illustrates how you can combine the following Smooks functionality to split a message out into smaller messages on the file system.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The Javabean cartridge for extracting data from the message and holding it in variables in the bean context. In this case, we could also use DOM NodeModels for capturing the order and order-item data to be used as the templating data models.</p>
+</li>
+<li>
+<p>The <code>&lt;file:outputStream&gt;</code> configuration from the routing cartridge for managing file system streams (naming, opening, closing, throttling creation, etc&#8230;&#8203;).</p>
+</li>
+<li>
+<p>The templating cartridge (FreeMarker Templates) for generating the individual split messages from data bound in the bean context by the JavaBean cartridge (see #1 above). The templating result is written to the file output stream (#2 above).</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>In the example, we want to process a huge order message and route the individual order item details to file. The following illustrates what we want to achieve. As you can see, the split messages don&#8217;t just contain data from the order item fragments. They also contain data from the order header and root elements.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="https://raw.githubusercontent.com/claudemamo/smooks/readme/docs/images/File-split-required.png" alt="Image:file-split-required.png"></span></p>
+</div>
+<div class="paragraph">
+<p>To achieve this with Smooks, we assemble the following Smooks configuration:</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
+                      <span class="na">xmlns:jb=</span><span class="s">"https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</span>
+                      <span class="na">xmlns:file=</span><span class="s">"https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd"</span>
+                      <span class="na">xmlns:ftl=</span><span class="s">"https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd"</span><span class="nt">&gt;</span>
+
+        <span class="c">&lt;!-- Extract and decode data from the message. Used in the freemarker template (below).
+             Note that we could also use a NodeModel here... --&gt;</span>
+(1)     <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"orderId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order/@id"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerNumber"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"header/customer/@number"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerName"</span> <span class="na">data=</span><span class="s">"header/customer"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;jb:wiring</span> <span class="na">property=</span><span class="s">"orderItem"</span> <span class="na">beanIdRef=</span><span class="s">"orderItem"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/jb:bean&gt;</span>
+(2)     <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"orderItem"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"itemId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/@id"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"productId"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"order-item/product"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"quantity"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/quantity"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"price"</span> <span class="na">decoder=</span><span class="s">"Double"</span> <span class="na">data=</span><span class="s">"order-item/price"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/jb:bean&gt;</span>
+
+        <span class="c">&lt;!-- Create/open a file output stream. This is writen to by the freemarker template (below).. --&gt;</span>
+(3)     <span class="nt">&lt;file:outputStream</span> <span class="na">openOnElement=</span><span class="s">"order-item"</span> <span class="na">resourceName=</span><span class="s">"orderItemSplitStream"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;file:fileNamePattern&gt;</span>order-${order.orderId}-${order.orderItem.itemId}.xml<span class="nt">&lt;/file:fileNamePattern&gt;</span>
+            <span class="nt">&lt;file:destinationDirectoryPattern&gt;</span>target/orders<span class="nt">&lt;/file:destinationDirectoryPattern&gt;</span>
+            <span class="nt">&lt;file:listFileNamePattern&gt;</span>order-${order.orderId}.lst<span class="nt">&lt;/file:listFileNamePattern&gt;</span>
+
+            <span class="nt">&lt;file:highWaterMark</span> <span class="na">mark=</span><span class="s">"10"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/file:outputStream&gt;</span>
+
+        <span class="c">&lt;!--
+         Every time we hit the end of an &lt;order-item&gt; element, apply this freemarker template,
+         outputting the result to the "orderItemSplitStream" OutputStream, which is the file
+         output stream configured above.
+        --&gt;</span>
+(4)     <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;ftl:template&gt;</span>target/classes/orderitem-split.ftl<span class="nt">&lt;/ftl:template&gt;</span>
+            <span class="nt">&lt;ftl:use&gt;</span>
+                <span class="c">&lt;!-- Output the templating result to the "orderItemSplitStream" file output stream... --&gt;</span>
+                <span class="nt">&lt;ftl:outputTo</span> <span class="na">outputStreamResource=</span><span class="s">"orderItemSplitStream"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/ftl:use&gt;</span>
+        <span class="nt">&lt;/ftl:freemarker&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Smooks Resource configuration #1 and #2 define the Java Bindings for extracting the order header information (config #1) and the order-item information (config #2). This is the key to processing a huge message; making sure that we only have the current order item in memory at any one time. The Smooks Javabean Cartridge manages all this for you, creating and recreating the orderItem beans as the fragments are being processed.</p>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;file:outputStream&gt;</code> configuration in configuration #3 manages the generation of the files on the file system. As you can see from the configuration, the file names can be dynamically constructed from data in the bean context. You can also see that it can throttle the creation of the files via the <code>highWaterMark</code> configuration parameter. This helps you manage file creation so as not to overwhelm the target file system.</p>
+</div>
+<div class="paragraph">
+<p>Smooks Resource configuration #4 defines the FreeMarker templating resource used to write the split messages to the OutputStream created by the <code>file:outputStream</code> (config #3). See how config #4 references the <code>file:outputStream</code> resource. The Freemarker template is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>&lt;orderitem id="${.vars["order-item"].@id}" order="${order.@id}"&gt;
+    &lt;customer&gt;
+        &lt;name&gt;${order.header.customer}&lt;/name&gt;
+        &lt;number&gt;${order.header.customer.@number}&lt;/number&gt;
+    &lt;/customer&gt;
+    &lt;details&gt;
+        &lt;productId&gt;${.vars["order-item"].product}&lt;/productId&gt;
+        &lt;quantity&gt;${.vars["order-item"].quantity}&lt;/quantity&gt;
+        &lt;price&gt;${.vars["order-item"].price}&lt;/price&gt;
+    &lt;/details&gt;
+&lt;/orderitem&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="jms_2">JMS</h3>
+<div class="paragraph">
+<p>JMS routing is performed via the <code>&lt;jms:router&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd</code> configuration namespace.</p>
+</div>
+<div class="paragraph">
+<p>The following is an example <code>&lt;jms:router&gt;</code> configuration that routes an <code>orderItem_xml</code> bean to a JMS Queue named <code>smooks.exampleQueue</code> (also read the "Routing to File" example):</p>
+</div>
+<div class="listingblock">
+<div class="title">smooks-config.xml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
+                      <span class="na">xmlns:jms=</span><span class="s">"https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd"</span>
+                      <span class="na">xmlns:ftl=</span><span class="s">"https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd"</span><span class="nt">&gt;</span>
+
+(1)     <span class="nt">&lt;resource-config</span> <span class="na">selector=</span><span class="s">"order,order-item"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;resource&gt;</span>org.smooks.engine.resource.visitor.dom.DomModelCreator<span class="nt">&lt;/resource&gt;</span>
+        <span class="nt">&lt;/resource-config&gt;</span>
+
+(2)     <span class="nt">&lt;jms:router</span> <span class="na">routeOnElement=</span><span class="s">"order-item"</span> <span class="na">beanId=</span><span class="s">"orderItem_xml"</span> <span class="na">destination=</span><span class="s">"smooks.exampleQueue"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;jms:message&gt;</span>
+                <span class="c">&lt;!-- Need to use special FreeMarker variable ".vars" --&gt;</span>
+                <span class="nt">&lt;jms:correlationIdPattern&gt;</span>${order.@id}-${.vars["order-item"].@id}<span class="nt">&lt;/jms:correlationIdPattern&gt;</span>
+            <span class="nt">&lt;/jms:message&gt;</span>
+            <span class="nt">&lt;jms:highWaterMark</span> <span class="na">mark=</span><span class="s">"3"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/jms:router&gt;</span>
+
+(3)     <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!--
+             Note in the template that we need to use the special FreeMarker variable ".vars"
+             because of the hyphenated variable names ("order-item"). See http://freemarker.org/docs/ref_specvar.html.
+            --&gt;</span>
+            <span class="nt">&lt;ftl:template&gt;</span>/orderitem-split.ftl<span class="nt">&lt;/ftl:template&gt;</span>
+            <span class="nt">&lt;ftl:use&gt;</span>
+                <span class="c">&lt;!-- Bind the templating result into the bean context, from where
+                     it can be accessed by the JMSRouter (configured above). --&gt;</span>
+                <span class="nt">&lt;ftl:bindTo</span> <span class="na">id=</span><span class="s">"orderItem_xml"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/ftl:use&gt;</span>
+        <span class="nt">&lt;/ftl:freemarker&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, we route the result of a FreeMarker templating operation to the JMS Queue (i.e. as a String). We could also have routed a full Object Model, in which case it would be routed as a Serialized ObjectMessage.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="apache_camel">Apache Camel</h3>
 <div class="paragraph">
 <p>It is possible to route fragments to Apache Camel endpoints using the <code>&lt;camel:route&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/camel-1.5.xsd</code> configuration namespace.</p>
@@ -2031,326 +2259,6 @@ Be sure to read the section on <a href="#java-binding">Java Binding</a>.
 </div>
 <div class="sect3">
 <h4 id="splitting_routing">Splitting &amp; Routing</h4>
-<div class="paragraph">
-<p>A common approach to processing large/huge messages is to split them out into smaller messages that can be processed independently. Of course splitting and routing is not just a solution for processing huge
-messages. It&#8217;s often needed with smaller messages as well (message size may be irrelevant) where, for example, order items in an order message need to be split out and routed (based on content - "Content Base Routing") to different departments or partners for processing. Under these conditions, the message formats required at the different destinations may also vary e.g.,</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>"destination1" required XML via the file system,</p>
-</li>
-<li>
-<p>"destination2" requires Java objects via a JMS Queue,</p>
-</li>
-<li>
-<p>"destination3" picks the messages up from a table in a database, etc&#8230;&#8203;</p>
-</li>
-<li>
-<p>"destination4" requires EDI messages via a JMS Queue,</p>
-</li>
-<li>
-<p>etc etc</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>With Smooks, all of the above is possible. You can perform multiple splitting and routing operations to multiple destinations (of different types) in a single pass over a message.</p>
-</div>
-<div class="paragraph">
-<p>The basic concept is simple. As you stream the message through Smooks:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Repeatedly create a standalone message (split) for the fragment to be routed.</p>
-</li>
-<li>
-<p>Repeatedly bind the split message into the bean context under a unique beanId.</p>
-</li>
-<li>
-<p>Repeatedly route the split message to the required endpoint (File, DB, JMS, ESB).</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>We emphasize "Repeatedly" (above) so as to reinforce the point that these operations happen for each instance of the split message found in the source message e.g. for each in an message.</p>
-</div>
-<div class="paragraph">
-<p>As for points #1 and #2 above specifically, Smooks offers two approaches to creating the split messages:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>A basic (untransformed/unenriched) fragment split and bind. This is a very simple configuration that simply serializes a message fragment (repeatedly) to its XML form and stores it in the bean context as a String.</p>
-</li>
-<li>
-<p>A more complex approach using the Java Binding and Templating Cartridges, where you configure Smooks to extract data from the source message and into the bean context (using configs) and then (optionally) apply templates to create the split messages. This is more complex, but offers the following advantages:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Allows for transformation of the split fragments i.e. not just XML as with the basic option.</p>
-</li>
-<li>
-<p>Allows for enrichment of the message.</p>
-</li>
-<li>
-<p>Allows for more complex splits, with the ability to merge data from multiple source fragments into each split message e.g. not just the fragments, but the order info too.</p>
-</li>
-<li>
-<p>Allows for splitting and routing of Java Objects as the Split messages (e.g., over JMS).</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>With the more complex approach outlined above, the key to processing huge messages (not an issue for the more basic approach) is to make sure that you always maintain a small memory footprint. You can do this using the JavaBean Cartridge by making sure you&#8217;re only binding the most relevant message data (into the bean context) at any one time. In the following sections, the examples are all based on splitting and routing of order-items out of an order message. The solutions shown all work for huge messages because the Smooks JavaBean Cartridge binding configurations are implemented such that the only data held in memory at any given time is the main order details (order header etc&#8230;&#8203;), and the
-"current" order item details.</p>
-</div>
-<div class="sect5">
-<h6 id="basic_splitting_and_routing">Basic Splitting and Routing</h6>
-<div class="paragraph">
-<p>As stated above, the easiest way to split and route fragments of a message is to use the basic <code>&lt;frag:serialize&gt;</code> and <em>&lt;*:router&gt;</em> components (<code>&lt;jms:router&gt;</code>, <code>&lt;file:router&gt;</code>, etc&#8230;&#8203;) from the Routing Cartridge. The <code>&lt;frag:serialize&gt;</code> component has its own configuration in the <code>https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd</code> namespace.</p>
-</div>
-<div class="paragraph">
-<p>The following is an example for serializing the contents of a SOAP message body and storing it in the Bean Context under the beanId of <code>soapBody</code>:</p>
-</div>
-<div class="listingblock">
-<div class="title">smooks-config</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:frag=</span><span class="s">"https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;frag:serialize</span> <span class="na">fragment=</span><span class="s">"Envelope/Body"</span> <span class="na">bindTo=</span><span class="s">"soapBody"</span> <span class="na">childContentOnly=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then the Smooks code for executing this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="n">configStream</span><span class="o">);</span>
-<span class="nc">JavaResult</span> <span class="n">javaResult</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
-
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">soapMessageStream</span><span class="o">),</span> <span class="n">javaResult</span><span class="o">);</span>
-
-<span class="nc">String</span> <span class="n">bodyContent</span> <span class="o">=</span> <span class="n">javaResult</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"soapBody"</span><span class="o">).</span><span class="na">toString</span><span class="o">().</span><span class="na">trim</span><span class="o">();</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>And of course, you can do all of this programmatically too (i.e., no need for the XML config):</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">();</span>
-
-<span class="n">smooks</span><span class="o">.</span><span class="na">addVisitor</span><span class="o">(</span><span class="k">new</span> <span class="nc">FragmentSerializer</span><span class="o">().</span><span class="na">setBindTo</span><span class="o">(</span><span class="s">"soapBody"</span><span class="o">),</span> <span class="s">"Envelope/Body"</span><span class="o">);</span>
-
-<span class="nc">JavaResult</span> <span class="n">javaResult</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">soapMessageStream</span><span class="o">),</span> <span class="n">javaResult</span><span class="o">);</span>
-
-<span class="nc">String</span> <span class="n">bodyContent</span> <span class="o">=</span> <span class="n">javaResult</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"soapBody"</span><span class="o">).</span><span class="na">toString</span><span class="o">().</span><span class="na">trim</span><span class="o">();</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The code snippets above only show how to create the split messages and bind them into the bean context, from where they can be accessed. How about routing these split messages to another endpoint for processing?Well it&#8217;s easy, just use one of the routing components as outlined in the following sections.</p>
-</div>
-<div class="paragraph">
-<p>The following is a quick example, showing the config for routing split messages (this time fragments) to a JMS Destination for processing:</p>
-</div>
-<div class="listingblock">
-<div class="title">smooks-config</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:frag=</span><span class="s">"https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd"</span> <span class="na">xmlns:jms=</span><span class="s">"https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="c">&lt;!-- Create the split messages for the order items... --&gt;</span>
-    <span class="nt">&lt;frag:serialize</span> <span class="na">fragment=</span><span class="s">"order-items/order-item"</span> <span class="na">bindTo=</span><span class="s">"orderItem"</span> <span class="nt">/&gt;</span>
-
-    <span class="c">&lt;!-- Route each order items split mesage to the orderItem JMS processing queue... --&gt;</span>
-    <span class="nt">&lt;jms:router</span> <span class="na">routeOnElement=</span><span class="s">"order-items/order-item"</span> <span class="na">beanId=</span><span class="s">"orderItem"</span> <span class="na">destination=</span><span class="s">"orderItemProcessingQueue"</span> <span class="nt">/&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For more details on the JMS routing aspects of the above example, see the JMS Router documentation (below). The &lt;jms:router&gt; could be substituted for any of the other routers e.g. if using with JBoss ESB, you could use the <code>&lt;esbr:routeBean&gt;</code> configuration to route the split message to any ESB endpoint.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="routing_to_file">Routing to File</h6>
-<div class="paragraph">
-<p>File based routing is performed via the <code>&lt;file:outputStream&gt;</code> configuration from the
-<code>https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd</code> configuration namespace.</p>
-</div>
-<div class="paragraph">
-<p>This section illustrates how you can combine the following Smooks functionality to split a message out into smaller messages on the file system.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>The Javabean cartridge for extracting data from the message and holding it in variables in the bean context. In this case, we could also use DOM NodeModels for capturing the order and order-item data to be used as the templating data models.</p>
-</li>
-<li>
-<p>The <code>&lt;file:outputStream&gt;</code> configuration from the routing cartridge for managing file system streams (naming, opening, closing, throttling creation, etc&#8230;&#8203;).</p>
-</li>
-<li>
-<p>The templating cartridge (FreeMarker Templates) for generating the individual split messages from data bound in the bean context by the JavaBean cartridge (see #1 above). The templating result is written to the file output stream (#2 above).</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>In the example, we want to process a huge order message and route the individual order item details to file. The following illustrates what we want to achieve. As you can see, the split messages don&#8217;t just contain data from the order item fragments. They also contain data from the order header and root elements.</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master/docs/images/File-split-required.png" alt="Image:file-split-required.png"></span></p>
-</div>
-<div class="paragraph">
-<p>To achieve this with Smooks, we assemble the following Smooks configuration:</p>
-</div>
-<div class="listingblock">
-<div class="title">smooks-config.xml</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
-                      <span class="na">xmlns:jb=</span><span class="s">"https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</span>
-                      <span class="na">xmlns:file=</span><span class="s">"https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd"</span>
-                      <span class="na">xmlns:ftl=</span><span class="s">"https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd"</span><span class="nt">&gt;</span>
-
-        <span class="c">&lt;!-- Extract and decode data from the message. Used in the freemarker template (below).
-             Note that we could also use a NodeModel here... --&gt;</span>
-(1)     <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"orderId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order/@id"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerNumber"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"header/customer/@number"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerName"</span> <span class="na">data=</span><span class="s">"header/customer"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;jb:wiring</span> <span class="na">property=</span><span class="s">"orderItem"</span> <span class="na">beanIdRef=</span><span class="s">"orderItem"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/jb:bean&gt;</span>
-(2)     <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"orderItem"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"itemId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/@id"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"productId"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"order-item/product"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"quantity"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/quantity"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"price"</span> <span class="na">decoder=</span><span class="s">"Double"</span> <span class="na">data=</span><span class="s">"order-item/price"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/jb:bean&gt;</span>
-
-        <span class="c">&lt;!-- Create/open a file output stream. This is writen to by the freemarker template (below).. --&gt;</span>
-(3)     <span class="nt">&lt;file:outputStream</span> <span class="na">openOnElement=</span><span class="s">"order-item"</span> <span class="na">resourceName=</span><span class="s">"orderItemSplitStream"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;file:fileNamePattern&gt;</span>order-${order.orderId}-${order.orderItem.itemId}.xml<span class="nt">&lt;/file:fileNamePattern&gt;</span>
-            <span class="nt">&lt;file:destinationDirectoryPattern&gt;</span>target/orders<span class="nt">&lt;/file:destinationDirectoryPattern&gt;</span>
-            <span class="nt">&lt;file:listFileNamePattern&gt;</span>order-${order.orderId}.lst<span class="nt">&lt;/file:listFileNamePattern&gt;</span>
-
-            <span class="nt">&lt;file:highWaterMark</span> <span class="na">mark=</span><span class="s">"10"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/file:outputStream&gt;</span>
-
-        <span class="c">&lt;!--
-         Every time we hit the end of an &lt;order-item&gt; element, apply this freemarker template,
-         outputting the result to the "orderItemSplitStream" OutputStream, which is the file
-         output stream configured above.
-        --&gt;</span>
-(4)     <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;ftl:template&gt;</span>target/classes/orderitem-split.ftl<span class="nt">&lt;/ftl:template&gt;</span>
-            <span class="nt">&lt;ftl:use&gt;</span>
-                <span class="c">&lt;!-- Output the templating result to the "orderItemSplitStream" file output stream... --&gt;</span>
-                <span class="nt">&lt;ftl:outputTo</span> <span class="na">outputStreamResource=</span><span class="s">"orderItemSplitStream"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/ftl:use&gt;</span>
-        <span class="nt">&lt;/ftl:freemarker&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Smooks Resource configuration #1 and #2 define the Java Bindings for extracting the order header information (config #1) and the order-item information (config #2). This is the key to processing a huge message; making sure that we only have the current order item in memory at any one time. The Smooks Javabean Cartridge manages all this for you, creating and recreating the orderItem beans as the fragments are being processed.</p>
-</div>
-<div class="paragraph">
-<p>The <code>&lt;file:outputStream&gt;</code> configuration in configuration #3 manages the generation of the files on the file system. As you can see from the configuration, the file names can be dynamically constructed from data in the bean context. You can also see that it can throttle the creation of the files via the <code>highWaterMark</code> configuration parameter. This helps you manage file creation so as not to overwhelm the target file system.</p>
-</div>
-<div class="paragraph">
-<p>Smooks Resource configuration #4 defines the FreeMarker templating resource used to write the split messages to the OutputStream created by the <code>file:outputStream</code> (config #3). See how config #4 references the <code>file:outputStream</code> resource. The Freemarker template is as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>&lt;orderitem id="${.vars["order-item"].@id}" order="${order.@id}"&gt;
-    &lt;customer&gt;
-        &lt;name&gt;${order.header.customer}&lt;/name&gt;
-        &lt;number&gt;${order.header.customer.@number}&lt;/number&gt;
-    &lt;/customer&gt;
-    &lt;details&gt;
-        &lt;productId&gt;${.vars["order-item"].product}&lt;/productId&gt;
-        &lt;quantity&gt;${.vars["order-item"].quantity}&lt;/quantity&gt;
-        &lt;price&gt;${.vars["order-item"].price}&lt;/price&gt;
-    &lt;/details&gt;
-&lt;/orderitem&gt;</code></pre>
-</div>
-</div>
-</div>
-<div class="sect5">
-<h6 id="routing_to_jms">Routing to JMS</h6>
-<div class="paragraph">
-<p>JMS routing is performed via the <code>&lt;jms:router&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd</code> configuration namespace.</p>
-</div>
-<div class="paragraph">
-<p>The following is an example <code>&lt;jms:router&gt;</code> configuration that routes an <code>orderItem_xml</code> bean to a JMS Queue named <code>smooks.exampleQueue</code> (also read the "Routing to File" example):</p>
-</div>
-<div class="listingblock">
-<div class="title">smooks-config.xml</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
-                      <span class="na">xmlns:jms=</span><span class="s">"https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd"</span>
-                      <span class="na">xmlns:ftl=</span><span class="s">"https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd"</span><span class="nt">&gt;</span>
-
-(1)     <span class="nt">&lt;resource-config</span> <span class="na">selector=</span><span class="s">"order,order-item"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;resource&gt;</span>org.smooks.engine.resource.visitor.dom.DomModelCreator<span class="nt">&lt;/resource&gt;</span>
-        <span class="nt">&lt;/resource-config&gt;</span>
-
-(2)     <span class="nt">&lt;jms:router</span> <span class="na">routeOnElement=</span><span class="s">"order-item"</span> <span class="na">beanId=</span><span class="s">"orderItem_xml"</span> <span class="na">destination=</span><span class="s">"smooks.exampleQueue"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;jms:message&gt;</span>
-                <span class="c">&lt;!-- Need to use special FreeMarker variable ".vars" --&gt;</span>
-                <span class="nt">&lt;jms:correlationIdPattern&gt;</span>${order.@id}-${.vars["order-item"].@id}<span class="nt">&lt;/jms:correlationIdPattern&gt;</span>
-            <span class="nt">&lt;/jms:message&gt;</span>
-            <span class="nt">&lt;jms:highWaterMark</span> <span class="na">mark=</span><span class="s">"3"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/jms:router&gt;</span>
-
-(3)     <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
-            <span class="c">&lt;!--
-             Note in the template that we need to use the special FreeMarker variable ".vars"
-             because of the hyphenated variable names ("order-item"). See http://freemarker.org/docs/ref_specvar.html.
-            --&gt;</span>
-            <span class="nt">&lt;ftl:template&gt;</span>/orderitem-split.ftl<span class="nt">&lt;/ftl:template&gt;</span>
-            <span class="nt">&lt;ftl:use&gt;</span>
-                <span class="c">&lt;!-- Bind the templating result into the bean context, from where
-                     it can be accessed by the JMSRouter (configured above). --&gt;</span>
-                <span class="nt">&lt;ftl:bindTo</span> <span class="na">id=</span><span class="s">"orderItem_xml"</span><span class="nt">/&gt;</span>
-            <span class="nt">&lt;/ftl:use&gt;</span>
-        <span class="nt">&lt;/ftl:freemarker&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this case, we route the result of a FreeMarker templating operation to the JMS Queue (i.e. as a String). We could also have routed a full Object Model, in which case it would be routed as a Serialized ObjectMessage.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="maven_coordinates_2">Maven Coordinates</h6>
-<div class="listingblock">
-<div class="title">pom.xml</div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>smooks-routing-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span></code></pre>
-</div>
-</div>
-</div>
 <div class="sect4">
 <h5 id="routing_to_a_database_using_sql">Routing to a Database using SQL</h5>
 <div class="paragraph">
@@ -4080,7 +3988,7 @@ Mike,Fennelly,Male,2,Ireland</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_3">Maven Coordinates</h4>
+<h4 id="maven_coordinates_2">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -4417,7 +4325,7 @@ Maurice  Zeijen     M 27 NL</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_4">Maven Coordinates</h4>
+<h4 id="maven_coordinates_3">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -4568,7 +4476,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <p>The DFDL cartridge supports variables, on disk caching, and trace debugging. Consult the <a href="/xsd/smooks/dfdl-1.0.xsd">XSD documentation</a> for further information.</p>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_5">Maven Coordinates</h4>
+<h4 id="maven_coordinates_4">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -4925,7 +4833,7 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_6">Maven Coordinates</h4>
+<h4 id="maven_coordinates_5">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -5051,7 +4959,7 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_7">Maven Coordinates</h4>
+<h4 id="maven_coordinates_6">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -5182,7 +5090,7 @@ class.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_8">Maven Coordinates</h4>
+<h4 id="maven_coordinates_7">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -5320,7 +5228,7 @@ class.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_9">Maven Coordinates</h4>
+<h4 id="maven_coordinates_8">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -6808,7 +6716,7 @@ example.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="maven_coordinates_10">Maven Coordinates</h4>
+<h4 id="maven_coordinates_9">Maven Coordinates</h4>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -7162,7 +7070,7 @@ See full example in the <a href="https://github.com/smooks/smooks-examples/tree/
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_11">Maven Coordinates</h5>
+<h5 id="maven_coordinates_10">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -7369,7 +7277,7 @@ Be sure to read the section on <a href="https://github.com/smooks/smooks-javabea
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_12">Maven Coordinates</h5>
+<h5 id="maven_coordinates_11">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -7544,7 +7452,7 @@ belongs to.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_13">Maven Coordinates</h5>
+<h5 id="maven_coordinates_12">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -7929,7 +7837,7 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="maven_coordinates_14">Maven Coordinates</h3>
+<h3 id="maven_coordinates_13">Maven Coordinates</h3>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -8063,7 +7971,7 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="maven_coordinates_15">Maven Coordinates</h5>
+<h5 id="maven_coordinates_14">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -8076,36 +7984,6 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="file_2">File</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>See the <a href="#routing-to-file">Routing to File</a> chapter for more information.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="database_2">Database</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>See the <a href="#enriching-output-data">Enriching Output Data</a> chapter for more information on database access (also for writing to the database)</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="jms_2">JMS</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>See the <a href="#routing-to-jms">Routing to JMS</a> for more information.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="camel">Camel</h2>
-<div class="sectionbody">
-
 </div>
 </div>
     </div><!-- /.container -->
