@@ -59,6 +59,10 @@
 <li><a href="#migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</a></li>
 <li><a href="#faqs">FAQs</a></li>
 <li><a href="#maven">Maven</a></li>
+</ul>
+</li>
+<li><a href="#fundamentals">Fundamentals</a>
+<ul class="sectlevel2">
 <li><a href="#basic_processing_model">Basic Processing Model</a></li>
 <li><a href="#hello_world_app">Hello World App</a></li>
 <li><a href="#smooks_resources">Smooks Resources</a></li>
@@ -94,6 +98,10 @@
 <li><a href="#general">General</a></li>
 <li><a href="#smooks_cartridges">Smooks Cartridges</a></li>
 <li><a href="#javabean_cartridge">Javabean Cartridge</a></li>
+</ul>
+</li>
+<li><a href="#testing">Testing</a>
+<ul class="sectlevel2">
 <li><a href="#unit_testing">Unit Testing</a></li>
 </ul>
 </li>
@@ -101,6 +109,10 @@
 <ul class="sectlevel2">
 <li><a href="#processing_huge_messages_gbs">Processing Huge Messages (GBs)</a></li>
 <li><a href="#message_splitting_routing">Message Splitting &amp; Routing</a></li>
+</ul>
+</li>
+<li><a href="#extending_smooks">Extending Smooks</a>
+<ul class="sectlevel2">
 <li><a href="#configuring_smooks_components">Configuring Smooks Components</a></li>
 <li><a href="#implementing_a_source_reader">Implementing a Source Reader</a></li>
 <li><a href="#implementing_a_fragment_visitor">Implementing a Fragment Visitor</a></li>
@@ -437,9 +449,14 @@ The terms <em>fragment</em> and <em>event</em> denote different meanings. It is 
 <div class="sect2">
 <h3 id="maven">Maven</h3>
 <div class="paragraph">
-<p>For details on how to integrate Smooks into your project via Maven, see the <a href="https://www.smooks.org/v2/maven">Maven guide</a>.
-== Fundamentals</p>
+<p>For details on how to integrate Smooks into your project via Maven, see the <a href="https://www.smooks.org/v2/maven">Maven guide</a>.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="fundamentals">Fundamentals</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>A commonly accepted definition of Smooks is of it being a "Transformation Engine". Nonetheless, at its core, Smooks makes no reference to <em>data transformation</em>. The core codebase is designed to hook custom visitor logic into an event stream produced from an input source of some kind. As such, in its most distilled form, Smooks is a <em>Structured Data Event Stream Processor</em>.</p>
 </div>
@@ -458,7 +475,6 @@ The terms <em>fragment</em> and <em>event</em> denote different meanings. It is 
 <p><strong>Huge Message Processing</strong>: declaratively consume (transform, or split and route) huge messages without writing boilerplate code.</p>
 </li>
 </ul>
-</div>
 </div>
 <div class="sect2">
 <h3 id="basic_processing_model">Basic Processing Model</h3>
@@ -1793,12 +1809,16 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 <div class="ulist">
 <ul>
 <li>
-<p>If possible don&#8217;t use the Virtual Bean Model. Create Beans instead of maps. Creating and adding data to Maps is a lot slower then creating simple POJO&#8217;s and calling the setter methods.
-== Testing</p>
+<p>If possible don&#8217;t use the Virtual Bean Model. Create Beans instead of maps. Creating and adding data to Maps is a lot slower then creating simple POJO&#8217;s and calling the setter methods.</p>
 </li>
 </ul>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="testing">Testing</h2>
+<div class="sectionbody">
 <div class="sect2">
 <h3 id="unit_testing">Unit Testing</h3>
 <div class="paragraph">
@@ -2470,9 +2490,14 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <div class="sect2">
 <h3 id="message_splitting_routing">Message Splitting &amp; Routing</h3>
 <div class="paragraph">
-<p>Please refer to the <a href="#splitting&#8212;&#8203;routing">Splitting &amp; Routing</a> section in the previous section.
-== Extending Smooks</p>
+<p>Please refer to the <a href="#splitting&#8212;&#8203;routing">Splitting &amp; Routing</a> section in the previous section.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="extending_smooks">Extending Smooks</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>All existing Smooks functionality (Java Binding, EDI processing, etc&#8230;&#8203;) is built through extension of a number of well defined APIs. We will look at these APIs in the coming sections.</p>
 </div>
@@ -2491,7 +2516,6 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 </div>
 <div class="paragraph">
 <p>Another very important aspect of writing Smooks extensions is how these components are configured. Because this is common to all Smooks components, we will look at this first.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="configuring_smooks_components">Configuring Smooks Components</h3>
