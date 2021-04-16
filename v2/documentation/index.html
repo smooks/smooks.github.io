@@ -82,16 +82,9 @@
 <li><a href="#database">Database</a></li>
 <li><a href="#java">Java</a></li>
 <li><a href="#jms">JMS</a></li>
+<li><a href="#apache_camel">Apache Camel</a></li>
 </ul>
 </li>
-<li><a href="#apache_camel_integration">Apache Camel Integration</a>
-<ul class="sectlevel2">
-<li><a href="#smookscomponent">SmooksComponent</a></li>
-<li><a href="#smooksdataformat">SmooksDataFormat</a></li>
-<li><a href="#smooksprocessor">SmooksProcessor</a></li>
-</ul>
-</li>
-<li><a href="#maven_coordinates">Maven Coordinates</a></li>
 <li><a href="#exporting_results">Exporting Results</a></li>
 <li><a href="#performance_tuning">Performance Tuning</a>
 <ul class="sectlevel2">
@@ -1534,10 +1527,11 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="sect2">
 <h3 id="jms">JMS</h3>
 <div class="paragraph">
-<p>See the <a href="#routing-to-jms">Routing to JMS</a> for more information.
-=== Apache Camel
-:leveloffset: 3</p>
+<p>See the <a href="#routing-to-jms">Routing to JMS</a> for more information.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="apache_camel">Apache Camel</h3>
 <div class="paragraph">
 <p>It is possible to route fragments to Apache Camel endpoints using the <code>&lt;camel:route&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/camel-1.5.xsd</code> configuration namespace.</p>
 </div>
@@ -1570,20 +1564,16 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="paragraph">
 <p>The above configuration shows routing using the <code>beanId</code> attribute. It is also possible to route using an attribute named <code>routeOnElement</code>.</p>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="apache_camel_integration">Apache Camel Integration</h2>
-<div class="sectionbody">
+<div class="sect4">
+<h5 id="apache_camel_integration">Apache Camel Integration</h5>
 <div class="paragraph">
 <p>Integrating Smooks from Apache Camel lets you to access all the features of Smooks from within Camel. You can take an existing Smooks configuration and use this in your Camel routes using one of the options that are described in this chapter.</p>
 </div>
 <div class="paragraph">
 <p>Using Smooks in Camel can be done in three ways:</p>
 </div>
-<div class="sect2">
-<h3 id="smookscomponent">SmooksComponent</h3>
+<div class="sect5">
+<h6 id="smookscomponent">SmooksComponent</h6>
 <div class="paragraph">
 <p>The <code>SmooksComponent</code> is a Camel <a href="https://camel.apache.org/component.html">Component</a> which can used when  you want to process the Camel Message Body using Smooks. You can do this by adding a route in your Camel route configuration:</p>
 </div>
@@ -1600,8 +1590,8 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="paragraph">
 <p>If you prefer/require programmatic configuration of Smooks you can use the <a href="#smooksprocessor"><code>SmooksProcessor</code></a> to achieve this.</p>
 </div>
-<div class="sect3">
-<h4 id="options">Options</h4>
+<div class="sect6">
+<h7 id="options">Options</h7>
 <div class="paragraph">
 <p>An Apache Component can take options that are specified after the Smooks configuration file. Currently only one option is available for the SmooksComponent:</p>
 </div>
@@ -1614,8 +1604,8 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="smooksdataformat">SmooksDataFormat</h3>
+<div class="sect5">
+<h6 id="smooksdataformat">SmooksDataFormat</h6>
 <div class="paragraph">
 <p><code>SmooksDataFormat</code> is a Camel DataFormat which is capable of transforming from one data format to another and back again. You would use this when you are only interested in transforming from one format to another and not interested in other Smooks features.</p>
 </div>
@@ -1632,8 +1622,8 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="smooksprocessor">SmooksProcessor</h3>
+<div class="sect5">
+<h6 id="smooksprocessor">SmooksProcessor</h6>
 <div class="paragraph">
 <p>Using <code>SmooksProcessor</code> gives you full control over Smooks, for example if you want to programatically create the underlying Smooks instance you’d use <code>SmooksProcessor</code>. When using <code>SmooksProcessor</code>, you can pass a Smooks instance to its constructor and prior to that programmatically configure Smooks.</p>
 </div>
@@ -1681,10 +1671,8 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="maven_coordinates">Maven Coordinates</h2>
-<div class="sectionbody">
+<div class="sect4">
+<h5 id="maven_coordinates">Maven Coordinates</h5>
 <div class="listingblock">
 <div class="title">pom.xml</div>
 <div class="content">
@@ -1693,6 +1681,8 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
     <span class="nt">&lt;artifactId&gt;</span>smooks-camel-cartridge<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
