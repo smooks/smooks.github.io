@@ -78,13 +78,10 @@
 </li>
 <li><a href="#routing">Routing</a>
 <ul class="sectlevel2">
-<li><a href="#file">File</a></li>
 <li><a href="#database">Database</a></li>
-<li><a href="#java">Java</a></li>
-<li><a href="#jms">JMS</a></li>
 <li><a href="#basic_splitting_and_routing">Basic Splitting and Routing</a></li>
-<li><a href="#file_2">File</a></li>
-<li><a href="#jms_2">JMS</a></li>
+<li><a href="#file">File</a></li>
+<li><a href="#jms">JMS</a></li>
 <li><a href="#apache_camel">Apache Camel</a></li>
 </ul>
 </li>
@@ -712,7 +709,7 @@ This requires the namespace prefix-to-URI mappings to be defined. A configuratio
 <div class="sect2">
 <h3 id="input">Input</h3>
 <div class="paragraph">
-<p>Smooks relies on a <em>Reader</em> for ingesting an input source and generate a SAX event stream. A reader is any class extending <a href="http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html"><code>XMLReader</code></a>. By default, Smooks uses the <code>XMLReader</code> returned from <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/helpers/XMLReaderFactory.html"><code>XMLReaderFactory.createXMLReader()</code></a>. You can easily implement your own <code>XMLReader</code> to create a non-XML reader that generates the input source event stream for Smooks to process:</p>
+<p>Smooks relies on a <em>Reader</em> for ingesting an input source and generating a SAX event stream. A reader is any class extending <a href="http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html"><code>XMLReader</code></a>. By default, Smooks uses the <code>XMLReader</code> returned from <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/helpers/XMLReaderFactory.html"><code>XMLReaderFactory.createXMLReader()</code></a>. You can easily implement your own <code>XMLReader</code> to create a non-XML reader that generates the input source event stream for Smooks to process:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -753,7 +750,7 @@ This requires the namespace prefix-to-URI mappings to be defined. A configuratio
 </div>
 </div>
 <div class="paragraph">
-<p>External Smooks modules, known as <a href="#Cartridge">cartridges</a>, provide support for non-XML readers but, by default, Smooks expects an XML input source. Omit the class name from the <code>reader</code> element to set features on the default XML reader:</p>
+<p>Packaged Smooks modules, known as <a href="#Cartridge">cartridges</a>, provide support for non-XML readers but, by default, Smooks expects an XML input source. Omit the class name from the <code>reader</code> element to set features on the default XML reader:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1495,38 +1492,20 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <p><em>Basic Fragment Splitting</em>: basic splitting means that no fragment transformation happens prior to routing. Basic splitting and routing involves defining the XPath of the fragment to be split out and defining a routing component (e.g., Apache Camel) to route that unmodified split fragment. See <a href="#basic-splitting-and-routing">Basic Splitting and Routing</a>.</p>
 </li>
 <li>
-<p><em>Complex Fragment Splitting</em>: Basic fragment splitting works for many use cases and is what most splitting and routing solutions offer. Smooks extends the basic splitting capabilities by allowing you to perform transformations on the split fragment data before routing is applied. For example, merging in the customer-details order information with each order-item information before performing the routing order-item split fragment routing.</p>
+<p><em>Complex Fragment Splitting</em>: basic fragment splitting works for many use cases and is what most splitting and routing solutions offer. Smooks extends the basic splitting capabilities by allowing you to perform transformations on the split fragment data before routing is applied. For example, merging in the customer-details order information with each order-item information before performing the routing order-item split fragment routing.</p>
 </li>
 <li>
 <p><em>In-Flight Stream Splitting &amp; Routing (Huge Message Support)</em>: Smooks is able to process infinite input streams because it can perform in-flight event routing; events are not accumulated when the <code>max.node.depth</code> parameter is left unset.</p>
 </li>
 <li>
-<p><em>Multiple Splitting and Routing</em>: Conditionally split and route multiple fragments (different formats XML, EDI, POJOs, etc&#8230;&#8203;) to different endpoints in a single filtering pass of the input source. One could route an <em>OrderItem</em> Java instance to the <em>HighValueOrdersValidation</em> JMS Queue for order items with a value greater than $1,000 and route all order items (unconditional) as XML/JSON to an HTTP endpoint for logging.</p>
+<p><em>Multiple Splitting and Routing</em>: conditionally split and route multiple fragments (different formats XML, EDI, POJOs, etc&#8230;&#8203;) to different endpoints in a single filtering pass of the input source. One could route an <em>OrderItem</em> Java instance to the <em>HighValueOrdersValidation</em> JMS Queue for order items with a value greater than $1,000 and route all order items (unconditional) as XML/JSON to an HTTP endpoint for logging.</p>
 </li>
 </ol>
-</div>
-<div class="sect2">
-<h3 id="file">File</h3>
-<div class="paragraph">
-<p>See the <a href="#routing-to-file">Routing to File</a> chapter for more information.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="database">Database</h3>
 <div class="paragraph">
 <p>See the <a href="#enriching-output-data">Enriching Output Data</a> chapter for more information on database access (also for writing to the database)</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="java">Java</h3>
-<div class="paragraph">
-<p>See the <a href="#the-bean-context">Bean Context</a> chapter in th basics chapter for more information.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="jms">JMS</h3>
-<div class="paragraph">
-<p>See the <a href="#routing-to-jms">Routing to JMS</a> for more information.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1604,7 +1583,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 </div>
 </div>
 <div class="sect2">
-<h3 id="file_2">File</h3>
+<h3 id="file">File</h3>
 <div class="paragraph">
 <p>File based routing is performed via the <code>&lt;file:outputStream&gt;</code> configuration from the
 <code>https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd</code> configuration namespace.</p>
@@ -1710,7 +1689,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 </div>
 </div>
 <div class="sect2">
-<h3 id="jms_2">JMS</h3>
+<h3 id="jms">JMS</h3>
 <div class="paragraph">
 <p>JMS routing is performed via the <code>&lt;jms:router&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd</code> configuration namespace.</p>
 </div>
