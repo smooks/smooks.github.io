@@ -77,7 +77,7 @@
 </ul>
 </li>
 <li><a href="#routing_output_data">Routing Output Data</a>
-<ul class="sectlevel3">
+<ul class="sectlevel2">
 <li><a href="#basic_splitting_and_routing">Basic Splitting and Routing</a></li>
 <li><a href="#file">File</a></li>
 <li><a href="#jms">JMS</a></li>
@@ -1560,8 +1560,8 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <div class="paragraph">
 <p>With the more complex approach outlined above, the key to processing huge messages (not an issue for the more basic approach) is to make sure that you always maintain a small memory footprint. You can do this using the JavaBean Cartridge by making sure you&#8217;re only binding the most relevant message data (into the bean context) at any one time. In the following sections, the examples are all based on splitting and routing of order-items out of an order message. The solutions shown all work for huge messages because the Smooks JavaBean Cartridge binding configurations are implemented such that the only data held in memory at any given time is the main order details (order header etc&#8230;&#8203;), and the  "current" order item details.</p>
 </div>
-<div class="sect3">
-<h4 id="basic_splitting_and_routing">Basic Splitting and Routing</h4>
+<div class="sect2">
+<h3 id="basic_splitting_and_routing">Basic Splitting and Routing</h3>
 <div class="paragraph">
 <p>As stated above, the easiest way to split and route fragments of a message is to use the basic <code>&lt;frag:serialize&gt;</code> and <em>&lt;*:router&gt;</em> components (<code>&lt;jms:router&gt;</code>, <code>&lt;file:router&gt;</code>, etc&#8230;&#8203;) from the Routing Cartridge. The <code>&lt;frag:serialize&gt;</code> component has its own configuration in the <code>https://www.smooks.org/xsd/smooks/fragment-routing-1.5.xsd</code> namespace.</p>
 </div>
@@ -1634,8 +1634,8 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <p>For more details on the JMS routing aspects of the above example, see the JMS Router documentation (below). The &lt;jms:router&gt; could be substituted for any of the other routers e.g. if using with JBoss ESB, you could use the <code>&lt;esbr:routeBean&gt;</code> configuration to route the split message to any ESB endpoint.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="file">File</h4>
+<div class="sect2">
+<h3 id="file">File</h3>
 <div class="paragraph">
 <p>File based routing is performed via the <code>&lt;file:outputStream&gt;</code> configuration from the
 <code>https://www.smooks.org/xsd/smooks/file-routing-2.0.xsd</code> configuration namespace.</p>
@@ -1740,8 +1740,8 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="jms">JMS</h4>
+<div class="sect2">
+<h3 id="jms">JMS</h3>
 <div class="paragraph">
 <p>JMS routing is performed via the <code>&lt;jms:router&gt;</code> configuration from the <code>https://www.smooks.org/xsd/smooks/jms-routing-2.0.xsd</code> configuration namespace.</p>
 </div>
