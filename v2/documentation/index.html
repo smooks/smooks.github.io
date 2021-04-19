@@ -123,7 +123,7 @@
 <li><a href="#rule_based_validation">Rule-Based Validation</a></li>
 </ul>
 </li>
-<li><a href="#database">Database</a>
+<li><a href="#database_support">Database Support</a>
 <ul class="sectlevel2">
 <li><a href="#jdbc">JDBC</a></li>
 <li><a href="#persistence">Persistence</a></li>
@@ -1658,7 +1658,7 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <p>In the example, we want to process a huge order message and route the individual order item details to file. The following illustrates what we want to achieve. As you can see, the split messages don&#8217;t just contain data from the order item fragments. They also contain data from the order header and root elements.</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="https://raw.githubusercontent.com/claudemamo/smooks/readme/docs/images/File-split-required.png" alt="Image:file-split-required.png"></span></p>
+<p><span class="image"><img src="https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master/docs/images/File-split-required.png" alt="Image:file-split-required.png"></span></p>
 </div>
 <div class="paragraph">
 <p>To achieve this with Smooks, we assemble the following Smooks configuration:</p>
@@ -7187,7 +7187,7 @@ belongs to.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="database">Database</h2>
+<h2 id="database_support">Database Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Smooks support for databases include:</p>
@@ -7211,7 +7211,7 @@ belongs to.</p>
 <p>Consider an ETL scenario where order and order items needs to be saved to the database:</p>
 </div>
 <div class="paragraph">
-<p><span class="image"><img src="docs/images/Db-split-required.png" alt="Image:db-split-required.png"></span></p>
+<p><span class="image"><img src="https://raw.githubusercontent.com/smooks/smooks-persistence-cartridge/master/docs/images/Db-split-required.png" alt="Image:db-split-required.png"></span></p>
 </div>
 <div class="paragraph">
 <p>To route an order and order item data to a database, you should define a set of Java bindings that extract the <em>order</em> and <em>order-item</em> data from the input source stream:</p>
