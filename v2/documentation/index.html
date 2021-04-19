@@ -126,10 +126,11 @@
 <li><a href="#enriching_output_data">Enriching Output Data</a>
 <ul class="sectlevel2">
 <li><a href="#sql_support">SQL Support</a></li>
-<li><a href="#entity_persistence_frameworks">Entity Persistence Frameworks</a></li>
-<li><a href="#data_access_object_support">Data Access Object Support</a></li>
+<li><a href="#jdbc">JDBC</a></li>
+<li><a href="#persistence">Persistence</a></li>
+<li><a href="#data_access_objects">Data Access Objects</a></li>
 <li><a href="#maven_coordinates_13">Maven Coordinates</a></li>
-<li><a href="#xml_namespace_8">XML Namespace</a></li>
+<li><a href="#xml_namespaces_3">XML Namespaces</a></li>
 </ul>
 </li>
 <li><a href="#scripting">Scripting</a>
@@ -7238,11 +7239,142 @@ using SQL</a> chapter for more information.</p>
 <div class="paragraph">
 <p>TODO: Write this chapter</p>
 </div>
+<div class="paragraph">
+<p>Smooks support for databases include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#jdbc">JDBC resources</a> to read from and write to the database using SQL.</p>
+</li>
+<li>
+<p><a href="#persistence">Entity persistence resources</a> to leverage persistence frameworks such as MyBatis, Hibernate, or any JPA compatible framework.</p>
+</li>
+<li>
+<p><a href="#data-access-objects">Data Access Object (DAO) resources</a> where CRUD methods are invoked to issue database reads and writes.</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
-<h3 id="entity_persistence_frameworks">Entity Persistence Frameworks</h3>
+<h3 id="jdbc">JDBC</h3>
 <div class="paragraph">
-<p>With the Smooks Persistence Cartridge, you can directly use several entity persistence frameworks from within Smooks (Hibernate, JPA, etc&#8230;&#8203;).</p>
+<p>Consider an ETL scenario where order and order items needs to be saved to the database:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="docs/images/Db-split-required.png" alt="Image:db-split-required.png"></span></p>
+</div>
+<div class="paragraph">
+<p>To route an order and order item data to a database, you should define a set of Java bindings that extract the <em>order</em> and <em>order-item</em> data from the input source stream:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:jb=</span><span class="s">"https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- Extract the order data... --&gt;</span>
+    <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"orderId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order/@id"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerNumber"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"header/customer/@number"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerName"</span> <span class="na">data=</span><span class="s">"header/customer"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/jb:bean&gt;</span>
+
+    <span class="c">&lt;!-- Extract the order-item data... --&gt;</span>
+    <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"orderItem"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"itemId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/@id"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"productId"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"order-item/product"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"quantity"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/quantity"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"price"</span> <span class="na">decoder=</span><span class="s">"Double"</span> <span class="na">data=</span><span class="s">"order-item/price"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/jb:bean&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next you need to define datasource configuration, and a number of <code>jdbc:executor</code> configurations that will reference the datasource to insert the POJO fields into the database. This is the datasource configuration (namespace <code>https://www.smooks.org/xsd/smooks/datasource-1.4.xsd</code>) for retrieving a direct database connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:ds=</span><span class="s">"https://www.smooks.org/xsd/smooks/datasource-1.4.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;ds:direct</span> <span class="na">bindOnElement=</span><span class="s">"#document"</span>
+              <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span>
+              <span class="na">driver=</span><span class="s">"org.hsqldb.jdbcDriver"</span>
+              <span class="na">url=</span><span class="s">"jdbc:hsqldb:hsql://localhost:9201/smooks-hsql-9201"</span>
+              <span class="na">username=</span><span class="s">"sa"</span>
+              <span class="na">password=</span><span class="s">""</span>
+              <span class="na">autoCommit=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is also possible to use a JNDI datasource for retrieving a database connection:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:ds=</span><span class="s">"https://www.smooks.org/xsd/smooks/datasource-1.4.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- This JNDI datasource can handle JDBC and JTA transactions or
+         it can leave the transaction managment to an other external component.
+         An external component could be an other Smooks visitor, the EJB transaction manager
+         or you can do it your self. --&gt;</span>
+    <span class="nt">&lt;ds:JNDI</span>
+         <span class="na">bindOnElement=</span><span class="s">"#document"</span>
+         <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span>
+         <span class="na">datasourceJndi=</span><span class="s">"java:/someDS"</span>
+         <span class="na">transactionManager=</span><span class="s">"JTA"</span>
+         <span class="na">transactionJndi=</span><span class="s">"java:/mockTransaction"</span>
+         <span class="na">targetProfile=</span><span class="s">"jta"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The datasource schema describes and documents how you can configure the datasource. This is the <code>jdbc:executor</code> configuration (namespace <code>https://www.smooks.org/xsd/smooks/jdbc-2.0.xsd</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:jdbc=</span><span class="s">"https://www.smooks.org/xsd/smooks/jdbc-2.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="c">&lt;!-- Assert whether it's an insert or update. Need to do this just before we do the insert/update... --&gt;</span>
+    <span class="nt">&lt;jdbc:executor</span> <span class="na">executeOnElement=</span><span class="s">"order-items"</span> <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span> <span class="na">executeBefore=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;jdbc:statement&gt;</span>select OrderId from ORDERS where OrderId = ${order.orderId}<span class="nt">&lt;/jdbc:statement&gt;</span>
+        <span class="nt">&lt;jdbc:resultSet</span> <span class="na">name=</span><span class="s">"orderExistsRS"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/jdbc:executor&gt;</span>
+
+    <span class="c">&lt;!-- If it's an insert (orderExistsRS.isEmpty()), insert the order before we process the order items... --&gt;</span>
+    <span class="nt">&lt;jdbc:executor</span> <span class="na">executeOnElement=</span><span class="s">"order-items"</span> <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span> <span class="na">executeBefore=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;condition&gt;</span>orderExistsRS.isEmpty()<span class="nt">&lt;/condition&gt;</span>
+        <span class="nt">&lt;jdbc:statement&gt;</span>INSERT INTO ORDERS VALUES(${order.orderId}, ${order.customerNumber}, ${order.customerName})<span class="nt">&lt;/jdbc:statement&gt;</span>
+    <span class="nt">&lt;/jdbc:executor&gt;</span>
+
+    <span class="c">&lt;!-- And insert each orderItem... --&gt;</span>
+    <span class="nt">&lt;jdbc:executor</span> <span class="na">executeOnElement=</span><span class="s">"order-item"</span> <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span> <span class="na">executeBefore=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;condition&gt;</span>orderExistsRS.isEmpty()<span class="nt">&lt;/condition&gt;</span>
+        <span class="nt">&lt;jdbc:statement&gt;</span>INSERT INTO ORDERITEMS VALUES (${orderItem.itemId}, ${order.orderId}, ${orderItem.productId}, ${orderItem.quantity}, ${orderItem.price})<span class="nt">&lt;/jdbc:statement&gt;</span>
+    <span class="nt">&lt;/jdbc:executor&gt;</span>
+
+    <span class="c">&lt;!-- Ignoring updates for now!! --&gt;</span>
+
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A functional version of this example is available <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/db-extract-transform-load">online</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="persistence">Persistence</h3>
+<div class="paragraph">
+<p>You can directly use several persistence frameworks from within Smooks (Hibernate, JPA, etc&#8230;&#8203;).</p>
 </div>
 <div class="paragraph">
 <p>Let us take a look at a Hibernate example. The same principals follow for any JPA compliant framework.</p>
@@ -7355,8 +7487,8 @@ using SQL</a> chapter for more information.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
- <span class="na">xmlns:jb=</span><span class="s">"https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</span>
- <span class="na">xmlns:dao=</span><span class="s">"https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</span><span class="nt">&gt;</span>
+                      <span class="na">xmlns:jb=</span><span class="s">"https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</span>
+                      <span class="na">xmlns:persistence=</span><span class="s">"https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</span><span class="nt">&gt;</span>
 
     <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">class=</span><span class="s">"example.entity.Order"</span> <span class="na">createOnElement=</span><span class="s">"order"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"ordernumber"</span> <span class="na">data=</span><span class="s">"ordernumber"</span> <span class="nt">/&gt;</span>
@@ -7370,14 +7502,14 @@ using SQL</a> chapter for more information.</p>
         <span class="nt">&lt;jb:wiring</span> <span class="na">property=</span><span class="s">"product"</span> <span class="na">beanIdRef=</span><span class="s">"product"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/jb:bean&gt;</span>
 
-    <span class="nt">&lt;dao:locator</span> <span class="na">beanId=</span><span class="s">"product"</span> <span class="na">lookupOnElement=</span><span class="s">"order-item"</span> <span class="na">onNoResult=</span><span class="s">"EXCEPTION"</span> <span class="na">uniqueResult=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;dao:query&gt;</span>from Product p where p.id = :id<span class="nt">&lt;/dao:query&gt;</span>
-        <span class="nt">&lt;dao:params&gt;</span>
-            <span class="nt">&lt;dao:value</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">data=</span><span class="s">"product"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;/dao:params&gt;</span>
-    <span class="nt">&lt;/dao:locator&gt;</span>
+    <span class="nt">&lt;persistence:locator</span> <span class="na">beanId=</span><span class="s">"product"</span> <span class="na">lookupOnElement=</span><span class="s">"order-item"</span> <span class="na">onNoResult=</span><span class="s">"EXCEPTION"</span> <span class="na">uniqueResult=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;persistence:query&gt;</span>from Product p where p.id = :id<span class="nt">&lt;/persistence:query&gt;</span>
+        <span class="nt">&lt;persistence:params&gt;</span>
+            <span class="nt">&lt;persistence:value</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">data=</span><span class="s">"product"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/persistence:params&gt;</span>
+    <span class="nt">&lt;/persistence:locator&gt;</span>
 
-    <span class="nt">&lt;dao:inserter</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">insertOnElement=</span><span class="s">"order"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;persistence:inserter</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">insertOnElement=</span><span class="s">"order"</span> <span class="nt">/&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
@@ -7387,11 +7519,11 @@ using SQL</a> chapter for more information.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dao:locator</span> <span class="na">beanId=</span><span class="s">"product"</span> <span class="na">lookupOnElement=</span><span class="s">"order-item"</span> <span class="na">lookup=</span><span class="s">"product.byId"</span> <span class="na">onNoResult=</span><span class="s">"EXCEPTION"</span> <span class="na">uniqueResult=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;dao:params&gt;</span>
-        <span class="nt">&lt;dao:value</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">data=</span><span class="s">"product"</span> <span class="na">decoder=</span><span class="s">"Integer"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/dao:params&gt;</span>
-<span class="nt">&lt;/dao:locator&gt;</span></code></pre>
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;persistence:locator</span> <span class="na">beanId=</span><span class="s">"product"</span> <span class="na">lookupOnElement=</span><span class="s">"order-item"</span> <span class="na">lookup=</span><span class="s">"product.byId"</span> <span class="na">onNoResult=</span><span class="s">"EXCEPTION"</span> <span class="na">uniqueResult=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;persistence:params&gt;</span>
+        <span class="nt">&lt;persistence:value</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">data=</span><span class="s">"product"</span> <span class="na">decoder=</span><span class="s">"Integer"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/persistence:params&gt;</span>
+<span class="nt">&lt;/persistence:locator&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7421,7 +7553,7 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="data_access_object_support">Data Access Object Support</h3>
+<h3 id="data_access_objects">Data Access Objects</h3>
 <div class="paragraph">
 <p>Now let’s take a look at a DAO based example. The example will read an XML file containing order information (note that this works just the same for EDI, CSV, etc&#8230;&#8203;). Using the javabean cartridge, it will bind the XML data into a set of entity beans. Using the id of the products within the order items (the element) it will locate the product entities and bind them to the order entity bean. Finally, the order bean will be persisted.</p>
 </div>
@@ -7501,7 +7633,7 @@ using SQL</a> chapter for more information.</p>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:jb=</span><span class="s">"https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</span>
-                      <span class="na">xmlns:dao=</span><span class="s">"https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</span><span class="nt">&gt;</span>
+                      <span class="na">xmlns:persistence=</span><span class="s">"https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</span><span class="nt">&gt;</span>
 
     <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">class=</span><span class="s">"example.entity.Order"</span> <span class="na">createOnElement=</span><span class="s">"order"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"ordernumber"</span> <span class="na">data=</span><span class="s">"ordernumber"</span><span class="nt">/&gt;</span>
@@ -7515,13 +7647,13 @@ using SQL</a> chapter for more information.</p>
         <span class="nt">&lt;jb:wiring</span> <span class="na">property=</span><span class="s">"product"</span> <span class="na">beanIdRef=</span><span class="s">"product"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/jb:bean&gt;</span>
 
-    <span class="nt">&lt;dao:locator</span> <span class="na">beanId=</span><span class="s">"product"</span> <span class="na">dao=</span><span class="s">"product"</span> <span class="na">lookup=</span><span class="s">"id"</span> <span class="na">lookupOnElement=</span><span class="s">"order-item"</span> <span class="na">onNoResult=</span><span class="s">"EXCEPTION"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;dao:params&gt;</span>
-            <span class="nt">&lt;dao:value</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">data=</span><span class="s">"product"</span> <span class="na">decoder=</span><span class="s">"Integer"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;/dao:params&gt;</span>
-    <span class="nt">&lt;/dao:locator&gt;</span>
+    <span class="nt">&lt;persistence:locator</span> <span class="na">beanId=</span><span class="s">"product"</span> <span class="na">dao=</span><span class="s">"product"</span> <span class="na">lookup=</span><span class="s">"id"</span> <span class="na">lookupOnElement=</span><span class="s">"order-item"</span> <span class="na">onNoResult=</span><span class="s">"EXCEPTION"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;persistence:params&gt;</span>
+            <span class="nt">&lt;persistence:value</span> <span class="na">name=</span><span class="s">"id"</span> <span class="na">data=</span><span class="s">"product"</span> <span class="na">decoder=</span><span class="s">"Integer"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/persistence:params&gt;</span>
+    <span class="nt">&lt;/persistence:locator&gt;</span>
 
-    <span class="nt">&lt;dao:inserter</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">dao=</span><span class="s">"order"</span> <span class="na">insertOnElement=</span><span class="s">"order"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;persistence:inserter</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">dao=</span><span class="s">"order"</span> <span class="na">insertOnElement=</span><span class="s">"order"</span><span class="nt">/&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
@@ -7569,10 +7701,20 @@ using SQL</a> chapter for more information.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="xml_namespace_8">XML Namespace</h3>
+<h3 id="xml_namespaces_3">XML Namespaces</h3>
 <div class="literalblock">
 <div class="content">
-<pre>xmlns:dao="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</pre>
+<pre>xmlns:ds="https://www.smooks.org/xsd/smooks/datasource-1.4.xsd"</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:jdbc="https://www.smooks.org/xsd/smooks/jdbc-2.0.xsd"</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>xmlns:persistence="https://www.smooks.org/xsd/smooks/persistence-2.0.xsd"</pre>
 </div>
 </div>
 </div>
@@ -7899,130 +8041,6 @@ Be sure to read the section on <a href="#java-binding">Java Binding</a>.
 <p><em>Multiple Splitting and Routing</em>: conditionally split and route multiple fragments (different formats XML, EDI, POJOs, etc&#8230;&#8203;) to different endpoints in a single filtering pass of the input source. One could route an <em>OrderItem</em> Java instance to the <em>HighValueOrdersValidation</em> JMS queue for order items with a value greater than $1,000 and route all order items as XML/JSON to an HTTP endpoint for logging.</p>
 </li>
 </ol>
-</div>
-<div class="sect4">
-<h5 id="routing_to_a_database_using_sql">Routing to a Database using SQL</h5>
-<div class="paragraph">
-<p>Routing to a database is also quite easy. Please read the "Routing to File" section above before reading this section.</p>
-</div>
-<div class="paragraph">
-<p>So we take the same scenario as with the File Routing example above, but this time we want to route the order and order item data to a database. This is what we want to achieve:</p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="docs/images/Db-split-required.png" alt="Image:db-split-required.png"></span></p>
-</div>
-<div class="paragraph">
-<p>First we need to define a set of Java bindings that extract the order and order-item data from the data stream:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:jb=</span><span class="s">"https://www.smooks.org/xsd/smooks/javabean-1.6.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="c">&lt;!-- Extract the order data... --&gt;</span>
-    <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"order"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"orderId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order/@id"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerNumber"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"header/customer/@number"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"customerName"</span> <span class="na">data=</span><span class="s">"header/customer"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/jb:bean&gt;</span>
-
-    <span class="c">&lt;!-- Extract the order-item data... --&gt;</span>
-    <span class="nt">&lt;jb:bean</span> <span class="na">beanId=</span><span class="s">"orderItem"</span> <span class="na">class=</span><span class="s">"java.util.Hashtable"</span> <span class="na">createOnElement=</span><span class="s">"order-item"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"itemId"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/@id"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"productId"</span> <span class="na">decoder=</span><span class="s">"Long"</span> <span class="na">data=</span><span class="s">"order-item/product"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"quantity"</span> <span class="na">decoder=</span><span class="s">"Integer"</span> <span class="na">data=</span><span class="s">"order-item/quantity"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"price"</span> <span class="na">decoder=</span><span class="s">"Double"</span> <span class="na">data=</span><span class="s">"order-item/price"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/jb:bean&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Next we need to define datasource configuration and a number of &lt;db:executor&gt; configurations that will use that datasource to insert the data that was bound into the Java Object model into the database.</p>
-</div>
-<div class="paragraph">
-<p>The Datasource configuration (namespace <a href="https://www.smooks.org/xsd/smooks/datasource-1.5.xsd" class="bare">https://www.smooks.org/xsd/smooks/datasource-1.5.xsd</a>) for retrieving direct database connection:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:ds=</span><span class="s">"https://www.smooks.org/xsd/smooks/datasource-1.5.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;ds:direct</span> <span class="na">bindOnElement=</span><span class="s">"#document"</span>
-              <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span>
-              <span class="na">driver=</span><span class="s">"org.hsqldb.jdbcDriver"</span>
-              <span class="na">url=</span><span class="s">"jdbc:hsqldb:hsql://localhost:9201/smooks-hsql-9201"</span>
-              <span class="na">username=</span><span class="s">"sa"</span>
-              <span class="na">password=</span><span class="s">""</span>
-              <span class="na">autoCommit=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>or it is possible to use a JNDI datasource for retrieving a database connection:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:ds=</span><span class="s">"https://www.smooks.org/xsd/smooks/datasource-1.5.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="c">&lt;!-- This JNDI datasource can handle JDBC and JTA transactions or
-         it can leave the transaction managment to an other external component.
-         An external component could be an other Smooks visitor, the EJB transaction manager
-         or you can do it your self. --&gt;</span>
-    <span class="nt">&lt;ds:JNDI</span>
-         <span class="na">bindOnElement=</span><span class="s">"#document"</span>
-         <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span>
-         <span class="na">datasourceJndi=</span><span class="s">"java:/someDS"</span>
-         <span class="na">transactionManager=</span><span class="s">"JTA"</span>
-         <span class="na">transactionJndi=</span><span class="s">"java:/mockTransaction"</span>
-         <span class="na">targetProfile=</span><span class="s">"jta"</span><span class="nt">/&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The datasource schema describes and documents how you can configure the datasource.</p>
-</div>
-<div class="paragraph">
-<p>The &lt;db:executor&gt; configurations (namespace <a href="https://www.smooks.org/xsd/smooks/db-routing-2.0.xsd" class="bare">https://www.smooks.org/xsd/smooks/db-routing-2.0.xsd</a>):</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
-                      <span class="na">xmlns:db=</span><span class="s">"https://www.smooks.org/xsd/smooks/db-routing-2.0.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="c">&lt;!-- Assert whether it's an insert or update. Need to do this just before we do the insert/update... --&gt;</span>
-    <span class="nt">&lt;db:executor</span> <span class="na">executeOnElement=</span><span class="s">"order-items"</span> <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span> <span class="na">executeBefore=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;db:statement&gt;</span>select OrderId from ORDERS where OrderId = ${order.orderId}<span class="nt">&lt;/db:statement&gt;</span>
-        <span class="nt">&lt;db:resultSet</span> <span class="na">name=</span><span class="s">"orderExistsRS"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/db:executor&gt;</span>
-
-    <span class="c">&lt;!-- If it's an insert (orderExistsRS.isEmpty()), insert the order before we process the order items... --&gt;</span>
-    <span class="nt">&lt;db:executor</span> <span class="na">executeOnElement=</span><span class="s">"order-items"</span> <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span> <span class="na">executeBefore=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;condition&gt;</span>orderExistsRS.isEmpty()<span class="nt">&lt;/condition&gt;</span>
-        <span class="nt">&lt;db:statement&gt;</span>INSERT INTO ORDERS VALUES(${order.orderId}, ${order.customerNumber}, ${order.customerName})<span class="nt">&lt;/db:statement&gt;</span>
-    <span class="nt">&lt;/db:executor&gt;</span>
-
-    <span class="c">&lt;!-- And insert each orderItem... --&gt;</span>
-    <span class="nt">&lt;db:executor</span> <span class="na">executeOnElement=</span><span class="s">"order-item"</span> <span class="na">datasource=</span><span class="s">"DBExtractTransformLoadDS"</span> <span class="na">executeBefore=</span><span class="s">"false"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;condition&gt;</span>orderExistsRS.isEmpty()<span class="nt">&lt;/condition&gt;</span>
-        <span class="nt">&lt;db:statement&gt;</span>INSERT INTO ORDERITEMS VALUES (${orderItem.itemId}, ${order.orderId}, ${orderItem.productId}, ${orderItem.quantity}, ${orderItem.price})<span class="nt">&lt;/db:statement&gt;</span>
-    <span class="nt">&lt;/db:executor&gt;</span>
-
-    <span class="c">&lt;!-- Ignoring updates for now!! --&gt;</span>
-
-<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Check out the db-extract-transform-load example.</p>
-</div>
 </div>
 </div>
 </div>
