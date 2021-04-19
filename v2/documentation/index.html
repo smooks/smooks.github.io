@@ -157,10 +157,7 @@
 <h2 id="introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Smooks is an extensible Java framework for building XML and non-XML data (CSV, EDI, POJOs, etc&#8230;&#8203;) fragment-based applications.</p>
-</div>
-<div class="paragraph">
-<p>While Smooks can be used as a lightweight framework on which to hook your own processing logic for a wide range of data formats, out-of-the-box it ships with useful features that can be used individually or seamlessly together:</p>
+<p>Smooks is an extensible Java framework for building XML and non-XML data (CSV, EDI, POJOs, etc&#8230;&#8203;) fragment-based applications. It can be used as a lightweight framework on which to hook your own processing logic for a wide range of data formats but out-of-the-box Smooks ships with features that can be used individually or seamlessly together:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -168,10 +165,10 @@
 <p><strong>Java Binding</strong>: Populate POJOs from an input source (CSV, EDI, XML, POJOs, etc&#8230;&#8203;). Populated POJOs can either be the final result of a transformation, or serve as a bridge for further transformations like what is seen in template resources which generate textual results such as XML. Additionally, Smooks supports collections (maps and lists of typed data) that can be referenced from expression languages and templates.</p>
 </li>
 <li>
-<p><strong>Transformation</strong>: Perform a wide range of data transformations - XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, POJO to XML, POJO to EDI, POJO to CSV, etc&#8230;&#8203;</p>
+<p><strong>Transformation</strong>: Perform a wide range of data transformations and mappings. XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, POJO to XML, POJO to EDI, POJO to CSV, etc&#8230;&#8203;</p>
 </li>
 <li>
-<p><strong>Huge Message Processing</strong>: Process huge messages (TBs) - split, transform and route fragments to JMS, file, database, and other destinations.</p>
+<p><strong>Huge Message Processing</strong>: Process huge messages (terabytes!). Split, transform and route fragments to JMS, filesystem, database, and other destinations.</p>
 </li>
 <li>
 <p><strong>Fragment Enrichment</strong>: Enrich a fragment with data from a database or other data sources.</p>
@@ -180,7 +177,7 @@
 <p><strong>Complex Fragment Validation</strong>: Rules-based fragment validation.</p>
 </li>
 <li>
-<p><strong>Fragment Persistence</strong>: Access a database through a persistence framework (like MyBatis, Hibernate, or any JPA compatible framework), possibly with the aid of DAOs, to read data or save fragments.</p>
+<p><strong>Fragment Persistence</strong>: Read fragments from, and save fragments to, a database through a JDBC, persistence frameworks (like MyBatis, Hibernate, or any JPA compatible framework), or DAOs.</p>
 </li>
 <li>
 <p><strong>Combine</strong>: Leverage Smooks&#8217;s transformation, routing and persistence functionality to perform <em>Extract Transform Load</em> (ETL) operations.</p>
@@ -193,7 +190,7 @@
 <p>Smooks started its life as a transformation solution. The main goal was to perform <em>fragment-based transformations</em> on messages. Supporting fragment-based transformation opened up the possibility of mixing and matching different technologies within the context of a single transformation. This meant that one could leverage distinct technologies for transforming fragments, depending on the type of transformation required by the fragment in question.</p>
 </div>
 <div class="paragraph">
-<p>In the process of evolving this fragment-based transformation solution, we realised that we were establishing a fragment-based processing paradigm. Concretely, a solution was being built for targeting custom <a href="#visitors">visitor</a> logic at message fragments. A visitor does not need to be restricted to transformation. A visitor could be implemented to apply all sorts of operations on fragments, and therefore, a message as a whole. At the time of writing, Smooks supports the following forms of fragment-based functionality:</p>
+<p>In the process of evolving this fragment-based transformation solution, it dawned on us that we were establishing a fragment-based processing paradigm. Concretely, a framework was being built for targeting custom <a href="#visitors">visitor</a> logic at message fragments. A visitor does not need to be restricted to transformation. A visitor could be implemented to apply all sorts of operations on fragments, and therefore, a message as a whole. At the time of writing, Smooks supports the following forms of fragment-based functionality:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -227,7 +224,7 @@
 <p>The primary design goal of Smooks is to provide a framework for fragment-based processing on structured data (XML and non-XML) using existing data processing technologies (such as XSLT, plain vanilla Java, Groovy script) while providing a degree of isolation between the different technologies.</p>
 </div>
 <div class="paragraph">
-<p>A <a href="#visitors">visitor</a> targets a fragment with the visitor&#8217;s resource <em>selector</em> value. The targeted fragment can take in as much or as little of the input stream as you like. A fragment is identified by the name of the event enclosing the fragment. You can target the whole stream using the event name of the root fragment as the selector or through the reserved <code>#document</code> selector.</p>
+<p>A visitor targets a fragment with the visitor&#8217;s resource <em>selector</em> value. The targeted fragment can take in as much or as little of the input stream as you like. A fragment is identified by the name of the event enclosing the fragment. You can target the whole stream using the event name of the root fragment as the selector or through the reserved <code>#document</code> selector.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -436,7 +433,7 @@ The terms <em>fragment</em> and <em>event</em> denote different meanings. It is 
 <div class="sect2">
 <h3 id="maven">Maven</h3>
 <div class="paragraph">
-<p>For details on how to integrate Smooks into your project via Maven, see the <a href="https://www.smooks.org/v2/maven">Maven guide</a>.</p>
+<p>See the <a href="https://www.smooks.org/v2/maven">Maven guide</a> for details on how to integrate Smooks into your project via Maven.</p>
 </div>
 </div>
 </div>
@@ -448,7 +445,7 @@ The terms <em>fragment</em> and <em>event</em> denote different meanings. It is 
 <p>A commonly accepted definition of Smooks is of it being a "Transformation Engine". Nonetheless, at its core, Smooks makes no reference to <em>data transformation</em>. The core codebase is designed to hook custom visitor logic into an event stream produced from an input source of some kind. As such, in its most distilled form, Smooks is a <em>Structured Data Event Stream Processor</em>.</p>
 </div>
 <div class="paragraph">
-<p>An application of a structured data event processor is transformation. In implementation terms, a Smooks transformation solution is a <a href="#visitors">visitor</a> reading the event stream from an input source to produce a different representation of the input. However, Smooks&#8217;s core capabilities enable much more than transformation. A range of other solutions can be implemented based on the fragment-based processing model:</p>
+<p>An application of a structured data event processor is transformation. In implementation terms, a Smooks transformation solution is a visitor reading the event stream from an input source to produce a different representation of the input. However, Smooks&#8217;s core capabilities enable much more than transformation. A range of other solutions can be implemented based on the fragment-based processing model:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -614,10 +611,10 @@ The terms <em>fragment</em> and <em>event</em> denote different meanings. It is 
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>The order in which the <a href="http://www.w3.org/TR/xpath/">XPath</a> expression is applied is the reverse of normal order e.g. as applied by an XSLT. Smooks works backwards from the targeted fragment element, as opposed to forwards from the message root element.</p>
+<p>The order in which the XPath expression is applied is the reverse of normal order e.g. as applied by an XSLT. Smooks works backwards from the targeted fragment element, as opposed to forwards from the message root element.</p>
 </li>
 <li>
-<p>Not all of the <a href="http://www.w3.org/TR/xpath/">XPath</a> specification is supported. A selector supports the following XPath syntax:</p>
+<p>Not all of the XPath specification is supported. A selector supports the following XPath syntax:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -645,7 +642,7 @@ The terms <em>fragment</em> and <em>event</em> denote different meanings. It is 
 <div class="title">Note</div>
 </td>
 <td class="content">
-This requires the namespace prefix-to-URI mappings to be defined. A configuration error will result if not defined. See the <a href="#namespace-declaration">Namespace Declaration</a> section for more details.
+This requires the namespace prefix-to-URI mappings to be defined. A configuration error will result if not defined. Read the <a href="#namespace-declaration">namespace declaration</a> section for more details.
 </td>
 </tr>
 </table>
@@ -707,7 +704,7 @@ This requires the namespace prefix-to-URI mappings to be defined. A configuratio
 <div class="sect2">
 <h3 id="input">Input</h3>
 <div class="paragraph">
-<p>Smooks relies on a <em>Reader</em> for ingesting an input source and generating a SAX event stream. A reader is any class extending <a href="http://java.sun.com/j2se/1.5.0/docs/api/org/xml/sax/XMLReader.html"><code>XMLReader</code></a>. By default, Smooks uses the <code>XMLReader</code> returned from <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/helpers/XMLReaderFactory.html"><code>XMLReaderFactory.createXMLReader()</code></a>. You can easily implement your own <code>XMLReader</code> to create a non-XML reader that generates the input source event stream for Smooks to process:</p>
+<p>Smooks relies on a <em>Reader</em> for ingesting an input source and generating a SAX event stream. A reader is any class extending <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/XMLReader.html"><code>XMLReader</code></a>. By default, Smooks uses the <code>XMLReader</code> returned from <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/helpers/XMLReaderFactory.html"><code>XMLReaderFactory.createXMLReader()</code></a>. You can easily implement your own <code>XMLReader</code> to create a non-XML reader that generates the input source event stream for Smooks to process:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -774,7 +771,7 @@ This requires the namespace prefix-to-URI mappings to be defined. A configuratio
 <p>As instances of <a href="https://docs.oracle.com/javase/8/docs/api/javax/xml/transform/Result.html"><code>Result</code></a>: client code extracts output from the <code>Result</code> instance after passing an empty one to <code>Smooks#filterSource(...)</code>.</p>
 </li>
 <li>
-<p>As side effects: during filtering, resource output is transferred to web services, local storage, queues, data stores, and other destinations. Events trigger the routing of fragments to external endpoints such as when <a href="#splitting&#8212;&#8203;routing">splitting and routing</a>.</p>
+<p>As side effects: during filtering, resource output is transferred to web services, local storage, queues, data stores, and other destinations. Events trigger the routing of fragments to external endpoints such as when <a href="https://github.com/smooks/smooks-routing-cartridge/blob/master/README.adoc">splitting and routing</a>.</p>
 </li>
 </ol>
 </div>
@@ -822,7 +819,7 @@ As yet, Smooks does not support capturing output to multiple <code>Result</code>
 <div class="sect4">
 <h5 id="streamresult_domresult">StreamResult &amp; DOMResult</h5>
 <div class="paragraph">
-<p>The <code>StreamResult</code> and <code>DOMResult</code> types receive special attention from Smooks. When the <a href="#filter-settings"><code>default.serialization.on</code></a> global parameter is turned on, which by default it is, Smooks serializes the stream of events to XML as it filters the input source. The XML is fed to the <code>Result</code> instance if a <code>StreamResult</code> or <code>DOMResult</code> is supplied to <code>Smooks#filterSource</code>. This is the mechanism used to perform a standard 1-input/1-xml-output character-based transformation.</p>
+<p>The <code>StreamResult</code> and <code>DOMResult</code> types receive special attention from Smooks. When the <a href="#user-content-settings"><code>default.serialization.on</code></a> global parameter is turned on, which by default it is, Smooks serializes the stream of events to XML as it filters the input source. The XML is fed to the <code>Result</code> instance if a <code>StreamResult</code> or <code>DOMResult</code> is supplied to <code>Smooks#filterSource</code>. This is the mechanism used to perform a standard 1-input/1-xml-output character-based transformation.</p>
 </div>
 </div>
 </div>
