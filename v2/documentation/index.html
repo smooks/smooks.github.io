@@ -123,9 +123,8 @@
 <li><a href="#rule_based_validation">Rule-Based Validation</a></li>
 </ul>
 </li>
-<li><a href="#enriching_output_data">Enriching Output Data</a>
+<li><a href="#database">Database</a>
 <ul class="sectlevel2">
-<li><a href="#sql_support">SQL Support</a></li>
 <li><a href="#jdbc">JDBC</a></li>
 <li><a href="#persistence">Persistence</a></li>
 <li><a href="#data_access_objects">Data Access Objects</a></li>
@@ -7188,57 +7187,8 @@ belongs to.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="enriching_output_data">Enriching Output Data</h2>
+<h2 id="database">Database</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>There are three out-of-the-box methods for enriching your output data:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Use a JDBC Datasource to access a database and use SQL statements to
-read from and write to the database. This capability is provided through
-the Smooks Routing Cartridge. See the section on
-<a href="#routing-to-a-database-using-sql">Routing to a Database using SQL</a>.</p>
-</li>
-<li>
-<p>Use an entity persistence framework (like MyBatis, Hibernate or any
-JPA compatible framework) to access a database and use its query
-language or CRUD methods to read from it or write to it. See the section
-on <a href="#entity-persistence-frameworks">Entity Persistence Frameworks</a>.</p>
-</li>
-<li>
-<p>Use custom Data Access Objects (DAO&#8217;s) to access a database and use
-it&#8217;s CRUD methods to read from it or write to it. Again, see
-<a href="#DAO_Support">DAO Support</a>.</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Be sure to read the section on <a href="#java-binding">Java
-Binding</a>.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>TODO: Rewrite / restructure this chapter</p>
-</div>
-<div class="sect2">
-<h3 id="sql_support">SQL Support</h3>
-<div class="paragraph">
-<p>See the <a href="#routing-to-a-database-using-sql">Routing to a Database
-using SQL</a> chapter for more information.</p>
-</div>
-<div class="paragraph">
-<p>TODO: Write this chapter</p>
-</div>
 <div class="paragraph">
 <p>Smooks support for databases include:</p>
 </div>
@@ -7254,7 +7204,6 @@ using SQL</a> chapter for more information.</p>
 <p><a href="#data-access-objects">Data Access Object (DAO) resources</a> where CRUD methods are invoked to issue database reads and writes.</p>
 </li>
 </ul>
-</div>
 </div>
 <div class="sect2">
 <h3 id="jdbc">JDBC</h3>
