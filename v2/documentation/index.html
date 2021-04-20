@@ -4050,7 +4050,7 @@ Maurice  Zeijen     M 27 NL</pre>
 <div class="sect2">
 <h3 id="dfdl">DFDL</h3>
 <div class="paragraph">
-<p>The DFDL cartridge opens up Smooks to an incredible number of data formats (e.g., SWIFT, ISO8583, HL7). In fact, this cartridge forms the foundations of the EDI and EDIFACT cartridges. The DFDL cartridge deserialises (i.e., parses) non-XML data and serialises (i.e., unparses) XML according to a structure described in <a href="https://daffodil.apache.org/docs/dfdl/">DFDL</a>. Take the subsequent DFDL schema as an example:</p>
+<p>The DFDL cartridge opens up Smooks to an incredible number of data formats (e.g., SWIFT, ISO8583, HL7). In fact, this cartridge forms the foundations of the <a href="https://github.com/smooks/smooks-edi-cartridge">EDI and EDIFACT cartridges</a>. The DFDL cartridge deserializes (i.e., parses) non-XML data and serializes (i.e., unparses) XML according to the structure described in a <a href="https://daffodil.apache.org/docs/dfdl/">DFDL</a> schema. Take the subsequent DFDL schema as an example:</p>
 </div>
 <div class="listingblock">
 <div class="title">csv.dfdl.xsd</div>
@@ -4099,6 +4099,7 @@ Maurice  Zeijen     M 27 NL</pre>
 <p>The schema describes the structure of CSV data like the one below:</p>
 </div>
 <div class="listingblock">
+<div class="title">input.csv</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="csv">last,first,middle,DOB
 smith,robert,brandon,1988-03-24
@@ -4107,7 +4108,7 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Assuming the file "csv.dfdl.xsd" holds the DFDL schema describing the CSV structure, the DFDL resource configuration to parse the above CSV would be written as:</p>
+<p>A Smooks config parsing the above CSV using the DFDL cartridge would be written as:</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -4124,7 +4125,7 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <em>dfdl:parser</em> element <em>schemaURI</em> attribute references the DFDL schema driving the parsing behaviour. For the above CSV, <em>dfdl:parser</em> generates the XML stream:</p>
+<p><code>dfdl:parser</code> is a reader where its <code>schemaURI</code> attribute references the DFDL schema driving the parsing behaviour. From <em>input.csv</em>, <code>dfdl:parser</code> generates the event stream:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4157,24 +4158,39 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Shown in the next snippet is the <em>dfdl:unparser</em> visitor serialising the root element from above stream back to the original CSV:</p>
+<p>Shown in the next snippet is a <a href="https://github.com/smooks/smooks/blob/master/README.adoc#pipeline">pipeline</a> enclosing the <code>dfdl:unparser</code> visitor:</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
                       <span class="na">xmlns:dfdl=</span><span class="s">"https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"</span><span class="nt">&gt;</span>
 
     ...
 
-    <span class="nt">&lt;dfdl:unparser</span> <span class="na">schemaURI=</span><span class="s">"/csv.dfdl.xsd"</span> <span class="na">unparseOnElement=</span><span class="s">"file"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"#document"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;core:action&gt;</span>
+            <span class="nt">&lt;core:inline&gt;</span>
+                <span class="nt">&lt;core:replace/&gt;</span>
+            <span class="nt">&lt;/core:inline&gt;</span>
+        <span class="nt">&lt;/core:action&gt;</span>
+        <span class="nt">&lt;core:config&gt;</span>
+            <span class="nt">&lt;smooks-resource-list&gt;</span>
+                <span class="nt">&lt;dfdl:unparser</span> <span class="na">schemaURI=</span><span class="s">"/csv.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/smooks-resource-list&gt;</span>
+        <span class="nt">&lt;/core:config&gt;</span>
+    <span class="nt">&lt;/core:smooks&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The DFDL cartridge supports variables, on disk caching, and trace debugging. Consult the <a href="/xsd/smooks/dfdl-1.0.xsd">XSD documentation</a> for further information.</p>
+<p>In contrast to the <code>dfdl:parser</code> <code>schemaURI</code> attribute , the <code>schemaURI</code> schema in <code>dfdl:unparser</code> drives the unparsing behaviour. <code>dfdl:unparser</code> replaces each node in the event stream with its serialized CSV counterpart, essentially implementing a passthrough application.</p>
+</div>
+<div class="paragraph">
+<p>The DFDL cartridge supports variables, on disk caching, and trace debugging. Consult the <a href="src/main/resources/META-INF/xsd/smooks/dfdl-1.0.xsd">XSD documentation</a> for further information.</p>
 </div>
 <div class="sect3">
 <h4 id="maven_coordinates_4">Maven Coordinates</h4>
@@ -4184,7 +4200,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-dfdl-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0-RC1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
