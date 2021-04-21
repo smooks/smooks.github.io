@@ -4096,7 +4096,7 @@ Maurice  Zeijen     M 27 NL</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The schema describes the structure of CSV data like the one below:</p>
+<p>This schema describes the structure of CSV data like the one below:</p>
 </div>
 <div class="listingblock">
 <div class="title">input.csv</div>
@@ -4125,7 +4125,7 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>dfdl:parser</code> is a reader. Its <code>schemaURI</code> attribute references the DFDL schema driving the parsing behaviour. From the above <em>input.csv</em>, <code>dfdl:parser</code> generates the event stream:</p>
+<p><code>dfdl:parser</code> is a reader and its <code>schemaURI</code> attribute references the DFDL schema driving the parsing behaviour. Assuming <em>input.csv</em> is the source, <code>dfdl:parser</code> will generate the event stream:</p>
 </div>
 <div class="listingblock">
 <div class="content">
