@@ -1,8 +1,10 @@
 name: Publish to GitHub Pages
 
 on:
-  push
-      
+  push:
+  schedule:
+    - cron:  '0 0 * * *'
+
 jobs:
   jekyll:
     runs-on: ubuntu-latest
