@@ -171,7 +171,7 @@
 <p><strong>Templating</strong>: extensible template-driven transformations, with support for <a href="https://www.w3.org/TR/xslt/">XSLT</a>, <a href="https://freemarker.apache.org/">FreeMarker</a>, and <a href="https://www.stringtemplate.org/">StringTemplate</a>.</p>
 </li>
 <li>
-<p><strong>Huge Message Processing</strong>: process huge messages (terabytes!). Split, transform and route fragments to JMS, filesystem, database, and other destinations.</p>
+<p><strong>Huge Message Processing</strong>: process huge messages (gigabytes!). Split, transform and route fragments to JMS, filesystem, database, and other destinations.</p>
 </li>
 <li>
 <p><strong>Fragment Enrichment</strong>: enrich fragments with data from a database or other data sources.</p>
@@ -180,7 +180,7 @@
 <p><strong>Complex Fragment Validation</strong>: rule-based fragment validation.</p>
 </li>
 <li>
-<p><strong>Fragment Persistence</strong>: read fragments from, and save fragments to, a database through either JDBC, persistence frameworks (like MyBatis, Hibernate, or any JPA compatible framework), or DAOs.</p>
+<p><strong>Fragment Persistence</strong>: read fragments from, and save fragments to, a database with either JDBC, persistence frameworks (like MyBatis, Hibernate, or any JPA compatible framework), or DAOs.</p>
 </li>
 <li>
 <p><strong>Combine</strong>: leverage Smooks&#8217;s transformation, routing and persistence functionality for <em>Extract Transform Load</em> (ETL) operations.</p>
@@ -193,7 +193,7 @@
 <div class="sect2">
 <h3 id="why_smooks">Why Smooks?</h3>
 <div class="paragraph">
-<p>Smooks started its life as a transformation solution. The main goal was to perform <em>fragment-based transformations</em> on messages. Supporting fragment-based transformation opened up the possibility of mixing and matching different technologies within the context of a single transformation. This meant that one could leverage distinct technologies for transforming fragments, depending on the type of transformation required by the fragment in question.</p>
+<p>Smooks was conceived to perform <em>fragment-based transformations</em> on messages. Supporting fragment-based transformation opened up the possibility of mixing and matching different technologies within the context of a single transformation. This meant that one could leverage distinct technologies for transforming fragments, depending on the type of transformation required by the fragment in question.</p>
 </div>
 <div class="paragraph">
 <p>In the process of evolving this fragment-based transformation solution, it dawned on us that we were establishing a fragment-based processing paradigm. Concretely, a framework was being built for targeting custom <a href="#visitors">visitor</a> logic at message fragments. A visitor does not need to be restricted to transformation. A visitor could be implemented to apply all sorts of operations on fragments, and therefore, the message as a whole.</p>
@@ -1179,10 +1179,10 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="s">"/smooks/smooks-transform-x.xml"</span><span class="o">);</span>
-<span class="nc">ExecutionContext</span> <span class="n">execContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
+<span class="nc">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
 
-<span class="n">execContext</span><span class="o">.</span><span class="na">setEventListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">HtmlReportGenerator</span><span class="o">(</span><span class="s">"/tmp/smooks-report.html"</span><span class="o">));</span>
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">execContext</span><span class="o">,</span> <span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">inputStream</span><span class="o">),</span> <span class="k">new</span> <span class="nc">StreamResult</span><span class="o">(</span><span class="n">outputStream</span><span class="o">));</span></code></pre>
+<span class="n">executionContext</span><span class="o">.</span><span class="na">getContentDeliveryRuntime</span><span class="o">().</span><span class="na">addExecutionEventListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">HtmlReportGenerator</span><span class="o">(</span><span class="s">"/tmp/smooks-report.html"</span><span class="o">));</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">inputStream</span><span class="o">),</span> <span class="k">new</span> <span class="nc">StreamResult</span><span class="o">(</span><span class="n">outputStream</span><span class="o">));</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3290,15 +3290,16 @@ smooks.filterSource(...);
 </div>
 </div>
 <div class="sect3">
-<h4 id="executioncontext_and_applicationcontext">ExecutionContext and ApplicationContext</h4>
+<h4 id="executioncontext">ExecutionContext</h4>
 <div class="paragraph">
-<p>Smooks provides these two Context objects for storing of state information.</p>
+<p><code>ExecutionContext</code> is scoped specifically around a single execution of a <code>Smooks.filterSource</code> method. <strong>All Smooks visitors must be stateless within the context of a single execution</strong>. A visitor
+is created once in Smooks and referenced across multiple concurrent executions of the <code>Smooks.filterSource</code> method. All data stored in an <code>ExecutionContext</code> instance will be lost on completion of the <code>Smooks.filterSource</code> execution. <code>ExecutionContext</code> is a parameter in all visit invocations.</p>
 </div>
-<div class="paragraph">
-<p>The <code>ExecutionContext</code> is scoped specifically around a single execution of a <code>Smooks.filterSource</code> method. All Smooks visitors must be stateless within the context of a single <code>Smooks.filterSource</code> execution, allowing the visitor to be used across multiple concurrent executions of the <code>Smooks.filterSource</code> method. All data stored in an <code>ExecutionContext</code> instance will be lost on completion of the <code>Smooks.filterSource</code> execution. The <code>ExecutionContext</code> is supplied in all visitor API message event calls.</p>
 </div>
+<div class="sect3">
+<h4 id="applicationcontext">ApplicationContext</h4>
 <div class="paragraph">
-<p>The <code>ApplicationContext</code> is scoped around the associated Smooks instance i.e. only one <code>ApplicationContext</code> instance exists per Smooks instance. This context object can be used to store data that needs to be maintained (and accessible) across multiple <code>Smooks.filterSource</code> executions. Components (any component, including <code>SaxNgVisitor</code> components) can gain access to their associated <code>ApplicationContext</code> instance by declaring an <code>ApplicationContext</code> class property and annotating it with <code>@Inject</code>:</p>
+<p><code>ApplicationContext</code> is scoped around the associated Smooks instance: only one <code>ApplicationContext</code> instance exists per Smooks instance. This context object can be used to store data that needs to be maintained (and accessible) across multiple <code>Smooks.filterSource</code> executions. Components (any component, including <code>SaxNgVisitor</code> components) can gain access to their associated <code>ApplicationContext</code> instance by declaring an <code>ApplicationContext</code> class property and annotating it with <code>@Inject</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7972,7 +7973,7 @@ Be sure to read the section on <a href="https://github.com/smooks/smooks-javabea
 <p><em>Complex Fragment Splitting</em>: basic fragment splitting works for many use cases and is what most splitting and routing solutions offer. Smooks extends the basic splitting capabilities by allowing you to perform transformations on the split fragment data before routing is applied. For example, merging in the customer-details order information with each order-item information before performing the routing order-item split fragment routing.</p>
 </li>
 <li>
-<p><em>In-Flight Stream Splitting &amp; Routing (Huge Message Support)</em>: Smooks is able to process infinite input streams because it can perform in-flight event routing; events are not accumulated when the <code>max.node.depth</code> parameter is left unset.</p>
+<p><em>In-Flight Stream Splitting &amp; Routing (Huge Message Support)</em>: Smooks is able to process gigabyte streams because it can perform in-flight event routing; events are not accumulated when the <code>max.node.depth</code> parameter is left unset.</p>
 </li>
 <li>
 <p><em>Multiple Splitting and Routing</em>: conditionally split and route multiple fragments (different formats XML, EDI, POJOs, etc&#8230;&#8203;) to different endpoints in a single filtering pass of the source. One could route an <em>OrderItem</em> Java instance to the <em>HighValueOrdersValidation</em> JMS queue for order items with a value greater than $1,000 and route all order items as XML/JSON to an HTTP endpoint for logging.</p>
