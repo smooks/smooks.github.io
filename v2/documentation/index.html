@@ -271,7 +271,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <div class="ulist">
 <ul>
 <li>
-<p>Supersedes the SAX and DOM filters</p>
+<p>Replaces SAX filter and supersedes DOM filter</p>
 </li>
 <li>
 <p>Brings with it a new visitor API which unifies the SAX and DOM visitor APIs</p>
@@ -331,6 +331,16 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <p>Separate top-level Java namespaces for API and implementation to provide a cleaner and more intuitive package structure: API interfaces and internal classes were relocated to <code>org.smooks.api</code> and <code>org.smooks.engine</code> respectively</p>
 </li>
 <li>
+<p>Improved XPath support for resource selectors</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Functions like <code>not()</code> are now supported</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>Numerous dependency updates</p>
 </li>
 <li>
@@ -351,6 +361,9 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </li>
 <li>
 <p>Replace references to Java packages <code>org.milyn</code> with <code>org.smooks.api</code>, <code>org.smooks.engine</code>, <code>org.smooks.io</code> or <code>org.smooks.support</code>.</p>
+</li>
+<li>
+<p>Inherit from <code>org.smooks.api.resource.visitor.sax.ng.SaxNgVisitor</code> instead of <code>org.milyn.delivery.sax.SAXVisitor</code>.</p>
 </li>
 <li>
 <p>Change legacy document root fragment selectors from <code>$document</code> to <code>#document</code>.</p>
@@ -404,6 +417,9 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </li>
 <li>
 <p>Replace references to <code>org.milyn.cdr.SmooksResourceConfiguration</code> with <code>org.smooks.api.resource.config.ResourceConfig</code>.</p>
+</li>
+<li>
+<p>Replace references to <code>org.milyn.delivery.sax.SAXToXMLWriter</code> with <code>org.smooks.io.DomSerializer</code>.</p>
 </li>
 </ol>
 </div>
@@ -1148,7 +1164,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <div class="colist arabic">
 <ol>
 <li>
-<p><code>type</code> (default: <code>SAX NG</code>): the type of processing model that will be used. <code>SAX NG</code> is the recommended type. The <code>DOM</code> and <code>SAX</code> types are deprecated.</p>
+<p><code>type</code> (default: <code>SAX NG</code>): the type of processing model that will be used. <code>SAX NG</code> is the recommended type. The <code>DOM</code> type is deprecated.</p>
 </li>
 <li>
 <p><code>defaultSerialization</code> (default: <code>true</code>): if default serialization should be switched on. Default serialization being turned on simply tells Smooks to locate a <code>StreamResult</code> (or <code>DOMResult</code>) in the Result objects provided to the <code>Smooks.filterSource</code> method and to serialize all events to that <code>Result</code> instance. This behavior can be turned off using this global configuration parameter and can be overridden on a per-fragment basis by targeting a visitor at that fragment that takes ownership of the <code>org.smooks.io.FragmentWriter</code> object.</p>
@@ -1938,7 +1954,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-camel-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -2036,7 +2052,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 <p><strong><a href="#user-content-settings">Pool reader instances</a></strong> where possible. This can result in a huge performance boost, as some readers are very expensive to create.</p>
 </li>
 <li>
-<p>If possible, use <a href="#filter-settings">SAX filtering</a>. However, you need to check that all Smooks Cartridges in use are SAX compatible. SAX processing is a lot faster than DOM processing and has a consistently small memory footprint. It is mandatory for processing large messages. See the <a href="#filtering-process-selection-dom-or-sax">Filtering Process Selection (DOM or SAX?)</a> section. SAX filtering is the <a href="http://jira.codehaus.org/browse/MILYN-589">default filtering type since Smooks v1.5</a>.</p>
+<p>If possible, use <a href="#filter-settings">SAX NG filtering</a>. However, you need to check that all Smooks cartridges in use are SAX NG compatible. SAX NG processing is faster than DOM processing and has a consistently small memory footprint. It is especially recommended for processing large messages. See the <a href="#filtering-process-selection-dom-or-sax">Filtering Process Selection (DOM or SAX?)</a> section. SAX NG is the default filter since Smooks 2.</p>
 </li>
 <li>
 <p>Turn off debug logging. Smooks performs some intensive debug logging in parts of the code. This can result in significant additional processing overhead and lower throughput. Also remember that NOT having your logging configured (at all) may result in debug log statements being executed!!</p>
@@ -2939,7 +2955,7 @@ Of course, the above is just an illustration of a Source message event stream an
 </div>
 </div>
 <div class="paragraph">
-<p>Note that all of the fragment text will not be available until the <code>AfterVisitor.visitAfter</code> event.</p>
+<p>Note that the complete fragment text will not be available until the <code>AfterVisitor.visitAfter</code> event.</p>
 </div>
 </div>
 <div class="sect3">
@@ -3033,21 +3049,21 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 </div>
 </div>
 <div class="sect4">
-<h5 id="domtoxmlwriter">DomToXmlWriter</h5>
+<h5 id="domserializer">DomSerializer</h5>
 <div class="paragraph">
-<p>Smooks provides the <code>DomToXmlWriter</code> class to make serializing of element data, as XML, a little easier. This class allows you to write a <code>SaxNgVisitor</code> implementation like:</p>
+<p>Smooks provides the <code>DomSerializer</code> class to make serializing of element data, as XML, a little easier. This class allows you to write a <code>SaxNgVisitor</code> implementation like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nd">@StreamResultWriter</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyVisitor</span> <span class="kd">implements</span> <span class="nc">ElementVisitor</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="nc">DomToXmlWriter</span> <span class="n">xmlWriter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DomToXmlWriter</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">DomSerializer</span> <span class="n">domSerializer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DomSerializer</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visitBefore</span><span class="o">(</span><span class="nc">Element</span> <span class="n">element</span><span class="o">,</span> <span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">try</span> <span class="o">{</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeStartElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeStartElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nf">SmooksException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
         <span class="o">}</span>
@@ -3056,7 +3072,7 @@ If you need to control serialization of sub-fragments you need to reset the <cod
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visitChildText</span><span class="o">(</span><span class="nc">CharacterData</span> <span class="n">characterData</span><span class="o">,</span> <span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">try</span> <span class="o">{</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeText</span><span class="o">(</span><span class="n">characterData</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeText</span><span class="o">(</span><span class="n">characterData</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nf">SmooksException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
         <span class="o">}</span>
@@ -3069,7 +3085,7 @@ If you need to control serialization of sub-fragments you need to reset the <cod
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visitAfter</span><span class="o">(</span><span class="nc">Element</span> <span class="n">element</span><span class="o">,</span> <span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">SmooksException</span><span class="o">,</span> <span class="nc">IOException</span> <span class="o">{</span>
         <span class="k">try</span> <span class="o">{</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeEndElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeEndElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nf">SmooksException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
         <span class="o">}</span>
@@ -3078,7 +3094,7 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 </div>
 </div>
 <div class="paragraph">
-<p>You may have noticed that the arguments in the <code>DomToXmlWriter</code> constructor are boolean. This is the <code>closeEmptyElements</code> and <code>rewriteEntities</code> args which should be based on the <code>closeEmptyElements</code> and <code>rewriteEntities</code> filter setting, respectively. Smooks provides a small code optimization/assist here. If you annotate the <code>DomToXmlWriter</code> field with <code>@Inject</code>, Smooks will create the <code>DomToXmlWriter</code> instance and initialize it with the <code>closeEmptyElements</code> and <code>rewriteEntities</code> filter settings for the associated Smooks instance:</p>
+<p>You may have noticed that the arguments in the <code>DomSerializer</code> constructor are boolean. This is the <code>closeEmptyElements</code> and <code>rewriteEntities</code> args which should be based on the <code>closeEmptyElements</code> and <code>rewriteEntities</code> filter setting, respectively. Smooks provides a small code optimization/assist here. If you annotate the <code>DomSerializer</code> field with <code>@Inject</code>, Smooks will create the <code>DomSerializer</code> instance and initialize it with the <code>closeEmptyElements</code> and <code>rewriteEntities</code> filter settings for the associated Smooks instance:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3086,13 +3102,13 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyVisitor</span> <span class="kd">implements</span> <span class="nc">AfterVisitor</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="nc">DomToXmlWriter</span> <span class="n">xmlWriter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">DomSerializer</span> <span class="n">domSerializer</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visitAfter</span><span class="o">(</span><span class="nc">Element</span> <span class="n">element</span><span class="o">,</span> <span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">SmooksException</span><span class="o">,</span> <span class="nc">IOException</span> <span class="o">{</span>
         <span class="k">try</span> <span class="o">{</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeStartElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeText</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeEndElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeStartElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeText</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeEndElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nf">SmooksException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
         <span class="o">}</span>
@@ -3124,7 +3140,7 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ChangeItemState</span> <span class="kd">implements</span> <span class="nc">AfterVisitor</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="nc">DomToXmlWriter</span> <span class="n">xmlWriter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">DomSerializer</span> <span class="n">domSerializer</span><span class="o">;</span>
 
     <span class="nd">@Inject</span>
     <span class="kd">private</span> <span class="nc">String</span> <span class="n">newState</span><span class="o">;</span>
@@ -3133,9 +3149,9 @@ If you need to control serialization of sub-fragments you need to reset the <cod
         <span class="n">element</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"state"</span><span class="o">,</span> <span class="n">newState</span><span class="o">);</span>
 
         <span class="k">try</span> <span class="o">{</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeStartElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeText</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
-            <span class="n">xmlWriter</span><span class="o">.</span><span class="na">writeEndElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeStartElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeText</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
+            <span class="n">domSerializer</span><span class="o">.</span><span class="na">writeEndElement</span><span class="o">(</span><span class="n">element</span><span class="o">,</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">getWriter</span><span class="o">());</span>
         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">throw</span> <span class="k">new</span> <span class="nf">SmooksException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
         <span class="o">}</span>
@@ -3697,7 +3713,7 @@ Mike,Fennelly,Male,2,Ireland</pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-csv-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4034,7 +4050,7 @@ Maurice  Zeijen     M 27 NL</pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-fixed-length-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4201,7 +4217,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-dfdl-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.0.0-RC1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4239,7 +4255,7 @@ jones,arya,cat,1986-02-19</code></pre>
     <span class="nt">&lt;edi:unparser</span> <span class="na">schemaURI=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
                   <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
                   <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span> // <b class="conum">(3)</b>
-                  <span class="na">unparseOnElement=</span><span class="s">"/Order"</span><span class="nt">/&gt;</span> // <b class="conum">(4)</b>
+                  <span class="na">unparseOnNode=</span><span class="s">"/Order"</span><span class="nt">/&gt;</span> // <b class="conum">(4)</b>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
@@ -4261,7 +4277,7 @@ jones,arya,cat,1986-02-19</code></pre>
 </ol>
 </div>
 <div class="paragraph">
-<p>The <em>unparseOnElement</em> attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge&#8217;s <a href="/xsd/smooks/edi-2.0.xsd">XSD documentation</a> for the complete list of config attributes and elements.</p>
+<p>The <code>unparseOnNode</code> attribute is exclusive to the unparser visitor. It tells the unparser which event to intercept and serialise. Consult  with the EDI cartridge&#8217;s <a href="/xsd/smooks/edi-2.0.xsd">XSD documentation</a> for the complete list of config attributes and elements.</p>
 </div>
 <div class="sect3">
 <h4 id="edi_dfdl_schema">EDI DFDL Schema</h4>
@@ -4558,7 +4574,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-edi-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4587,13 +4603,13 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
 
     <span class="nt">&lt;edifact:parser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span><span class="nt">/&gt;</span>
 
-    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnElement=</span><span class="s">"/Interchange"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"/Interchange"</span><span class="nt">/&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The <em>edifact:parser</em> and <em>edifact:unparser</em>, analogous to the <em>edi:parser</em> and <em>edi:unparser</em>, convert the stream according to the pre-generated DFDL schema referenced in the <em>schemaURI</em> attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the <em>onDiskCache</em> attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:</p>
+<p>The <em>edifact:parser</em> and <em>edifact:unparser</em>, analogous to the <em>edi:parser</em> and <em>edi:unparser</em>, convert the stream according to the pre-generated DFDL schema referenced in the <em>schemaURI</em> attribute. Given that an EDIFACT schema can be very big compared to your average EDI schema, it may take minutes for the parser to compile it. Even having the <em>cacheOnDisk</em> attribute enabled may not be sufficient to meet your compilation time needs. For such situations, you can mitigate this problem by declaring ahead of time which message types the parser will process:</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -4609,7 +4625,7 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
         <span class="nt">&lt;/edifact:messageTypes&gt;</span>
     <span class="nt">&lt;/edifact:parser&gt;</span>
 
-    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnElement=</span><span class="s">"/Interchange"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaURI=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"/Interchange"</span><span class="nt">&gt;</span>
        <span class="nt">&lt;edifact:messageTypes&gt;</span>
             <span class="nt">&lt;edifact:messageType&gt;</span>ORDERS<span class="nt">&lt;/edifact:messageType&gt;</span>
             <span class="nt">&lt;edifact:messageType&gt;</span>INVOIC<span class="nt">&lt;/edifact:messageType&gt;</span>
@@ -4648,7 +4664,7 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>edifact-schemas<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;classifier&gt;</span>d93a<span class="nt">&lt;/classifier&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4684,7 +4700,7 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-edifact-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4724,7 +4740,7 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
 <p><code>rootName</code>: The name of the root element. Default: <code>json</code>.</p>
 </li>
 <li>
-<p><code>elementName</code>: The name of a sequence element. Default: <code>element</code>.</p>
+<p><code>arrayElementName</code>: The name of a sequence element. Default: <code>element</code>.</p>
 </li>
 </ul>
 </div>
@@ -4815,7 +4831,7 @@ class.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-json-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4953,7 +4969,7 @@ class.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-yaml-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -6441,7 +6457,7 @@ example.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-javabean-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -6795,7 +6811,7 @@ See full example in the <a href="https://github.com/smooks/smooks-examples/tree/
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-templating-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -7002,7 +7018,7 @@ Be sure to read the section on <a href="https://github.com/smooks/smooks-javabea
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-rules-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -7177,7 +7193,7 @@ belongs to.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-validation-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -7641,9 +7657,9 @@ belongs to.</p>
 <div class="title">pom.xml</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.persistence<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-persistence-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -7787,7 +7803,7 @@ belongs to.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-scripting-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-M3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC1<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
