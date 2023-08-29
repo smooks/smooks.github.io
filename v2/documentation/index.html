@@ -4207,7 +4207,20 @@ jones,arya,cat,1986-02-19</code></pre>
 <p>In contrast to the <code>dfdl:parser</code> <code>schemaUri</code> attribute , the <code>schemaUri</code> schema in <code>dfdl:unparser</code> drives the unparsing behaviour. <code>dfdl:unparser</code> replaces each node in the event stream with its serialized CSV counterpart, essentially implementing a pass-through application.</p>
 </div>
 <div class="paragraph">
-<p>The DFDL cartridge supports variables, on disk caching, and trace debugging. Consult the <a href="src/main/resources/META-INF/xsd/smooks/dfdl-1.0.xsd">XSD documentation</a> for further information.</p>
+<p>The DFDL cartridge supports variables, on disk caching, and trace debugging. Consult the <a href="src/main/resources/META-INF/xsd/smooks/dfdl-1.0.xsd">XSD documentation</a> for further information. It is strongly advised to learn DFDL before authoring a DFDL schema. Resources to get started with DFDL include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://ogf.org/ogf/doku.php/standards/dfdl/dfdl">Open Grid Forum DFDL page</a></p>
+</li>
+<li>
+<p><a href="https://daffodil.apache.org/community/">Apache Daffodil user mailing list</a></p>
+</li>
+<li>
+<p><a href="https://daffodil.apache.org/docs/dfdl/">DFDL specification</a></p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="parser_reader_options">Parser reader options</h4>
@@ -4248,7 +4261,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="sect4">
 <h5 id="validation_mode">Validation mode</h5>
 <div class="paragraph">
-<p>Validation modes for validating the resulting infoset against the DFDL schema. The following values are supported</p>
+<p>Validation modes for validating the resulting infoset against the DFDL schema. The following values are supported:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -4264,15 +4277,15 @@ jones,arya,cat,1986-02-19</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Off</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Turn off all validation against the DFDL schema</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turn off all validation against the DFDL schema.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Limited</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Perform only facet validation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Perform XSD validation of facets, minLength, maxLength, enumeration, minInclusive, minExclusive, maxInclusive, maxExclusive, and maxOccurs constraints. Validation failures will be printed in the log but will not interrupt parsing or unparsing.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Full</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Perform full schema validation using Xerces</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Perform full schema validation using Xerces. A validation failure will abort parsing/unparsing and throw a <code>org.smooks.api.SmooksException</code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4288,6 +4301,21 @@ jones,arya,cat,1986-02-19</code></pre>
     <span class="nt">&lt;dfdl:parser</span> <span class="na">schemaUri=</span><span class="s">"/csv.dfdl.xsd"</span> <span class="na">validationMode=</span><span class="s">"Limited"</span><span class="nt">/&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Validation failures can be retrieved from the Smooks execution context as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="o">...</span>
+
+<span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">Smooks</span><span class="o">();</span>
+<span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+
+<span class="nc">List</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">daffodil</span><span class="o">.</span><span class="na">japi</span><span class="o">.</span><span class="na">Diagnostic</span><span class="o">&gt;</span> <span class="n">diagnostics</span> <span class="o">=</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">cartridges</span><span class="o">.</span><span class="na">dfdl</span><span class="o">.</span><span class="na">parser</span><span class="o">.</span><span class="na">DfdlParser</span><span class="o">.</span><span class="na">DIAGNOSTICS_TYPED_KEY</span><span class="o">);</span>
+<span class="o">...</span></code></pre>
 </div>
 </div>
 </div>
@@ -4343,20 +4371,6 @@ jones,arya,cat,1986-02-19</code></pre>
     <span class="nt">&lt;/dfdl:parser&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Failed assertions do not interrupt the parsing and can be retrieved from the Smooks execution context as shown below:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="o">...</span>
-
-<span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">Smooks</span><span class="o">();</span>
-<span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
-
-<span class="nc">List</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">daffodil</span><span class="o">.</span><span class="na">japi</span><span class="o">.</span><span class="na">Diagnostic</span><span class="o">&gt;</span> <span class="n">diagnostics</span> <span class="o">=</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">cartridges</span><span class="o">.</span><span class="na">dfdl</span><span class="o">.</span><span class="na">parser</span><span class="o">.</span><span class="na">DfdlParser</span><span class="o">.</span><span class="na">DIAGNOSTICS_TYPED_KEY</span><span class="o">);</span></code></pre>
 </div>
 </div>
 </div>
