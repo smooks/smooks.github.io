@@ -4285,7 +4285,7 @@ jones,arya,cat,1986-02-19</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Full</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Perform full schema validation using Xerces. A validation failure will abort parsing/unparsing and throw a <code>org.smooks.api.SmooksException</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Perform full schema validation using Xerces. A validation failure will abort parsing and throw a <code>org.smooks.api.SmooksException</code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4397,7 +4397,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="sect4">
 <h5 id="validation_mode_2">Validation mode</h5>
 <div class="paragraph">
-<p>Validation modes for validating the resulting infoset against the DFDL schema. The following values are supported</p>
+<p>Validation modes for validating the input infoset against the DFDL schema. The following values are supported:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -4413,15 +4413,15 @@ jones,arya,cat,1986-02-19</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Off</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Turn off all validation against the DFDL schema</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turn off all validation against the DFDL schema.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Limited</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Perform only facet validation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Perform XSD validation of facets, minLength, maxLength, enumeration, minInclusive, minExclusive, maxInclusive, maxExclusive, and maxOccurs constraints. Validation failures will be printed in the log but will not interrupt parsing or unparsing.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Full</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Perform full schema validation using Xerces</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Perform full schema validation using Xerces. A validation failure will abort unparsing and throw a <code>org.smooks.api.SmooksException</code>.</p></td>
 </tr>
 </tbody>
 </table>
