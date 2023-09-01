@@ -4483,10 +4483,10 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="sect2">
 <h3 id="edi">EDI</h3>
 <div class="paragraph">
-<p>The EDI cartridge provides a reader for parsing EDI documents, and a visitor for serialising the event stream into EDI.</p>
+<p>The EDI cartridge inherits from the <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc">DFDL cartridge</a> to provide a reader for parsing EDI documents, and a visitor for serialising the event stream into EDI. Many of the options that are available from the DFDL cartridge are supported in the EDI cartridge as well (e.g., <a href="https://github.com/smooks/smooks-dfdl-cartridge#validation-mode">validation mode</a>).</p>
 </div>
 <div class="paragraph">
-<p>In the following pass-through configuration, Smooks parses an EDI document and then serialises, or unparses in DFDL lingo, the generated event stream to produce an EDI document identical to the parsed document.</p>
+<p>In the following pass-through configuration, Smooks parses an EDI document and then serialises, or unparses in DFDL nomenclature, the generated event stream to produce an EDI document identical to the parsed document.</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -4840,8 +4840,8 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="sect2">
 <h3 id="edifact">EDIFACT</h3>
 <div class="paragraph">
-<p>Smooks 2 provides out-of-the-box support for UN/EDIFACT interchanges in terms of pre-generated EDI DFDL schemas derived from the <a href="http://www.unece.org/trade/untdid/down_index.htm">official UN/EDIFACT
-message definition zip directories</a>. This allows you to easily convert a UN/EDIFACT message interchange into a consumable XML document. Specialised <em>edifact:parser</em> and <em>edifact:unparser</em> resources support UN/EDIFACT interchanges as shown in the next example:</p>
+<p>Smooks 2 provides out-of-the-box support for UN EDIFACT interchanges in terms of pre-generated EDI DFDL schemas derived from the <a href="http://www.unece.org/trade/untdid/down_index.htm">official UN EDIFACT
+message definition zip directories</a>. This allows you to easily convert a UN EDIFACT message interchange into a consumable XML document. Specialised <em>edifact:parser</em> and <em>edifact:unparser</em> resources support UN EDIFACT interchanges as shown in the next example:</p>
 </div>
 <div class="listingblock">
 <div class="title">smooks-config.xml</div>
@@ -4897,10 +4897,10 @@ message definition zip directories</a>. This allows you to easily convert a UN/E
 <div class="sect3">
 <h4 id="schema_packs">Schema Packs</h4>
 <div class="paragraph">
-<p>In an effort to simplify the processing of UN/EDIFACT Interchanges, we have created tools to generate EDIFACT schema packs from <a href="http://www.unece.org/trade/untdid/down_index.htm">the official UN/EDIFACT message definition zip directories</a>. The generated schema packs are deployed to a public Maven repository from where users can easily access the EDIFACT schemas for the UN/EDIFACT message sets they need to support.</p>
+<p>In an effort to simplify the processing of UN EDIFACT Interchanges, we have created tools to generate EDIFACT schema packs from <a href="http://www.unece.org/trade/untdid/down_index.htm">the official UN EDIFACT message definition zip directories</a>. The generated schema packs are deployed to a public Maven repository from where users can easily access the EDIFACT schemas for the UN EDIFACT message sets they need to support.</p>
 </div>
 <div class="paragraph">
-<p>Schema packs are available for most of the UN/EDIFACT directories. These are available from the Maven Snapshot and Central repositories and can be added to your application using standard Maven dependency management.</p>
+<p>Schema packs are available for most of the UN EDIFACT directories. These are available from the Maven Snapshot and Central repositories and can be added to your application using standard Maven dependency management.</p>
 </div>
 <div class="paragraph">
 <p>As an example, to add the D93A DFDL schema pack to your application classpath, add the following dependency to your application&#8217;s POM:</p>
