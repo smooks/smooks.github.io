@@ -354,19 +354,28 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </div>
 <div class="sect2">
 <h3 id="migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</h3>
+<div class="paragraph">
+<p>Comparing the <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples">code examples</a> for Smooks 1 with <a href="https://github.com/smooks/smooks-examples/tree/v1.0.4">those for Smooks 2</a> can be a useful guide in migrating to Smooks 2. While not exhaustive, we have compiled a list of notes to assist your migration:</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
 <p>Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.</p>
 </li>
 <li>
-<p>Replace references to Java packages <code>org.milyn</code> with <code>org.smooks.api</code>, <code>org.smooks.engine</code>, <code>org.smooks.io</code> or <code>org.smooks.support</code>.</p>
+<p>Remove references to  <code>org.milyn.util.CollectionsUtil</code> and write your own implementation for this class.</p>
+</li>
+<li>
+<p>Replace <code>org.milyn.*</code> Java package references with <code>org.smooks.api</code>, <code>org.smooks.engine</code>, <code>org.smooks.io</code> or <code>org.smooks.support</code>.</p>
 </li>
 <li>
 <p>Inherit from <code>org.smooks.api.resource.visitor.sax.ng.SaxNgVisitor</code> instead of <code>org.milyn.delivery.sax.SAXVisitor</code>.</p>
 </li>
 <li>
 <p>Change legacy document root fragment selectors from <code>$document</code> to <code>#document</code>.</p>
+</li>
+<li>
+<p>Remove the <code>milyn-smooks-all</code> dependency from the Maven POM and import the <a href="https://www.smooks.org/v2/maven#bill_of_materials_bom">Smooks BOM</a> instead. Declare the corresponding dependency of each Smooks cartridge used within the project but omit the artifact version.</p>
 </li>
 <li>
 <p>Replace Smooks Maven coordinates to match the coordinates as described in the <a href="https://www.smooks.org/v2/maven">Maven guide</a>.</p>
@@ -420,6 +429,12 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </li>
 <li>
 <p>Replace references to <code>org.milyn.delivery.sax.SAXToXMLWriter</code> with <code>org.smooks.io.DomSerializer</code>.</p>
+</li>
+<li>
+<p>Follow the <a href="https://github.com/smooks/smooks-examples/tree/master/edifact-to-java">EDIFACT-to-Java example</a> to migrate an implementation that binds an EDIFACT document to a POJO.</p>
+</li>
+<li>
+<p>Follow the <a href="https://github.com/smooks/smooks-examples/tree/master/java-to-edifact">Java-to-EDIFACT example</a> to migrate an implementation that deserialises a POJO into an EDIFACT document.</p>
 </li>
 </ol>
 </div>
