@@ -355,7 +355,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <div class="sect2">
 <h3 id="migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</h3>
 <div class="paragraph">
-<p>Comparing the <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples">code examples</a> for Smooks 1 with <a href="https://github.com/smooks/smooks-examples/tree/v1.0.4">those for Smooks 2</a> can be a useful guide in migrating to Smooks 2. While not exhaustive, we have compiled a list of notes to assist your migration:</p>
+<p>Comparing the <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples">code examples</a> for Smooks 1 with <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5">those for Smooks 2</a> can be a useful guide in migrating to Smooks 2. While not exhaustive, we have compiled a list of notes to assist your migration:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -530,7 +530,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <div class="sect2">
 <h3 id="hello_world_app">Hello World App</h3>
 <div class="paragraph">
-<p>One or more of <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/resource/visitor/sax/ng/SaxNgVisitor.html">SaxNgVisitor</a> interfaces need to be implemented in order to consume the SAX event stream produced from the source, depending on which events are of interest.</p>
+<p>One or more of <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/SaxNgVisitor.html">SaxNgVisitor</a> interfaces need to be implemented in order to consume the SAX event stream produced from the source, depending on which events are of interest.</p>
 </div>
 <div class="paragraph">
 <p>The following is a hello world app demonstrating how to implement a visitor that is fired on the <code>visitBefore</code> and <code>visitAfter</code> events of a targeted node in the event stream. In this case, Smooks configures the visitor to target element <code>foo</code>:</p>
@@ -551,7 +551,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </div>
 </div>
 <div class="paragraph">
-<p>Observe that in this case the program does not produce a result. The program does not even interact with the filtering process in any way because it does not provide an <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/ExecutionContext.html"><code>ExecutionContext</code></a> to <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/Smooks.html"><code>smooks.filterSource(...)</code></a>.</p>
+<p>Observe that in this case the program does not produce a result. The program does not even interact with the filtering process in any way because it does not provide an <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/ExecutionContext.html"><code>ExecutionContext</code></a> to <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/Smooks.html"><code>smooks.filterSource(...)</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>This example illustrated the lower level mechanics of the Smooks&#8217;s programming model. In reality, most users are not going to want to solve their problems at this level of detail. Smooks ships with substantial pre-built functionality, that is, pre-built visitors. Visitors are bundled based on functionality: these bundles are called <em>Cartridges</em>.</p>
@@ -824,10 +824,10 @@ Smooks can generate output in either, or both, of the above ways, all in a singl
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/io/payload/JavaResult.html"><code>JavaResult</code></a>: result type for capturing the contents of the Smooks JavaBean context.</p>
+<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/JavaResult.html"><code>JavaResult</code></a>: result type for capturing the contents of the Smooks JavaBean context.</p>
 </li>
 <li>
-<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/io/payload/StringResult.html"><code>StringResult</code></a>: <code>StreamResult</code> extension wrapping a <code>StringWriter</code>, useful for testing.</p>
+<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/StringResult.html"><code>StringResult</code></a>: <code>StreamResult</code> extension wrapping a <code>StringWriter</code>, useful for testing.</p>
 </li>
 </ul>
 </div>
@@ -1226,7 +1226,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <p>An example <code>HtmlReportGenerator</code> report can be seen <a href="http://www.milyn.org/docs/smooks-report/report.html">online here</a>.</p>
 </div>
 <div class="paragraph">
-<p>Of course you can also write and use your own <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/delivery/event/ExecutionEventListener.html">ExecutionEventListener</a> implementations.</p>
+<p>Of course you can also write and use your own <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/delivery/event/ExecutionEventListener.html">ExecutionEventListener</a> implementations.</p>
 </div>
 <div class="admonitionblock caution">
 <table>
@@ -1321,10 +1321,10 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/engine/bean/context/preinstalled/UniqueID.html"><code>PUUID</code></a>: This <code>UniqueId</code> instance provides unique identifiers for the filtering <code>ExecutionContext</code>.</p>
+<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/bean/context/preinstalled/UniqueID.html"><code>PUUID</code></a>: This <code>UniqueId</code> instance provides unique identifiers for the filtering <code>ExecutionContext</code>.</p>
 </li>
 <li>
-<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/engine/bean/context/preinstalled/Time.html"><code>PTIME</code></a>: This <code>Time</code> instance provides time-based data for the filtering ExecutionContext.</p>
+<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/bean/context/preinstalled/Time.html"><code>PTIME</code></a>: This <code>Time</code> instance provides time-based data for the filtering ExecutionContext.</p>
 </li>
 </ul>
 </div>
@@ -1392,7 +1392,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="ulist">
 <ul>
 <li>
-<p>Global Configuration Parameters: Every in a Smooks configuration can specify elements for configuration parameters. These parameter values are available at runtime through the <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/resource/config/ResourceConfig.html"><code>ResourceConfig</code></a>, or are reflectively injected through the <code>@Inject</code> annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the <code>ExecutionContext</code> (vs <code>ResourceConfig</code>). More on this in the following sections.</p>
+<p>Global Configuration Parameters: Every in a Smooks configuration can specify elements for configuration parameters. These parameter values are available at runtime through the <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/config/ResourceConfig.html"><code>ResourceConfig</code></a>, or are reflectively injected through the <code>@Inject</code> annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the <code>ExecutionContext</code> (vs <code>ResourceConfig</code>). More on this in the following sections.</p>
 </li>
 <li>
 <p>Default Properties: Specify default values for attributes. These defaults are automatically applied to `ResourceConfig`s  when their corresponding does not specify the attribute. More on this in the following section.</p>
@@ -2395,7 +2395,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 </ol>
 </div>
 <div class="paragraph">
-<p>The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, <a href="https://github.com/smooks/smooks/tree/v2.0.0-RC2/core/src/main/resources/META-INF/xsd">as can be seen in the source</a>.</p>
+<p>The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, <a href="https://github.com/smooks/smooks/tree/v2.0.0-RC3/core/src/main/resources/META-INF/xsd">as can be seen in the source</a>.</p>
 </div>
 </div>
 </div>
@@ -2405,7 +2405,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.2/camel">Ap
 <p>Implementing and configuring a new Source Reader for Smooks is straightforward. The Smooks specific parts of the process are easy and are not really the issue. The level of effort involved is a function of the complexity of the Source data format for which you are implementing the reader.</p>
 </div>
 <div class="paragraph">
-<p>Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting &amp; Routing, etc&#8230;&#8203; So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard <code>org.xml.sax.XMLReader</code> interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/resource/reader/SmooksXMLReader.html"><code>org.smooks.api.resource.reader.SmooksXMLReader</code></a> interface (which is just an extension of <code>org.xml.sax.XMLReader</code>). So, you can easily use (or extend) an existing <code>org.xml.sax.XMLReader</code> implementation, or implement a new Reader from scratch.</p>
+<p>Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting &amp; Routing, etc&#8230;&#8203; So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard <code>org.xml.sax.XMLReader</code> interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/reader/SmooksXMLReader.html"><code>org.smooks.api.resource.reader.SmooksXMLReader</code></a> interface (which is just an extension of <code>org.xml.sax.XMLReader</code>). So, you can easily use (or extend) an existing <code>org.xml.sax.XMLReader</code> implementation, or implement a new Reader from scratch.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s now look at a simple example of implementing a Reader for use with Smooks. In this example, we will implement a Reader that can read a stream of Comma Separated Value (CSV) records, converting the CSV stream into a stream of SAX events that can be processed by Smooks, allowing you to do all the things Smooks allows (Java Binding, etc&#8230;&#8203;).</p>
@@ -2827,7 +2827,7 @@ Mark,Jones</pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>The CSV and Regex readers are implemented using these abstract classes. See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.4/csv-variable-record">csv-variable-record</a> and <a href="https://github.com/smooks/smooks-examples/tree/v1.0.4/flatfile-to-xml-regex">flatfile-to-xml-regex</a> examples. The <a href="https://github.com/smooks/smooks-examples/tree/v1.0.4/flatfile-to-xml-regex">Regex Reader</a> implementation is also a good example that can be used as a basis for your own custom flat file reader.</p>
+<p>The CSV and Regex readers are implemented using these abstract classes. See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/csv-variable-record">csv-variable-record</a> and <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/flatfile-to-xml-regex">flatfile-to-xml-regex</a> examples. The <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/flatfile-to-xml-regex">Regex Reader</a> implementation is also a good example that can be used as a basis for your own custom flat file reader.</p>
 </div>
 </div>
 </div>
@@ -2856,7 +2856,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/ContentHandler.html">SAX events</a> that a SaxNgVisitor implementation can capture and processes. Depending on the use case being solved with the SaxNgVisitor implementation, you may need to implement one or all of these interfaces.</p>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/resource/visitor/sax/ng/BeforeVisitor.html"><code>BeforeVisitor</code></a>: Captures the <em>startElement</em> SAX event for the targeted fragment element:</p>
+<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/BeforeVisitor.html"><code>BeforeVisitor</code></a>: Captures the <em>startElement</em> SAX event for the targeted fragment element:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2867,7 +2867,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/resource/visitor/sax/ng/ChildrenVisitor.html"><code>ChildrenVisitor</code></a>: Captures the <em>character</em> based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the <em>startElement</em> events of child fragment elements:</p>
+<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/ChildrenVisitor.html"><code>ChildrenVisitor</code></a>: Captures the <em>character</em> based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the <em>startElement</em> events of child fragment elements:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2880,7 +2880,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/resource/visitor/sax/ng/AfterVisitor.html"><code>AfterVisitor</code></a>: Captures the <em>endElement</em> SAX event for the targeted fragment element:</p>
+<p><a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/AfterVisitor.html"><code>AfterVisitor</code></a>: Captures the <em>endElement</em> SAX event for the targeted fragment element:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2891,7 +2891,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p>As a convenience for those implementations that need to capture all the SAX events, the above three interfaces are pulled together into a single interface in the <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC2/smooks/org/smooks/api/resource/visitor/sax/ng/ElementVisitor.html"><code>ElementVisitor</code></a> interface.</p>
+<p>As a convenience for those implementations that need to capture all the SAX events, the above three interfaces are pulled together into a single interface in the <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/ElementVisitor.html"><code>ElementVisitor</code></a> interface.</p>
 </div>
 <div class="paragraph">
 <p>Illustrating these events using a piece of XML:</p>
@@ -4484,7 +4484,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-dfdl-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.0.0-RC2<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0-RC3<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
