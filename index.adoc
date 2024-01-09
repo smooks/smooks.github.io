@@ -27,7 +27,7 @@ To use Smooks, simply add the following dependency to your project.
 </dependency>
 ----
 
-See https://mvnrepository.com/artifact/org.milyn/milyn-smooks-all[Maven
+See https://mvnrepository.com/artifact/org.smooks/smooks-core[Maven
 Central] for a list of available versions.
 
 == What can it be used for?
