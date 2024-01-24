@@ -4511,6 +4511,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
                       <span class="na">xmlns:edi=</span><span class="s">"https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</span><span class="nt">&gt;</span>
 
     <span class="c">&lt;!-- Configure the reader to parse the EDI stream into a stream of SAX events. --&gt;</span>
@@ -4518,11 +4519,23 @@ jones,arya,cat,1986-02-19</code></pre>
                 <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
                 <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span><span class="nt">/&gt;</span> // <b class="conum">(3)</b>
 
-    <span class="c">&lt;!-- Configure the writer to serialise the XML stream into EDI. --&gt;</span>
-    <span class="nt">&lt;edi:unparser</span> <span class="na">schemaUri=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
-                  <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
-                  <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span> // <b class="conum">(3)</b>
-                  <span class="na">unparseOnNode=</span><span class="s">"/Order"</span><span class="nt">/&gt;</span> // <b class="conum">(4)</b>
+    <span class="c">&lt;!-- Apply a pipeline on the root event and replace the XML result produced from &lt;edifact:parser .../&gt; with the pipeline EDI result. --&gt;</span>
+    <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"/Order"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;core:action&gt;</span>
+            <span class="nt">&lt;core:inline&gt;</span>
+                <span class="nt">&lt;core:replace/&gt;</span>
+            <span class="nt">&lt;/core:inline&gt;</span>
+        <span class="nt">&lt;/core:action&gt;</span>
+        <span class="nt">&lt;core:config&gt;</span>
+            <span class="nt">&lt;smooks-resource-list&gt;</span>
+                <span class="c">&lt;!-- Configure the writer to serialise the event stream into EDI. --&gt;</span>
+                <span class="nt">&lt;edi:unparser</span> <span class="na">schemaUri=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
+                              <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
+                              <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span> // <b class="conum">(3)</b>
+                              <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">/&gt;</span> // <b class="conum">(4)</b>
+            <span class="nt">&lt;/smooks-resource-list&gt;</span>
+        <span class="nt">&lt;/core:config&gt;</span>
+    <span class="nt">&lt;/core:smooks&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
@@ -4866,11 +4879,26 @@ message definition zip directories</a>. This allows you to easily convert a UN E
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
                       <span class="na">xmlns:edifact=</span><span class="s">"https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"</span><span class="nt">&gt;</span>
 
+    <span class="c">&lt;!-- Configure the reader to parse the EDIFACT stream into a stream of SAX events. --&gt;</span>
     <span class="nt">&lt;edifact:parser</span> <span class="na">schemaUri=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span><span class="nt">/&gt;</span>
 
-    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaUri=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"/Interchange"</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- Apply a pipeline on the root event and replace the XML result produced from &lt;edifact:parser .../&gt; with the pipeline EDIFACT result. --&gt;</span>
+    <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"/Interchange"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;core:action&gt;</span>
+            <span class="nt">&lt;core:inline&gt;</span>
+                <span class="nt">&lt;core:replace/&gt;</span>
+            <span class="nt">&lt;/core:inline&gt;</span>
+        <span class="nt">&lt;/core:action&gt;</span>
+        <span class="nt">&lt;core:config&gt;</span>
+            <span class="nt">&lt;smooks-resource-list&gt;</span>
+                <span class="c">&lt;!-- Configure the writer to serialise the event stream into EDIFACT. --&gt;</span>
+                <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaUri=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/smooks-resource-list&gt;</span>
+        <span class="nt">&lt;/core:config&gt;</span>
+    <span class="nt">&lt;/core:smooks&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
@@ -4883,6 +4911,7 @@ message definition zip directories</a>. This allows you to easily convert a UN E
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
                       <span class="na">xmlns:edifact=</span><span class="s">"https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"</span><span class="nt">&gt;</span>
 
     <span class="nt">&lt;edifact:parser</span> <span class="na">schemaUri=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span><span class="nt">&gt;</span>
@@ -4892,12 +4921,23 @@ message definition zip directories</a>. This allows you to easily convert a UN E
         <span class="nt">&lt;/edifact:messageTypes&gt;</span>
     <span class="nt">&lt;/edifact:parser&gt;</span>
 
-    <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaUri=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"/Interchange"</span><span class="nt">&gt;</span>
-       <span class="nt">&lt;edifact:messageTypes&gt;</span>
-            <span class="nt">&lt;edifact:messageType&gt;</span>ORDERS<span class="nt">&lt;/edifact:messageType&gt;</span>
-            <span class="nt">&lt;edifact:messageType&gt;</span>INVOIC<span class="nt">&lt;/edifact:messageType&gt;</span>
-        <span class="nt">&lt;/edifact:messageTypes&gt;</span>
-    <span class="nt">&lt;/edifact:unparser&gt;</span>
+    <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"/Interchange"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;core:action&gt;</span>
+            <span class="nt">&lt;core:inline&gt;</span>
+                <span class="nt">&lt;core:replace/&gt;</span>
+            <span class="nt">&lt;/core:inline&gt;</span>
+        <span class="nt">&lt;/core:action&gt;</span>
+        <span class="nt">&lt;core:config&gt;</span>
+            <span class="nt">&lt;smooks-resource-list&gt;</span>
+                <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaUri=</span><span class="s">"/d03b/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">&gt;</span>
+                   <span class="nt">&lt;edifact:messageTypes&gt;</span>
+                        <span class="nt">&lt;edifact:messageType&gt;</span>ORDERS<span class="nt">&lt;/edifact:messageType&gt;</span>
+                        <span class="nt">&lt;edifact:messageType&gt;</span>INVOIC<span class="nt">&lt;/edifact:messageType&gt;</span>
+                    <span class="nt">&lt;/edifact:messageTypes&gt;</span>
+                <span class="nt">&lt;/edifact:unparser&gt;</span>
+            <span class="nt">&lt;/smooks-resource-list&gt;</span>
+        <span class="nt">&lt;/core:config&gt;</span>
+    <span class="nt">&lt;/core:smooks&gt;</span>
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
