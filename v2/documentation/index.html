@@ -63,7 +63,7 @@
 </li>
 <li><a href="#fundamentals">Fundamentals</a>
 <ul class="sectlevel2">
-<li><a href="#basic_processing_model">Basic Processing Model</a></li>
+<li><a href="#processing_model">Processing Model</a></li>
 <li><a href="#hello_world_app">Hello World App</a></li>
 <li><a href="#smooks_resources">Smooks Resources</a></li>
 <li><a href="#input">Input</a></li>
@@ -460,7 +460,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <h2 id="fundamentals">Fundamentals</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A commonly accepted definition of Smooks is of it being a "Transformation Engine". Nonetheless, at its core, Smooks makes no reference to <em>data transformation</em>. The core codebase is designed to hook visitor logic into an event stream produced from a source of some kind. As such, in its most distilled form, Smooks is a <em>Structured Data Event Stream Processor</em>.</p>
+<p>A commonly accepted definition of Smooks is of it being a <em>Transformation Engine</em>. Nonetheless, at its core, Smooks makes no reference to <em>data transformation</em>. The core codebase is designed to hook visitor logic into an event stream produced from a source of some kind. As such, in its most distilled form, Smooks is a <em>Structured Data Event Stream Processor</em>.</p>
 </div>
 <div class="paragraph">
 <p>An application of a structured data event processor is transformation. In implementation terms, a Smooks transformation solution is a visitor reading the event stream from a source to produce a different representation of the input. However, Smooks&#8217;s core capabilities enable much more than transformation. A range of other solutions can be implemented based on the fragment-based processing model:</p>
@@ -479,9 +479,12 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </ul>
 </div>
 <div class="sect2">
-<h3 id="basic_processing_model">Basic Processing Model</h3>
+<h3 id="processing_model">Processing Model</h3>
 <div class="paragraph">
-<p>Smooks&#8217;s fundamental behaviour is to take an input <em>source</em>, such as XML, and from it generate an <em>event stream</em> to which <em>visitors</em> are applied to produce a <em>result</em> such as EDI.</p>
+<p>Smooks&#8217;s fundamental behaviour is to take an input <em>source</em>, such as CSV, and from it generate an <em>event stream</em> to which <em>visitors</em> are applied to produce a <em>result</em>, such as EDI. The Smooks processing model is illustrated below:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="https://raw.githubusercontent.com/smooks/smooks/master/docs/images/smooks.png" alt="Image:smooks.png"></span></p>
 </div>
 <div class="paragraph">
 <p>Several sources and result types are supported which equate to different transformation types, including but not limited to:</p>
