@@ -30,8 +30,9 @@ jobs:
         run: |
           git clone --branch gh-pages https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git && cd smooks.github.io
           git rm -rf .
-          cp -r ../jekyll_build/* .
-          touch .nojekyll
+          mkdir v2
+          cp -r ../jekyll_build/* . && cp -r jekyll_build/* v2
+          touch .nojekyll && touch v2/.nojekyll
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git add .
