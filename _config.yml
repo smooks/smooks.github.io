@@ -1,6 +1,5 @@
 title: Smooks
 theme: minima
-baseurl: /v2
 asciidoc: {}
 asciidoctor:
   base_dir: :docdir
