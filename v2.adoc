@@ -1,7 +1,7 @@
-:layout: redirected
-:sitemap: false
-:permalink: /v2/
-:redirect_to:  /
+---
+layout: redirected
+sitemap: false
+permalink: /v2/
+redirect_to:  /
+---
 
-
-Test
