@@ -9,3 +9,5 @@ asciidoctor:
     - source-highlighter=rouge
     - stylesdir=assets/css
     - allow-uri-read=
+plugins:
+  - jekyll-redirect-from

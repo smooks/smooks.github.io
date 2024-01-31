@@ -1,7 +1,6 @@
 ---
-layout: redirected
-sitemap: false
-permalink: /v2/:path
-redirect_to:  /
+redirect_from:
+  - /v2/
+  - /
 ---
 
