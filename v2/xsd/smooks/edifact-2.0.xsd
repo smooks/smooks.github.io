@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:smooks="https://www.smooks.org/xsd/smooks-2.0.xsd"
+            xmlns:edifact="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
+            xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
+            targetNamespace="https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"
+            elementFormDefault="qualified">
+
+    <xsd:import namespace="https://www.smooks.org/xsd/smooks-2.0.xsd"/>
+    <xsd:import namespace="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"/>
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Smooks EDIFACT Resource Configuration</xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="parser" type="edifact:parser" substitutionGroup="smooks:abstract-reader">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                A EDIFACT parser reads an EDIFACT document by using grammar defined in a DFDL schema and generates the
+                corresponding event stream for Smooks to process.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="unparser" substitutionGroup="smooks:abstract-resource-config"
+                 type="edifact:unparserVisitor">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                An EDIFACT unparser visitor serialises a fragment into EDI according to the grammar defined in a DFDL schema.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="parser">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">EDIFACT Parser</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="edi:parser">
+                <xsd:sequence>
+                    <xsd:element name="messageTypes" type="edifact:messageTypes" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="messageTypes">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                The message types the parser can process: the parser will reject messages that do not belong to a type in
+                the list. Schema compilation time is directly proportional to the number of declared messages types.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="messageType" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation xml:lang="en">
+                        A message type the parser can process.
+                    </xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string"/>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="unparserVisitor">
+        <xsd:complexContent>
+            <xsd:extension base="edi:unparserVisitor">
+                <xsd:sequence>
+                    <xsd:element name="messageTypes" type="edifact:messageTypes" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+</xsd:schema>

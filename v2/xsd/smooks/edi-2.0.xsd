@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:smooks="https://www.smooks.org/xsd/smooks-2.0.xsd"
+            xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
+            xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd" 
+            targetNamespace="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
+            elementFormDefault="qualified">
+
+    <xsd:import namespace="https://www.smooks.org/xsd/smooks-2.0.xsd"/>
+    <xsd:import namespace="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd"/>
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Smooks EDI Resource Configuration</xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="parser" type="edi:parser" substitutionGroup="smooks:abstract-reader">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                An EDI parser reads an EDI document according to the grammar defined in a DFDL schema and generates the
+                corresponding event stream for Smooks to process.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="unparser" substitutionGroup="smooks:abstract-resource-config"
+                 type="edi:unparserVisitor">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">
+                An EDI unparser visitor serialises a fragment into EDI according to the grammar defined in a DFDL schema.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="parser">
+        <xsd:annotation>
+            <xsd:documentation xml:lang="en">EDI Parser</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="dfdl:parser">
+                <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="unparserVisitor">
+        <xsd:complexContent>
+            <xsd:extension base="dfdl:unparserVisitor">
+                <xsd:attributeGroup ref="edi:parserUnparserAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:attributeGroup name="parserUnparserAttributes">
+        <xsd:attribute name="segmentTerminator" type="xsd:string" default="'%NL;%WSP*; '%WSP*;"/>
+        <xsd:attribute name="dataElementSeparator" type="xsd:string" default="+"/>
+        <xsd:attribute name="compositeDataElementSeparator" type="xsd:string" default=":"/>
+        <xsd:attribute name="escapeCharacter" type="xsd:string" default="?"/>
+        <xsd:attribute name="repetitionSeparator" type="xsd:string" default="*"/>
+        <xsd:attribute name="decimalSign" type="xsd:string" default="."/>
+        <xsd:attribute name="triadSeparator" type="xsd:string" default=","/>
+    </xsd:attributeGroup>
+</xsd:schema>
