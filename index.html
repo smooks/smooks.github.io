@@ -6,10 +6,11 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1" />
-    <link rel="shortcut icon" href="/assets/images/smooks-favicon.png">
-    <link rel="stylesheet" href="/assets/css/styles.css" type="text/css" />
-    <link rel="stylesheet" media="print" href="/assets/css/commonPrint.css" type="text/css" >
-    <link rel="stylesheet" media="print" href="/assets/css/gumax_print.css" type="text/css" >
+    <link rel="shortcut icon" href="/assets/images/smooks-favicon.png"/>
+    <link rel="stylesheet" href="/assets/css/styles.css" type="text/css"/>
+    <link rel="stylesheet" href="/assets/css/asciidoctor.min.css"/>
+    <link rel="stylesheet" media="print" href="/assets/css/commonPrint.css" type="text/css"/>
+    <link rel="stylesheet" media="print" href="/assets/css/gumax_print.css" type="text/css"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -37,9 +38,8 @@
             <li><a href="/community">Community</a></li>
             <li><a href="https://github.com/smooks">GitHub</a></li>
             <li><a href="/faq">FAQ</a></li>
-            <li><a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples">Examples</a></li>
+            <li><a href="https://github.com/smooks/smooks-examples/tree/v1.0.5">Examples</a></li>
             <li><a href="/maven">Maven</a></li>
-            <li><a href="/ant">Ant</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -47,62 +47,95 @@
     </nav>
 
     <div class="main container">
-        <p><span data-page-nav="/index"></span></p>
-
-<div class="main-page-logo">
+        <p>
+    <span data-page-nav="/index"></span>
+</p>
+<div style="padding: 20px;text-align: center">
     <img src="/assets/images/smooks-logo.png" />
 </div>
-
-<p><strong>Smooks</strong> is an extensible framework for building applications for processing XML and non XML
-data (CSV, EDI, Java etc) using Java.</p>
-
+<div class="paragraph">
+<p><strong>Smooks</strong> is an extensible Java framework for building XML and non-XML
+data (CSV, EDI, Java, etc…) processing applications.</p>
+</div>
+<div class="paragraph">
 <p>To use Smooks, simply add the following dependency to your project.</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.milyn<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>milyn-smooks-all<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.7.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</code></pre></div></div>
-
-<p>See <a href="https://mvnrepository.com/artifact/org.milyn/milyn-smooks-all">Maven Central</a> for a list of available versions.</p>
-
-<h1 id="what-can-it-be-used-for">What can it be used for?</h1>
-
-<p>While Smooks can be used as a lightweight platform on which to build your own custom processing logic (for a wide
-range of data formats “out of the box”), it comes with some very useful features that can be used individually,
-or seamlessly combined together.</p>
-
-<h3 id="java-binding">Java Binding</h3>
-
-<p>Populate a Java Object Model from a data source (CSV, EDI, XML, Java etc). Populated object models can be used as a 
-transformation result itself, or can be used by (e.g.) Templating resources for generating XML or other character
-based results. Also supports <strong>Virtual Object Models</strong> (Maps and Lists of typed data), which can be used by EL and 
-Templating functionality.</p>
-
-<p><img src="assets/images/Binding.png" alt="Java Binding" /></p>
-
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.smooks<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>smooks-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="https://mvnrepository.com/artifact/org.smooks/smooks-core">Maven
+Central</a> for a list of available versions.</p>
+</div>
+<div class="sect1">
+<h2 id="what_can_it_be_used_for">What can it be used for?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>While Smooks can be used as a lightweight platform on which to build
+your own custom processing logic (for a wide range of data formats
+``out-of-the-box''), it comes with some very useful features that can be
+used individually, or seamlessly combined together.</p>
+</div>
+<div class="sect2">
+<h3 id="java_binding">Java Binding</h3>
+<div class="paragraph">
+<p>Populate a Java Object Model from a data source (CSV, EDI, XML, Java
+etc). Populated object models can be used as a transformation result
+itself, or can be used by (e.g.) Templating resources for generating XML
+or other character based results. Also supports <strong>Virtual Object Models</strong>
+(Maps and Lists of typed data), which can be used by EL and Templating
+functionality.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/images/Binding.png" alt="Java Binding">
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="transformation">Transformation</h3>
-
-<p>Perform a wide range of <strong>Data Transforms</strong> - XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, Java to XML,
-Java to EDI, Java to CSV, Java to Java, XML to Java, EDI to Java etc.</p>
-
-<p><img src="assets/images/Transform.png" alt="Transform" /></p>
-
-<h3 id="huge-message-processing">Huge Message Processing</h3>
-
-<p>Process <strong>huge messages</strong> (GBs) - <strong>Split</strong>, <strong>Transform</strong> and <strong>Route</strong> message fragments to <strong>JMS</strong>, <strong>File</strong>,
-<strong>Database</strong> etc destinations.</p>
-
-<p><img src="assets/images/Hugetrans.png" alt="Huge Message Processing" /></p>
-
-<h3 id="message-enrichment">Message Enrichment</h3>
-
+<div class="paragraph">
+<p>Perform a wide range of <strong>Data Transforms</strong> - XML to XML, CSV to XML, EDI
+to XML, XML to EDI, XML to CSV, Java to XML, Java to EDI, Java to CSV,
+Java to Java, XML to Java, EDI to Java etc.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/images/Transform.png" alt="Transform">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="huge_message_processing">Huge Message Processing</h3>
+<div class="paragraph">
+<p>Process <strong>huge messages</strong> (GBs) - <strong>Split</strong>, <strong>Transform</strong> and <strong>Route</strong> message
+fragments to <strong>JMS</strong>, <strong>File</strong>, <strong>Database</strong> etc destinations.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/images/Hugetrans.png" alt="Huge Message Processing">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="message_enrichment">Message Enrichment</h3>
+<div class="paragraph">
 <p><strong>Enrich</strong> a message with data from a <strong>Database</strong>, or other Datasources.</p>
-
-<p><img src="assets/images/Enrich.png" alt="Enrich Messages" /></p>
-
-
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="assets/images/Enrich.png" alt="Enrich Messages">
+</div>
+</div>
+</div>
+</div>
+</div>
     </div><!-- /.container -->
 
     <!-- Bootstrap core JavaScript

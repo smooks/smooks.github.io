@@ -1,10 +1,8 @@
-@import url(/bootstrap/css/bootstrap.min.css);
+@import url(../../bootstrap/css/bootstrap.min.css);
 /*--------------------------------------------------- SCSS Elements 0.1 --------------------------------------------------- A set of useful SCSS mixins SCSS version of the LESS Elements (http://lesselements.com) Modified by Martin Tedjawardhana ---------------------------------------------------*/
 body { margin-top: 50px; }
 
 .main.container { height: 100%; }
-
-.main-page-logo { text-align: center; padding: 20px; }
 
 .error-404 { padding-top: 100px; text-align: center; }
 
