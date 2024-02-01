@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git fetch --all && git checkout gh-pages 
-          git rm -rf v1.7 && mkdir v1.7 && cp -r jekyll_build/* v1.7
+          git rm -rf v1.7 --ignore-unmatch && mkdir v1.7 && cp -r jekyll_build/* v1.7
           touch v1.7/.nojekyll
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
