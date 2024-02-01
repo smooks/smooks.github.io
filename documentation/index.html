@@ -6835,10 +6835,10 @@ example.</p>
 <p>Take advantage of other Smooks cartridges such as the <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc">JavaBean cartridge</a>. You can use the JavaBean cartridge to (1) decode and bind the stream data to the Smooks bean context, and then (2) reference that decoded data from within your FreeMarker template.</p>
 </li>
 <li>
-<p>Be used to process huge message streams (e.g., gigabytes), while at the same time maintain a relatively simple processing model, with a low memory footprint. See <a href="https://www.smooks.org/v2/documentation/#processing_huge_messages_gbs">Processing Huge Messages</a> for further information.</p>
+<p>Be used to process huge message streams (e.g., gigabytes), while at the same time maintain a relatively simple processing model, with a low memory footprint. See <a href="https://www.smooks.org/documentation/#processing_huge_messages_gbs">Processing Huge Messages</a> for further information.</p>
 </li>
 <li>
-<p>Be used for generating new fragments that can then be routed (using <a href="https://www.smooks.org/v2/documentation/#splitting_routing">Smooks Routing components</a>) to physical endpoints (e.g., File, JMS), or logical endpoints on an ESB (a "Service").</p>
+<p>Be used for generating new fragments that can then be routed (using <a href="https://www.smooks.org/documentation/#splitting_routing">Smooks Routing components</a>) to physical endpoints (e.g., File, JMS), or logical endpoints on an ESB (a "Service").</p>
 </li>
 </ol>
 </div>
@@ -6860,7 +6860,7 @@ Be sure to read the section on <a href="https://github.com/smooks/smooks-javabea
 <div class="sect4">
 <h5 id="freemarker_templating">FreeMarker Templating</h5>
 <div class="paragraph">
-<p><a href="http://freemarker.org/">FreeMarker</a> is a powerful templating engine. Smooks uses FreeMarker to create text from a fragment. This text can then be inserted into the result stream, or <a href="https://www.smooks.org/v2/documentation/#splitting_routing">routed to another process</a>.</p>
+<p><a href="http://freemarker.org/">FreeMarker</a> is a powerful templating engine. Smooks uses FreeMarker to create text from a fragment. This text can then be inserted into the result stream, or <a href="https://www.smooks.org/documentation/#splitting_routing">routed to another process</a>.</p>
 </div>
 <div class="paragraph">
 <p>Add the schema declaration <code>https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd</code> to the Smooks XML config to configure FreeMarker resources with namespace elements.</p>
@@ -7056,7 +7056,7 @@ See full example in the <a href="https://github.com/smooks/smooks-examples/tree/
 <div class="sect5">
 <h6 id="programmatic_configuration_3">Programmatic Configuration</h6>
 <div class="paragraph">
-<p>FreeMarker templating configurations can be programmatically added to a Smooks instance by configuring and adding a <a href="https://www.smooks.org/v2/javadoc/v2.0.0-RC3/smooks/org/smooks/cartridges/templating/freemarker/FreeMarkerTemplateProcessor.html"><code>FreeMarkerTemplateProcessor</code></a> instance to the Smooks instance. The following example creates a Smooks instance with Java binding and FreeMarker templating configurations:</p>
+<p>FreeMarker templating configurations can be programmatically added to a Smooks instance by configuring and adding a <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/cartridges/templating/freemarker/FreeMarkerTemplateProcessor.html"><code>FreeMarkerTemplateProcessor</code></a> instance to the Smooks instance. The following example creates a Smooks instance with Java binding and FreeMarker templating configurations:</p>
 </div>
 <div class="listingblock">
 <div class="content">
