@@ -1,3 +1,8 @@
+---
+redirect_from:
+  - /v2/faq/
+---
+
 :page-liquid:
 
 = FAQ
