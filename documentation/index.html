@@ -5465,7 +5465,7 @@ class.</p>
 <div class="sect4">
 <h5 id="java_binding_overview">Java Binding Overview</h5>
 <div class="paragraph">
-<p>This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV, etc&#8230;&#8203; However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java objects it creates (and binds data into) available through the <a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/context/BeanContext.html">BeanContext</a> class. This is essentially a Java Bean context that is made available to any Smooks visitor via the Smooks <a href="/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html">ExecutionContext</a>.</p>
+<p>This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV, etc&#8230;&#8203; However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java objects it creates (and binds data into) available through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/bean/contedxt/BeanContext.html">BeanContext</a> class. This is essentially a Java Bean context that is made available to any Smooks visitor via the Smooks <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a>.</p>
 </div>
 <div class="paragraph">
 <p>Some of the existing features that build on the functionality provided in the Javabean Cartridge include:</p>
@@ -5605,9 +5605,6 @@ class.</p>
 </li>
 <li>
 <p><code>createOnElement</code>: attribute controls when the bean instance is created. Population of the bean properties is controlled through the binding configurations (child elements of the element).</p>
-</li>
-<li>
-<p><code>createOnElementNS</code>: The namespace of the createOnElement can be specified via the <code>createOnElementNS</code> attribute.</p>
 </li>
 </ul>
 </div>
@@ -5778,7 +5775,7 @@ class.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>In most cases, Smooks will automatically detect the datatype decoder to be used for a <code>&lt;jb:value&gt;</code> binding. However, some decoders require configuration e.g. the DateDecoder (<code>decoder="Date"</code>). In these cases, the decoder attribute should be defined on the binding, as well as the &lt;jb:decodeParam&gt; child elements for specifying the decode parameters for that decoder. <a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/package-summary.html">See the full list of DataDecoder available out-of-the-box</a>.</p>
+<p>In most cases, Smooks will automatically detect the datatype decoder to be used for a <code>&lt;jb:value&gt;</code> binding. However, some decoders require configuration e.g. the DateDecoder (<code>decoder="Date"</code>). In these cases, the decoder attribute should be defined on the binding, as well as the &lt;jb:decodeParam&gt; child elements for specifying the decode parameters for that decoder. <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/package-summary.html">See the full list of DataDecoder available out-of-the-box</a>.</p>
 </li>
 </ol>
 </div>
@@ -5821,19 +5818,19 @@ class.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/DateDecoder.html">Date</a></strong>: Decode/Encode a String to a <em>java.util.Date</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToDateConverterFactory.html">Date</a></strong>: Decode/Encode a String to a <em>java.util.Date</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/CalendarDecoder.html">Calendar</a></strong>: Decode/Encode a String to a <em>java.util.Calendar</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToXmlGregorianCalendarConverterFactory.html">Calendar</a></strong>: Decode/Encode a String to a <em>java.util.Calendar</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlDateDecoder.html">SqlDate</a></strong>: Decode/Encode a String to a <em>java.sql.Date</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/SqlDateConverterFactory.html">SqlDate</a></strong>: Decode/Encode a String to a <em>java.sql.Date</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlTimeDecoder.html">SqlTime</a></strong>: Decode/Encode a String to a <em>java.sql.Time</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/SqlTimeConverterFactory.html">SqlTime</a></strong>: Decode/Encode a String to a <em>java.sql.Time</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/SqlTimestampDecoder.html">SqlTimestamp</a></strong>: Decode/Encode a String to a <em>java.sql.Timestamp</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/SqlTimestampConverterFactory.html">SqlTimestamp</a></strong>: Decode/Encode a String to a <em>java.sql.Timestamp</em> instance.</p>
 </li>
 </ul>
 </div>
@@ -5863,10 +5860,10 @@ class.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The <em>format</em> decodeParam is based on the <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601</a> standard for Date formatting. See <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a> Javadoc and <a href="http://en.wikipedia.org/wiki/ISO_8601">Wikipedia</a> for more information.</p>
+<p>The <em>format</em> decodeParam is based on the <a href="http://www.w3.org/TR/NOTE-datetime">ISO 8601</a> standard for Date formatting. See <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a> Javadoc and <a href="https://en.wikipedia.org/wiki/ISO_8601">Wikipedia</a> for more information.</p>
 </div>
 <div class="paragraph">
-<p>The <em>locale</em> decodeParam value is an underscore separated string, with the first token being the <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO Language Code</a> for the Locale and the second token being the <a href="http://www.iso.ch/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html">ISO Country Code</a>. This decodeParam can also be specified as 2 separate parameters for language and country e.g.:</p>
+<p>The <em>locale</em> decodeParam value is an underscore separated string, with the first token being the <a href="https://www.loc.gov/standards/iso639-2/php/English_list.php">ISO Language Code</a> for the Locale and the second token being the <a href="https://www.iso.org/obp/ui/#iso:pub:PUB500001:en">ISO Country Code</a>. This decodeParam can also be specified as 2 separate parameters for language and country e.g.:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5886,25 +5883,25 @@ class.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/BigDecimalDecoder.html">BigDecimalDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigDecimal</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToBigDecimalConverterFactory.html">BigDecimalDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigDecimal</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/BigIntegerDecoder.html">BigIntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigInteger</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToBigIntegerConverterFactory.html">BigIntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigInteger</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/DoubleDecoder.html">DoubleDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Double</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToDoubleConverterFactory.html">DoubleDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Double</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/FloatDecoder.html">FloatDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Float</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToFloatConverterFactory.html">FloatDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Float</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/IntegerDecoder.html">IntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Integer</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToIntegerConverterFactory.html">IntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Integer</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/LongDecoder.html">LongDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Long' instance (including primitive).</em></p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToLongConverterFactory.html">LongDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Long' instance (including primitive).</em></p>
 </li>
 <li>
-<p><strong><a href="/javadoc/v1.7.1/smooks/org/milyn/javabean/decoders/ShortDecoder.html">ShortDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Short</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToShortConverterFactory.html">ShortDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Short</em> instance (including primitive).</p>
 </li>
 </ul>
 </div>
@@ -5933,11 +5930,11 @@ class.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The <em>format</em> decodeParam is based on the <a href="http://java.sun.com/docs/books/tutorial/i18n/format/decimalFormat.html">NumberFormat</a> pattern syntax.</p>
+<p>The <em>format</em> decodeParam is based on the <a href="https://docs.oracle.com/javase/tutorial/i18n/format/decimalFormat.html">NumberFormat</a> pattern syntax.</p>
 </div>
 <div class="paragraph">
 <p>The <em>locale</em> decodeParam value is an underscore separated string, with the first token being the
-<a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO Language Code</a> for the Locale and the second token being the <a href="http://www.iso.ch/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html">ISO Country Code</a>. This decodeParam can also be specified as 2 separate parameters for language and country e.g.,:</p>
+<a href="https://www.loc.gov/standards/iso639-2/php/English_list.php">ISO Language Code</a> for the Locale and the second token being the <a href="https://www.iso.org/obp/ui/#iso:pub:PUB500001:en">ISO Country Code</a>. This decodeParam can also be specified as 2 separate parameters for language and country e.g.,:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6287,7 +6284,7 @@ methods. However there are plans to use byte code generation instead of reflecti
 <p>Note above how we always define the <code>decoder</code> attribute for a Virtual Model (Map). This is because Smooks has no way of auto-detecting the decode type for data binding to a Map. So, if you need typed values bound into your Virtual Model, you need to specify an appropriate decoder. If the decoder is not specified in this case, Smooks will simply bind the data into the Virtual Model as a String.</p>
 </div>
 <div class="paragraph">
-<p>Take a look at the <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples">model-driven-basic
+<p>Take a look at the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5">model-driven-basic
 and model-driven-basic-virtual examples</a>.</p>
 </div>
 <div class="sect6">
@@ -6442,7 +6439,7 @@ and model-driven-basic-virtual examples</a>.</p>
 <div class="sect4">
 <h5 id="programmatic_configuration_2">Programmatic Configuration</h5>
 <div class="paragraph">
-<p>Java Binding Configuratons can be programmatically added to a Smooks using the <a href="/v1.7.1/smooks/org/milyn/javabean/Bean.html">Bean</a> configuration class.</p>
+<p>Java Binding Configuratons can be programmatically added to a Smooks using the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks-javabean-cartridge/org/smooks/cartridges/javabean/Bean.html">Bean</a> configuration class.</p>
 </div>
 <div class="paragraph">
 <p>This class can be used to programmatically configure a Smooks instance for performing a Java Bindings on a specific class. To populate a graph, you simply create a graph of Bean instances by binding Beans onto Beans. The Bean class uses a Fluent API (all methods return the Bean instance), making it easy to string configurations together to build up a graph of Bean configuration.</p>
@@ -6599,7 +6596,7 @@ and model-driven-basic-virtual examples</a>.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>See the <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/xml-read-write">xml-read-write</a>
+<p>See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/xml-read-write">xml-read-write</a>
 example.</p>
 </div>
 </div>
@@ -6624,7 +6621,7 @@ example.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>See the <a href="https://github.com/smooks/smooks/tree/v1.7.1/smooks-examples/xml-read-write-transform">xml-read-write-transform</a> example.</p>
+<p>See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/xml-read-write-transform">xml-read-write-transform</a> example.</p>
 </div>
 </div>
 </div>
@@ -6741,7 +6738,7 @@ example.</p>
 <div class="sect4">
 <h5 id="notes_on_javaresult">Notes on JavaResult</h5>
 <div class="paragraph">
-<p>Users should note that there is <strong>no guarantee</strong> as to the exact contents of a <a href="/javadoc/v1.7.1/smooks/org/milyn/payload/JavaResult.html">JavaResult</a> instance after calling the Smooks.filterSource method. After calling this method, the JavaResult instance will contain the final contents of the bean context, which can be added to by any visitor.</p>
+<p>Users should note that there is <strong>no guarantee</strong> as to the exact contents of a <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/JavaResult.html">JavaResult</a> instance after calling the Smooks.filterSource method. After calling this method, the JavaResult instance will contain the final contents of the bean context, which can be added to by any visitor.</p>
 </div>
 <div class="paragraph">
 <p>You can restrict the Bean set returned in a JavaResult by using a <code>&lt;jb:result&gt;</code> configuration in the Smooks configuration. In the following example configuration, we tell Smooks to only retain the  "order" bean in the ResultSet:</p>
@@ -6779,7 +6776,7 @@ example.</p>
 <p>So after applying this configuration, calls to the JavaResult.getBean(String) method for anything other than the "order" bean will return null. This will work fine in cases such as the above example, because the other bean instances are wired into the "order" graph.</p>
 </div>
 <div class="paragraph">
-<p>Note that as of Smooks v1.2, if a <a href="/javadoc/v1.7.1/smooks/org/milyn/payload/JavaSource.html">JavaSource</a> instance is supplied to the <code>Smooks#filterSource</code> method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext.html">ExecutionContect</a> for that Smooks.filterSource invocation. This will mean that some JavaSource bean instances may be visible in the JavaResult.</p>
+<p>Note that as of Smooks v1.2, if a <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/JavaSource.html">JavaSource</a> instance is supplied to the <code>Smooks#filterSource</code> method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a> for that Smooks.filterSource invocation. This will mean that some JavaSource bean instances may be visible in the JavaResult.</p>
 </div>
 </div>
 </div>
