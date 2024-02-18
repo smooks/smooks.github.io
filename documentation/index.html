@@ -438,6 +438,22 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <li>
 <p>Set <code>ContainerResourceLocator</code> from <code>DefaultApplicationContextBuilder#setResourceLocator</code> instead from <code>ApplicationContext#setResourceLocator</code>.</p>
 </li>
+<li>
+<p>Replace class implementations of:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.milyn.delivery.ExecutionLifecycleInitializable</code> with <code>org.smooks.api.lifecycle.PreExecutionLifecycle</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.delivery.ExecutionLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostExecutionLifecycle</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.delivery.VisitLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostFragmentLifecycle</code>.</p>
+</li>
+</ul>
+</div>
+</li>
 </ol>
 </div>
 </div>
@@ -3252,37 +3268,37 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 <div class="sect3">
 <h4 id="visitor_instance_lifecycle">Visitor Instance Lifecycle</h4>
 <div class="paragraph">
-<p>One aspect of the visitor lifecycle has already been discussed in the general context of Smooks component <a href="#initialize-and-uninitialize">initialization and uninitialization</a>.</p>
+<p>One aspect of the visitor lifecycle has already been discussed in the general context of Smooks component <a href="#initialize-and-uninitialize">initialization and un-initialization</a>.</p>
 </div>
 <div class="paragraph">
-<p>Smooks supports two additional component lifecycle events, specific to visitor components, via the <code>ExecutionLifecycleCleanable</code> and <code>VisitLifecycleCleanable</code> interfaces.</p>
+<p>Smooks supports two additional component lifecycle events, specific to visitor components, via the <code>PostExecutionLifecycle</code> and <code>PostFragmentLifecycle</code> interfaces.</p>
 </div>
 <div class="sect4">
-<h5 id="executionlifecyclecleanable">ExecutionLifecycleCleanable</h5>
+<h5 id="postexecutionlifecycle">PostExecutionLifecycle</h5>
 <div class="paragraph">
 <p>Visitor components implementing this lifecycle interface will be able to perform post <code>Smooks.filterSource</code> lifecycle operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ExecutionLifecycleCleanable</span> <span class="kd">extends</span> <span class="nc">Visitor</span> <span class="o">{</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PostExecutionLifecycle</span> <span class="o">{</span>
 
-    <span class="kt">void</span> <span class="nf">executeExecutionLifecycleCleanup</span><span class="o">(</span><span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="nf">onPostExecution</span><span class="o">(</span><span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">);</span>
 <span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The basic call sequence can be described as follows (note the executeExecutionLifecycleCleanup calls):</p>
+<p>The basic call sequence can be described as follows (note the onPostExecution calls):</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(..);</span>
 
         <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(...);</span>
-            <span class="o">**</span> <span class="nc">VisitorXX</span><span class="o">.</span><span class="na">executeExecutionLifecycleCleanup</span> <span class="o">**</span>
+            <span class="o">**</span> <span class="nc">VisitorXX</span><span class="o">.</span><span class="na">onPostExecution</span> <span class="o">**</span>
         <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(...);</span>
-            <span class="o">**</span> <span class="nc">VisitorXX</span><span class="o">.</span><span class="na">executeExecutionLifecycleCleanup</span> <span class="o">**</span>
+            <span class="o">**</span> <span class="nc">VisitorXX</span><span class="o">.</span><span class="na">onPostExecution</span> <span class="o">**</span>
         <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(...);</span>
-            <span class="o">**</span> <span class="nc">VisitorXX</span><span class="o">.</span><span class="na">executeExecutionLifecycleCleanup</span> <span class="o">**</span>
+            <span class="o">**</span> <span class="nc">VisitorXX</span><span class="o">.</span><span class="na">onPostExecution</span> <span class="o">**</span>
         <span class="o">...</span> <span class="n">etc</span> <span class="o">...</span></code></pre>
 </div>
 </div>
@@ -3291,20 +3307,20 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 </div>
 </div>
 <div class="sect4">
-<h5 id="visitlifecyclecleanable">VisitLifecycleCleanable</h5>
+<h5 id="postfragmentlifecycle">PostFragmentLifecycle</h5>
 <div class="paragraph">
 <p>Visitor components implementing this lifecycle interface will be able to perform post <code>AfterVisitor.visitAfter</code> lifecycle operations.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">VisitLifecycleCleanable</span> <span class="kd">extends</span> <span class="nc">Visitor</span> <span class="o">{</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PostFragmentLifecycle</span> <span class="kd">extends</span> <span class="nc">Visitor</span> <span class="o">{</span>
 
-    <span class="kt">void</span> <span class="nf">executeVisitLifecycleCleanup</span><span class="o">(</span><span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="nf">onPostFragment</span><span class="o">(</span><span class="nc">Fragment</span><span class="o">&lt;?&gt;</span> <span class="n">fragment</span><span class="o">,</span> <span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">);</span>
 <span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The basic call sequence can be described as follows (note the executeVisitLifecycleCleanup calls):</p>
+<p>The basic call sequence can be described as follows (note the onPostFragment calls):</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -3316,15 +3332,15 @@ If you need to control serialization of sub-fragments you need to reset the <cod
             &lt;child&gt;                      &lt;--- VisitorXX.visitChildElement
             &lt;/child&gt;
         &lt;/target-fragment&gt;     &lt;--- VisitorXX.visitAfter
-        ** VisitorXX.executeVisitLifecycleCleanup **
+        ** VisitorXX.onPostFragment **
         &lt;target-fragment&gt;      &lt;--- VisitorXX.visitBefore
             Text!!                       &lt;--- VisitorXX.visitChildText
             &lt;child&gt;                      &lt;--- VisitorXX.visitChildElement
             &lt;/child&gt;
         &lt;/target-fragment&gt;     &lt;--- VisitorXX.visitAfter
-        ** VisitorXX.executeVisitLifecycleCleanup **
+        ** VisitorXX.onPostFragment **
     &lt;/message&gt;
-    VisitorXX.executeExecutionLifecycleCleanup
+    VisitorXX.onPostExecution
 
 smooks.filterSource(...);
 
@@ -3334,15 +3350,15 @@ smooks.filterSource(...);
             &lt;child&gt;                      &lt;--- VisitorXX.visitChildElement
             &lt;/child&gt;
         &lt;/target-fragment&gt;     &lt;--- VisitorXX.visitAfter
-        ** VisitorXX.executeVisitLifecycleCleanup **
+        ** VisitorXX.onPostFragment **
         &lt;target-fragment&gt;      &lt;--- VisitorXX.visitBefore
             Text!!                       &lt;--- VisitorXX.visitChildText
             &lt;child&gt;                      &lt;--- VisitorXX.visitChildElement
             &lt;/child&gt;
         &lt;/target-fragment&gt;     &lt;--- VisitorXX.visitAfter
-        ** VisitorXX.executeVisitLifecycleCleanup **
+        ** VisitorXX.onPostFragment **
     &lt;/message&gt;
-    VisitorXX.executeExecutionLifecycleCleanup</pre>
+    VisitorXX.onPostExecution</pre>
 </div>
 </div>
 <div class="paragraph">
