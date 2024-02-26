@@ -365,6 +365,22 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <p>Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.</p>
 </li>
 <li>
+<p>Replace class implementations of:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.milyn.delivery.ExecutionLifecycleInitializable</code> with <code>org.smooks.api.lifecycle.PreExecutionLifecycle</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.delivery.ExecutionLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostExecutionLifecycle</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.delivery.VisitLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostFragmentLifecycle</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>Remove references to  <code>org.milyn.util.CollectionsUtil</code> and write your own implementation for this class.</p>
 </li>
 <li>
@@ -428,6 +444,16 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </li>
 <li>
 <p>Replace references to <code>org.milyn.cdr.SmooksResourceConfiguration</code> with <code>org.smooks.api.resource.config.ResourceConfig</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Replace calls to <code>setDefaultResource()</code> with <code>setSystem()</code></p>
+</li>
+<li>
+<p>Replace calls to <code>isDefaultResource()</code> with <code>isSystem()</code></p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>Replace references to <code>org.milyn.delivery.sax.SAXToXMLWriter</code> with <code>org.smooks.io.DomSerializer</code>.</p>
@@ -440,22 +466,6 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </li>
 <li>
 <p>Set <code>ContainerResourceLocator</code> from <code>DefaultApplicationContextBuilder#setResourceLocator</code> instead from <code>ApplicationContext#setResourceLocator</code>.</p>
-</li>
-<li>
-<p>Replace class implementations of:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>org.milyn.delivery.ExecutionLifecycleInitializable</code> with <code>org.smooks.api.lifecycle.PreExecutionLifecycle</code>.</p>
-</li>
-<li>
-<p><code>org.milyn.delivery.ExecutionLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostExecutionLifecycle</code>.</p>
-</li>
-<li>
-<p><code>org.milyn.delivery.VisitLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostFragmentLifecycle</code>.</p>
-</li>
-</ul>
-</div>
 </li>
 </ol>
 </div>
@@ -1441,7 +1451,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <p>Global Configuration Parameters: Every in a Smooks configuration can specify elements for configuration parameters. These parameter values are available at runtime through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/config/ResourceConfig.html"><code>ResourceConfig</code></a>, or are reflectively injected through the <code>@Inject</code> annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the <code>ExecutionContext</code> (vs <code>ResourceConfig</code>). More on this in the following sections.</p>
 </li>
 <li>
-<p>Default Properties: Specify default values for attributes. These defaults are automatically applied to `ResourceConfig`s  when their corresponding does not specify the attribute. More on this in the following section.</p>
+<p>Default Properties: Specify default values for attributes. These defaults are automatically applied to <code>ResourceConfig</code> s  when their corresponding does not specify the attribute. More on this in the following section.</p>
 </li>
 </ul>
 </div>
