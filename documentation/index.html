@@ -365,17 +365,23 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <p>Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.</p>
 </li>
 <li>
-<p>Replace class implementations of:</p>
+<p>Replace class interfaces:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>org.milyn.delivery.ExecutionLifecycleInitializable</code> with <code>org.smooks.api.lifecycle.PreExecutionLifecycle</code>.</p>
+<p><code>org.milyn.delivery.ExecutionLifecycleInitializable</code> with <code>org.smooks.api.lifecycle.PreExecutionLifecycle</code></p>
 </li>
 <li>
-<p><code>org.milyn.delivery.ExecutionLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostExecutionLifecycle</code>.</p>
+<p><code>org.milyn.delivery.ExecutionLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostExecutionLifecycle</code></p>
 </li>
 <li>
-<p><code>org.milyn.delivery.VisitLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostFragmentLifecycle</code>.</p>
+<p><code>org.milyn.delivery.VisitLifecycleCleanable</code> with <code>org.smooks.api.lifecycle.PostFragmentLifecycle</code></p>
+</li>
+<li>
+<p><code>org.milyn.delivery.ConfigurationExpander</code> with <code>org.smooks.api.delivery.ResourceConfigExpander</code></p>
+</li>
+<li>
+<p><code>org.milyn.event.ResourceBasedEvent</code> with <code>org.smooks.api.delivery.event.ResourceAwareEvent</code></p>
 </li>
 </ul>
 </div>
@@ -384,10 +390,54 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <p>Remove references to  <code>org.milyn.util.CollectionsUtil</code> and write your own implementation for this class.</p>
 </li>
 <li>
-<p>Replace <code>org.milyn.*</code> Java package references with <code>org.smooks.api</code>, <code>org.smooks.engine</code>, <code>org.smooks.io</code> or <code>org.smooks.support</code>.</p>
+<p>Implement from <code>org.smooks.api.resource.visitor.sax.ng.SaxNgVisitor</code> instead of <code>org.milyn.delivery.sax.SAXVisitor</code>.</p>
 </li>
 <li>
-<p>Inherit from <code>org.smooks.api.resource.visitor.sax.ng.SaxNgVisitor</code> instead of <code>org.milyn.delivery.sax.SAXVisitor</code>.</p>
+<p>Replace <code>Smooks#addConfiguration(&#8230;&#8203;)</code> method calls with <code>Smooks#addResourceConfig(&#8230;&#8203;)</code>.</p>
+</li>
+<li>
+<p>Replace references to:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.milyn.javabean.DataDecode</code> with <code>org.smooks.api.converter.TypeConverterFactory</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.cdr.annotation.Configurator</code> with <code>org.smooks.api.lifecycle.LifecycleManager</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.javabean.DataDecoderException</code> with <code>org.smooks.api.converter.TypeConverterException</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.cdr.SmooksResourceConfigurationStore</code> with <code>org.smooks.api.Registry</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.cdr.SmooksResourceConfiguration</code> with <code>org.smooks.api.resource.config.ResourceConfig</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Replace calls to <code>setDefaultResource()</code> with <code>setSystem()</code></p>
+</li>
+<li>
+<p>Replace calls to <code>isDefaultResource()</code> with <code>isSystem()</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>org.milyn.delivery.sax.SAXToXMLWriter</code> with <code>org.smooks.io.DomSerializer</code>.</p>
+</li>
+<li>
+<p><code>org.milyn.delivery.dom.serialize.Serializer</code> references with <code>org.smooks.api.resource.visitor.SerializerVisitor</code></p>
+</li>
+<li>
+<p><code>org.milyn.event.types.ConfigBuilderEvent</code> references with <code>org.smooks.api.delivery.event.ContentDeliveryConfigExecutionEvent</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Replace <code>org.milyn.*</code> Java package references with <code>org.smooks.api</code>, <code>org.smooks.engine</code>, <code>org.smooks.io</code> or <code>org.smooks.support</code>.</p>
 </li>
 <li>
 <p>Change legacy document root fragment selectors from <code>$document</code> to <code>#document</code>.</p>
@@ -406,13 +456,10 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <p>Replace <code>ExecutionContext#getContext()</code> method calls with <code>ExecutionContext#getApplicationContext()</code>.</p>
 </li>
 <li>
-<p>Replace <code>org.smooks.delivery.dom.serialize.SerializationVisitor</code> references with <code>org.smooks.api.resource.visitor.SerializerVisitor</code>.</p>
+<p>Replace <code>org.milyn.cdr.annotation.AppContext</code> annotations with <code>javax.inject.Inject</code> annotations.</p>
 </li>
 <li>
-<p>Replace <code>org.smooks.cdr.annotation.AppContext</code> annotations with <code>javax.inject.Inject</code> annotations.</p>
-</li>
-<li>
-<p>Replace <code>org.smooks.cdr.annotation.ConfigParam</code> annotations with <code>javax.inject.Inject</code> annotations:</p>
+<p>Replace <code>org.milyn.cdr.annotation.ConfigParam</code> annotations with <code>javax.inject.Inject</code> annotations:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -425,38 +472,10 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </div>
 </li>
 <li>
-<p>Replace <code>org.smooks.delivery.annotation.Initialize</code> annotations with <code>jakarta.annotation.PostConstruct</code> annotations.</p>
+<p>Replace <code>org.milyn.delivery.annotation.Initialize</code> annotations with <code>jakarta.annotation.PostConstruct</code> annotations.</p>
 </li>
 <li>
-<p>Replace <code>org.smooks.delivery.annotation.Uninitialize</code> annotations with <code>jakarta.annotation.PreDestroy</code> annotations.</p>
-</li>
-<li>
-<p>Replace references to <code>org.smooks.javabean.DataDecode</code> with <code>org.smooks.api.converter.TypeConverterFactory</code>.</p>
-</li>
-<li>
-<p>Replace references to <code>org.smooks.cdr.annotation.Configurator</code> with <code>org.smooks.api.lifecycle.LifecycleManager</code>.</p>
-</li>
-<li>
-<p>Replace references to <code>org.smooks.javabean.DataDecoderException</code> with <code>org.smooks.api.converter.TypeConverterException</code>.</p>
-</li>
-<li>
-<p>Replace references to <code>org.smooks.cdr.SmooksResourceConfigurationStore</code> with <code>org.smooks.api.Registry</code>.</p>
-</li>
-<li>
-<p>Replace references to <code>org.milyn.cdr.SmooksResourceConfiguration</code> with <code>org.smooks.api.resource.config.ResourceConfig</code>.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Replace calls to <code>setDefaultResource()</code> with <code>setSystem()</code></p>
-</li>
-<li>
-<p>Replace calls to <code>isDefaultResource()</code> with <code>isSystem()</code></p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Replace references to <code>org.milyn.delivery.sax.SAXToXMLWriter</code> with <code>org.smooks.io.DomSerializer</code>.</p>
+<p>Replace <code>org.milyn.delivery.annotation.Uninitialize</code> annotations with <code>jakarta.annotation.PreDestroy</code> annotations.</p>
 </li>
 <li>
 <p>Follow the <a href="https://github.com/smooks/smooks-examples/tree/master/edifact-to-java">EDIFACT-to-Java example</a> to migrate an implementation that binds an EDIFACT document to a POJO.</p>
