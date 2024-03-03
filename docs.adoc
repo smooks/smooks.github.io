@@ -43,6 +43,8 @@ include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=testing]
 
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=extending-smooks]
+
+include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=instrumentation]
 :imagesdir:
 
 == Consuming & Writing Data
