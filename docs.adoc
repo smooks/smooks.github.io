@@ -7,7 +7,7 @@ redirect_from:
 :page-permalink: /documentation/
 :page-liquid:
 
-+++
+++++
 <div class="admonitionblock note">
   <table>
     <tbody>
@@ -22,15 +22,11 @@ This is the user guide for Smooks 2. For Smooks 1, visit the <a href="https://ww
     </tbody>
   </table>
 </div>
-+++
+++++
 
 = User Guide
 :showtitle:
 :toc:
-
-+++
-<span data-page-nav="{{ '/documentation' | prepend: site.baseurl }}"></span>
-+++
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=introduction]
