@@ -1,6 +1,7 @@
 ---
 layout: default
-permalink: /v1.7/community/
+permalink: /community/
+path: /v1.7/
 ---
 
 <span data-page-nav="/community"></span>

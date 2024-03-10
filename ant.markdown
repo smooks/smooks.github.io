@@ -1,6 +1,6 @@
 ---
 layout: default
-permalink: /v1.7/ant/
+path: /v1.7/
 ---
 <br/>
 If you're using Ant in your project, you can pull the Smooks binaries from the Maven repository using the "**getsmooks-build.xml**" Ant script:

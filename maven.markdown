@@ -1,6 +1,6 @@
 ---
 layout: default
-permalink: /v1.7/maven/
+path: /v1.7/
 ---
 <br/>
 All Smooks components are available from the Maven Central Repository.

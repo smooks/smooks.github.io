@@ -1,6 +1,6 @@
 ---
 layout: default
-permalink: /v1.7/
+path: /v1.7/
 ---
 <span data-page-nav="/index"></span>
 

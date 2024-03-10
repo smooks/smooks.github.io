@@ -1,7 +1,8 @@
 ---
 layout: default
-permalink: /v1.7/faq/
+path: /v1.7/
 ---
+
 ### Contents
 
 1. [What's the easiest way to get started with Smooks?](#whats-the-easiest-way-to-get-started-with-smooks)
