@@ -9,8 +9,9 @@ redirect_from:
 
 = User Guide
 :showtitle:
-NOTE: This is the user guide for Smooks 2. For Smooks 1, visit the https://www.smooks.org/v1.7/documentation/[v1.7 user guide].
 :toc:
+
+NOTE: This is the user guide for Smooks 2. For Smooks 1, visit the https://www.smooks.org/v1.7/documentation/[v1.7 user guide].
 
 +++
 <span data-page-nav="{{ '/documentation' | prepend: site.baseurl }}"></span>
