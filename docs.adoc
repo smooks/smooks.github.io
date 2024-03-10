@@ -10,7 +10,6 @@ redirect_from:
 NOTE: This is the user guide for Smooks 2. For Smooks 1, visit the https://www.smooks.org/v1.7/documentation/[v1.7 user guide].
 
 = User Guide
-
 :showtitle:
 :toc:
 
