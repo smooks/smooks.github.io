@@ -47,21 +47,124 @@
     </nav>
 
     <div class="main container">
-        <div class="admonitionblock note">
-  <table>
-    <tbody>
-      <tr>
-        <td class="icon">
-          <div class="title">Note</div>
-        </td>
-        <td class="content">
-This is the user guide for Smooks 2. For Smooks 1, visit the <a href="https://www.smooks.org/v1.7/documentation/">v1.7 user guide</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        <h1>User Guide</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This is the user guide for Smooks 2. For Smooks 1, visit the <a href="https://www.smooks.org/v1.7/documentation/">v1.7 user guide</a>.
+</td>
+</tr>
+</table>
 </div>
-<h1 id="user_guide" class="sect0">User Guide</h1>
+<div id="toc" class="toc">
+<div id="toctitle" class="title">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#introduction">Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#why_smooks">Why Smooks?</a></li>
+<li><a href="#fragment_based_processing">Fragment-Based Processing</a></li>
+<li><a href="#whats_new_in_smooks_2">What&#8217;s new in Smooks 2?</a></li>
+<li><a href="#migrating_from_smooks_1_7_to_2_0">Migrating from Smooks 1.7 to 2.0</a></li>
+<li><a href="#faqs">FAQs</a></li>
+<li><a href="#maven">Maven</a></li>
+</ul>
+</li>
+<li><a href="#fundamentals">Fundamentals</a>
+<ul class="sectlevel2">
+<li><a href="#hello_world_app">Hello World App</a></li>
+<li><a href="#smooks_resources">Smooks Resources</a></li>
+<li><a href="#input">Input</a></li>
+<li><a href="#output">Output</a></li>
+<li><a href="#pipeline">Pipeline</a></li>
+<li><a href="#cartridge">Cartridge</a></li>
+<li><a href="#filter">Filter</a></li>
+<li><a href="#bean_context">Bean Context</a></li>
+<li><a href="#global_configurations">Global Configurations</a></li>
+<li><a href="#configuration_modularization">Configuration Modularization</a></li>
+</ul>
+</li>
+<li><a href="#routing">Routing</a>
+<ul class="sectlevel2">
+<li><a href="#basic_splitting_and_routing">Basic Splitting and Routing</a></li>
+<li><a href="#file">File</a></li>
+<li><a href="#jms">JMS</a></li>
+<li><a href="#apache_camel">Apache Camel</a></li>
+</ul>
+</li>
+<li><a href="#exporting_results">Exporting Results</a></li>
+<li><a href="#performance_tuning">Performance Tuning</a>
+<ul class="sectlevel2">
+<li><a href="#general">General</a></li>
+<li><a href="#smooks_cartridges">Smooks Cartridges</a></li>
+<li><a href="#javabean_cartridge">Javabean Cartridge</a></li>
+</ul>
+</li>
+<li><a href="#testing">Testing</a>
+<ul class="sectlevel2">
+<li><a href="#unit_testing">Unit Testing</a></li>
+</ul>
+</li>
+<li><a href="#extending_smooks">Extending Smooks</a>
+<ul class="sectlevel2">
+<li><a href="#configuring_smooks_components">Configuring Smooks Components</a></li>
+<li><a href="#implementing_a_source_reader">Implementing a Source Reader</a></li>
+<li><a href="#implementing_a_fragment_visitor">Implementing a Fragment Visitor</a></li>
+</ul>
+</li>
+<li><a href="#instrumentation">Instrumentation</a>
+<ul class="sectlevel2">
+<li><a href="#activation">Activation</a></li>
+<li><a href="#extending">Extending</a></li>
+</ul>
+</li>
+<li><a href="#consuming_writing_data">Consuming &amp; Writing Data</a>
+<ul class="sectlevel2">
+<li><a href="#csv">CSV</a></li>
+<li><a href="#fixed_length">Fixed-Length</a></li>
+<li><a href="#dfdl">DFDL</a></li>
+<li><a href="#edi">EDI</a></li>
+<li><a href="#edifact">EDIFACT</a></li>
+<li><a href="#json">JSON</a></li>
+<li><a href="#yaml">YAML</a></li>
+<li><a href="#javabeans">JavaBeans</a></li>
+<li><a href="#templating">Templating</a></li>
+</ul>
+</li>
+<li><a href="#validating_data">Validating Data</a>
+<ul class="sectlevel2">
+<li><a href="#rules">Rules</a></li>
+<li><a href="#rule_based_validation">Rule-Based Validation</a></li>
+</ul>
+</li>
+<li><a href="#database_support">Database Support</a>
+<ul class="sectlevel2">
+<li><a href="#jdbc">JDBC</a></li>
+<li><a href="#persistence">Persistence</a></li>
+<li><a href="#data_access_objects">Data Access Objects</a></li>
+<li><a href="#maven_coordinates_13">Maven Coordinates</a></li>
+<li><a href="#xml_namespaces_3">XML Namespaces</a></li>
+</ul>
+</li>
+<li><a href="#scripting">Scripting</a>
+<ul class="sectlevel2">
+<li><a href="#groovy">Groovy</a></li>
+</ul>
+</li>
+<li><a href="#common_use_cases">Common use cases</a>
+<ul class="sectlevel2">
+<li><a href="#processing_huge_messages_gbs">Processing Huge Messages (GBs)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="introduction">Introduction</h2>
 <div class="sectionbody">
