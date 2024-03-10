@@ -1,5 +1,6 @@
 ---
 layout: default
+permalink: /v1.7/faq/
 ---
 ### Contents
 
