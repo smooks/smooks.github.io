@@ -1,6 +1,7 @@
 ---
 layout: default
-permalink: /v1.7/documentation/
+permalink: /documentation/
+path: /v1.7/
 ---
 
 <span data-page-nav="/documentation"></span>
