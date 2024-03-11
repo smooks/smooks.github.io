@@ -6,7 +6,6 @@ path: /v1.7/
 
 <span data-page-nav="/documentation"></span>
 
-> [!NOTE]
 > This is the user guide for Smooks 1. For Smooks 2, visit the [v2 user guide](https://www.smooks.org/documentation/).
 
 ### Examples
