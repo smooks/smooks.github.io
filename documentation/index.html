@@ -621,7 +621,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <div class="sect2">
 <h3 id="hello_world_app">Hello World App</h3>
 <div class="paragraph">
-<p>One or more of <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/SaxNgVisitor.html">SaxNgVisitor</a> interfaces need to be implemented in order to consume the SAX event stream produced from the source, depending on which events are of interest.</p>
+<p>One or more of <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/SaxNgVisitor.html">SaxNgVisitor</a> interfaces need to be implemented in order to consume the SAX event stream produced from the source, depending on which events are of interest.</p>
 </div>
 <div class="paragraph">
 <p>The following is a hello world app demonstrating how to implement a visitor that is fired on the <code>visitBefore</code> and <code>visitAfter</code> events of a targeted node in the event stream. In this case, Smooks configures the visitor to target element <code>foo</code>:</p>
@@ -642,7 +642,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </div>
 </div>
 <div class="paragraph">
-<p>Observe that in this case the program does not produce a result. The program does not even interact with the filtering process in any way because it does not provide an <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/ExecutionContext.html"><code>ExecutionContext</code></a> to <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/Smooks.html"><code>smooks.filterSource(...)</code></a>.</p>
+<p>Observe that in this case the program does not produce a result. The program does not even interact with the filtering process in any way because it does not provide an <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/ExecutionContext.html"><code>ExecutionContext</code></a> to <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/Smooks.html"><code>smooks.filterSource(...)</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>This example illustrated the lower level mechanics of the Smooks&#8217;s programming model. In reality, most users are not going to want to solve their problems at this level of detail. Smooks ships with substantial pre-built functionality, that is, pre-built visitors. Visitors are bundled based on functionality: these bundles are called <em>Cartridges</em>.</p>
@@ -915,10 +915,10 @@ Smooks can generate output in either, or both, of the above ways, all in a singl
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/JavaResult.html"><code>JavaResult</code></a>: result type for capturing the contents of the Smooks JavaBean context.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/JavaResult.html"><code>JavaResult</code></a>: result type for capturing the contents of the Smooks JavaBean context.</p>
 </li>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/StringResult.html"><code>StringResult</code></a>: <code>StreamResult</code> extension wrapping a <code>StringWriter</code>, useful for testing.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/StringResult.html"><code>StringResult</code></a>: <code>StreamResult</code> extension wrapping a <code>StringWriter</code>, useful for testing.</p>
 </li>
 </ul>
 </div>
@@ -1317,7 +1317,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <p>An example <code>HtmlReportGenerator</code> report can be seen <a href="http://www.milyn.org/docs/smooks-report/report.html">online here</a>.</p>
 </div>
 <div class="paragraph">
-<p>Of course you can also write and use your own <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/delivery/event/ExecutionEventListener.html">ExecutionEventListener</a> implementations.</p>
+<p>Of course you can also write and use your own <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/delivery/event/ExecutionEventListener.html">ExecutionEventListener</a> implementations.</p>
 </div>
 <div class="admonitionblock caution">
 <table>
@@ -1412,10 +1412,10 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/bean/context/preinstalled/UniqueID.html"><code>PUUID</code></a>: This <code>UniqueId</code> instance provides unique identifiers for the filtering <code>ExecutionContext</code>.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/bean/context/preinstalled/UniqueID.html"><code>PUUID</code></a>: This <code>UniqueId</code> instance provides unique identifiers for the filtering <code>ExecutionContext</code>.</p>
 </li>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/bean/context/preinstalled/Time.html"><code>PTIME</code></a>: This <code>Time</code> instance provides time-based data for the filtering ExecutionContext.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/bean/context/preinstalled/Time.html"><code>PTIME</code></a>: This <code>Time</code> instance provides time-based data for the filtering ExecutionContext.</p>
 </li>
 </ul>
 </div>
@@ -1483,7 +1483,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="ulist">
 <ul>
 <li>
-<p>Global Configuration Parameters: Every in a Smooks configuration can specify elements for configuration parameters. These parameter values are available at runtime through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/config/ResourceConfig.html"><code>ResourceConfig</code></a>, or are reflectively injected through the <code>@Inject</code> annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the <code>ExecutionContext</code> (vs <code>ResourceConfig</code>). More on this in the following sections.</p>
+<p>Global Configuration Parameters: Every in a Smooks configuration can specify elements for configuration parameters. These parameter values are available at runtime through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/config/ResourceConfig.html"><code>ResourceConfig</code></a>, or are reflectively injected through the <code>@Inject</code> annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the <code>ExecutionContext</code> (vs <code>ResourceConfig</code>). More on this in the following sections.</p>
 </li>
 <li>
 <p>Default Properties: Specify default values for attributes. These defaults are automatically applied to <code>ResourceConfig</code> s  when their corresponding does not specify the attribute. More on this in the following section.</p>
@@ -2486,7 +2486,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/camel">Ap
 </ol>
 </div>
 <div class="paragraph">
-<p>The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, <a href="https://github.com/smooks/smooks/tree/v2.0.0-RC3/core/src/main/resources/META-INF/xsd">as can be seen in the source</a>.</p>
+<p>The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, <a href="https://github.com/smooks/smooks/tree/v2.0.0-RC4/core/src/main/resources/META-INF/xsd">as can be seen in the source</a>.</p>
 </div>
 </div>
 </div>
@@ -2496,7 +2496,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/camel">Ap
 <p>Implementing and configuring a new Source Reader for Smooks is straightforward. The Smooks specific parts of the process are easy and are not really the issue. The level of effort involved is a function of the complexity of the Source data format for which you are implementing the reader.</p>
 </div>
 <div class="paragraph">
-<p>Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting &amp; Routing, etc&#8230;&#8203; So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard <code>org.xml.sax.XMLReader</code> interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/reader/SmooksXMLReader.html"><code>org.smooks.api.resource.reader.SmooksXMLReader</code></a> interface (which is just an extension of <code>org.xml.sax.XMLReader</code>). So, you can easily use (or extend) an existing <code>org.xml.sax.XMLReader</code> implementation, or implement a new Reader from scratch.</p>
+<p>Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting &amp; Routing, etc&#8230;&#8203; So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard <code>org.xml.sax.XMLReader</code> interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/reader/SmooksXMLReader.html"><code>org.smooks.api.resource.reader.SmooksXMLReader</code></a> interface (which is just an extension of <code>org.xml.sax.XMLReader</code>). So, you can easily use (or extend) an existing <code>org.xml.sax.XMLReader</code> implementation, or implement a new Reader from scratch.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s now look at a simple example of implementing a Reader for use with Smooks. In this example, we will implement a Reader that can read a stream of Comma Separated Value (CSV) records, converting the CSV stream into a stream of SAX events that can be processed by Smooks, allowing you to do all the things Smooks allows (Java Binding, etc&#8230;&#8203;).</p>
@@ -2947,7 +2947,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/ContentHandler.html">SAX events</a> that a SaxNgVisitor implementation can capture and processes. Depending on the use case being solved with the SaxNgVisitor implementation, you may need to implement one or all of these interfaces.</p>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/BeforeVisitor.html"><code>BeforeVisitor</code></a>: Captures the <em>startElement</em> SAX event for the targeted fragment element:</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/BeforeVisitor.html"><code>BeforeVisitor</code></a>: Captures the <em>startElement</em> SAX event for the targeted fragment element:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2958,7 +2958,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/ChildrenVisitor.html"><code>ChildrenVisitor</code></a>: Captures the <em>character</em> based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the <em>startElement</em> events of child fragment elements:</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/ChildrenVisitor.html"><code>ChildrenVisitor</code></a>: Captures the <em>character</em> based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the <em>startElement</em> events of child fragment elements:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2971,7 +2971,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/AfterVisitor.html"><code>AfterVisitor</code></a>: Captures the <em>endElement</em> SAX event for the targeted fragment element:</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/AfterVisitor.html"><code>AfterVisitor</code></a>: Captures the <em>endElement</em> SAX event for the targeted fragment element:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2982,7 +2982,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p>As a convenience for those implementations that need to capture all the SAX events, the above three interfaces are pulled together into a single interface in the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/resource/visitor/sax/ng/ElementVisitor.html"><code>ElementVisitor</code></a> interface.</p>
+<p>As a convenience for those implementations that need to capture all the SAX events, the above three interfaces are pulled together into a single interface in the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/ElementVisitor.html"><code>ElementVisitor</code></a> interface.</p>
 </div>
 <div class="paragraph">
 <p>Illustrating these events using a piece of XML:</p>
@@ -4564,7 +4564,7 @@ Maurice  Zeijen     M 27 NL</pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-fixed-length-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -4980,7 +4980,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-dfdl-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0-RC4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5350,7 +5350,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-edi-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5467,7 +5467,7 @@ message definition zip directories</a>. This allows you to easily convert a UN E
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>edifact-schemas<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;classifier&gt;</span>d93a<span class="nt">&lt;/classifier&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5503,7 +5503,7 @@ message definition zip directories</a>. This allows you to easily convert a UN E
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-edifact-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5634,7 +5634,7 @@ class.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-json-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5934,7 +5934,7 @@ class.</p>
 <div class="sect4">
 <h5 id="java_binding_overview">Java Binding Overview</h5>
 <div class="paragraph">
-<p>This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV, etc&#8230;&#8203; However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java objects it creates (and binds data into) available through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/bean/contedxt/BeanContext.html">BeanContext</a> class. This is essentially a Java Bean context that is made available to any Smooks visitor via the Smooks <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a>.</p>
+<p>This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV, etc&#8230;&#8203; However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java objects it creates (and binds data into) available through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/bean/contedxt/BeanContext.html">BeanContext</a> class. This is essentially a Java Bean context that is made available to any Smooks visitor via the Smooks <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a>.</p>
 </div>
 <div class="paragraph">
 <p>Some of the existing features that build on the functionality provided in the Javabean Cartridge include:</p>
@@ -6244,7 +6244,7 @@ class.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>In most cases, Smooks will automatically detect the datatype decoder to be used for a <code>&lt;jb:value&gt;</code> binding. However, some decoders require configuration e.g. the DateDecoder (<code>decoder="Date"</code>). In these cases, the decoder attribute should be defined on the binding, as well as the &lt;jb:decodeParam&gt; child elements for specifying the decode parameters for that decoder. <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/package-summary.html">See the full list of DataDecoder available out-of-the-box</a>.</p>
+<p>In most cases, Smooks will automatically detect the datatype decoder to be used for a <code>&lt;jb:value&gt;</code> binding. However, some decoders require configuration e.g. the DateDecoder (<code>decoder="Date"</code>). In these cases, the decoder attribute should be defined on the binding, as well as the &lt;jb:decodeParam&gt; child elements for specifying the decode parameters for that decoder. <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/package-summary.html">See the full list of DataDecoder available out-of-the-box</a>.</p>
 </li>
 </ol>
 </div>
@@ -6287,19 +6287,19 @@ class.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToDateConverterFactory.html">Date</a></strong>: Decode/Encode a String to a <em>java.util.Date</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToDateConverterFactory.html">Date</a></strong>: Decode/Encode a String to a <em>java.util.Date</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToXmlGregorianCalendarConverterFactory.html">Calendar</a></strong>: Decode/Encode a String to a <em>java.util.Calendar</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToXmlGregorianCalendarConverterFactory.html">Calendar</a></strong>: Decode/Encode a String to a <em>java.util.Calendar</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/SqlDateConverterFactory.html">SqlDate</a></strong>: Decode/Encode a String to a <em>java.sql.Date</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/SqlDateConverterFactory.html">SqlDate</a></strong>: Decode/Encode a String to a <em>java.sql.Date</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/SqlTimeConverterFactory.html">SqlTime</a></strong>: Decode/Encode a String to a <em>java.sql.Time</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/SqlTimeConverterFactory.html">SqlTime</a></strong>: Decode/Encode a String to a <em>java.sql.Time</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/SqlTimestampConverterFactory.html">SqlTimestamp</a></strong>: Decode/Encode a String to a <em>java.sql.Timestamp</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/SqlTimestampConverterFactory.html">SqlTimestamp</a></strong>: Decode/Encode a String to a <em>java.sql.Timestamp</em> instance.</p>
 </li>
 </ul>
 </div>
@@ -6352,25 +6352,25 @@ class.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToBigDecimalConverterFactory.html">BigDecimalDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigDecimal</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToBigDecimalConverterFactory.html">BigDecimalDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigDecimal</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToBigIntegerConverterFactory.html">BigIntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigInteger</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToBigIntegerConverterFactory.html">BigIntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigInteger</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToDoubleConverterFactory.html">DoubleDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Double</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToDoubleConverterFactory.html">DoubleDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Double</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToFloatConverterFactory.html">FloatDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Float</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToFloatConverterFactory.html">FloatDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Float</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToIntegerConverterFactory.html">IntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Integer</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToIntegerConverterFactory.html">IntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Integer</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToLongConverterFactory.html">LongDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Long' instance (including primitive).</em></p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToLongConverterFactory.html">LongDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Long' instance (including primitive).</em></p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/engine/converter/StringToShortConverterFactory.html">ShortDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Short</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToShortConverterFactory.html">ShortDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Short</em> instance (including primitive).</p>
 </li>
 </ul>
 </div>
@@ -6908,7 +6908,7 @@ and model-driven-basic-virtual examples</a>.</p>
 <div class="sect4">
 <h5 id="programmatic_configuration_2">Programmatic Configuration</h5>
 <div class="paragraph">
-<p>Java Binding Configuratons can be programmatically added to a Smooks using the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks-javabean-cartridge/org/smooks/cartridges/javabean/Bean.html">Bean</a> configuration class.</p>
+<p>Java Binding Configuratons can be programmatically added to a Smooks using the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks-javabean-cartridge/org/smooks/cartridges/javabean/Bean.html">Bean</a> configuration class.</p>
 </div>
 <div class="paragraph">
 <p>This class can be used to programmatically configure a Smooks instance for performing a Java Bindings on a specific class. To populate a graph, you simply create a graph of Bean instances by binding Beans onto Beans. The Bean class uses a Fluent API (all methods return the Bean instance), making it easy to string configurations together to build up a graph of Bean configuration.</p>
@@ -7207,7 +7207,7 @@ example.</p>
 <div class="sect4">
 <h5 id="notes_on_javaresult">Notes on JavaResult</h5>
 <div class="paragraph">
-<p>Users should note that there is <strong>no guarantee</strong> as to the exact contents of a <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/JavaResult.html">JavaResult</a> instance after calling the Smooks.filterSource method. After calling this method, the JavaResult instance will contain the final contents of the bean context, which can be added to by any visitor.</p>
+<p>Users should note that there is <strong>no guarantee</strong> as to the exact contents of a <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/JavaResult.html">JavaResult</a> instance after calling the Smooks.filterSource method. After calling this method, the JavaResult instance will contain the final contents of the bean context, which can be added to by any visitor.</p>
 </div>
 <div class="paragraph">
 <p>You can restrict the Bean set returned in a JavaResult by using a <code>&lt;jb:result&gt;</code> configuration in the Smooks configuration. In the following example configuration, we tell Smooks to only retain the  "order" bean in the ResultSet:</p>
@@ -7245,7 +7245,7 @@ example.</p>
 <p>So after applying this configuration, calls to the JavaResult.getBean(String) method for anything other than the "order" bean will return null. This will work fine in cases such as the above example, because the other bean instances are wired into the "order" graph.</p>
 </div>
 <div class="paragraph">
-<p>Note that as of Smooks v1.2, if a <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/io/payload/JavaSource.html">JavaSource</a> instance is supplied to the <code>Smooks#filterSource</code> method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="https://www.smooks.org/javadoc/v2.0.0-RC3/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a> for that Smooks.filterSource invocation. This will mean that some JavaSource bean instances may be visible in the JavaResult.</p>
+<p>Note that as of Smooks v1.2, if a <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/JavaSource.html">JavaSource</a> instance is supplied to the <code>Smooks#filterSource</code> method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a> for that Smooks.filterSource invocation. This will mean that some JavaSource bean instances may be visible in the JavaResult.</p>
 </div>
 </div>
 </div>
@@ -7257,7 +7257,7 @@ example.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-javabean-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC3<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
