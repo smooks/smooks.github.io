@@ -3629,7 +3629,7 @@ Smooks instrumentation is available starting from v2.0.0-RC4.
 </div>
 </div>
 <div class="paragraph">
-<p>Line 15 from the snippet above uses <code>InstrumentationAgent</code> to register the <code>@ManagedResource</code> annotated object with the MBean server so that it can be queried and invoked by JMX clients. <code>InstrumentationAgent</code> is obtained from an instance of <code>org.smooks.api.management.InstrumentationResource</code>. The singleton <code>InstrumentationResource</code> can be looked up from the Smooks registry as shown in line 12.</p>
+<p>Line 17 from the snippet above uses <code>InstrumentationAgent</code> to register the <code>@ManagedResource</code> annotated object with the MBean server so that it can be queried and invoked by JMX clients. <code>InstrumentationAgent</code> is obtained from an instance of <code>org.smooks.api.management.InstrumentationResource</code>. The singleton <code>InstrumentationResource</code> can be looked up from the Smooks registry as shown in line 14.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -3785,7 +3785,7 @@ Smooks instrumentation is available starting from v2.0.0-RC4.
 </div>
 </div>
 <div class="paragraph">
-<p>As illustrated above in lines 28-29, to register a <code>@ManagedNotification</code> instance, the MBean descriptor should be assembled dynamically with <code>org.smooks.management.ModelMBeanAssembler</code>. The assembled <code>javax.management.modelmbean.ModelMBeanInfo</code> is then registered using <code>InstrumentationAgent</code> as shown in line 30. <code>InstrumentationAgent.register(Object, ObjectName, ModelMBeanInfo, boolean)</code> returns a <code>RequiredModelMBean</code> object that can be referenced to broadcast notifications, seen in lines 34-35.</p>
+<p>As illustrated above in lines 29-30, to register a <code>@ManagedNotification</code> instance, the MBean descriptor should be assembled dynamically with <code>org.smooks.management.ModelMBeanAssembler</code>. The assembled <code>javax.management.modelmbean.ModelMBeanInfo</code> is then registered using <code>InstrumentationAgent</code> as shown in line 31. <code>InstrumentationAgent.register(Object, ObjectName, ModelMBeanInfo, boolean)</code> returns a <code>RequiredModelMBean</code> object that can be referenced to broadcast notifications, seen in lines 35-36.</p>
 </div>
 </div>
 <div class="sect3">
