@@ -15,8 +15,7 @@ layout: default
 </div>
 ++++
 
-*Smooks* is an extensible Java framework for building XML and non-XML
-data (CSV, EDI, Java, etc…) processing applications.
+*Smooks* is an extensible Java framework for building XML and non-XML data (CSV, EDI, Java, etc…) fragment-based applications.
 
 To use Smooks, simply add the following dependency to your project.
 
