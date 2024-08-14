@@ -408,7 +408,7 @@
     }
 
     em,
-    i {
+    i:not(.fa) {
       font-style: italic;
       line-height: inherit;
     }
