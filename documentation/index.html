@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="/assets/images/smooks-favicon.png"/>
     <link rel="stylesheet" href="/assets/css/styles.css" type="text/css"/>
     <link rel="stylesheet" href="/assets/css/asciidoctor.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" media="print" href="/assets/css/commonPrint.css" type="text/css"/>
     <link rel="stylesheet" media="print" href="/assets/css/gumax_print.css" type="text/css"/>
 
@@ -54,7 +55,7 @@
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 This is the user guide for Smooks 2. For Smooks 1, visit the <a href="https://www.smooks.org/v1.7/documentation/">v1.7 user guide</a>.
@@ -227,7 +228,7 @@ This is the user guide for Smooks 2. For Smooks 1, visit the <a href="https://ww
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 The terms <em>fragment</em> and <em>node</em> denote different meanings. It is usually acceptable to use the terms interchangeably because the difference is subtle and, more often than not, irrelevant. A <em>node</em> may be the outer node of a fragment, excluding the child nodes. A <em>fragment</em> is the outer node and all its child nodes along with their character nodes (text, etc&#8230;&#8203;). When a visitor targets a node, it typically means that the visitor can only process the fragment&#8217;s outer node as opposed to the fragment as a whole, that is, the outer node and its child nodes
@@ -749,7 +750,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 This requires the namespace prefix-to-URI mappings to be defined. A configuration error will result if not defined. Read the <a href="#namespace-declaration">namespace declaration</a> section for more details.
@@ -892,7 +893,7 @@ This requires the namespace prefix-to-URI mappings to be defined. A configuratio
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 Smooks can generate output in either, or both, of the above ways, all in a single filtering pass of the source. It does not need to filter the source multiple times in order to generate multiple outputs, critical for performance.
@@ -927,7 +928,7 @@ Smooks can generate output in either, or both, of the above ways, all in a singl
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 As yet, Smooks does not support capturing output to multiple <code>Result</code> instances of the same type. For example, you can specify multiple <code>StreamResult</code> instances in <code>Smooks.filterSource(...)</code> but Smooks will only output to the first <code>StreamResult</code> instance.
@@ -944,7 +945,7 @@ As yet, Smooks does not support capturing output to multiple <code>Result</code>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 This is the mechanism used to perform a standard 1-input/1-xml-output character-based transformation.
@@ -1118,7 +1119,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <code>core:delegate-reader</code> was introduced in Smooks 2.0.0-M3 and will be renamed to <code>core:rewrite</code> in the next release of Smooks.
@@ -1190,7 +1191,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/pipelines">available in the smooks-examples repository</a>.
@@ -1382,13 +1383,13 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span><span class="nt">&gt;</span>
 
-    <span class="nt">&lt;core:filterSettings</span> <span class="na">type=</span><span class="s">"SAX NG"</span> <b class="conum">(1)</b>
-                         <span class="na">defaultSerialization=</span><span class="s">"true"</span> <b class="conum">(2)</b>
-                         <span class="na">terminateOnException=</span><span class="s">"true"</span> <b class="conum">(3)</b>
-                         <span class="na">closeSource=</span><span class="s">"true"</span> <b class="conum">(4)</b>
-                         <span class="na">closeResult=</span><span class="s">"true"</span> <b class="conum">(5)</b>
-                         <span class="na">rewriteEntities=</span><span class="s">"true"</span> <b class="conum">(6)</b>
-                         <span class="na">readerPoolSize=</span><span class="s">"3"</span><span class="nt">/&gt;</span> <b class="conum">(7)</b>
+    <span class="nt">&lt;core:filterSettings</span> <span class="na">type=</span><span class="s">"SAX NG"</span> <i class="conum" data-value="1"></i><b>(1)</b>
+                         <span class="na">defaultSerialization=</span><span class="s">"true"</span> <i class="conum" data-value="2"></i><b>(2)</b>
+                         <span class="na">terminateOnException=</span><span class="s">"true"</span> <i class="conum" data-value="3"></i><b>(3)</b>
+                         <span class="na">closeSource=</span><span class="s">"true"</span> <i class="conum" data-value="4"></i><b>(4)</b>
+                         <span class="na">closeResult=</span><span class="s">"true"</span> <i class="conum" data-value="5"></i><b>(5)</b>
+                         <span class="na">rewriteEntities=</span><span class="s">"true"</span> <i class="conum" data-value="6"></i><b>(6)</b>
+                         <span class="na">readerPoolSize=</span><span class="s">"3"</span><span class="nt">/&gt;</span> <i class="conum" data-value="7"></i><b>(7)</b>
 
     <span class="c">&lt;!-- Other visitor configs etc... --&gt;</span>
 
@@ -1396,29 +1397,36 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p><code>type</code> (default: <code>SAX NG</code>): the type of processing model that will be used. <code>SAX NG</code> is the recommended type. The <code>DOM</code> type is deprecated.</p>
-</li>
-<li>
-<p><code>defaultSerialization</code> (default: <code>true</code>): if default serialization should be switched on. Default serialization being turned on simply tells Smooks to locate a <code>StreamResult</code> (or <code>DOMResult</code>) in the Result objects provided to the <code>Smooks.filterSource</code> method and to serialize all events to that <code>Result</code> instance. This behavior can be turned off using this global configuration parameter and can be overridden on a per-fragment basis by targeting a visitor at that fragment that takes ownership of the <code>org.smooks.io.FragmentWriter</code> object.</p>
-</li>
-<li>
-<p><code>terminateOnException</code> (default: <code>true</code>): whether an exception should terminate execution.</p>
-</li>
-<li>
-<p><code>closeSource</code> (default: <code>true</code>): close <code>Inp</code> instance streams passed to the <code>Smooks.filterSource</code> method. The exception here is <code>System.in</code>, which will never be closed.</p>
-</li>
-<li>
-<p><code>closeResult</code>: close Result streams passed to the <code>[Smooks.filterSource</code> method (default "true"). The exception here is <code>System.out</code> and <code>System.err</code>, which will never be closed.</p>
-</li>
-<li>
-<p><code>rewriteEntities</code>: rewrite XML entities when reading and writing (default serialization) XML.</p>
-</li>
-<li>
-<p><code>readerPoolSize</code>: reader Pool Size (default 0). Some Reader implementations are very expensive to create (e.g. Xerces). Pooling Reader instances (i.e. reusing) can result in a huge performance improvement, especially when processing lots of "small" messages. The default value for this setting is 0 (i.e. unpooled - a new Reader instance is created for each message). Configure in line with your applications threading model.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>type</code> (default: <code>SAX NG</code>): the type of processing model that will be used. <code>SAX NG</code> is the recommended type. The <code>DOM</code> type is deprecated.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>defaultSerialization</code> (default: <code>true</code>): if default serialization should be switched on. Default serialization being turned on simply tells Smooks to locate a <code>StreamResult</code> (or <code>DOMResult</code>) in the Result objects provided to the <code>Smooks.filterSource</code> method and to serialize all events to that <code>Result</code> instance. This behavior can be turned off using this global configuration parameter and can be overridden on a per-fragment basis by targeting a visitor at that fragment that takes ownership of the <code>org.smooks.io.FragmentWriter</code> object.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>terminateOnException</code> (default: <code>true</code>): whether an exception should terminate execution.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>closeSource</code> (default: <code>true</code>): close <code>Inp</code> instance streams passed to the <code>Smooks.filterSource</code> method. The exception here is <code>System.in</code>, which will never be closed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>closeResult</code>: close Result streams passed to the <code>[Smooks.filterSource</code> method (default "true"). The exception here is <code>System.out</code> and <code>System.err</code>, which will never be closed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td><code>rewriteEntities</code>: rewrite XML entities when reading and writing (default serialization) XML.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td><code>readerPoolSize</code>: reader Pool Size (default 0). Some Reader implementations are very expensive to create (e.g. Xerces). Pooling Reader instances (i.e. reusing) can result in a huge performance improvement, especially when processing lots of "small" messages. The default value for this setting is 0 (i.e. unpooled - a new Reader instance is created for each message). Configure in line with your applications threading model.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1448,7 +1456,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 <table>
 <tr>
 <td class="icon">
-<div class="title">Caution</div>
+<i class="fa icon-caution" title="Caution"></i>
 </td>
 <td class="content">
 Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGenerator incurs a significant performance overhead and with large message, can even result in OutOfMemory exceptions.
@@ -1521,7 +1529,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <code>BeanId</code> and <code>BeanIdStore</code> are thread-safe.
@@ -2170,7 +2178,7 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <table>
 <tr>
 <td class="icon">
-<div class="title">Tip</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/camel">Apache Camel examples</a> in the examples page.
@@ -3057,7 +3065,7 @@ Mark,Jones</pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 Smooks treats all visitors as stateless objects. A visitor instance must be usable concurrently across multiple messages, that is, across multiple concurrent calls to the <code>Smooks.filterSource</code> method.All state associated with the current <code>Smooks.filterSource</code> execution must be stored in the <code>ExecutionContext</code>. For more details see the <a href="#executioncontext-and-applicationcontext">ExecutionContext and ApplicationContex</a> section.
@@ -3127,7 +3135,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Of course, the above is just an illustration of a Source message event stream and it looks like XML, but could be EDI, CSV, JSON, etc&#8230;&#8203; Think of this as just an XML serialization of a Source message event stream, serialized as XML for easy reading.
@@ -3208,7 +3216,7 @@ Of course, the above is just an illustration of a Source message event stream an
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Of course, you can also modify the serialized form of a message fragment using one of the out-of-the-box <a href="#templating">Templating</a> components. These components are also <code>SaxNgVisitor</code> implementations.
@@ -3257,7 +3265,7 @@ Of course, you can also modify the serialized form of a message fragment using o
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 If you need to control serialization of sub-fragments you need to reset the <code>Writer</code> instance so as to divert serialization of the sub-fragments. You do this by calling <code>ExecutionContext.setWriter</code>.
@@ -3573,7 +3581,7 @@ is created once in Smooks and referenced across multiple concurrent executions o
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Smooks instrumentation is available starting from v2.0.0-RC4.
@@ -3760,7 +3768,7 @@ Smooks instrumentation is available starting from v2.0.0-RC4.
 <table>
 <tr>
 <td class="icon">
-<div class="title">Important</div>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
 <a href="#activation">Instrumentation needs to be activated</a> in order to obtain a non-null <code>InstrumentationResource</code> from the lookup.
@@ -4113,7 +4121,7 @@ book,The Finkler Question,Howard Jacobson</pre>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Multi Record Field Definitions are not supported when the fields are defined in the message (<code>fieldsInMessage="true"</code>).
@@ -4170,7 +4178,7 @@ Multi Record Field Definitions are not supported when the fields are defined in 
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 This feature is not supported for Multi Record Field Definitions (see above), or when the fields are defined in the incoming message (<code>fieldsInMessage="true"</code>).
@@ -5136,9 +5144,9 @@ jones,arya,cat,1986-02-19</code></pre>
                       <span class="na">xmlns:edi=</span><span class="s">"https://www.smooks.org/xsd/smooks/edi-2.0.xsd"</span><span class="nt">&gt;</span>
 
     <span class="c">&lt;!-- Configure the reader to parse the EDI stream into a stream of SAX events. --&gt;</span>
-    <span class="nt">&lt;edi:parser</span> <span class="na">schemaUri=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
-                <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
-                <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span><span class="nt">/&gt;</span> // <b class="conum">(3)</b>
+    <span class="nt">&lt;edi:parser</span> <span class="na">schemaUri=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> <i class="conum" data-value="1"></i><b>(1)</b>
+                <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> <i class="conum" data-value="2"></i><b>(2)</b>
+                <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span><span class="nt">/&gt;</span> <i class="conum" data-value="3"></i><b>(3)</b>
 
     <span class="c">&lt;!-- Apply a pipeline on the root event and replace the XML result produced from &lt;edifact:parser .../&gt; with the pipeline EDI result. --&gt;</span>
     <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"/Order"</span><span class="nt">&gt;</span>
@@ -5150,10 +5158,10 @@ jones,arya,cat,1986-02-19</code></pre>
         <span class="nt">&lt;core:config&gt;</span>
             <span class="nt">&lt;smooks-resource-list&gt;</span>
                 <span class="c">&lt;!-- Configure the writer to serialise the event stream into EDI. --&gt;</span>
-                <span class="nt">&lt;edi:unparser</span> <span class="na">schemaUri=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> // <b class="conum">(1)</b>
-                              <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> // <b class="conum">(2)</b>
-                              <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span> // <b class="conum">(3)</b>
-                              <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">/&gt;</span> // <b class="conum">(4)</b>
+                <span class="nt">&lt;edi:unparser</span> <span class="na">schemaUri=</span><span class="s">"/edi-to-xml-mapping.dfdl.xsd"</span> <i class="conum" data-value="1"></i><b>(1)</b>
+                              <span class="na">segmentTerminator=</span><span class="s">"%NL;"</span> <i class="conum" data-value="2"></i><b>(2)</b>
+                              <span class="na">compositeDataElementSeparator=</span><span class="s">"^"</span> <i class="conum" data-value="3"></i><b>(3)</b>
+                              <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">/&gt;</span> <i class="conum" data-value="4"></i><b>(4)</b>
             <span class="nt">&lt;/smooks-resource-list&gt;</span>
         <span class="nt">&lt;/core:config&gt;</span>
     <span class="nt">&lt;/core:smooks&gt;</span>
@@ -5224,9 +5232,9 @@ jones,arya,cat,1986-02-19</code></pre>
         <span class="nt">&lt;/xsd:appinfo&gt;</span>
     <span class="nt">&lt;/xsd:annotation&gt;</span>
 
-    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> // <b class="conum">(1)</b>
-                 <span class="na">name=</span><span class="s">"header"</span> // <b class="conum">(2)</b>
-                 <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span><span class="nt">&gt;</span> // <b class="conum">(3)</b>
+    <span class="nt">&lt;xsd:element</span> <span class="na">dfdl:initiator=</span><span class="s">"HDR"</span> <i class="conum" data-value="1"></i><b>(1)</b>
+                 <span class="na">name=</span><span class="s">"header"</span> <i class="conum" data-value="2"></i><b>(2)</b>
+                 <span class="na">dfdl:ref=</span><span class="s">"ibmEdiFmt:EDISegmentFormat"</span><span class="nt">&gt;</span> <i class="conum" data-value="3"></i><b>(3)</b>
         <span class="nt">&lt;xsd:complexType&gt;</span>
             ...
         <span class="nt">&lt;/xsd:complexType&gt;</span>
@@ -5235,17 +5243,20 @@ jones,arya,cat,1986-02-19</code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p><em>dfdl:initiator</em> identifies the segment code .</p>
-</li>
-<li>
-<p><em>name</em> attribute specifies the segment&#8217;s XML mapping.</p>
-</li>
-<li>
-<p><em>ibmEdiFmt:EDISegmentFormat</em> holds the segment structure definition; it is important to reference it from within the <em>dfdl:ref</em> attribute.</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><em>dfdl:initiator</em> identifies the segment code .</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><em>name</em> attribute specifies the segment&#8217;s XML mapping.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><em>ibmEdiFmt:EDISegmentFormat</em> holds the segment structure definition; it is important to reference it from within the <em>dfdl:ref</em> attribute.</td>
+</tr>
+</table>
 </div>
 <div class="sect5">
 <h6 id="segment_cardinality">Segment Cardinality</h6>
@@ -5724,7 +5735,7 @@ processed by this Reader. Default of 'UTF-8'.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 You shouldn&#8217;t need this configuration parameter and <strong>it will be removed in a future release</strong>. Instead, you should manage the JSON stream Source character encoding by supplying a <code>java.io.Reader</code> to the <code>Smooks.filterSource()</code> method.
@@ -6706,7 +6717,7 @@ class.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 If you have a definition with your default language that includes a ':' then you must prefix that definition with 'default:' else you will run into an Exception.
@@ -7440,7 +7451,7 @@ example.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Be sure to read the section on <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc#java-binding">Java Binding</a>.
@@ -7635,7 +7646,7 @@ Be sure to read the section on <a href="https://github.com/smooks/smooks-javabea
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 See full example in the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/file-router">file-router</a> example
@@ -7880,7 +7891,7 @@ See full example in the <a href="https://github.com/smooks/smooks-examples/tree/
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Be sure to read the section on <a href="https://github.com/smooks/smooks-javabean-cartridge/blob/master/README.adoc#java-binding">Java Binding</a>.
@@ -8758,7 +8769,7 @@ belongs to.</p>
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 Be sure to read the section on <a href="https://github.com/smooks/smooks-javabean-cartridge#java-binding">Java Binding</a>.
