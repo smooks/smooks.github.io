@@ -82,6 +82,7 @@ This is the user guide for Smooks 2. For Smooks 1, visit the <a href="https://ww
 <li><a href="#input">Input</a></li>
 <li><a href="#output">Output</a></li>
 <li><a href="#pipeline">Pipeline</a></li>
+<li><a href="#delegate_reader">Delegate Reader</a></li>
 <li><a href="#cartridge">Cartridge</a></li>
 <li><a href="#filter">Filter</a></li>
 <li><a href="#bean_context">Bean Context</a></li>
@@ -1089,7 +1090,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml">...
 <span class="nt">&lt;core:action&gt;</span>
-    <span class="nt">&lt;core:bind-to</span> <span class="na">id=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;core:bindTo</span> <span class="na">id=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/core:action&gt;</span>
 ...</code></pre>
 </div>
@@ -1104,11 +1105,135 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml">...
 <span class="nt">&lt;core:action&gt;</span>
-    <span class="nt">&lt;core:output-to</span> <span class="na">outputStreamResource=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;core:outputTo</span> <span class="na">outputStreamResource=</span><span class="s">"..."</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/core:action&gt;</span>
 ...</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="delegate_reader">Delegate Reader</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<code>core:delegate-reader</code> was introduced in Smooks 2.0.0-M3 and will be renamed to <code>core:rewrite</code> in the next release of Smooks.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>core:delegate-reader</code> construct is a reader designed to offer a convenient mechanism for substituting the event stream entering a <a href="#pipeline">pipeline</a> with one that the pipeline resources can process.</p>
+</div>
+<div class="paragraph">
+<p><code>core:delegate-reader</code> enables one or more of its enclosed visitors to substitute targeted events with new events. In the example that follows, the pipeline feeds the event stream to <code>core:delegate-reader</code>, and <code>core:delegate-reader</code> in turn, feeds targeted events to the nested FreeMarker visitors:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
+                      <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span>
+                      <span class="na">xmlns:ftl=</span><span class="s">"https://www.smooks.org/xsd/smooks/freemarker-2.0.xsd"</span>
+                      <span class="na">xmlns:edifact=</span><span class="s">"https://www.smooks.org/xsd/smooks/edifact-2.0.xsd"</span><span class="nt">&gt;</span>
+
+    ...
+    ...
+
+    <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"#document"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;core:action&gt;</span>
+            <span class="nt">&lt;core:inline&gt;</span>
+                <span class="nt">&lt;core:replace/&gt;</span>
+            <span class="nt">&lt;/core:inline&gt;</span>
+        <span class="nt">&lt;/core:action&gt;</span>
+        <span class="nt">&lt;core:config&gt;</span>
+            <span class="nt">&lt;smooks-resource-list&gt;</span>
+                <span class="nt">&lt;core:delegate-reader&gt;</span>
+                    <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"#document"</span> <span class="na">applyBefore=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;ftl:template&gt;</span>header.xml.ftl<span class="nt">&lt;/ftl:template&gt;</span>
+                    <span class="nt">&lt;/ftl:freemarker&gt;</span>
+                    <span class="nt">&lt;core:smooks</span> <span class="na">filterSourceOn=</span><span class="s">"record"</span> <span class="na">maxNodeDepth=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;core:config&gt;</span>
+                            <span class="nt">&lt;smooks-resource-list&gt;</span>
+                                <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"#document"</span><span class="nt">&gt;</span>
+                                    <span class="nt">&lt;ftl:template&gt;</span>body.xml.ftl<span class="nt">&lt;/ftl:template&gt;</span>
+                                <span class="nt">&lt;/ftl:freemarker&gt;</span>
+                            <span class="nt">&lt;/smooks-resource-list&gt;</span>
+                        <span class="nt">&lt;/core:config&gt;</span>
+                    <span class="nt">&lt;/core:smooks&gt;</span>
+                    <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"#document"</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;ftl:template&gt;</span>footer.xml.ftl<span class="nt">&lt;/ftl:template&gt;</span>
+                    <span class="nt">&lt;/ftl:freemarker&gt;</span>
+                <span class="nt">&lt;/core:delegate-reader&gt;</span>
+
+                <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaUri=</span><span class="s">"/d96a/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;edifact:messageTypes&gt;</span>
+                        <span class="nt">&lt;edifact:messageType&gt;</span>ORDERS<span class="nt">&lt;/edifact:messageType&gt;</span>
+                    <span class="nt">&lt;/edifact:messageTypes&gt;</span>
+                <span class="nt">&lt;/edifact:unparser&gt;</span>
+            <span class="nt">&lt;/smooks-resource-list&gt;</span>
+        <span class="nt">&lt;/core:config&gt;</span>
+    <span class="nt">&lt;/core:smooks&gt;</span>
+
+    ...
+    ...
+<span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A visitor within <code>core:delegate-reader</code> writes XML fragments to the result stream, replacing the targeted events. For example, in the config above, the FreeMarker visitors are replacing the <code>#document</code> and <code>record</code> events with materialised XML templates. More precisely, <code>core:delegate-reader</code> converts the materialised XML into a new event stream which is then processed by the downstream pipeline resources, in this case, <code>edifact:unparser</code>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/pipelines">available in the smooks-examples repository</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When implementing your own visitor for <code>core:delegate-reader</code>, call <code>org.smooks.io.Stream#out(org.smooks.api.ExecutionContext).write(java.lang.String)</code> within one of the overridden visit methods to replace the event stream as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kn">package</span> <span class="nn">org.smooks.benchmark</span><span class="o">;</span>
+
+<span class="o">...</span>
+<span class="o">...</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BibliographyVisitor</span> <span class="kd">implements</span> <span class="nc">AfterVisitor</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="nc">String</span> <span class="no">TEMPLATE</span> <span class="o">=</span> <span class="s">"&lt;entry&gt;&lt;author&gt;%s&lt;/author&gt;&lt;title&gt;%s&lt;/title&gt;&lt;/entry&gt;"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">DOMXPath</span> <span class="n">domXPath</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">DOMXPath</span> <span class="n">titleXPath</span><span class="o">;</span>
+
+    <span class="nd">@PostConstruct</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postConstruct</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">JaxenException</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">domXPath</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DOMXPath</span><span class="o">(</span><span class="s">"//author"</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">titleXPath</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DOMXPath</span><span class="o">(</span><span class="s">"//title"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visitAfter</span><span class="o">(</span><span class="nc">Element</span> <span class="n">element</span><span class="o">,</span> <span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Element</span><span class="o">&gt;</span> <span class="n">authors</span> <span class="o">=</span> <span class="o">((</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Element</span><span class="o">&gt;)</span> <span class="n">domXPath</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">element</span><span class="o">));</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Element</span><span class="o">&gt;</span> <span class="n">titles</span> <span class="o">=</span> <span class="o">((</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Element</span><span class="o">&gt;)</span> <span class="n">titleXPath</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="n">element</span><span class="o">));</span>
+            <span class="nc">Stream</span><span class="o">.</span><span class="na">out</span><span class="o">(</span><span class="n">executionContext</span><span class="o">).</span><span class="na">write</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="no">TEMPLATE</span><span class="o">,</span> <span class="n">authors</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="s">"N/A"</span> <span class="o">:</span> <span class="n">authors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">getTextContent</span><span class="o">(),</span> <span class="s">"&lt;![CDATA["</span> <span class="o">+</span> <span class="o">(</span><span class="n">titles</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="s">"N/A"</span> <span class="o">:</span> <span class="n">titles</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">getTextContent</span><span class="o">()))</span> <span class="o">+</span> <span class="s">"]]&gt;"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="o">|</span> <span class="nc">JaxenException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">SmooksException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>BibliographyVisitor</code> is a custom visitor which visits end events. The <code>visitAfter</code> method evaluates the author elements together with the title elements and writes XML to the result stream replacing the selected events.</p>
 </div>
 </div>
 <div class="sect2">
@@ -3073,7 +3198,7 @@ Of course, the above is just an illustration of a Source message event stream an
 <p>The <code>Smooks.filterSource(Source, Result)</code> method can take one or more of a number of different <code>Result</code> type implementations, one of which is the <code>StreamResult</code> class (see <a href="#multiple-outputsresults">Multiple Outputs/Results</a>). By default, Smooks will always serialize the full Source event stream as XML to any <code>StreamResult</code> instance provided to the <code>Smooks.filterSource(Source, Result)</code> method.</p>
 </div>
 <div class="paragraph">
-<p>So, if the Source provided to the <code>Smooks.filterSource(Source, Result)</code> method is an XML stream and a  <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/transform/stream/StreamResult.html"><code>StreamResult</code></a> instance is provided as one of the <code>Result</code> instances, the Source XML will be written out to the
+<p>So, if the Source provided to the <code>Smooks.filterSource(Source, Result)</code> method is an XML stream and a  <a href="https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/javax/xml/transform/stream/StreamResult.html"><code>StreamResult</code></a> instance is provided as one of the <code>Result</code> instances, the Source XML will be written out to the
 <code>StreamResult</code> unmodified, unless the Smooks instance is configured with one or more <code>SaxNgVisitor</code> implementations that modify one or more fragments. In other words, Smooks streams the Source in and back out again through the <code>StreamResult</code> instance. Default serialization can be turned on/off by <a href="#user-content-settings">configuring the filter settings</a>.</p>
 </div>
 <div class="paragraph">
