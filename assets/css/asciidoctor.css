@@ -135,8 +135,6 @@
 
 .main.container em, .main.container i { font-style: italic; line-height: inherit; }
 
-.main.container i.fa { font-style: inherit; }
-
 .main.container strong, .main.container b { font-weight: bold; line-height: inherit; }
 
 .main.container small { font-size: 60%; line-height: inherit; }
@@ -693,7 +691,7 @@
 
 .main.container a span.icon > .fa { cursor: inherit; }
 
-.main.container .admonitionblock td.icon [class^="fa icon-"] { font-size: 2.5em; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); cursor: default; }
+.main.container .admonitionblock td.icon [class^="fa icon-"] { font-size: 2.5em; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); cursor: default; font-style: inherit; }
 
 .main.container .admonitionblock td.icon .icon-note::before { content: "\f05a"; color: #19407c; }
 
