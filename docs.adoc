@@ -20,8 +20,6 @@ include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=
 
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=fundamentals]
 
-include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=routing]
-
 == Routing
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master
