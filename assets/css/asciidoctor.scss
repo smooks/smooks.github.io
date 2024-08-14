@@ -413,10 +413,6 @@
       line-height: inherit;
     }
 
-    i.fa {
-      font-style: inherit;
-    }
-
     strong,
     b {
       font-weight: bold;
@@ -2121,6 +2117,7 @@
       font-size: 2.5em;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
       cursor: default;
+      font-style: inherit;
     }
 
     .admonitionblock td.icon .icon-note::before {
