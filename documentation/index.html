@@ -2084,13 +2084,25 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <div class="sect4">
 <h5 id="apache_camel_integration">Apache Camel Integration</h5>
 <div class="paragraph">
-<p>Integrating Smooks from Apache Camel lets you to access all the features of Smooks from within Camel. You can take an existing Smooks configuration and use this in your Camel routes using one of the options that are described in this chapter.</p>
+<p>Integrating Smooks from Apache Camel lets you access all the features of Smooks from within Camel. You can take an existing Smooks configuration and use this in your Camel routes using one of the options that are described in this chapter.</p>
 </div>
 <div class="paragraph">
 <p>Using Smooks in Camel can be done in three ways:</p>
 </div>
 <div class="sect5">
 <h6 id="smookscomponent">SmooksComponent</h6>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+SmooksComponent is deprecated and superseded by the <a href="https://camel.apache.org/components/next/smooks-component.html">Camel Smooks Component</a>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The <code>SmooksComponent</code> is a Camel <a href="https://camel.apache.org/component.html">Component</a> which can used when  you want to process the Camel Message Body using Smooks. You can do this by adding a route in your Camel route configuration:</p>
 </div>
@@ -2141,8 +2153,20 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 </div>
 <div class="sect5">
 <h6 id="smooksprocessor">SmooksProcessor</h6>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+SmooksProcessor is deprecated and superseded by the <a href="https://camel.apache.org/components/next/smooks-component.html">Camel Smooks Component</a>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Using <code>SmooksProcessor</code> gives you full control over Smooks, for example if you want to programatically create the underlying Smooks instance you’d use <code>SmooksProcessor</code>. When using <code>SmooksProcessor</code>, you can pass a Smooks instance to its constructor and prior to that programmatically configure Smooks.</p>
+<p>Using <code>SmooksProcessor</code> gives you full control over Smooks, for example if you want to programmatically create the underlying Smooks instance you’d use <code>SmooksProcessor</code>. When using <code>SmooksProcessor</code>, you can pass a Smooks instance to its constructor and prior to that programmatically configure Smooks.</p>
 </div>
 <div class="paragraph">
 <p>Below is an example of using the <code>SmooksProcessor</code> in a Camel route:</p>
@@ -2181,7 +2205,7 @@ messages. It&#8217;s often needed with smaller messages as well (message size ma
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-See the <a href="https://github.com/smooks/smooks-examples/tree/v1.0.5/camel">Apache Camel examples</a> in the examples page.
+See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache Camel examples</a> in the examples page.
 </td>
 </tr>
 </table>
