@@ -61,10 +61,7 @@
 </p>
 </div>
 <div class="paragraph">
-<p>All Smooks components are available from the Maven Central Repository.</p>
-</div>
-<div class="paragraph">
-<p>If your building Smooks from source using Maven, please use:</p>
+<p>All Smooks components are available from the Maven Central Repository. If your building Smooks from source using Maven, please use:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -77,76 +74,121 @@
 </ol>
 </div>
 <div class="sect1">
-<h2 id="artifact_ids">Artifact IDs</h2>
+<h2 id="artifact_coordinates">Artifact Coordinates</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Maven group ID for Smooks cartridges, excluding the EDI and EDIFACT
-cartridges, is "<em>org.smooks.cartridges</em>". For the EDI and EDIFACT
-cartridges, the group ID is "<em>org.smooks.cartridges.edi</em>". All remaining
-Smooks artifacts have the groupId "<em>org.smooks</em>".</p>
+<p>The artifact coordinates for each of the Smooks artifact is as follows:</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Artifact Name</th>
+<th class="tableblock halign-left valign-top">Artifact ID</th>
+<th class="tableblock halign-left valign-top">Group ID</th>
+<th class="tableblock halign-left valign-top">Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-core</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All cartridges depend on <code>smooks-core</code>. In other words, if your project declares a dependency on a cartridge, then there is no need to additionally declare the <code>smooks-core</code> dependency.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Management Module</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-management</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Commons</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-commons</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All Smooks artifacts depend on <code>smooks-commons</code>, so no need to specify a dependency on this module if you are already dependent on one of the others.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Calculation Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-calc-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CSV Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-csv-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed-Length Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-fixed-length-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EDI Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-edi-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges.edi</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EDIFACT Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-edifact-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges.edifact</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JavaBean Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-javabean-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-json-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Routing Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-routing-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Templating Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-templating-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persistence Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-persistence-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Validation Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-validation-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DFDL Cartridge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>smooks-dfdl-cartridge</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>org.smooks.cartridges</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p>The artifact ID for each of the Smooks artifact is as follows:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Smooks Core: "smooks-core"</p>
-</li>
-<li>
-<p><a href="documentation/#smooks-cartridges">Smooks Cartridges</a>:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Calc: "smooks-calc-cartridge"</p>
-</li>
-<li>
-<p>CSV: "smooks-csv-cartridge"</p>
-</li>
-<li>
-<p>Fixed-length reader: "smooks-fixed-length-cartridge"</p>
-</li>
-<li>
-<p>EDI: "smooks-edi-cartridge"</p>
-</li>
-<li>
-<p>EDIFACT: "smooks-edifact-cartridge"</p>
-</li>
-<li>
-<p>Javabean: "smooks-javabean-cartridge"</p>
-</li>
-<li>
-<p>JSON: "smooks-json-cartridge"</p>
-</li>
-<li>
-<p>Routing: "smooks-routing-cartridge"</p>
-</li>
-<li>
-<p>Templating: "smooks-templating-cartridge"</p>
-</li>
-<li>
-<p>Persistence: "smooks-persistence-cartridge"</p>
-</li>
-<li>
-<p>Validation: "smooks-validation-cartridge"</p>
-</li>
-<li>
-<p>DFDL: "smooks-dfdl-cartridge"</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Commons: "smooks-commons" (all artifacts depend on Commons, so no need
-to specify a dependency on this module if you are already dependent on
-one of the others)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Note</strong>: All cartridges depend on "smooks-core". Therefore, if your
-project depends on one of the cartridges, there&#8217;s no need to specify the
-dependency on smooks-core.</p>
+<p>Here is an example declaring a dependency on a Smooks artifact:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -158,9 +200,7 @@ dependency on smooks-core.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>See the POMs in the <a href="https://github.com/smooks/smooks-examples">examples</a>
-for references of Maven-based applications that depend on different
-Smooks Cartridges.</p>
+<p>See the POMs in the <a href="https://github.com/smooks/smooks-examples">examples</a> for references of Maven-managed applications that depend on different Smooks cartridges.</p>
 </div>
 </div>
 </div>
@@ -168,9 +208,7 @@ Smooks Cartridges.</p>
 <h2 id="bill_of_materials_bom">Bill of Materials (BOM)</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In order to guarantee compatibility between Smooks artifacts, we
-recommend you import the Smooks BOM from your POM before declaring
-dependencies on Smooks:</p>
+<p>In order to guarantee compatibility between Smooks artifacts, it is recommended to import the Smooks BOM from your POM before declaring dependencies on Smooks:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -190,8 +228,7 @@ dependencies on Smooks:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The BOM will manage the dependency versions therefore omit the <em>version</em>
-element when declaring Smooks dependencies:</p>
+<p>The BOM will manage the dependency versions therefore omit the <em>version</em> element when declaring Smooks dependencies:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -209,12 +246,22 @@ element when declaring Smooks dependencies:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="snapshots">SNAPSHOTs</h2>
+<h2 id="edge">Edge</h2>
 <div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Snapshots are strongly discouraged from being deployed to production environments.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Smooks SNAPSHOTs are available from
-<a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype OSSRH</a>.
-You need to declare the Maven repository in your project&#8217;s POM:</p>
+<p>The latest Smooks snapshots are available from <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype OSSRH</a> in order to test the latest features and bug fixes. You need to declare the Maven repository in your project&#8217;s POM:</p>
 </div>
 <div class="listingblock">
 <div class="content">
