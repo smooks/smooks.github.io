@@ -23,7 +23,7 @@ The artifact coordinates for each of the Smooks artifact is as follows:
 | Artifact Name | Artifact ID | Group ID | Comment
 
 | Core | `smooks-core` | `org.smooks` | All cartridges depend on `smooks-core`. In other words, if your project declares a dependency on a cartridge, then there is no need to additionally declare the `smooks-core` dependency.
-| Management Module | `smooks-management` | `org.smooks` |
+| Management | `smooks-management` | `org.smooks` |
 | Commons | `smooks-commons` | `org.smooks` | All Smooks artifacts depend on `smooks-commons`, so no need to specify a dependency on this module if you are already dependent on one of the others.
 | Calculation Cartridge | `smooks-calc-cartridge` | `org.smooks.cartridges` |
 | CSV Cartridge | `smooks-csv-cartridge` | `org.smooks.cartridges` |
