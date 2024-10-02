@@ -8097,7 +8097,7 @@ belongs to.</p>
 <div class="sect4">
 <h5 id="validation_results">Validation Results</h5>
 <div class="paragraph">
-<p>Validation results are captured by the Smooks.filterSource by specifying a <code>ValidationResult</code> instance in the <code>filterSource</code> method call. When the <code>filterSource</code> method returns, the <code>ValidationResult</code> instance will contain all validation data.</p>
+<p>Validation results are captured by the Smooks.filterSource by specifying a <code>ValidationSink</code> instance in the <code>filterSource</code> method call. When the <code>filterSource</code> method returns, the <code>ValidationSink</code> instance will contain all validation data.</p>
 </div>
 <div class="paragraph">
 <p>An example of executing Smooks in order to perform message fragment validation is as follows:</p>
@@ -8113,7 +8113,7 @@ belongs to.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As you can see from the above code, individual warning, error, and other validation results are made available from the <code>ValidationResult</code> object in the form of <code>OnFailResult</code> instances. The <code>OnFailResult</code> object provides details about an individual failure.</p>
+<p>As you can see from the above code, individual warning, error, and other validation results are made available from the <code>ValidationSink</code> object in the form of <code>OnFailResult</code> instances. The <code>OnFailResult</code> object provides details about an individual failure.</p>
 </div>
 </div>
 <div class="sect4">
