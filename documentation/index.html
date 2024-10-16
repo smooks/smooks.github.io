@@ -83,7 +83,7 @@ This is the user guide for Smooks 2. For Smooks 1, visit the <a href="https://ww
 <li><a href="#input">Input</a></li>
 <li><a href="#output">Output</a></li>
 <li><a href="#pipeline">Pipeline</a></li>
-<li><a href="#delegate_reader">Delegate Reader</a></li>
+<li><a href="#rewrite">Rewrite</a></li>
 <li><a href="#cartridge">Cartridge</a></li>
 <li><a href="#filter">Filter</a></li>
 <li><a href="#bean_context">Bean Context</a></li>
@@ -336,7 +336,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <div class="ulist">
 <ul>
 <li>
-<p>Farewell <code>@ConfigParam</code>, <code>@Config</code>, <code>@AppContext</code>, and <code>@StreamResultWriter</code>. Welcome <code>@Inject</code>.</p>
+<p>Farewell <code>@ConfigParam</code>, <code>@Config</code>, <code>@AppContext</code>, and <code>@StreamSinkWriter</code>. Welcome <code>@Inject</code>.</p>
 </li>
 <li>
 <p>Farewell <code>@Initialize</code> and <code>@Uninitialize</code>. Welcome <code>@PostConstruct</code> and <code>@PreDestroy</code>.</p>
@@ -381,6 +381,62 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <ol class="arabic">
 <li>
 <p>Smooks 2 no longer supports Java 7. Your application needs to be compiled to at least Java 8 to run Smooks 2.</p>
+</li>
+<li>
+<p>Replace <code>javax.xml.transform.Source</code> parameter in <code>Smooks#filterSource(&#8230;&#8203;)</code> method calls with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.smooks.io.source.JavaSource</code> instead of <code>org.milyn.payload.JavaSource</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.source.StringSource</code> instead of <code>org.milyn.payload.StringSource</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.source.ByteSource</code> instead of <code>org.milyn.payload.ByteSource</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.source.DOMSource</code> instead of <code>org.milyn.payload.DOMSource</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.source.JavaSourceWithoutEventStream</code> instead of <code>org.milyn.payload.JavaSourceWithoutEventStream</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.source.ReaderSource</code> instead of <code>javax.xml.transform.stream.StreamSource</code> when the latter is constructed from <code>java.io.Reader</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.source.StreamSource</code> instead of <code>javax.xml.transform.stream.StreamSource</code> when the latter is constructed from <code>java.io.InputStream</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.source.URLSource</code> instead of <code>javax.xml.transform.stream.StreamSource</code> when the latter is constructed from a system ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Replace <code>javax.xml.transform.Result</code> parameter in <code>Smooks#filterSource(&#8230;&#8203;)</code> method calls with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>org.smooks.io.sink.StringSink</code> instead of <code>org.milyn.payload.StringResult</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.sink.JavaSink</code> instead of <code>org.milyn.payload.JavaResult</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.sink.ByteSink</code> instead of <code>org.milyn.payload.ByteResult</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.sink.DOMSink</code> instead of <code>javax.xml.transform.dom.DOMResult</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.sink.StreamSink</code> instead of <code>javax.xml.transform.stream.StreamResult</code> when the latter is constructed from <code>java.io.OutputStream</code></p>
+</li>
+<li>
+<p><code>org.smooks.io.sink.WriterSink</code> instead of <code>javax.xml.transform.stream.StreamResult</code> when the latter is constructed from <code>java.io.Writer</code></p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>Replace class interfaces:</p>
@@ -623,7 +679,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 <div class="sect2">
 <h3 id="hello_world_app">Hello World App</h3>
 <div class="paragraph">
-<p>One or more of <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/SaxNgVisitor.html">SaxNgVisitor</a> interfaces need to be implemented in order to consume the SAX event stream produced from the source, depending on which events are of interest.</p>
+<p>One or more of <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/resource/visitor/sax/ng/SaxNgVisitor.html">SaxNgVisitor</a> interfaces need to be implemented in order to consume the SAX event stream produced from the source, depending on which events are of interest.</p>
 </div>
 <div class="paragraph">
 <p>The following is a hello world app demonstrating how to implement a visitor that is fired on the <code>visitBefore</code> and <code>visitAfter</code> events of a targeted node in the event stream. In this case, Smooks configures the visitor to target element <code>foo</code>:</p>
@@ -644,7 +700,7 @@ The terms <em>fragment</em> and <em>node</em> denote different meanings. It is u
 </div>
 </div>
 <div class="paragraph">
-<p>Observe that in this case the program does not produce a result. The program does not even interact with the filtering process in any way because it does not provide an <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/ExecutionContext.html"><code>ExecutionContext</code></a> to <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/Smooks.html"><code>smooks.filterSource(...)</code></a>.</p>
+<p>Observe that in this case the program does not produce a result. The program does not even interact with the filtering process in any way because it does not provide an <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/ExecutionContext.html"><code>ExecutionContext</code></a> to <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/Smooks.html"><code>smooks.filterSource(...)</code></a>.</p>
 </div>
 <div class="paragraph">
 <p>This example illustrated the lower level mechanics of the Smooks&#8217;s programming model. In reality, most users are not going to want to solve their problems at this level of detail. Smooks ships with substantial pre-built functionality, that is, pre-built visitors. Visitors are bundled based on functionality: these bundles are called <em>Cartridges</em>.</p>
@@ -879,7 +935,7 @@ This requires the namespace prefix-to-URI mappings to be defined. A configuratio
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>As instances of <a href="https://docs.oracle.com/javase/8/docs/api/javax/xml/transform/Result.html"><code>Result</code></a>: client code extracts output from the <code>Result</code> instance after passing an empty one to <code>Smooks#filterSource(...)</code>.</p>
+<p>As instances of <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/io/Sink.html"><code>Sink</code></a>: client code extracts output from the <code>Sink</code> instance after passing an empty one to <code>Smooks#filterSource(...)</code>.</p>
 </li>
 <li>
 <p>As side effects: during filtering, resource output is sent to web services, local storage, queues, data stores, and other locations. Events trigger the routing of fragments to external endpoints such as what happens when <a href="https://github.com/smooks/smooks-routing-cartridge/blob/master/README.adoc">splitting and routing</a>.</p>
@@ -902,25 +958,25 @@ Smooks can generate output in either, or both, of the above ways, all in a singl
 </table>
 </div>
 <div class="sect3">
-<h4 id="result">Result</h4>
+<h4 id="sink">Sink</h4>
 <div class="paragraph">
-<p>A look at the Smooks API reveals that Smooks can be supplied with multiple <code>Result</code> instances:</p>
+<p>A look at the Smooks API reveals that Smooks can be supplied with multiple <code>Sink</code> instances:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">filterSource</span><span class="o">(</span><span class="nc">Source</span> <span class="n">source</span><span class="o">,</span> <span class="nc">Result</span><span class="o">...</span> <span class="n">results</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">SmooksException</span></code></pre>
+<pre class="rouge highlight"><code data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">filterSource</span><span class="o">(</span><span class="nc">Source</span> <span class="n">source</span><span class="o">,</span> <span class="nc">Sink</span><span class="o">...</span> <span class="n">sinks</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">SmooksException</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Smooks can work with the standard JDK <a href="https://docs.oracle.com/javase/8/docs/api/javax/xml/transform/stream/StreamResult.html"><code>StreamResult</code></a> and <a href="https://docs.oracle.com/javase/8/docs/api/javax/xml/transform/dom/DOMResult.html"><code>DOMResult</code></a> result types, as well as the Smooks specific ones:</p>
+<p>Smooks can work with implementation of <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/io/sink/StreamSink.html"><code>StreamSink</code></a> and <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/io/sink/DOMSink.html"><code>DOMSink</code></a> sink types, as well as:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/JavaResult.html"><code>JavaResult</code></a>: result type for capturing the contents of the Smooks JavaBean context.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/io/sink/JavaSink.html"><code>JavaSink</code></a>: sink type for capturing the contents of the Smooks JavaBean context.</p>
 </li>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/StringResult.html"><code>StringResult</code></a>: <code>StreamResult</code> extension wrapping a <code>StringWriter</code>, useful for testing.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/io/sink/StringSink.html"><code>StringSink</code></a>: <code>StringSink</code> extension wrapping a <code>StringWriter</code>, useful for testing.</p>
 </li>
 </ul>
 </div>
@@ -931,15 +987,15 @@ Smooks can generate output in either, or both, of the above ways, all in a singl
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-As yet, Smooks does not support capturing output to multiple <code>Result</code> instances of the same type. For example, you can specify multiple <code>StreamResult</code> instances in <code>Smooks.filterSource(...)</code> but Smooks will only output to the first <code>StreamResult</code> instance.
+As yet, Smooks does not support capturing output to multiple <code>Sink</code> instances of the same type. For example, you can specify multiple <code>StreamSink</code> instances in <code>Smooks.filterSource(...)</code> but Smooks will only output to the first <code>StreamSink</code> instance.
 </td>
 </tr>
 </table>
 </div>
 <div class="sect4">
-<h5 id="stream_results">Stream Results</h5>
+<h5 id="stream_sinks">Stream Sinks</h5>
 <div class="paragraph">
-<p>The <code>StreamResult</code> and <code>DOMResult</code> types receive special attention from Smooks. When the <a href="#user-content-settings"><code>default.serialization.on</code></a> global parameter is turned on, which by default it is, Smooks serializes the stream of events to XML while filtering the source. The XML is fed to the <code>Result</code> instance if a <code>StreamResult</code> or <code>DOMResult</code> is passed to <code>Smooks#filterSource</code>.</p>
+<p>The <code>StreamSink</code> and <code>DOMSink</code> types receive special attention from Smooks. When the <a href="#user-content-settings"><code>default.serialization.on</code></a> global parameter is turned on, which by default it is, Smooks serializes the stream of events to XML while filtering the source. The XML is fed to the <code>Sink</code> instance if a <code>StreamSink</code> or <code>DOMSink</code> is passed to <code>Smooks#filterSource</code>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -965,7 +1021,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <div class="sect2">
 <h3 id="pipeline">Pipeline</h3>
 <div class="paragraph">
-<p>A pipeline is a flexible, yet simple, Smooks construct that isolates the processing of a targeted event from its main processing as well as from the processing of other pipelines. In practice, this means being able to compose any series of transformations on an event outside the main execution context before directing the pipeline output to the execution result stream or to other destinations. With pipelines, you can enrich data, rename/remove nodes, and much more.</p>
+<p>A pipeline is a flexible, yet simple, Smooks construct that isolates the processing of a targeted event from its main processing as well as from the processing of other pipelines. In practice, this means being able to compose any series of transformations on an event outside the main execution context before directing the pipeline output to the execution sink stream or to other destinations. With pipelines, you can enrich data, rename/remove nodes, and much more.</p>
 </div>
 <div class="paragraph">
 <p>Under the hood, a pipeline is just another instance of Smooks, made self-evident from the Smooks config element declaring a pipeline:</p>
@@ -998,7 +1054,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <div class="sect3">
 <h4 id="inline">Inline</h4>
 <div class="paragraph">
-<p>Merges the pipeline&#8217;s output with the result stream:</p>
+<p>Merges the pipeline&#8217;s output with the sink stream:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1100,7 +1156,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 <div class="sect3">
 <h4 id="output_to">Output To</h4>
 <div class="paragraph">
-<p>Directs the output to a different stream other than the result stream:</p>
+<p>Directs the output to a different stream other than the sink stream:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1114,24 +1170,12 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 </div>
 </div>
 <div class="sect2">
-<h3 id="delegate_reader">Delegate Reader</h3>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<code>core:delegate-reader</code> was introduced in Smooks 2.0.0-M3 and will be renamed to <code>core:rewrite</code> in the next release of Smooks.
-</td>
-</tr>
-</table>
+<h3 id="rewrite">Rewrite</h3>
+<div class="paragraph">
+<p>The <code>core:rewrite</code> construct is a reader designed to offer a convenient mechanism for substituting the event stream entering a <a href="#pipeline">pipeline</a> with one that the pipeline resources can process.</p>
 </div>
 <div class="paragraph">
-<p>The <code>core:delegate-reader</code> construct is a reader designed to offer a convenient mechanism for substituting the event stream entering a <a href="#pipeline">pipeline</a> with one that the pipeline resources can process.</p>
-</div>
-<div class="paragraph">
-<p><code>core:delegate-reader</code> enables one or more of its enclosed visitors to substitute targeted events with new events. In the example that follows, the pipeline feeds the event stream to <code>core:delegate-reader</code>, and <code>core:delegate-reader</code> in turn, feeds targeted events to the nested FreeMarker visitors:</p>
+<p><code>core:rewrite</code> enables one or more of its enclosed visitors to substitute targeted events with new events. In the example that follows, the pipeline feeds the event stream to <code>core:rewrite</code>, and <code>core:rewrite</code> in turn, feeds targeted events to the nested FreeMarker visitors:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1152,7 +1196,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
         <span class="nt">&lt;/core:action&gt;</span>
         <span class="nt">&lt;core:config&gt;</span>
             <span class="nt">&lt;smooks-resource-list&gt;</span>
-                <span class="nt">&lt;core:delegate-reader&gt;</span>
+                <span class="nt">&lt;core:rewrite&gt;</span>
                     <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"#document"</span> <span class="na">applyBefore=</span><span class="s">"true"</span><span class="nt">&gt;</span>
                         <span class="nt">&lt;ftl:template&gt;</span>header.xml.ftl<span class="nt">&lt;/ftl:template&gt;</span>
                     <span class="nt">&lt;/ftl:freemarker&gt;</span>
@@ -1168,7 +1212,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
                     <span class="nt">&lt;ftl:freemarker</span> <span class="na">applyOnElement=</span><span class="s">"#document"</span><span class="nt">&gt;</span>
                         <span class="nt">&lt;ftl:template&gt;</span>footer.xml.ftl<span class="nt">&lt;/ftl:template&gt;</span>
                     <span class="nt">&lt;/ftl:freemarker&gt;</span>
-                <span class="nt">&lt;/core:delegate-reader&gt;</span>
+                <span class="nt">&lt;/core:rewrite&gt;</span>
 
                 <span class="nt">&lt;edifact:unparser</span> <span class="na">schemaUri=</span><span class="s">"/d96a/EDIFACT-Messages.dfdl.xsd"</span> <span class="na">unparseOnNode=</span><span class="s">"*"</span><span class="nt">&gt;</span>
                     <span class="nt">&lt;edifact:messageTypes&gt;</span>
@@ -1185,7 +1229,7 @@ This is the mechanism used to perform a standard 1-input/1-xml-output character-
 </div>
 </div>
 <div class="paragraph">
-<p>A visitor within <code>core:delegate-reader</code> writes XML fragments to the result stream, replacing the targeted events. For example, in the config above, the FreeMarker visitors are replacing the <code>#document</code> and <code>record</code> events with materialised XML templates. More precisely, <code>core:delegate-reader</code> converts the materialised XML into a new event stream which is then processed by the downstream pipeline resources, in this case, <code>edifact:unparser</code>.</p>
+<p>A visitor within <code>core:rewrite</code> writes XML fragments to the sink stream, replacing the targeted events. For example, in the config above, the FreeMarker visitors are replacing the <code>#document</code> and <code>record</code> events with materialised XML templates. More precisely, <code>core:rewrite</code> converts the materialised XML into a new event stream which is then processed by the downstream pipeline resources, in this case, <code>edifact:unparser</code>.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1200,7 +1244,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 </table>
 </div>
 <div class="paragraph">
-<p>When implementing your own visitor for <code>core:delegate-reader</code>, call <code>org.smooks.io.Stream#out(org.smooks.api.ExecutionContext).write(java.lang.String)</code> within one of the overridden visit methods to replace the event stream as shown below:</p>
+<p>When implementing your own visitor for <code>core:rewrite</code>, call <code>org.smooks.io.Stream#out(org.smooks.api.ExecutionContext).write(java.lang.String)</code> within one of the overridden visit methods to replace the event stream as shown below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1234,7 +1278,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 </div>
 </div>
 <div class="paragraph">
-<p><code>BibliographyVisitor</code> is a custom visitor which visits end events. The <code>visitAfter</code> method evaluates the author elements together with the title elements and writes XML to the result stream replacing the selected events.</p>
+<p><code>BibliographyVisitor</code> is a custom visitor which visits end events. The <code>visitAfter</code> method evaluates the author elements together with the title elements and writes XML to the sink stream replacing the selected events.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1387,7 +1431,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
                          <span class="na">defaultSerialization=</span><span class="s">"true"</span> <i class="conum" data-value="2"></i><b>(2)</b>
                          <span class="na">terminateOnException=</span><span class="s">"true"</span> <i class="conum" data-value="3"></i><b>(3)</b>
                          <span class="na">closeSource=</span><span class="s">"true"</span> <i class="conum" data-value="4"></i><b>(4)</b>
-                         <span class="na">closeResult=</span><span class="s">"true"</span> <i class="conum" data-value="5"></i><b>(5)</b>
+                         <span class="na">closeSink=</span><span class="s">"true"</span> <i class="conum" data-value="5"></i><b>(5)</b>
                          <span class="na">rewriteEntities=</span><span class="s">"true"</span> <i class="conum" data-value="6"></i><b>(6)</b>
                          <span class="na">readerPoolSize=</span><span class="s">"3"</span><span class="nt">/&gt;</span> <i class="conum" data-value="7"></i><b>(7)</b>
 
@@ -1404,7 +1448,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><code>defaultSerialization</code> (default: <code>true</code>): if default serialization should be switched on. Default serialization being turned on simply tells Smooks to locate a <code>StreamResult</code> (or <code>DOMResult</code>) in the Result objects provided to the <code>Smooks.filterSource</code> method and to serialize all events to that <code>Result</code> instance. This behavior can be turned off using this global configuration parameter and can be overridden on a per-fragment basis by targeting a visitor at that fragment that takes ownership of the <code>org.smooks.io.FragmentWriter</code> object.</td>
+<td><code>defaultSerialization</code> (default: <code>true</code>): if default serialization should be switched on. Default serialization being turned on simply tells Smooks to locate a <code>StreamSink</code> (or <code>DOMSink</code>) in the Sink objects provided to the <code>Smooks.filterSource</code> method and to serialize all events to that <code>Sink</code> instance. This behavior can be turned off using this global configuration parameter and can be overridden on a per-fragment basis by targeting a visitor at that fragment that takes ownership of the <code>org.smooks.io.FragmentWriter</code> object.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
@@ -1416,7 +1460,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td><code>closeResult</code>: close Result streams passed to the <code>[Smooks.filterSource</code> method (default "true"). The exception here is <code>System.out</code> and <code>System.err</code>, which will never be closed.</td>
+<td><code>closeSink</code>: close Sink streams passed to the <code>[Smooks.filterSource</code> method (default "true"). The exception here is <code>System.out</code> and <code>System.err</code>, which will never be closed.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
@@ -1440,7 +1484,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 <span class="nc">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
 
 <span class="n">executionContext</span><span class="o">.</span><span class="na">getContentDeliveryRuntime</span><span class="o">().</span><span class="na">addExecutionEventListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">HtmlReportGenerator</span><span class="o">(</span><span class="s">"/tmp/smooks-report.html"</span><span class="o">));</span>
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">inputStream</span><span class="o">),</span> <span class="k">new</span> <span class="nc">StreamResult</span><span class="o">(</span><span class="n">outputStream</span><span class="o">));</span></code></pre>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">inputStream</span><span class="o">),</span> <span class="k">new</span> <span class="nc">StreamSink</span><span class="o">(</span><span class="n">outputStream</span><span class="o">));</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1450,7 +1494,7 @@ The full example is <a href="https://github.com/smooks/smooks-examples/tree/v2/p
 <p>An example <code>HtmlReportGenerator</code> report can be seen <a href="http://www.milyn.org/docs/smooks-report/report.html">online here</a>.</p>
 </div>
 <div class="paragraph">
-<p>Of course you can also write and use your own <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/delivery/event/ExecutionEventListener.html">ExecutionEventListener</a> implementations.</p>
+<p>Of course you can also write and use your own <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/delivery/event/ExecutionEventListener.html">ExecutionEventListener</a> implementations.</p>
 </div>
 <div class="admonitionblock caution">
 <table>
@@ -1502,7 +1546,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="sect2">
 <h3 id="bean_context">Bean Context</h3>
 <div class="paragraph">
-<p>The <em>Bean Context</em> is a container for objects which can be accessed within during a Smooks execution. One bean context is created per execution context, that is, per <code>Smooks#filterSource(...)</code> operation. Provide an <code>org.smooks.io.payload.JavaResult</code> object to <code>Smooks#filterSource(...)</code> if you want the contents of the bean context to be returned at the end of the filtering process:</p>
+<p>The <em>Bean Context</em> is a container for objects which can be accessed within during a Smooks execution. One bean context is created per execution context, that is, per <code>Smooks#filterSource(...)</code> operation. Provide an <code>org.smooks.io.sink.JavaSink</code> object to <code>Smooks#filterSource(...)</code> if you want the contents of the bean context to be returned at the end of the filtering process:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1512,14 +1556,14 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <span class="c1">//Create a Smooks instance (cachable)</span>
 <span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="s">"smooks-config.xml"</span><span class="o">);</span>
 
-<span class="c1">//Create the JavaResult, which will contain the filter result after filtering</span>
-<span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+<span class="c1">//Create the JavaSink, which will contain the filter result after filtering</span>
+<span class="nc">JavaSink</span> <span class="n">sink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSink</span><span class="o">();</span>
 
-<span class="c1">//Filter the data from the source, putting the result into the JavaResult</span>
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+<span class="c1">//Filter the data from the source, putting the result into the JavaSink</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">sink</span><span class="o">);</span>
 
 <span class="c1">//Getting the Order bean which was created by the JavaBean cartridge</span>
-<span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Order</span><span class="o">)</span><span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"order"</span><span class="o">);</span></code></pre>
+<span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Order</span><span class="o">)</span><span class="n">sink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"order"</span><span class="o">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1545,10 +1589,10 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/bean/context/preinstalled/UniqueID.html"><code>PUUID</code></a>: This <code>UniqueId</code> instance provides unique identifiers for the filtering <code>ExecutionContext</code>.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/bean/context/preinstalled/UniqueID.html"><code>PUUID</code></a>: This <code>UniqueId</code> instance provides unique identifiers for the filtering <code>ExecutionContext</code>.</p>
 </li>
 <li>
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/bean/context/preinstalled/Time.html"><code>PTIME</code></a>: This <code>Time</code> instance provides time-based data for the filtering ExecutionContext.</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/bean/context/preinstalled/Time.html"><code>PTIME</code></a>: This <code>Time</code> instance provides time-based data for the filtering ExecutionContext.</p>
 </li>
 </ul>
 </div>
@@ -1616,7 +1660,7 @@ Only use the HTMLReportGenerator in development. When enabled, the HTMLReportGen
 <div class="ulist">
 <ul>
 <li>
-<p>Global Configuration Parameters: Every in a Smooks configuration can specify elements for configuration parameters. These parameter values are available at runtime through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/config/ResourceConfig.html"><code>ResourceConfig</code></a>, or are reflectively injected through the <code>@Inject</code> annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the <code>ExecutionContext</code> (vs <code>ResourceConfig</code>). More on this in the following sections.</p>
+<p>Global Configuration Parameters: Every in a Smooks configuration can specify elements for configuration parameters. These parameter values are available at runtime through the <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/resource/config/ResourceConfig.html"><code>ResourceConfig</code></a>, or are reflectively injected through the <code>@Inject</code> annotation. Global Configuration Parameters are parameters that are defined centrally (see below) and are accessible to all runtime components via the <code>ExecutionContext</code> (vs <code>ResourceConfig</code>). More on this in the following sections.</p>
 </li>
 <li>
 <p>Default Properties: Specify default values for attributes. These defaults are automatically applied to <code>ResourceConfig</code> s  when their corresponding does not specify the attribute. More on this in the following section.</p>
@@ -2232,16 +2276,16 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache
 <h2 id="exporting_results">Exporting Results</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>When using Smooks standalone you are in full control of the type of output that Smooks produces since you specify it by passing a certain Result to the filter method. But when integrating Smooks with other frameworks (JBossESB, Mule, Camel, and others) this needs to be specified inside the framework&#8217;s configuration. Starting with version 1.4 of Smooks you can now declare the data types that Smooks produces and you can use the Smooks api to retrieve the Result(s) that Smooks exports.</p>
+<p>When using Smooks standalone you are in full control of the type of output that Smooks produces since you specify it by passing a certain Sink to the filter method. But when integrating Smooks with other frameworks (JBossESB, Mule, Camel, and others) this needs to be specified inside the framework&#8217;s configuration. Starting with version 1.4 of Smooks you can now declare the data types that Smooks produces and you can use the Smooks api to retrieve the Sink(s) that Smooks exports.</p>
 </div>
 <div class="paragraph">
-<p>To declare the type of result that Smooks produces you use the 'exports' element as shown below:</p>
+<p>To declare the type of sink that Smooks produces you use the 'exports' element as shown below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span> <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span><span class="nt">&gt;</span>
    <span class="nt">&lt;core:exports&gt;</span>
-      <span class="nt">&lt;core:result</span> <span class="na">type=</span><span class="s">"org.smooks.io.payload.JavaResult"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;core:result</span> <span class="na">type=</span><span class="s">"org.smooks.io.sink.JavaSink"</span><span class="nt">/&gt;</span>
    <span class="nt">&lt;/core:exports&gt;</span>
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
@@ -2255,11 +2299,11 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache
 <span class="nc">Exports</span> <span class="n">exports</span> <span class="o">=</span> <span class="nc">Exports</span><span class="o">.</span><span class="na">getExports</span><span class="o">(</span><span class="n">smooks</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">());</span>
 <span class="k">if</span> <span class="o">(</span><span class="n">exports</span><span class="o">.</span><span class="na">hasExports</span><span class="o">())</span>
 <span class="o">{</span>
-    <span class="c1">// Create the instances of the Result types.</span>
+    <span class="c1">// Create the instances of the Sink types.</span>
     <span class="c1">// (Only the types, i.e the Class type are declared in the 'type' attribute.</span>
-    <span class="nc">Result</span><span class="o">[]</span> <span class="n">results</span> <span class="o">=</span> <span class="n">exports</span><span class="o">.</span><span class="na">createResults</span><span class="o">();</span>
-    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">getSource</span><span class="o">(</span><span class="n">exchange</span><span class="o">),</span> <span class="n">results</span><span class="o">);</span>
-    <span class="c1">// The Results(s) will now be populate by Smooks filtering process and</span>
+    <span class="nc">Sink</span><span class="o">[]</span> <span class="n">sinks</span> <span class="o">=</span> <span class="n">exports</span><span class="o">.</span><span class="na">createSinks</span><span class="o">();</span>
+    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">getSource</span><span class="o">(</span><span class="n">exchange</span><span class="o">),</span> <span class="n">sinks</span><span class="o">);</span>
+    <span class="c1">// The Sink(s) will now be populate by Smooks filtering process and</span>
     <span class="c1">// available to the framework in question.</span>
 <span class="o">}</span></code></pre>
 </div>
@@ -2272,13 +2316,13 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
                       <span class="na">xmlns:core=</span><span class="s">"https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"</span><span class="nt">&gt;</span>
    <span class="nt">&lt;core:exports&gt;</span>
-      <span class="nt">&lt;core:result</span> <span class="na">type=</span><span class="s">"org.smooks.io.payload.JavaResult"</span> <span class="na">extract=</span><span class="s">"orderBean"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;core:result</span> <span class="na">type=</span><span class="s">"org.smooks.io.sink.JavaSink"</span> <span class="na">extract=</span><span class="s">"orderBean"</span><span class="nt">/&gt;</span>
    <span class="nt">&lt;/core:exports&gt;</span>
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The extract attribute is intended to be used when you are only interested in a sub-section of a produced result. In the example above we are saying that we only want the object named orderBean to be exported. The other contents of the JavaResult will be ignored. Another example where you might want to use this kind of extracting could be when you only want a ValidationResult of a certain type, for example to only return validation errors.</p>
+<p>The extract attribute is intended to be used when you are only interested in a sub-section of a produced result. In the example above we are saying that we only want the object named orderBean to be exported. The other contents of the JavaSink will be ignored. Another example where you might want to use this kind of extracting could be when you only want a ValidationSink of a certain type, for example to only return validation errors.</p>
 </div>
 <div class="paragraph">
 <p>Below is an example of using the extracts option from an embedded framework:</p>
@@ -2289,11 +2333,11 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache
 <span class="nc">Exports</span> <span class="n">exports</span> <span class="o">=</span> <span class="nc">Exports</span><span class="o">.</span><span class="na">getExports</span><span class="o">(</span><span class="n">smooks</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">());</span>
 <span class="k">if</span> <span class="o">(</span><span class="n">exports</span><span class="o">.</span><span class="na">hasExports</span><span class="o">())</span>
 <span class="o">{</span>
-    <span class="c1">// Create the instances of the Result types.</span>
+    <span class="c1">// Create the instances of the Sink types.</span>
     <span class="c1">// (Only the types, i.e the Class type are declared in the 'type' attribute.</span>
-    <span class="nc">Result</span><span class="o">[]</span> <span class="n">results</span> <span class="o">=</span> <span class="n">exports</span><span class="o">.</span><span class="na">createResults</span><span class="o">();</span>
-    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">getSource</span><span class="o">(</span><span class="n">exchange</span><span class="o">),</span> <span class="n">results</span><span class="o">);</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="n">object</span><span class="o">&gt;</span> <span class="n">objects</span> <span class="o">=</span> <span class="nc">Exports</span><span class="o">.</span><span class="na">extractResults</span><span class="o">(</span><span class="n">results</span><span class="o">,</span> <span class="n">exports</span><span class="o">);</span>
+    <span class="nc">Sink</span><span class="o">[]</span> <span class="n">sinks</span> <span class="o">=</span> <span class="n">exports</span><span class="o">.</span><span class="na">createSinks</span><span class="o">();</span>
+    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">getSource</span><span class="o">(</span><span class="n">exchange</span><span class="o">),</span> <span class="n">sinks</span><span class="o">);</span>
+    <span class="nc">List</span><span class="o">&lt;</span><span class="n">object</span><span class="o">&gt;</span> <span class="n">objects</span> <span class="o">=</span> <span class="nc">Exports</span><span class="o">.</span><span class="na">extractSinks</span><span class="o">(</span><span class="n">sinks</span><span class="o">,</span> <span class="n">exports</span><span class="o">);</span>
     <span class="c1">// Now make the object available to the framework that this code is running:</span>
     <span class="c1">// Camel, JBossESB, Mule, etc...</span>
 <span class="o">}</span></code></pre>
@@ -2364,13 +2408,13 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache
 
         <span class="k">try</span> <span class="o">{</span>
             <span class="nc">Source</span> <span class="n">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"input-message.xml"</span> <span class="o">)</span> <span class="o">);</span>
-            <span class="nc">StringResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringResult</span><span class="o">();</span>
+            <span class="nc">StringSink</span> <span class="n">sink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringSink</span><span class="o">();</span>
 
-            <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+            <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">sink</span><span class="o">);</span>
 
             <span class="c1">// compare the expected xml with the transformation result.</span>
             <span class="nc">XMLUnit</span><span class="o">.</span><span class="na">setIgnoreWhitespace</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-            <span class="nc">XMLAssert</span><span class="o">.</span><span class="na">assertXMLEqual</span><span class="o">(</span><span class="k">new</span> <span class="nc">InputStreamReader</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"expected.xml"</span><span class="o">)),</span> <span class="k">new</span> <span class="nc">StringReader</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">getResult</span><span class="o">()));</span>
+            <span class="nc">XMLAssert</span><span class="o">.</span><span class="na">assertXMLEqual</span><span class="o">(</span><span class="k">new</span> <span class="nc">InputStreamReader</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"expected.xml"</span><span class="o">)),</span> <span class="k">new</span> <span class="nc">StringReader</span><span class="o">(</span><span class="n">sink</span><span class="o">.</span><span class="na">getResult</span><span class="o">()));</span>
         <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
             <span class="n">smooks</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
         <span class="o">}</span>
@@ -2643,7 +2687,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache
 </ol>
 </div>
 <div class="paragraph">
-<p>The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, <a href="https://github.com/smooks/smooks/tree/v2.0.0-RC4/core/src/main/resources/META-INF/xsd">as can be seen in the source</a>.</p>
+<p>The easiest way to get familiar with this mechanism is by looking at existing extended namespace configurations within the Smooks code itself. All Smooks components (including e.g. the Java Binding functionality) use this mechanism for defining their configurations. Smooks Core itself defines a number of extended configuration namesaces, <a href="https://github.com/smooks/smooks/tree/v2.0.0/core/src/main/resources/META-INF/xsd">as can be seen in the source</a>.</p>
 </div>
 </div>
 </div>
@@ -2653,7 +2697,7 @@ See the <a href="https://github.com/smooks/smooks-examples/tree/v2/camel">Apache
 <p>Implementing and configuring a new Source Reader for Smooks is straightforward. The Smooks specific parts of the process are easy and are not really the issue. The level of effort involved is a function of the complexity of the Source data format for which you are implementing the reader.</p>
 </div>
 <div class="paragraph">
-<p>Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting &amp; Routing, etc&#8230;&#8203; So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard <code>org.xml.sax.XMLReader</code> interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/reader/SmooksXMLReader.html"><code>org.smooks.api.resource.reader.SmooksXMLReader</code></a> interface (which is just an extension of <code>org.xml.sax.XMLReader</code>). So, you can easily use (or extend) an existing <code>org.xml.sax.XMLReader</code> implementation, or implement a new Reader from scratch.</p>
+<p>Implementing a Reader for your custom data format immediately opens all Smooks capabilities to that data format e.g. Java Binding, Templating, Persistence, Validation, Splitting &amp; Routing, etc&#8230;&#8203; So a relatively small investment can yield a quite significant return. The only requirement, from a Smooks perspective, is that the Reader implements the standard <code>org.xml.sax.XMLReader</code> interface from the Java JDK. However, if you want to be able to configure the Reader implementation, it needs to implement the <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/resource/reader/SmooksXMLReader.html"><code>org.smooks.api.resource.reader.SmooksXMLReader</code></a> interface (which is just an extension of <code>org.xml.sax.XMLReader</code>). So, you can easily use (or extend) an existing <code>org.xml.sax.XMLReader</code> implementation, or implement a new Reader from scratch.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s now look at a simple example of implementing a Reader for use with Smooks. In this example, we will implement a Reader that can read a stream of Comma Separated Value (CSV) records, converting the CSV stream into a stream of SAX events that can be processed by Smooks, allowing you to do all the things Smooks allows (Java Binding, etc&#8230;&#8203;).</p>
@@ -2750,7 +2794,7 @@ Mark,Jones</pre>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="o">{</span>
         <span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"mycsvread-config.xml"</span><span class="o">));</span>
-        <span class="nc">StringResult</span> <span class="n">serializedCSVEvents</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringResult</span><span class="o">();</span>
+        <span class="nc">StringSink</span> <span class="n">serializedCSVEvents</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringSink</span><span class="o">();</span>
 
         <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"names.csv"</span><span class="o">)),</span> <span class="n">serializedCSVEvents</span><span class="o">);</span>
 
@@ -2871,11 +2915,11 @@ Mark,Jones</pre>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test_java_binding</span><span class="o">()</span> <span class="o">{</span>
         <span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"java-binding-config.xml"</span><span class="o">));</span>
-        <span class="nc">JavaResult</span> <span class="n">javaResult</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+        <span class="nc">JavaSink</span> <span class="n">javaSink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSink</span><span class="o">();</span>
 
-        <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"names.csv"</span><span class="o">)),</span> <span class="n">javaResult</span><span class="o">);</span>
+        <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="s">"names.csv"</span><span class="o">)),</span> <span class="n">javaSink</span><span class="o">);</span>
 
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">PersonName</span><span class="o">&gt;</span> <span class="n">peopleNames</span> <span class="o">=</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">PersonName</span><span class="o">&gt;)</span> <span class="n">javaResult</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"peopleNames"</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">PersonName</span><span class="o">&gt;</span> <span class="n">peopleNames</span> <span class="o">=</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">PersonName</span><span class="o">&gt;)</span> <span class="n">javaSink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"peopleNames"</span><span class="o">);</span>
 
         <span class="c1">// TODO: add assertions etc</span>
     <span class="o">}</span>
@@ -3015,11 +3059,11 @@ Mark,Jones</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="n">configStream</span><span class="o">);</span>
-<span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+<span class="nc">JavaSink</span> <span class="n">sink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSink</span><span class="o">();</span>
 
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">messageReader</span><span class="o">),</span> <span class="n">result</span><span class="o">);</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">messageReader</span><span class="o">),</span> <span class="n">sink</span><span class="o">);</span>
 
-<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;</span> <span class="n">people</span> <span class="o">=</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"people"</span><span class="o">);</span></code></pre>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;</span> <span class="n">people</span> <span class="o">=</span> <span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;)</span> <span class="n">sink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"people"</span><span class="o">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3043,11 +3087,11 @@ Mark,Jones</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nc">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Smooks</span><span class="o">(</span><span class="n">configStream</span><span class="o">);</span>
-<span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+<span class="nc">JavaSink</span> <span class="n">sink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSink</span><span class="o">();</span>
 
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">messageReader</span><span class="o">),</span> <span class="n">result</span><span class="o">);</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">messageReader</span><span class="o">),</span> <span class="n">sink</span><span class="o">);</span>
 
-<span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Person</span><span class="o">&gt;</span> <span class="n">people</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Person</span><span class="o">&gt;)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"people"</span><span class="o">);</span>
+<span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Person</span><span class="o">&gt;</span> <span class="n">people</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Person</span><span class="o">&gt;)</span> <span class="n">sink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"people"</span><span class="o">);</span>
 
 <span class="nc">Person</span> <span class="n">tom</span> <span class="o">=</span> <span class="n">people</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Tom"</span><span class="o">);</span>
 <span class="nc">Person</span> <span class="n">mike</span> <span class="o">=</span> <span class="n">people</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"Mike"</span><span class="o">);</span></code></pre>
@@ -3104,7 +3148,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 <a href="https://docs.oracle.com/javase/8/docs/api/org/xml/sax/ContentHandler.html">SAX events</a> that a SaxNgVisitor implementation can capture and processes. Depending on the use case being solved with the SaxNgVisitor implementation, you may need to implement one or all of these interfaces.</p>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/BeforeVisitor.html"><code>BeforeVisitor</code></a>: Captures the <em>startElement</em> SAX event for the targeted fragment element:</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/resource/visitor/sax/ng/BeforeVisitor.html"><code>BeforeVisitor</code></a>: Captures the <em>startElement</em> SAX event for the targeted fragment element:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3115,7 +3159,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/ChildrenVisitor.html"><code>ChildrenVisitor</code></a>: Captures the <em>character</em> based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the <em>startElement</em> events of child fragment elements:</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/resource/visitor/sax/ng/ChildrenVisitor.html"><code>ChildrenVisitor</code></a>: Captures the <em>character</em> based SAX events for the targeted fragment element, as well as Smooks generated (pseudo) events corresponding to the <em>startElement</em> events of child fragment elements:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3128,7 +3172,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/AfterVisitor.html"><code>AfterVisitor</code></a>: Captures the <em>endElement</em> SAX event for the targeted fragment element:</p>
+<p><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/resource/visitor/sax/ng/AfterVisitor.html"><code>AfterVisitor</code></a>: Captures the <em>endElement</em> SAX event for the targeted fragment element:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3139,7 +3183,7 @@ Smooks treats all visitors as stateless objects. A visitor instance must be usab
 </div>
 </div>
 <div class="paragraph">
-<p>As a convenience for those implementations that need to capture all the SAX events, the above three interfaces are pulled together into a single interface in the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/resource/visitor/sax/ng/ElementVisitor.html"><code>ElementVisitor</code></a> interface.</p>
+<p>As a convenience for those implementations that need to capture all the SAX events, the above three interfaces are pulled together into a single interface in the <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/resource/visitor/sax/ng/ElementVisitor.html"><code>ElementVisitor</code></a> interface.</p>
 </div>
 <div class="paragraph">
 <p>Illustrating these events using a piece of XML:</p>
@@ -3168,7 +3212,7 @@ Of course, the above is just an illustration of a Source message event stream an
 </table>
 </div>
 <div class="paragraph">
-<p><a href="https://docs.oracle.com/javase/8/docs/api/org/w3c/dom/Element.html">Element</a>: As can be seen from the above SAX NG interfaces, <code>Element</code> type is passed in all method calls. This object contains details about the targeted fragment element, including attributes and their values. We&#8217;ll discuss text accumulation and <code>StreamResult</code> writing in the coming sections.</p>
+<p><a href="https://docs.oracle.com/javase/8/docs/api/org/w3c/dom/Element.html">Element</a>: As can be seen from the above SAX NG interfaces, <code>Element</code> type is passed in all method calls. This object contains details about the targeted fragment element, including attributes and their values. We&#8217;ll discuss text accumulation and <code>StreamSink</code> writing in the coming sections.</p>
 </div>
 </div>
 <div class="sect3">
@@ -3225,13 +3269,13 @@ Of course, the above is just an illustration of a Source message event stream an
 </div>
 </div>
 <div class="sect3">
-<h4 id="streamresult_writingserialization">StreamResult Writing/Serialization</h4>
+<h4 id="streamsink_writingserialization">StreamSink Writing/Serialization</h4>
 <div class="paragraph">
-<p>The <code>Smooks.filterSource(Source, Result)</code> method can take one or more of a number of different <code>Result</code> type implementations, one of which is the <code>StreamResult</code> class (see <a href="#multiple-outputsresults">Multiple Outputs/Results</a>). By default, Smooks will always serialize the full Source event stream as XML to any <code>StreamResult</code> instance provided to the <code>Smooks.filterSource(Source, Result)</code> method.</p>
+<p>The <code>Smooks.filterSource(Source, Sink)</code> method can take one or more of a number of different <code>Sink</code> type implementations, one of which is the <code>StreamSink</code> class (see <a href="#multiple-resultssinks">Multiple results/sinks</a>). By default, Smooks will always serialize the full Source event stream as XML to any <code>StreamSink</code> instance provided to the <code>Smooks.filterSource(Source, Sink)</code> method.</p>
 </div>
 <div class="paragraph">
-<p>So, if the Source provided to the <code>Smooks.filterSource(Source, Result)</code> method is an XML stream and a  <a href="https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/javax/xml/transform/stream/StreamResult.html"><code>StreamResult</code></a> instance is provided as one of the <code>Result</code> instances, the Source XML will be written out to the
-<code>StreamResult</code> unmodified, unless the Smooks instance is configured with one or more <code>SaxNgVisitor</code> implementations that modify one or more fragments. In other words, Smooks streams the Source in and back out again through the <code>StreamResult</code> instance. Default serialization can be turned on/off by <a href="#user-content-settings">configuring the filter settings</a>.</p>
+<p>So, if the Source provided to the <code>Smooks.filterSource(Source, Sink)</code> method is an XML stream and a  <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/io/StreamSink.html"><code>StreamSink</code></a> instance is provided as one of the <code>Sink</code> instances, the Source XML will be written out to the
+<code>StreamSink</code> unmodified, unless the Smooks instance is configured with one or more <code>SaxNgVisitor</code> implementations that modify one or more fragments. In other words, Smooks streams the Source in and back out again through the <code>StreamSink</code> instance. Default serialization can be turned on/off by <a href="#user-content-settings">configuring the filter settings</a>.</p>
 </div>
 <div class="paragraph">
 <p>If you want to modify the serialized form of one of the message fragments (i.e. "transform"), you need to implement a <code>SaxNgVisitor</code> to do so and target it at the message fragment using an XPath-like expression.</p>
@@ -3249,10 +3293,10 @@ Of course, you can also modify the serialized form of a message fragment using o
 </table>
 </div>
 <div class="paragraph">
-<p>The key to implementing a <code>SaxNgVisitor</code> geared towards transforming the serialized form of a fragment is telling Smooks that the <code>SaxNgVisitor</code> implementation in question will be writing to the <code>StreamResult</code>. You need to tell Smooks this because Smooks supports targeting of multiple <code>SaxNgVisitor</code> implementations at a single fragment, but only one <code>SaxNgVisitor</code> is allowed to write to the <code>StreamResult</code>, per fragment. If a second <code>SaxNgVisitor</code> attempts to write to the <code>StreamResult</code>, a <code>SAXWriterAccessException</code> will result and you will need to modify your Smooks configuration.</p>
+<p>The key to implementing a <code>SaxNgVisitor</code> geared towards transforming the serialized form of a fragment is telling Smooks that the <code>SaxNgVisitor</code> implementation in question will be writing to the <code>StreamSink</code>. You need to tell Smooks this because Smooks supports targeting of multiple <code>SaxNgVisitor</code> implementations at a single fragment, but only one <code>SaxNgVisitor</code> is allowed to write to the <code>StreamSink</code>, per fragment. If a second <code>SaxNgVisitor</code> attempts to write to the <code>StreamSink</code>, a <code>SAXWriterAccessException</code> will result and you will need to modify your Smooks configuration.</p>
 </div>
 <div class="paragraph">
-<p>In order to be "the one" that writes to the <em>StreamResult</em>, the <em>SaxNgVisitor</em> needs to <strong>acquire ownership</strong> of the <em>Writer</em> to the <em>StreamResult</em>. It does this by simply making a call to the <em>ExecutionContext.getWriter().write(&#8230;&#8203;)</em> method from inside the <em>BeforeVisitor.visitBefore</em> methods implementation:</p>
+<p>In order to be "the one" that writes to the <em>StreamSink</em>, the <em>SaxNgVisitor</em> needs to <strong>acquire ownership</strong> of the <em>Writer</em> to the <em>StreamSink</em>. It does this by simply making a call to the <em>ExecutionContext.getWriter().write(&#8230;&#8203;)</em> method from inside the <em>BeforeVisitor.visitBefore</em> methods implementation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3298,12 +3342,12 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 </table>
 </div>
 <div class="paragraph">
-<p>Sometimes you know that the target fragment you are serializing/transforming will never have sub-fragments. In this situation, it&#8217;s a bit ugly to have to implement the <code>BeforeVisitor.visitBefore</code> method just to make a call to the <code>ExecutionContext.getWriter().write(...)</code> method to acquire ownership of the <code>Writer</code>. For this reason, we have the <code>@StreamResultWriter</code> annotation. Used in combination with the <code>@TextConsumer</code> annotation, we can remove the need to implement all but the <code>AfterVisitor.visitAfter</code> method:</p>
+<p>Sometimes you know that the target fragment you are serializing/transforming will never have sub-fragments. In this situation, it&#8217;s a bit ugly to have to implement the <code>BeforeVisitor.visitBefore</code> method just to make a call to the <code>ExecutionContext.getWriter().write(...)</code> method to acquire ownership of the <code>Writer</code>. For this reason, we have the <code>@StreamSinkWriter</code> annotation. Used in combination with the <code>@TextConsumer</code> annotation, we can remove the need to implement all but the <code>AfterVisitor.visitAfter</code> method:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="java"><span class="nd">@TextConsumer</span>
-<span class="nd">@StreamResultWriter</span>
+<span class="nd">@StreamSinkWriter</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyVisitor</span> <span class="kd">implements</span> <span class="nc">AfterVisitor</span> <span class="o">{</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visitAfter</span><span class="o">(</span><span class="nc">Element</span> <span class="n">element</span><span class="o">,</span> <span class="nc">ExecutionContext</span> <span class="n">executionContext</span><span class="o">)</span> <span class="o">{</span>
@@ -3321,7 +3365,7 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nd">@StreamResultWriter</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nd">@StreamSinkWriter</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyVisitor</span> <span class="kd">implements</span> <span class="nc">ElementVisitor</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="nc">DomSerializer</span> <span class="n">domSerializer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DomSerializer</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
@@ -3465,7 +3509,7 @@ If you need to control serialization of sub-fragments you need to reset the <cod
 
 <span class="n">smooks</span><span class="o">.</span><span class="na">addVisitor</span><span class="o">(</span><span class="k">new</span> <span class="nc">ChangeItemState</span><span class="o">().</span><span class="na">setNewState</span><span class="o">(</span><span class="s">"COMPLETED"</span><span class="o">),</span> <span class="s">"order-items/order-item[@status = 'OK']"</span><span class="o">);</span>
 
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">inReader</span><span class="o">),</span> <span class="k">new</span> <span class="nc">StreamResult</span><span class="o">(</span><span class="n">outWriter</span><span class="o">));</span></code></pre>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">inReader</span><span class="o">),</span> <span class="k">new</span> <span class="nc">StreamSink</span><span class="o">(</span><span class="n">outWriter</span><span class="o">));</span></code></pre>
 </div>
 </div>
 </div>
@@ -8804,7 +8848,7 @@ Be sure to read the section on <a href="https://github.com/smooks/smooks-javabea
 <div class="sect3">
 <h4 id="one_to_one_transformation">One-to-One Transformation</h4>
 <div class="paragraph">
-<p>If the requirement is to process a huge message by transforming it into a single message of another format, the easiest mechanism with Smooks is to apply multiple FreeMarker templates to the Source message Event Stream, outputting to a Smooks.filterSource Result stream.</p>
+<p>If the requirement is to process a huge message by transforming it into a single message of another format, the easiest mechanism with Smooks is to apply multiple FreeMarker templates to the Source message Event Stream, outputting to a <code>Smooks.filterSource</code> sink stream.</p>
 </div>
 <div class="paragraph">
 <p>This can be done in one of 2 ways with FreeMarker templating, depending on the type of model that&#8217;s appropriate:</p>
