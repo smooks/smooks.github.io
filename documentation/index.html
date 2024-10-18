@@ -3687,7 +3687,7 @@ Smooks instrumentation is available starting from v2.0.0-RC4.
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-management<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5027,7 +5027,7 @@ jones,arya,cat,1986-02-19</code></pre>
 
 <span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">Smooks</span> <span class="n">smooks</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">Smooks</span><span class="o">();</span>
 <span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">sink</span><span class="o">);</span>
 
 <span class="nc">List</span><span class="o">&lt;</span><span class="n">org</span><span class="o">.</span><span class="na">apache</span><span class="o">.</span><span class="na">daffodil</span><span class="o">.</span><span class="na">japi</span><span class="o">.</span><span class="na">Diagnostic</span><span class="o">&gt;</span> <span class="n">diagnostics</span> <span class="o">=</span> <span class="n">executionContext</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">org</span><span class="o">.</span><span class="na">smooks</span><span class="o">.</span><span class="na">cartridges</span><span class="o">.</span><span class="na">dfdl</span><span class="o">.</span><span class="na">parser</span><span class="o">.</span><span class="na">DfdlParser</span><span class="o">.</span><span class="na">DIAGNOSTICS_TYPED_KEY</span><span class="o">);</span>
 <span class="o">...</span></code></pre>
@@ -5181,7 +5181,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-dfdl-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.0.0-RC4<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
