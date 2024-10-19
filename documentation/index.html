@@ -5554,7 +5554,7 @@ jones,arya,cat,1986-02-19</code></pre>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-edi-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5671,7 +5671,7 @@ message definition zip directories</a>. This allows you to easily convert a UN E
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>edifact-schemas<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;classifier&gt;</span>d93a<span class="nt">&lt;/classifier&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -5707,7 +5707,7 @@ message definition zip directories</a>. This allows you to easily convert a UN E
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges.edi<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-edifact-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -6053,7 +6053,7 @@ class.</p>
 <div class="sect3">
 <h4 id="java_to_java">Java to Java</h4>
 <div class="paragraph">
-<p>The source object is provided to Smooks via a <code>org.smooks.io.payload.JavaSource</code> instance. This object is created by passing the constructor the root object of the source model. The resulting <code>JavaSource</code> object is used in the <code>Smooks#filter</code> method. The resulting code could look like as follows:</p>
+<p>The source object is provided to Smooks via a <code>org.smooks.io.source.JavaSource</code> instance. This object is created by passing the constructor the root object of the source model. The resulting <code>JavaSource</code> object is used in the <code>Smooks#filter</code> method. The resulting code could look like as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -6062,16 +6062,16 @@ class.</p>
     <span class="nc">ExecutionContext</span> <span class="n">executionContext</span> <span class="o">=</span> <span class="n">smooks</span><span class="o">.</span><span class="na">createExecutionContext</span><span class="o">();</span>
 
     <span class="c1">// Transform the source Order to the target LineOrder via a</span>
-    <span class="c1">// JavaSource and JavaResult instance...</span>
+    <span class="c1">// JavaSource and JavaSink instance...</span>
     <span class="nc">JavaSource</span> <span class="n">source</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSource</span><span class="o">(</span><span class="n">srcOrder</span><span class="o">);</span>
-    <span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+    <span class="nc">JavaSink</span> <span class="n">sink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSink</span><span class="o">();</span>
 
     <span class="c1">// Configure the execution context to generate a report...</span>
     <span class="n">executionContext</span><span class="o">.</span><span class="na">setEventListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">HtmlReportGenerator</span><span class="o">(</span><span class="s">"target/report/report.html"</span><span class="o">));</span>
 
-    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+    <span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">executionContext</span><span class="o">,</span> <span class="n">source</span><span class="o">,</span> <span class="n">sink</span><span class="o">);</span>
 
-    <span class="k">return</span> <span class="o">(</span><span class="nc">LineOrder</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"lineOrder"</span><span class="o">);</span>
+    <span class="k">return</span> <span class="o">(</span><span class="nc">LineOrder</span><span class="o">)</span> <span class="n">sink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"lineOrder"</span><span class="o">);</span>
 <span class="o">}</span></code></pre>
 </div>
 </div>
@@ -6094,7 +6094,7 @@ class.</p>
 <span class="c1">// Turn streaming off via the JavaSource...</span>
 <span class="n">javaSource</span><span class="o">.</span><span class="na">setEventStreamRequired</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
 
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">javaSource</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span></code></pre>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="n">javaSource</span><span class="o">,</span> <span class="n">sink</span><span class="o">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6138,10 +6138,10 @@ class.</p>
 <div class="sect4">
 <h5 id="java_binding_overview">Java Binding Overview</h5>
 <div class="paragraph">
-<p>This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV, etc&#8230;&#8203; However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java objects it creates (and binds data into) available through the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/bean/contedxt/BeanContext.html">BeanContext</a> class. This is essentially a Java Bean context that is made available to any Smooks visitor via the Smooks <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a>.</p>
+<p>This feature of Smooks can be used in its own right purely as a Java binding framework for XML, EDI, CSV, etc&#8230;&#8203; However, it is very important to remember that the Java Binding capabilities in Smooks are the cornerstone of many other capabilities provided by Smooks. This is because Smooks makes the Java objects it creates (and binds data into) available through the <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/bean/contedxt/BeanContext.html">BeanContext</a> class. This is essentially a Java Bean context that is made available to any Smooks visitor via the Smooks <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a>.</p>
 </div>
 <div class="paragraph">
-<p>Some of the existing features that build on the functionality provided in the Javabean Cartridge include:</p>
+<p>Some of the existing features that build on the functionality provided in the JavaBean Cartridge include:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -6282,7 +6282,7 @@ class.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>The Javabean cartridge has the following conditions for javabeans:</p>
+<p>The JavaBean cartridge has the following conditions for javabeans:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6304,7 +6304,7 @@ class.</p>
 <p>The configuration shown above simply created the <em>example.model.Order</em> bean instance and bound it into the bean context. This section will describe how to bind data into that bean instance.</p>
 </div>
 <div class="paragraph">
-<p>The Javabean Cartridge provides support for 3 types of data bindings, which are added as child elements of the <code>&lt;jb:bean&gt;</code> element:</p>
+<p>The JavaBean Cartridge provides support for 3 types of data bindings, which are added as child elements of the <code>&lt;jb:bean&gt;</code> element:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -6448,7 +6448,7 @@ class.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>In most cases, Smooks will automatically detect the datatype decoder to be used for a <code>&lt;jb:value&gt;</code> binding. However, some decoders require configuration e.g. the DateDecoder (<code>decoder="Date"</code>). In these cases, the decoder attribute should be defined on the binding, as well as the &lt;jb:decodeParam&gt; child elements for specifying the decode parameters for that decoder. <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/package-summary.html">See the full list of DataDecoder available out-of-the-box</a>.</p>
+<p>In most cases, Smooks will automatically detect the datatype decoder to be used for a <code>&lt;jb:value&gt;</code> binding. However, some decoders require configuration e.g. the DateDecoder (<code>decoder="Date"</code>). In these cases, the decoder attribute should be defined on the binding, as well as the &lt;jb:decodeParam&gt; child elements for specifying the decode parameters for that decoder. <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/package-summary.html">See the full list of DataDecoder available out-of-the-box</a>.</p>
 </li>
 </ol>
 </div>
@@ -6491,19 +6491,19 @@ class.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToDateConverterFactory.html">Date</a></strong>: Decode/Encode a String to a <em>java.util.Date</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToDateConverterFactory.html">Date</a></strong>: Decode/Encode a String to a <em>java.util.Date</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToXmlGregorianCalendarConverterFactory.html">Calendar</a></strong>: Decode/Encode a String to a <em>java.util.Calendar</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToXmlGregorianCalendarConverterFactory.html">Calendar</a></strong>: Decode/Encode a String to a <em>java.util.Calendar</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/SqlDateConverterFactory.html">SqlDate</a></strong>: Decode/Encode a String to a <em>java.sql.Date</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/SqlDateConverterFactory.html">SqlDate</a></strong>: Decode/Encode a String to a <em>java.sql.Date</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/SqlTimeConverterFactory.html">SqlTime</a></strong>: Decode/Encode a String to a <em>java.sql.Time</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/SqlTimeConverterFactory.html">SqlTime</a></strong>: Decode/Encode a String to a <em>java.sql.Time</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/SqlTimestampConverterFactory.html">SqlTimestamp</a></strong>: Decode/Encode a String to a <em>java.sql.Timestamp</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/SqlTimestampConverterFactory.html">SqlTimestamp</a></strong>: Decode/Encode a String to a <em>java.sql.Timestamp</em> instance.</p>
 </li>
 </ul>
 </div>
@@ -6556,25 +6556,25 @@ class.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToBigDecimalConverterFactory.html">BigDecimalDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigDecimal</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToBigDecimalConverterFactory.html">BigDecimalDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigDecimal</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToBigIntegerConverterFactory.html">BigIntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigInteger</em> instance.</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToBigIntegerConverterFactory.html">BigIntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.math. BigInteger</em> instance.</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToDoubleConverterFactory.html">DoubleDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Double</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToDoubleConverterFactory.html">DoubleDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Double</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToFloatConverterFactory.html">FloatDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Float</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToFloatConverterFactory.html">FloatDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Float</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToIntegerConverterFactory.html">IntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Integer</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToIntegerConverterFactory.html">IntegerDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Integer</em> instance (including primitive).</p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToLongConverterFactory.html">LongDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Long' instance (including primitive).</em></p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToLongConverterFactory.html">LongDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Long' instance (including primitive).</em></p>
 </li>
 <li>
-<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/engine/converter/StringToShortConverterFactory.html">ShortDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Short</em> instance (including primitive).</p>
+<p><strong><a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/engine/converter/StringToShortConverterFactory.html">ShortDecoder</a></strong>: Decode/Encode a String to a <em>java.lang.Short</em> instance (including primitive).</p>
 </li>
 </ul>
 </div>
@@ -7001,7 +7001,7 @@ and model-driven-basic-virtual examples</a>.</p>
 <div class="sect5">
 <h6 id="direct_value_binding">Direct Value Binding</h6>
 <div class="paragraph">
-<p>As of Smooks 1.3 the Javabean Cartridge has an new feature called direct value binding. Direct value binding uses the Smooks DataDecoder to create an Object from a selected data element/attribute and add it directly to the bean context.</p>
+<p>As of Smooks 1.3 the JavaBean Cartridge has an new feature called direct value binding. Direct value binding uses the Smooks DataDecoder to create an Object from a selected data element/attribute and add it directly to the bean context.</p>
 </div>
 <div class="paragraph">
 <p>The <strong>ValueBinder</strong> class is the visitor that does the value binding.</p>
@@ -7038,10 +7038,10 @@ and model-driven-basic-virtual examples</a>.</p>
 <div class="sect6">
 <h7 id="example">Example</h7>
 <div class="paragraph">
-<p>Taking the "classic" Order message as an example and getting the order number, name and date as Value Objects in the form of an Integer and String.</p>
+<p>Taking the classic Order message as an example and getting the order number, name and date as Value Objects in the form of an Integer and String.</p>
 </div>
 <div class="listingblock">
-<div class="title">The Message</div>
+<div class="title">Message</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;order</span> <span class="na">xmlns=</span><span class="s">"http://x"</span><span class="nt">&gt;</span>
      <span class="nt">&lt;header&gt;</span>
@@ -7056,7 +7056,7 @@ and model-driven-basic-virtual examples</a>.</p>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">The Configuration</div>
+<div class="title">Configuration</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0"?&gt;</span>
  <span class="nt">&lt;smooks-resource-list</span> <span class="na">xmlns=</span><span class="s">"https://www.smooks.org/xsd/smooks-2.0.xsd"</span>
@@ -7099,11 +7099,11 @@ and model-driven-basic-virtual examples</a>.</p>
 <span class="n">smooks</span><span class="o">.</span><span class="na">addVisitors</span><span class="o">(</span><span class="n">customerNameValue</span><span class="o">);</span>
 
 <span class="c1">//And the execution code:</span>
-<span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+<span class="nc">JavaSink</span> <span class="n">sink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSink</span><span class="o">();</span>
 
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">orderMessageStream</span><span class="o">),</span> <span class="n">result</span><span class="o">);</span>
-<span class="nc">Integer</span> <span class="n">customerNumber</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Integer</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"customerNumber"</span><span class="o">);</span>
-<span class="nc">String</span> <span class="n">customerName</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"customerName"</span><span class="o">);</span></code></pre>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">orderMessageStream</span><span class="o">),</span> <span class="n">sink</span><span class="o">);</span>
+<span class="nc">Integer</span> <span class="n">customerNumber</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Integer</span><span class="o">)</span> <span class="n">sink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"customerNumber"</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">customerName</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span> <span class="n">sink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"customerName"</span><span class="o">);</span></code></pre>
 </div>
 </div>
 </div>
@@ -7112,7 +7112,7 @@ and model-driven-basic-virtual examples</a>.</p>
 <div class="sect4">
 <h5 id="programmatic_configuration_2">Programmatic Configuration</h5>
 <div class="paragraph">
-<p>Java Binding Configuratons can be programmatically added to a Smooks using the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks-javabean-cartridge/org/smooks/cartridges/javabean/Bean.html">Bean</a> configuration class.</p>
+<p>Java Binding Configuratons can be programmatically added to a Smooks using the <a href="https://www.smooks.org/javadoc/v2.0.0/smooks-javabean-cartridge/org/smooks/cartridges/javabean/Bean.html">Bean</a> configuration class.</p>
 </div>
 <div class="paragraph">
 <p>This class can be used to programmatically configure a Smooks instance for performing a Java Bindings on a specific class. To populate a graph, you simply create a graph of Bean instances by binding Beans onto Beans. The Bean class uses a Fluent API (all methods return the Bean instance), making it easy to string configurations together to build up a graph of Bean configuration.</p>
@@ -7199,10 +7199,10 @@ and model-driven-basic-virtual examples</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="java"><span class="nc">JavaResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaResult</span><span class="o">();</span>
+<pre class="rouge highlight"><code data-lang="java"><span class="nc">JavaSink</span> <span class="n">sink</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JavaSink</span><span class="o">();</span>
 
-<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">orderMessageStream</span><span class="o">),</span> <span class="n">result</span><span class="o">);</span>
-<span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Order</span><span class="o">)</span> <span class="n">result</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"order"</span><span class="o">);</span></code></pre>
+<span class="n">smooks</span><span class="o">.</span><span class="na">filterSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">StreamSource</span><span class="o">(</span><span class="n">orderMessageStream</span><span class="o">),</span> <span class="n">sink</span><span class="o">);</span>
+<span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Order</span><span class="o">)</span> <span class="n">sink</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"order"</span><span class="o">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7301,7 +7301,7 @@ example.</p>
 <div class="sect4">
 <h5 id="generating_the_smooks_binding_configuration">Generating the Smooks Binding Configuration</h5>
 <div class="paragraph">
-<p>The Javabean Cartridge contains the <code>org.smooks.javabean.gen.ConfigGenerator</code> utility class that can be used to generate a binding configuration template. This template can then be used as the basis for defining a binding.</p>
+<p>The JavaBean Cartridge contains the <code>org.smooks.javabean.gen.ConfigGenerator</code> utility class that can be used to generate a binding configuration template. This template can then be used as the basis for defining a binding.</p>
 </div>
 <div class="paragraph">
 <p>From the commandline:</p>
@@ -7409,12 +7409,12 @@ example.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="notes_on_javaresult">Notes on JavaResult</h5>
+<h5 id="notes_on_javasink">Notes on JavaSink</h5>
 <div class="paragraph">
-<p>Users should note that there is <strong>no guarantee</strong> as to the exact contents of a <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/JavaResult.html">JavaResult</a> instance after calling the Smooks.filterSource method. After calling this method, the JavaResult instance will contain the final contents of the bean context, which can be added to by any visitor.</p>
+<p>Users should note that there is <strong>no guarantee</strong> as to the exact contents of a <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/io/JavaSink.html">JavaSink</a> instance after calling the Smooks.filterSource method. After calling this method, the JavaSink instance will contain the final contents of the bean context, which can be added to by any visitor.</p>
 </div>
 <div class="paragraph">
-<p>You can restrict the Bean set returned in a JavaResult by using a <code>&lt;jb:result&gt;</code> configuration in the Smooks configuration. In the following example configuration, we tell Smooks to only retain the  "order" bean in the ResultSet:</p>
+<p>You can restrict the Bean set returned in a JavaSink by using a <code>&lt;jb:result&gt;</code> configuration in the Smooks configuration. In the following example configuration, we tell Smooks to only retain the  "order" bean in the ResultSet:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7439,17 +7439,17 @@ example.</p>
         <span class="nt">&lt;jb:value</span> <span class="na">property=</span><span class="s">"price"</span> <span class="na">data=</span><span class="s">"order-item/price"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/jb:bean&gt;</span>
 
-    <span class="c">&lt;!-- Only retain the "order" bean in the root of any final JavaResult. --&gt;</span>
+    <span class="c">&lt;!-- Only retain the "order" bean in the root of any final JavaSink. --&gt;</span>
     <span class="nt">&lt;jb:result</span> <span class="na">retainBeans=</span><span class="s">"order"</span><span class="nt">/&gt;</span>
 
 <span class="nt">&lt;/smooks-resource-list&gt;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>So after applying this configuration, calls to the JavaResult.getBean(String) method for anything other than the "order" bean will return null. This will work fine in cases such as the above example, because the other bean instances are wired into the "order" graph.</p>
+<p>So after applying this configuration, calls to the JavaSink.getBean(String) method for anything other than the "order" bean will return null. This will work fine in cases such as the above example, because the other bean instances are wired into the "order" graph.</p>
 </div>
 <div class="paragraph">
-<p>Note that as of Smooks v1.2, if a <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/io/payload/JavaSource.html">JavaSource</a> instance is supplied to the <code>Smooks#filterSource</code> method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="https://www.smooks.org/javadoc/v2.0.0-RC4/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a> for that Smooks.filterSource invocation. This will mean that some JavaSource bean instances may be visible in the JavaResult.</p>
+<p>Note that as of Smooks v1.2, if a <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/io/payload/JavaSource.html">JavaSource</a> instance is supplied to the <code>Smooks#filterSource</code> method (as the filter Source instance), Smooks will use the JavaSource to construct the bean context associated with the <a href="https://www.smooks.org/javadoc/v2.0.0/smooks/org/smooks/api/ExecutionContext.html">ExecutionContext</a> for that Smooks.filterSource invocation. This will mean that some JavaSource bean instances may be visible in the JavaSink.</p>
 </div>
 </div>
 </div>
@@ -7461,7 +7461,7 @@ example.</p>
 <pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.smooks.cartridges<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>smooks-javabean-cartridge<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.0.0-RC4<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
