@@ -35,6 +35,7 @@ jobs:
       - name: Build with Jekyll
         run: |
           git worktree add v1.7 v1.7
+          rm v1.7/_config.yml
           bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
 #      - name: Prepare pages artifact
 #        if: github.ref == 'refs/heads/main'
