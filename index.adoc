@@ -15,9 +15,13 @@ layout: default
 </div>
 ++++
 
-*Smooks* is an extensible Java framework for building XML and non-XML data (CSV, EDI, Java, etc…) fragment-based applications.
+*Smooks* is an extensible Java framework for building XML and non-XML data fragment-based applications.
 
-To use Smooks, simply add the following dependency to your project.
+The Smooks engine known as the _Smooks Core_ is a lightweight library that can be added to you Java project as follows:
+
+[tabs]
+====
+Maven::
 
 [source,xml]
 ----
@@ -28,44 +32,41 @@ To use Smooks, simply add the following dependency to your project.
 </dependency>
 ----
 
-See https://mvnrepository.com/artifact/org.smooks/smooks-core[Maven
-Central] for a list of available versions.
+Gradle::
+
+[source,groovy]
+----
+implementation group: 'org.smooks', name: 'smooks-core', version: '2.0.0'
+----
+====
+
+
+See https://mvnrepository.com/artifact/org.smooks/smooks-core[Maven Central] for a list of available versions.
 
 == What can it be used for?
 
-While Smooks can be used as a lightweight platform on which to build
-your own custom processing logic (for a wide range of data formats
-"out-of-the-box"), it comes with some very useful features that can be
-used individually, or seamlessly combined together.
+Smooks is an extensible Java framework for building XML and non-XML data (CSV, EDI, POJOs, etc...) fragment-based applications. It can be used as a lightweight framework on which to hook your own processing logic for a wide range of data formats but, out-of-the-box, Smooks ships with features that can be used individually or seamlessly together.
 
 === Java Binding
 
-Populate a Java Object Model from a data source (CSV, EDI, XML, Java
-etc). Populated object models can be used as a transformation result
-itself, or can be used by (e.g.) Templating resources for generating XML
-or other character based results. Also supports *Virtual Object Models*
-(Maps and Lists of typed data), which can be used by EL and Templating
-functionality.
+Populate a Java Object Model from a data source (CSV, EDI, XML, Java, etc...). Populated object models can be used as a transformation result itself, or can be used by, for example, templating resources for generating XML or other character-based results. Also supports *Virtual Object Models* (Maps and Lists of typed data), which can be used by expression languages and template engines.
 
 image::assets/images/Binding.png[Java Binding]
 
 === Transformation
 
-Perform a wide range of *Data Transforms* - XML to XML, CSV to XML, EDI
-to XML, XML to EDI, XML to CSV, Java to XML, Java to EDI, Java to CSV,
-Java to Java, XML to Java, EDI to Java etc.
+Perform a wide range of *Data Transforms* - XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, Java to XML, Java to EDI, Java to CSV, Java to Java, XML to Java, EDI to Java etc.
 
 image::assets/images/Transform.png[Transform]
 
 === Huge Message Processing
 
-Process *huge messages* (GBs) - *Split*, *Transform* and *Route* message
-fragments to *JMS*, *File*, *Database* etc destinations.
+Process *huge messages* (GBs) - *Split*, *Transform* and *Route* message fragments to *JMS*, *File*, *Database* etc destinations.
 
 image::assets/images/Hugetrans.png[Huge Message Processing]
 
 === Message Enrichment
 
-*Enrich* a message with data from a *Database*, or other Datasources.
+*Enrich* a message with data from a *Database*, or other data sources.
 
 image::assets/images/Enrich.png[Enrich Messages]
