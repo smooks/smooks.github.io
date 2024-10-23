@@ -40,6 +40,7 @@ jobs:
           git clone --branch gh-pages https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git && cd smooks.github.io
           git rm -rf . && git checkout HEAD -- v1.7/
           cp -r ../_site/* .
+          touch .nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
