@@ -17,7 +17,7 @@ layout: default
 
 *Smooks* is an extensible Java framework for building XML and non-XML data fragment-based applications.
 
-The Smooks engine known as the _Smooks Core_ is a lightweight library that can be added to you Java project as follows:
+The Smooks engine known as the _Smooks Core_ is a lightweight library that can be added to your Java project as follows:
 
 [tabs]
 ====
