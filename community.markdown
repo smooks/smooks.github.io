@@ -1,6 +1,5 @@
 ---
 layout: default
-permalink: /community/
 path: /v1.7/
 ---
 

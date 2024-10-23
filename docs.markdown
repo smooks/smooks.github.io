@@ -1,6 +1,5 @@
 ---
 layout: default
-permalink: /documentation/
 path: /v1.7/
 ---
 
