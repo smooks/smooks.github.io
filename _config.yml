@@ -12,3 +12,4 @@ asciidoctor:
     - icons=font
 plugins:
   - jekyll-redirect-from
+  - asciidoctor-tabs
