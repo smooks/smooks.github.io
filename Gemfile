@@ -17,6 +17,8 @@ gem "minima", "~> 2.5"
 group :jekyll_plugins do
   gem "jekyll-asciidoc", '~> 3.0.0'
   gem "jekyll-redirect-from"
+  gem 'asciidoctor'
+  gem "asciidoctor-tabs"
 end
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
