@@ -20,15 +20,26 @@ layout: default
 The Smooks engine known as the _Smooks Core_ is a lightweight library that can be added to you Java project as follows:
 
 [tabs]
-======
-Tab A::
-+
-====
-Example block in Tab A.
 ====
 
-Tab B:: Just text.
-======
+Maven::
++
+[source,xml]
+----
+<dependency>
+    <groupId>org.smooks</groupId>
+    <artifactId>smooks-core</artifactId>
+    <version>2.0.0</version>
+</dependency>
+----
++
+Gradle::
++
+[source,groovy]
+----
+implementation 'org.smooks:smooks-core:2.0.0'
+----
+====
 
 See https://mvnrepository.com/artifact/org.smooks/smooks-core[Maven Central] for a list of available versions.
 
