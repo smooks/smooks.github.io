@@ -47,8 +47,6 @@ jobs:
 #          touch .nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        with:
-          path: smooks.github.io/
 
   deploy:
     environment:
