@@ -22,7 +22,7 @@ The Smooks engine known as the _Smooks Core_ is a lightweight library that can b
 [tabs]
 ====
 Maven::
-
++
 [source,xml]
 ----
 <dependency>
@@ -33,7 +33,7 @@ Maven::
 ----
 
 Gradle::
-
++
 [source,groovy]
 ----
 implementation group: 'org.smooks', name: 'smooks-core', version: '2.0.0'
