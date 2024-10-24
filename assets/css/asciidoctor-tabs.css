@@ -22,7 +22,7 @@
   position: relative;
 }
 
-.tab    list > ul li:focus-visible {
+.tablist > ul li:focus-visible {
   outline: none;
 }
 
