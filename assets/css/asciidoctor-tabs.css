@@ -22,7 +22,7 @@
   position: relative;
 }
 
-.tablist.ulist > ul li:focus-visible {
+.tablist > ul li:focus-visible {
   outline: none;
 }
 
@@ -72,12 +72,12 @@
   padding: 1.25em;
 }
 
-.tablist.ulist > ul li,
+.tablist > ul li,
 .tabpanel {
   border: 1px solid #dcdcdc;
 }
 
-.tablist.ulist > ul li {
+.tablist > ul li {
   border-bottom: 0;
 }
 
