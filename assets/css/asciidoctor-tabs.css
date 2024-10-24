@@ -9,8 +9,6 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  margin-bottom: initial;
-  line-height: initial;
 }
 
 .tablist > ul li {
@@ -35,6 +33,7 @@
 
 .tablist.ulist > ul li + li {
   margin-left: 0.25em;
+  margin: 0;
 }
 
 .tabs .tablist li::after {
