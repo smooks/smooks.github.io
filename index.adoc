@@ -17,7 +17,7 @@ layout: default
 
 *Smooks* is an extensible Java framework for building XML and non-XML data fragment-based applications.
 
-The engine powering Smooks is a lightweight library that can be added to your Java project as follows:
+The engine powering Smooks is a library with minimal dependencies that can be added to your Java project as follows:
 
 [tabs]
 ====
@@ -35,7 +35,7 @@ Maven::
 +
 Gradle::
 +
-[source,groovy]
+[source,groovy]test: test tabbed content
 ----
 implementation 'org.smooks:smooks-core:2.0.0'
 ----
