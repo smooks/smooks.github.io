@@ -3,7 +3,7 @@
   margin-bottom: 1.25em;
 }
 
-.tablist > ul {
+.tablist.ulist > ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
@@ -22,7 +22,7 @@
   position: relative;
 }
 
-.tablist > ul li:focus-visible {
+.tab    list > ul li:focus-visible {
   outline: none;
 }
 
@@ -33,7 +33,6 @@
 
 .tablist.ulist > ul li + li {
   margin-left: 0.25em;
-  margin: 0;
 }
 
 .tabs .tablist li::after {
