@@ -29,7 +29,7 @@
 div.tablist.ulist,
 .tablist.ulist > ul li {
   margin: 0;
-  padding: 0;
+  padding: initial;
 }
 
 .tablist.ulist > ul li + li {
