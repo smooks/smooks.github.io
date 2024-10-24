@@ -39,6 +39,13 @@ Gradle::
 ----
 implementation 'org.smooks:smooks-core:2.0.0'
 ----
++
+SBT::
++
+[source,scala]
+----
+libraryDependencies += "org.smooks" % "smooks" % "2.0.0" pomOnly()
+----
 ====
 
 See https://mvnrepository.com/artifact/org.smooks/smooks-core[Maven Central] for a list of available versions.
@@ -49,24 +56,24 @@ Smooks is an extensible Java framework for building XML and non-XML data (CSV, E
 
 === Java Binding
 
-Populate a Java Object Model from a data source (CSV, EDI, XML, Java, etc...). Populated object models can be used as a transformation result itself, or can be used by, for example, templating resources for generating XML or other character-based results. Also supports *Virtual Object Models* (Maps and Lists of typed data), which can be used by expression languages and template engines.
+Populate POJOs from a source (CSV, EDI, XML, POJOs, etc...). Populated POJOs can either be the final result of a transformation, or serve as a bridge for further transformations like what is seen in template resources which generate textual results such as XML. Additionally, Smooks supports collections (maps and lists of typed data) that can be referenced from expression languages and templates.
 
 image::assets/images/Binding.png[Java Binding]
 
 === Transformation
 
-Perform a wide range of *Data Transforms* - XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, Java to XML, Java to EDI, Java to CSV, Java to Java, XML to Java, EDI to Java etc.
+Perform a wide range of data transformations and mappings. XML to XML, CSV to XML, EDI to XML, XML to EDI, XML to CSV, POJO to XML, POJO to EDI, POJO to CSV, etc...
 
 image::assets/images/Transform.png[Transform]
 
 === Huge Message Processing
 
-Process *huge messages* (GBs) - *Split*, *Transform* and *Route* message fragments to *JMS*, *File*, *Database* etc destinations.
+Process huge messages (gigabytes!). Split, transform and route fragments to JMS, filesystem, database, and other destinations.
 
 image::assets/images/Hugetrans.png[Huge Message Processing]
 
 === Message Enrichment
 
-*Enrich* a message with data from a *Database*, or other data sources.
+Enrich fragments with data from a database or other data sources.
 
 image::assets/images/Enrich.png[Enrich Messages]
