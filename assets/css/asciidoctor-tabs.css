@@ -29,7 +29,6 @@
 div.tablist.ulist,
 .tablist.ulist > ul li {
   margin: 0;
-  padding: inherit;
 }
 
 .tablist.ulist > ul li + li {
