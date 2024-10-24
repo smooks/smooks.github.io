@@ -26,7 +26,7 @@
   outline: none;
 }
 
-.tablist.ulist div,
+div.tablist.ulist,
 .tablist.ulist > ul li {
   margin: 0;
   padding: 0;
