@@ -11,7 +11,7 @@
   padding: 0;
 }
 
-.tablist > ul li {
+.tablist.ulist > ul li {
   align-items: center;
   background-color: #fff;
   cursor: pointer;
@@ -22,11 +22,11 @@
   position: relative;
 }
 
-.tablist > ul li:focus-visible {
+.tablist.ulist > ul li:focus-visible {
   outline: none;
 }
 
-div.tablist.ulist,
+.tablist.ulist,
 .tablist.ulist > ul li {
   margin: 0;
 }
@@ -72,12 +72,12 @@ div.tablist.ulist,
   padding: 1.25em;
 }
 
-.tablist > ul li,
+.tablist.ulist > ul li,
 .tabpanel {
   border: 1px solid #dcdcdc;
 }
 
-.tablist > ul li {
+.tablist.ulist > ul li {
   border-bottom: 0;
 }
 
