@@ -26,9 +26,10 @@
   outline: none;
 }
 
-.tablist.ulist,
+.tablist.ulist div,
 .tablist.ulist > ul li {
   margin: 0;
+  padding: 0;
 }
 
 .tablist.ulist > ul li + li {
