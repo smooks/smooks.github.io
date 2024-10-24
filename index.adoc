@@ -35,7 +35,7 @@ Maven::
 +
 Gradle::
 +
-[source,groovy]test: test tabbed content
+[source,groovy]
 ----
 implementation 'org.smooks:smooks-core:2.0.0'
 ----
