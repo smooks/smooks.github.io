@@ -72,7 +72,7 @@ Process huge payloads while keeping a small memory footprint. Split, transform a
 
 image::assets/images/Hugetrans.png[Huge Message Processing]
 
-=== Message Enrichment
+=== Enrichment
 
 Enrich fragments with data from a database or other data sources.
 
