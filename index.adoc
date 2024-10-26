@@ -66,9 +66,9 @@ Perform a wide range of data transformations and mappings. XML to XML, CSV to XM
 
 image::assets/images/Transform.png[Transform]
 
-=== Scalable Message Processing
+=== Scalable Processing
 
-Process huge messages (gigabytes!). Split, transform and route fragments to JMS, filesystem, database, and other destinations.
+Process huge payloads while keeping a small memory footprint. Split, transform and route fragments to JMS, filesystem, database, and other destinations.
 
 image::assets/images/Hugetrans.png[Huge Message Processing]
 
