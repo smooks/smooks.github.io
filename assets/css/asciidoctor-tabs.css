@@ -3,7 +3,7 @@
   margin-bottom: 1.25em;
 }
 
-.tablist.ulist > ul {
+.tabs .tablist > ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
@@ -11,12 +11,11 @@
   padding: 0;
 }
 
-.tablist.ulist > ul li {
+.tabs .tablist > ul li {
   align-items: center;
   background-color: #fff;
   cursor: pointer;
   display: flex;
-  font-weight: bold;
   line-height: 1.5;
   padding: 0.25em 1em;
   position: relative;
@@ -67,7 +66,7 @@
   margin: 0;
 }
 
-.tabpanel {
+.tabs div.tabpanel {
   background-color: #fff;
   padding: 1.25em;
 }
@@ -106,5 +105,9 @@
 }
 
 #content .tablecontainer > table.tableblock {
+  margin-bottom: 0;
+}
+
+.tabs .tabpanel .listingblock {
   margin-bottom: 0;
 }

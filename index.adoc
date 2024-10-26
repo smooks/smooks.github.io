@@ -37,14 +37,14 @@ Gradle::
 +
 [source,groovy]
 ----
-implementation 'org.smooks:smooks-core:2.0.0'
+implementation group: 'org.smooks', name: 'smooks-core', version: '2.0.0'
 ----
 +
 SBT::
 +
 [source,scala]
 ----
-libraryDependencies += "org.smooks" % "smooks" % "2.0.0" pomOnly()
+libraryDependencies += "org.smooks" % "smooks-core" % "2.0.0"
 ----
 ====
 
