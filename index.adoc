@@ -29,7 +29,7 @@ Maven::
 <dependency>
     <groupId>org.smooks</groupId>
     <artifactId>smooks-core</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
 </dependency>
 ----
 +
@@ -37,14 +37,14 @@ Gradle::
 +
 [source,groovy]
 ----
-implementation group: 'org.smooks', name: 'smooks-core', version: '2.1.0'
+implementation group: 'org.smooks', name: 'smooks-core', version: '2.2.0'
 ----
 +
 SBT::
 +
 [source,scala]
 ----
-libraryDependencies += "org.smooks" % "smooks-core" % "2.1.0"
+libraryDependencies += "org.smooks" % "smooks-core" % "2.2.0"
 ----
 ====
 
