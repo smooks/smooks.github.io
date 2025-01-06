@@ -15,7 +15,7 @@ layout: default
 </div>
 ++++
 
-*Smooks* is an open-source, extensible data integration Java framework for building event-driven applications that process XML and non-XML data in a fragment-based way.
+*Smooks* is an open-source, extensible Java framework for building event-driven applications that break up XML and non-XML data into fragments for data integration.
 
 The engine powering Smooks is a library with minimal dependencies that can be added to your Java project as follows:
 
