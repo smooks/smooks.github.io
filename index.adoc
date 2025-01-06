@@ -52,7 +52,7 @@ See https://mvnrepository.com/artifact/org.smooks/smooks-core[Maven Central] for
 
 == What can it be used for?
 
-Smooks is an extensible Java framework for building fragment-based, event-driven applications that process structured data (CSV, EDI, XML, POJOs, etc...). It can be used as a lightweight framework on which to hook your own processing logic for a wide range of data formats but, out-of-the-box, Smooks ships with features that can be used individually or seamlessly together.
+Smooks is an extensible data integration Java framework for building fragment-based, event-driven applications that process structured data (CSV, EDI, XML, POJOs, etc...). It can be used as a lightweight framework on which to hook your own processing logic for a wide range of data formats but, out-of-the-box, Smooks ships with features that can be used individually or seamlessly together.
 
 === Java Binding
 
