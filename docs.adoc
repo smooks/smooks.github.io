@@ -8,9 +8,12 @@ redirect_from:
 :page-liquid:
 
 = User Guide
-:toc: left
+:showtitle:
+:toc: macro
 
 NOTE: This is the user guide for Smooks 2. For Smooks 1, visit the https://www.smooks.org/v1.7/docs.html[v1.7 user guide].
+
+toc::[]
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=introduction]
