@@ -1,8 +1,12 @@
 @import "../../bootstrap/css/bootstrap.min.css";
 @import "elements";
 
+html {
+  scroll-padding-top: 70px;
+}
+
 body {
-  margin-top: 50px;
+  padding-top: 70px;
 }
 
 .main.container {
@@ -25,4 +29,8 @@ body {
   margin-top: 20px;
   border: 1px solid #cacaca;
   @include rounded(5px);
+}
+
+.rouge.highlight {
+  border: 1px solid #ccc;
 }
