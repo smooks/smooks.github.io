@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" media="print" href="{{ '/assets/css/commonPrint.css' | prepend: site.baseurl }}" type="text/css"/>
     <link rel="stylesheet" media="print" href="{{ '/assets/css/gumax_print.css' | prepend: site.baseurl }}" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.30.0/tocbot.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -21,7 +22,7 @@
     <![endif]-->
   </head>
 
-  <body>
+  <body >
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" href="#">Smooks</a>
@@ -58,7 +59,19 @@
     </nav>
 
     <div class="main container">
-      {{ content }}
+      <div class="row">
+        {% if page.show-toc %}
+        <!-- sidebar, which will move to the top on a small screen -->
+        <div class="col-sm-3">
+          <div id="side-toc" class="sticky-top"></div>
+        </div>
+        <div class="col-sm-9">.
+          {{ content }}
+        </div>
+        {% else %}
+          {{ content }}
+        {% endif %}
+      </div>
     </div>
 
     <!-- Bootstrap core JavaScript
@@ -68,6 +81,20 @@
     <script src="{{ '/assets/js/jquery-3.1.0.min.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/bootstrap/js/bootstrap.bundle.min.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/assets/js/smooks.js' | prepend: site.baseurl }}"></script>
+    <script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.30.0/tocbot.min.js"></script>
+    <script>
+      tocbot.init({
+        tocSelector: '#side-toc',
+        contentSelector: '.main',
+        headingSelector: 'h2, h3, h4, h5, h5',
+        includeTitleTags: true,
+        enableUrlHashUpdateOnScroll: true,
+        hasInnerContainers: false,
+        headingsOffset: 70,
+        scrollSmoothOffset: -70,
+        scrollSmooth: false
+      });
+    </script>
   </body>
 </html>
-

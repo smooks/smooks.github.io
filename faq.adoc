@@ -5,8 +5,9 @@ redirect_from:
 
 :page-liquid:
 
-= FAQ
+= Frequently Asked Questions
 :sectnums:
+:showtitle:
 :toc:
 :toc-title:
 
@@ -14,7 +15,7 @@ redirect_from:
 <span data-page-nav="{{ '/faq' | prepend: site.baseurl }}"></span>
 +++
 
-=== *What's the easiest way to get started with Smooks?*
+==== What's the easiest way to get started with Smooks?
 
 The easiest way to get started with Smooks is to:
 
@@ -26,29 +27,29 @@ https://github.com/smooks/smooks-examples/tree/v5[tutorials].
 The tutorials are the perfect base upon which to integrate Smooks into
 your application.
 
-=== *How do I use Smooks in a Maven based Project?*
+==== How do I use Smooks in a Maven based Project?
 
 Take a look at link:maven[this page].
 
-=== *What "Processing Model" does Smooks employ?*
+==== What "Processing Model" does Smooks employ?
 
 Smooks supports DOM and SAX based processing models, but adds a more
 "code friendly" layer on top of them. See the link:documentation[user
 guide].
 
-=== *What "Configuration Model" does Smooks employ?*
+==== What "Configuration Model" does Smooks employ?
 
 See the
 link:/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration.html[SmooksResourceConfiguration]
 javadocs.
 
-=== *What is a "Message Fragment"?*
+==== What is a "Message Fragment"?
 
 See
 link:documentation#fragment-based-data-processing-with-smooks[fragment-based
 data processing with Smooks].
 
-=== *What is a "selector"?*
+==== What is a "selector"?
 
 A Smooks transformation is specified as a series of "resource"
 configurations (typically made in an XML file). Smooks
@@ -67,25 +68,25 @@ happens when more than one parser configuration (under selector
 "org.xml.sax.driver") is targeted at a message e.g. where profiling is
 in use?]
 
-=== *How do I configure a Java resource?*
+==== How do I configure a Java resource?
 
 Check out the
 https://github.com/smooks/smooks-examples/tree/v5/java-basic[java-basic]
 tutorial.
 
-=== *How do I configure an XSLT resource?*
+==== How do I configure an XSLT resource?
 
 . Check out the link:documentation#xsl-templating[user guide].
 . Check out the
 https://github.com/smooks/smooks-examples/tree/v5[tutorials].
 
-=== *How do I configure a FreeMarker resource?*
+==== How do I configure a FreeMarker resource?
 
 . Check out the link:documentation/#freemarker-templating[user guide].
 . Check out the templating
 https://github.com/smooks/smooks-examples/tree/v5[tutorials].
 
-=== *How do I configure a StringTemplate resource?*
+==== How do I configure a StringTemplate resource?
 
 . Check out the
 link:/javadoc/v1.7.1/smooks/org/milyn/templating/stringtemplate/StringTemplateContentHandlerFactory[StringTemplateContentHandlerFactory
@@ -93,13 +94,13 @@ Javadocs].
 . Check out the templating
 https://github.com/smooks/smooks-examples/tree/v5[tutorials].
 
-=== *How do I configure a Groovy resource?*
+==== How do I configure a Groovy resource?
 
 . Check out the link:documentation/#groovy[user guid].
 . Check out the
 https://github.com/smooks/smooks-examples/tree/v5[tutorials].
 
-=== *Is Smooks an alternative to technologies such as XSLT?*
+==== Is Smooks an alternative to technologies such as XSLT?
 
 No! Smooks is a framework for performing
 link:documentation#fragment-based-data-processing-with-smooks[fragment-based
@@ -112,7 +113,7 @@ https://groovy-lang.org/[Groovy] script,
 https://freemarker.apache.org/[FreeMarker] and
 https://www.stringtemplate.org/[StringTemplate] templating.
 
-=== *Is Smooks going to be yet another Transformation Configuration Model I'll have to learn?*
+==== Is Smooks going to be yet another Transformation Configuration Model I'll have to learn?
 
 First off, don't think of Smooks as an alternative to the likes of XSLT
 and don't think of the Smooks configuration as a "Transformation
@@ -131,7 +132,7 @@ See the
 link:/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfiguration[SmooksResourceConfiguration]
 javadocs.
 
-=== *How does Smooks simplify my XSLT?*
+==== How does Smooks simplify my XSLT?
 
 Smooks can be used to simplify your XSLT in a number of ways:
 
@@ -149,7 +150,7 @@ technologies with your XSLT,
 link:#xslt-supports-custom-extensions-java-javascript-etc-so-cant-i-mix-and-match-other-technologies-with-xslt-in-this-way[without
 effecting the XSLT's portability].
 
-=== *XSLT supports custom extensions (Java, Javascript etc), so can't I "mix and match" other technologies with XSLT in this way?*
+==== XSLT supports custom extensions (Java, Javascript etc), so can't I "mix and match" other technologies with XSLT in this way?
 
 Sure, XSLT supports custom extensions. The problem with XSLT Extensions
 is the effect they often have on your XSLT in terms of portability
@@ -168,7 +169,7 @@ a date field into XML nodes that are more consumable by XSLT, removing
 the convoluted date field processing logic from the XSLT, keeping the
 stylesheet nice and simple.
 
-=== *When would I use Smooks to apply and XSLT verses using an XSLT Processor directly?*
+==== When would I use Smooks to apply and XSLT verses using an XSLT Processor directly?
 
 . No one transformation technology (including XSLT) is ideally suited to
 all transformation use cases. Some parts (fragments) of a message are
@@ -189,7 +190,7 @@ XSLT).
 . Where you have a larger message set and require a mechanism for
 selecting and applying the appropriate XSLT based on message profiles.
 
-=== *What sort of processing overhead is encored when using Smooks to apply XSLT?*
+==== What sort of processing overhead is encored when using Smooks to apply XSLT?
 
 We carried out some profiling in order to get an answer to this very
 question. The scenario we used was purposely geared in favor of XSLT.
@@ -221,7 +222,7 @@ blog].
 *NOTE*: Smooks v1.0 supports a SAX based processing model. More
 information on this to follow, or mail the User mailing list.
 
-=== *Can I use Java (or Groovy) to pre-process one fragment of a message and then apply an XSLT to the whole document?*
+==== Can I use Java (or Groovy) to pre-process one fragment of a message and then apply an XSLT to the whole document?
 
 Absolutely! This is a classic Smooks usecase. See the
 https://github.com/smooks/smooks-examples/tree/v5/xslt-groovy[xslt-groovy
@@ -231,7 +232,7 @@ the convoluted date field processing logic from the XSLT, keeping the
 stylesheet nice and simple. The XSLT is then applied to the "#document"
 (root) node.
 
-=== *Does Smooks support a Stream or SAX based processing model?*
+==== Does Smooks support a Stream or SAX based processing model?
 
 Smooks Core does support a SAX based processing model. Not all
 components have been updated to leverage the SAX processing model, but
@@ -245,7 +246,7 @@ suffer a lot more than an equivalent DOM based transform. Counteracting
 this for Stream/SAX can result in more complex and unmaintainable
 transformations.
 
-=== *Can Smooks be used to process message formats other than XML?*
+==== Can Smooks be used to process message formats other than XML?
 
 Absolutely! Smooks allows you configure a SAX parser on a per transform
 basis (based on a message profile if necessary). As long as a message is
@@ -256,7 +257,7 @@ and
 https://github.com/smooks/smooks-examples/tree/v5/csv-to-xml[csv-to-xml]
 tutorials.
 
-=== *What's the difference between the link:documentation#java-binding[JavaBean Cartridge] and XML Binding frameworks like JAXB, XMLBeans, XStream etc?*
+==== What's the difference between the link:documentation#java-binding[JavaBean Cartridge] and XML Binding frameworks like JAXB, XMLBeans, XStream etc?
 
 The Javabeans Cartridge is not intended as a straight alternative to
 existing XML Binding frameworks such as those listed above. If your only
@@ -295,27 +296,27 @@ these frameworks. If your use case cannot be solved using JAXB (etc)
 without major headaches (which can often be the case), then Smooks can
 be an option for you!
 
-=== *How do I target a resource at the document root fragment of a message without having to specify the name of the root Element?*
+==== How do I target a resource at the document root fragment of a message without having to specify the name of the root Element?
 
 Specify the selector as "#document".
 
-=== *How do I target a resource at all Elements of a message?*
+==== How do I target a resource at all Elements of a message?
 
 Specify the selector as "*".
 
-=== *What happens to message elements I don't target any resources at?*
+==== What happens to message elements I don't target any resources at?
 
 They remain in the resulting document, untouched. This is unlike a
 templating type system (e.g. XSLT) where this would result in these
 fragments being omitted from the resulting document.
 
-=== *Can I target more than one resource at a message fragment?*
+==== Can I target more than one resource at a message fragment?
 
 You can. They will be sorted an applied by Smooks in order of their
 configuration specificity. See the
 link:/javadoc/v1.7.1/smooks/org/milyn/cdr/SmooksResourceConfigurationSortComparator[SmooksResourceConfigurationSortComparator].
 
-=== *What technologies are supported by Smooks?*
+==== What technologies are supported by Smooks?
 
 Smooks supports a number of technologies and
 link:/javadoc/v1.7.1/smooks/org/milyn/delivery/ContentHandlerFactory[can
@@ -327,7 +328,7 @@ https://github.com/smooks/smooks/tree/v1.7.1/smooks-cartridges[See the
 current list of Smooks cartridges and the technologies they add support
 for].
 
-=== *Apart from message transformation, what other forms of message processing are possible with Smooks?*
+==== Apart from message transformation, what other forms of message processing are possible with Smooks?
 
 In most of the Smooks documentation we talk about Smooks in the context
 of data transformation. However, the core of Smooks (smooks-core) knows
@@ -343,11 +344,11 @@ link:documentation#visitor[Visitor] implementations can interact with
 each other via the
 link:/javadoc/v1.7.1/smooks/org/milyn/container/ExecutionContext[ExecutionContext].
 
-=== *Can a single link:/javadoc/v1.7.1/smooks/org/milyn/Smooks[Smooks] instance be run concurrently?*
+==== Can a single link:/javadoc/v1.7.1/smooks/org/milyn/Smooks[Smooks] instance be run concurrently?
 
 Absolutely!
 
-=== *Can Smooks be extended to support other transformation/processing technologies?*
+==== Can Smooks be extended to support other transformation/processing technologies?
 
 Sure. To add support for another transformation or processing
 technology, you need to implement a

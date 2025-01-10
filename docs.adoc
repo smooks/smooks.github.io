@@ -1,6 +1,7 @@
 ---
 redirect_from:
   - /v2/documentation/
+show-toc: true
 ---
 
 :page-layout: default
@@ -9,11 +10,8 @@ redirect_from:
 
 = User Guide
 :showtitle:
-:toc: macro
 
 NOTE: This is the user guide for Smooks 2. For Smooks 1, visit the https://www.smooks.org/v1.7/docs.html[v1.7 user guide].
-
-toc::[]
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=introduction]
