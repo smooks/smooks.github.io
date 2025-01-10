@@ -62,20 +62,6 @@ include::https://raw.githubusercontent.com/smooks/smooks-javabean-cartridge/mast
 
 include::https://raw.githubusercontent.com/smooks/smooks-templating-cartridge/master/README.adoc[tag=smooks-templating-cartridge,leveloffset=3]
 
-== Routing
-
-:imagesdir: https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master
-
-include::https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master/README.adoc[tag=smooks-routing-cartridge,leveloffset=1]
-
-:imagesdir:
-
-=== Apache Camel
-
-include::https://raw.githubusercontent.com/smooks/smooks-camel-cartridge/master/README.adoc[tag=smooks-camel-cartridge,leveloffset=3]
-
-:imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
-
 == Validating Data
 
 === Rules
@@ -106,6 +92,22 @@ include::https://raw.githubusercontent.com/smooks/smooks-scripting-cartridge/mas
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
 
+include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=common-use-cases]
+
+== Routing
+
+:imagesdir: https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master
+
+include::https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master/README.adoc[tag=smooks-routing-cartridge,leveloffset=1]
+
+:imagesdir:
+
+=== Apache Camel
+
+include::https://raw.githubusercontent.com/smooks/smooks-camel-cartridge/master/README.adoc[tag=smooks-camel-cartridge,leveloffset=3]
+
+:imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
+
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=exporting-results]
 
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=performance-tuning]
@@ -115,6 +117,5 @@ include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=extending-smooks]
 
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=instrumentation]
-:imagesdir:
 
-include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=common-use-cases]
+:imagesdir:
