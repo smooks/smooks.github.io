@@ -33,10 +33,9 @@ include::https://raw.githubusercontent.com/smooks/smooks-fixed-length-cartridge/
 include::https://raw.githubusercontent.com/smooks/smooks-dfdl-cartridge/master/README.adoc[tag=smooks-dfdl-cartridge,leveloffset=2]
 
 === EDI
+
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks-edi-cartridge/master
-
 include::https://raw.githubusercontent.com/smooks/smooks-edi-cartridge/master/README.adoc[tag=smooks-edi-cartridge,leveloffset=1]
-
 :imagesdir:
 
 === EDIFACT
@@ -52,10 +51,9 @@ include::https://raw.githubusercontent.com/smooks/smooks-json-cartridge/master/R
 include::https://raw.githubusercontent.com/smooks/smooks-yaml-cartridge/master/README.adoc[tag=smooks-yaml-cartridge,leveloffset=2]
 
 === JavaBeans
+
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks-javabean-cartridge/master
-
 include::https://raw.githubusercontent.com/smooks/smooks-javabean-cartridge/master/README.adoc[tag=smooks-javabean-cartridge,leveloffset=2]
-
 :imagesdir:
 
 === Templating
@@ -67,9 +65,7 @@ include::https://raw.githubusercontent.com/smooks/smooks-templating-cartridge/ma
 === Rules
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks-rules-cartridge/master
-
 include::https://raw.githubusercontent.com/smooks/smooks-rules-cartridge/master/README.adoc[tag=smooks-rules-cartridge,leveloffset=3]
-
 :imagesdir:
 
 === Rule-Based Validation
@@ -79,9 +75,7 @@ include::https://raw.githubusercontent.com/smooks/smooks-validation-cartridge/ma
 == Database Support
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks-persistence-cartridge/master
-
 include::https://raw.githubusercontent.com/smooks/smooks-persistence-cartridge/master/README.adoc[tag=smooks-persistence-cartridge,leveloffset=1]
-
 :imagesdir:
 
 == Scripting
@@ -90,16 +84,10 @@ include::https://raw.githubusercontent.com/smooks/smooks-persistence-cartridge/m
 
 include::https://raw.githubusercontent.com/smooks/smooks-scripting-cartridge/master/README.adoc[tag=smooks-scripting-cartridge,leveloffset=3]
 
-:imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
-
-include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=common-use-cases]
-
 == Routing
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master
-
 include::https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/master/README.adoc[tag=smooks-routing-cartridge,leveloffset=1]
-
 :imagesdir:
 
 === Apache Camel
@@ -107,7 +95,6 @@ include::https://raw.githubusercontent.com/smooks/smooks-routing-cartridge/maste
 include::https://raw.githubusercontent.com/smooks/smooks-camel-cartridge/master/README.adoc[tag=smooks-camel-cartridge,leveloffset=3]
 
 :imagesdir: https://raw.githubusercontent.com/smooks/smooks/master
-
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=exporting-results]
 
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=performance-tuning]
@@ -118,4 +105,5 @@ include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=
 
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=instrumentation]
 
+include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=common-use-cases]
 :imagesdir:
