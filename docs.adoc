@@ -17,16 +17,13 @@ NOTE: This is the user guide for Smooks 2. For Smooks 1, visit the https://www.s
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=introduction]
 
 include::https://raw.githubusercontent.com/smooks/smooks/master/README.adoc[tag=fundamentals]
+:imagesdir:
 
 == Consuming & Writing Data
 
 === CSV
 
 include::https://raw.githubusercontent.com/smooks/smooks-csv-cartridge/master/README.adoc[tag=smooks-csv-cartridge,leveloffset=2]
-
-=== Fixed-Length
-
-include::https://raw.githubusercontent.com/smooks/smooks-fixed-length-cartridge/master/README.adoc[tag=smooks-fixed-length-cartridge,leveloffset=2]
 
 === DFDL
 
@@ -42,13 +39,9 @@ include::https://raw.githubusercontent.com/smooks/smooks-edi-cartridge/master/RE
 
 include::https://raw.githubusercontent.com/smooks/smooks-edi-cartridge/master/README.adoc[tag=smooks-edifact-cartridge,leveloffset=1]
 
-=== JSON
+=== Fixed-Length
 
-include::https://raw.githubusercontent.com/smooks/smooks-json-cartridge/master/README.adoc[tag=smooks-json-cartridge,leveloffset=2]
-
-=== YAML
-
-include::https://raw.githubusercontent.com/smooks/smooks-yaml-cartridge/master/README.adoc[tag=smooks-yaml-cartridge,leveloffset=2]
+include::https://raw.githubusercontent.com/smooks/smooks-fixed-length-cartridge/master/README.adoc[tag=smooks-fixed-length-cartridge,leveloffset=2]
 
 === JavaBeans
 
@@ -56,9 +49,17 @@ include::https://raw.githubusercontent.com/smooks/smooks-yaml-cartridge/master/R
 include::https://raw.githubusercontent.com/smooks/smooks-javabean-cartridge/master/README.adoc[tag=smooks-javabean-cartridge,leveloffset=2]
 :imagesdir:
 
+=== JSON
+
+include::https://raw.githubusercontent.com/smooks/smooks-json-cartridge/master/README.adoc[tag=smooks-json-cartridge,leveloffset=2]
+
 === Templating
 
 include::https://raw.githubusercontent.com/smooks/smooks-templating-cartridge/master/README.adoc[tag=smooks-templating-cartridge,leveloffset=3]
+
+=== YAML
+
+include::https://raw.githubusercontent.com/smooks/smooks-yaml-cartridge/master/README.adoc[tag=smooks-yaml-cartridge,leveloffset=2]
 
 == Validating Data
 
