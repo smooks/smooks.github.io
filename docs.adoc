@@ -8,6 +8,10 @@ show-toc: true
 :page-permalink: /documentation/
 :page-liquid:
 
+++++
+<span data-page-nav="{{ '/documentation' | prepend: site.baseurl }}"></span>
+++++
+
 = User Guide
 :showtitle:
 

@@ -10,11 +10,13 @@
             setPageSize();
         });
     }
-    
+
     // Highlight the right nav
     var nav = $("span[data-page-nav]");
     if (nav.length === 1) {
         var navAnchor = $('nav a[href="' + nav.attr('data-page-nav') + '"]');
-        navAnchor.parent().addClass('active');
+        navAnchor.addClass('active');
+        navAnchor.attr('aria-current', 'page');
+        navAnchor.append(' <span class="sr-only">(current)</span>');
     }
 }());

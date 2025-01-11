@@ -26,13 +26,13 @@
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" href="#">Smooks</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="{{ '/index' | prepend: site.baseurl }}">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ '/index' | prepend: site.baseurl }}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ '/documentation' | prepend: site.baseurl }}">Documentation</a>
@@ -78,7 +78,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ '/assets/js/asciidoctor-tabs.js' | prepend: site.baseurl }}"></script>
-    <script src="{{ '/assets/js/jquery-3.1.0.min.js' | prepend: site.baseurl }}"></script>
+    <script src="{{ '/assets/js/jquery-3.7.1.min.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/bootstrap/js/bootstrap.bundle.min.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/assets/js/smooks.js' | prepend: site.baseurl }}"></script>
     <script src="{{ '/assets/js/tocbot.min.js' | prepend: site.baseurl }}"></script>
