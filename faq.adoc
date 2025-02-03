@@ -22,7 +22,7 @@ The easiest way to get started with Smooks is to:
 . Have a quick read of the link:documentation/#basics[Smooks Basics]
 section.
 . Download and try out some of the
-https://github.com/smooks/smooks-examples/tree/v5[tutorials].
+https://github.com/smooks/smooks-examples/tree/v6[tutorials].
 
 The tutorials are the perfect base upon which to integrate Smooks into
 your application.
@@ -71,20 +71,20 @@ in use?]
 ==== How do I configure a Java resource?
 
 Check out the
-https://github.com/smooks/smooks-examples/tree/v5/java-basic[java-basic]
+https://github.com/smooks/smooks-examples/tree/v6/java-basic[java-basic]
 tutorial.
 
 ==== How do I configure an XSLT resource?
 
 . Check out the link:documentation#xsl-templating[user guide].
 . Check out the
-https://github.com/smooks/smooks-examples/tree/v5[tutorials].
+https://github.com/smooks/smooks-examples/tree/v6[tutorials].
 
 ==== How do I configure a FreeMarker resource?
 
 . Check out the link:documentation/#freemarker-templating[user guide].
 . Check out the templating
-https://github.com/smooks/smooks-examples/tree/v5[tutorials].
+https://github.com/smooks/smooks-examples/tree/v6[tutorials].
 
 ==== How do I configure a StringTemplate resource?
 
@@ -92,13 +92,13 @@ https://github.com/smooks/smooks-examples/tree/v5[tutorials].
 link:/javadoc/v1.7.1/smooks/org/milyn/templating/stringtemplate/StringTemplateContentHandlerFactory[StringTemplateContentHandlerFactory
 Javadocs].
 . Check out the templating
-https://github.com/smooks/smooks-examples/tree/v5[tutorials].
+https://github.com/smooks/smooks-examples/tree/v6[tutorials].
 
 ==== How do I configure a Groovy resource?
 
 . Check out the link:documentation/#groovy[user guid].
 . Check out the
-https://github.com/smooks/smooks-examples/tree/v5[tutorials].
+https://github.com/smooks/smooks-examples/tree/v6[tutorials].
 
 ==== Is Smooks an alternative to technologies such as XSLT?
 
@@ -144,7 +144,7 @@ fragments], it's easier to modularize and reuse your XSLT.
 context of a single message transform. This means you can transform (or
 pre-process) fragments of the message, not easily consumed by XSLT,
 using other technologies e.g. Java or Groovy. See the
-https://github.com/smooks/smooks-examples/tree/v5/xslt-groovy[xslt-groovy
+https://github.com/smooks/smooks-examples/tree/v6/xslt-groovy[xslt-groovy
 tutorial]. Unlike XSL Extensions however, it supports mixing these
 technologies with your XSLT,
 link:#xslt-supports-custom-extensions-java-javascript-etc-so-cant-i-mix-and-match-other-technologies-with-xslt-in-this-way[without
@@ -163,7 +163,7 @@ Smooks helps you solve the same type of problems that XSLT Extensions
 are designed to solve, but by keeping the extension logic separate from
 the XSLT. Your stylesheets should always be vanilla XSLT, without any
 reference to extension code. See the
-https://github.com/smooks/smooks-examples/tree/v5/xslt-groovy[xslt-groovy
+https://github.com/smooks/smooks-examples/tree/v6/xslt-groovy[xslt-groovy
 tutorial]. It uses a Groovy Smooks resource ("extension") to pre-process
 a date field into XML nodes that are more consumable by XSLT, removing
 the convoluted date field processing logic from the XSLT, keeping the
@@ -179,7 +179,7 @@ using a procedural language such as Java. When you encounter situations
 such as this and want to avoid the type of portability issues outlined
 link:#xslt-supports-custom-extensions-java-javascript-etc-so-cant-i-mix-and-match-other-technologies-with-xslt-in-this-way[here],
 Smooks offers a a nice clean solution. See the
-https://github.com/smooks/smooks-examples/tree/v5/xslt-groovy[xslt-groovy
+https://github.com/smooks/smooks-examples/tree/v6/xslt-groovy[xslt-groovy
 tutorial]. It uses a Groovy Smooks resource ("extension") to pre-process
 a date field into XML nodes that are more consumable by XSLT, removing
 the convoluted date field processing logic from the XSLT, keeping the
@@ -225,7 +225,7 @@ information on this to follow, or mail the User mailing list.
 ==== Can I use Java (or Groovy) to pre-process one fragment of a message and then apply an XSLT to the whole document?
 
 Absolutely! This is a classic Smooks usecase. See the
-https://github.com/smooks/smooks-examples/tree/v5/xslt-groovy[xslt-groovy
+https://github.com/smooks/smooks-examples/tree/v6/xslt-groovy[xslt-groovy
 tutorial]. It uses a Groovy Smooks resource ("extension") to pre-process
 a date field into XML nodes that are more consumable by XSLT, removing
 the convoluted date field processing logic from the XSLT, keeping the
@@ -252,9 +252,9 @@ Absolutely! Smooks allows you configure a SAX parser on a per transform
 basis (based on a message profile if necessary). As long as a message is
 hierarchical in nature, SAX events can be generated for that message,
 allowing it to be consumed by Smooks. See the
-https://github.com/smooks/smooks-examples/tree/v5/edi-to-xml[edi-to-xml]
+https://github.com/smooks/smooks-examples/tree/v6/edi-to-xml[edi-to-xml]
 and
-https://github.com/smooks/smooks-examples/tree/v5/csv-to-xml[csv-to-xml]
+https://github.com/smooks/smooks-examples/tree/v6/csv-to-xml[csv-to-xml]
 tutorials.
 
 ==== What's the difference between the link:documentation#java-binding[JavaBean Cartridge] and XML Binding frameworks like JAXB, XMLBeans, XStream etc?
