@@ -18,7 +18,3 @@ collections:
   blog:
     output: true
     permalink: /:collection/:year/:month/:day/:title/
-feed:
-  collections:
-    blog:
-      path: "/blog/feed.xml"
