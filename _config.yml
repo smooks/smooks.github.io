@@ -13,7 +13,12 @@ asciidoctor:
 plugins:
   - jekyll-redirect-from
   - asciidoctor-tabs
+  - jekyll-feed
 collections:
   blog:
     output: true
     permalink: /:collection/:year/:month/:day/:title/
+feed:
+  collections:
+    blog:
+      path: "/blog/feed.xml"

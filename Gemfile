@@ -19,6 +19,7 @@ group :jekyll_plugins do
   gem "jekyll-redirect-from"
   gem 'asciidoctor'
   gem "asciidoctor-tabs"
+  gem 'jekyll-feed'
 end
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
