@@ -1,0 +1,30 @@
+---
+layout: post
+title: "At long last… Smooks v1.4…"
+date: 2011-1-19
+author: Tom Fennelly
+tags: ["Release"]
+---
+
+We’re glad to announce the release of Smooks v1.4.  v1.4 has been a long time in the making and has a ton of new features and fixes.  I want to thank everyone that contributed to this release (I think I listed all in the above link… sorry if I missed anyone).  Without the contributions of these people, most of the features in Smooks v1.4 would not exist.
+
+As well as 85+ bug fixes, Smooks v1.4 includes the following new highlight features:
+
+* EDI:
+    * http://smooks.org/mediawiki/index.php?title=V1.4:Smooks_v1.4_User_Guide#UN.2FEDIFACT[Out of the box support for UN/EDIFACT Interchange messages]. (By: _Bård Langoy, Renat Zubairov, Tom_)
+    * Allow the EDIParser (by explicit configuration) to ignore unmapped fields. (By: _Christian Bach_)
+    * Added EDI Ojbect Serialization to EJC generated POJOs. (By: _Tom_)
+    * Support for UN/EDIFACT UNA Decimal Point specification. (By: _Nicolas Blanc_)
+* A https://github.com/smooks/smooks/tree/v1.4/smooks-examples/dynamic-model-builder[Dynamic Model Builder] that allows you to process evolving configuration namespaces. Supports model reading and writing. (By: _Tom_)
+* Support for reading YAML messages. (By: _Maurice Zeijen_)
+* Create an OSGi compatible “smooks-all” module that assembles all smooks jars into a single jar. (By: _Daniel Bevenius, Tom_)
+* http://smooks.org/mediawiki/index.php?title=V1.4:Smooks_v1.4_User_Guide#Apache_Camel_Integration[Apache Camel Integration]. (By: _Daniel Bevenius_)
+* http://smooks.org/mediawiki/index.php?title=V1.4:Smooks_v1.4_User_Guide#Number_Decoding[NumberFormat support for Numeric DataDecoders]. (By: _Tom_)
+* Support for bean wiring by bean type and bean annotation. (By: _Tom_)
+* http://smooks.org/mediawiki/index.php?title=V1.4:Smooks_v1.4_User_Guide#Simple_Stream_Manipulations[Simple event stream manipulation actions] for renaming/removing elements/attributes. (By: _Tom_)
+* Restructured and easier to use User Guide. (By: _Maurice Zeijen_)
+* Restructured and easier to use Examples page. (By: _Tom_)
+… http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11071&version=15886[*_See full list of Fixes and Features_*]
+
+[link=http://smooks.org/mediawiki/index.php?title=Downloads]
+image::/assets/blog/Download_button.gif[]

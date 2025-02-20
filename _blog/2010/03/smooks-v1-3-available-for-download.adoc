@@ -1,0 +1,26 @@
+---
+layout: post
+title: "Smooks v1.3… Available for download"
+date: 2010-3-3
+author:  tom
+tags: ["Release"]
+---
+
+We were slow about doing it, but eventually… Smooks v1.3 (final) has hit the shelves!!
+
+=== http://www.smooks.org/mediawiki/index.php?title=Downloads[Download and try it out].
+
+Thanks to everyone that contributed to this release.  As well as 65+ bug fixes, we’ve added a number of new features and improvements:
+
+1. Greatly *improved XPath support* in selectors. This allows you to write more complex selectors with XPath syntax. See http://www.smooks.org/mediawiki/index.php?title=V1.3:Smooks_v1.3_User_Guide#Selectors[here]. See http://jira.codehaus.org/browse/MILYN-43[JIRA].
+2. Support for *Fixed Length Field (FLF)* messages. See http://jira.codehaus.org/browse/MILYN-290[JIRA].
+3. *Java Binding Improvements*:
+    * Ability to bind raw data values into the bean context. See http://jira.codehaus.org/browse/MILYN-349[JIRA].
+    * Support for factory methods for bean creation. See http://jira.codehaus.org/browse/MILYN-377[JIRA].
+    * Make bind data available to Expression Base Bindings. See http://jira.codehaus.org/browse/MILYN-384[JIRA].
+4. String manipulation *functions for tweaking CSV and FLF* fields before forwarding to Smooks components. See http://jira.codehaus.org/browse/MILYN-386[JIRA].
+5. Support premature *Filter termination*. See http://jira.codehaus.org/browse/MILYN-395[JIRA].
+6. *Simple fragment splitter*. See http://jira.codehaus.org/browse/MILYN-428[JIRA].
+7. CSV Header Validation. See http://jira.codehaus.org/browse/MILYN-428[JIRA].
+
+http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11071&version=15079[_See here for a full list of Fixes and Features_]

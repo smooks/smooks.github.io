@@ -1,0 +1,120 @@
+---
+layout: post
+title: "Smooks DFDL Filter in a Cross Domain Solution"
+date: 2021-12-5
+author: Claude
+tags: ["Security"]
+---
+
+_This post was reproduced on the https://oncodesign.io/2021/12/05/smooks-dfdl-filter-in-a-cross-domain-solution/[On Code & Design blog]_.
+
+In the cyber security space, a https://www.cyber.gov.au/acsc/view-all-content/publications/fundamentals-cross-domain-solutions[cross domain solution] is a bridge connecting two different security domains, permitting data to flow from one domain into another while minimising the associated security risks. A filter, or more formally a https://www.ncsc.gov.uk/collection/cross-domain-solutions/using-the-principles/content-based-attack-protection[verification engine], is a suggested component in a cross domain solution.
+
+image::/assets/blog/cross-domain-solution.png[align=center]
+
+A filter inspects the content flowing through the bridge. Data failing inspection is captured for investigation by the security team. Given this brief description, I argue for the following properties in a verification engine:
+
+* Validation: syntactically and semantically validates complex data formats
+
+* Content-based routing: routes valid data to its destination while invalid (e.g., malformed or malicious) data is routed to a different channel
+
+* Data streaming: filters data whatever the size which implies parsing the data and then reassembling it
+
+* Open to scrutiny: the filter’s source code should be available for detailed evaluation. Open source software, by definition, is a prime example of this property
+
+https://www.smooks.org/v2/[Smooks], with its strong support for SAX event streams and XPath-driven routing, alongside https://daffodil.apache.org/[DFDL]’s transformation and validation features, manifest the above properties. Picture a situation where https://en.wikipedia.org/wiki/National_Imagery_Transmission_Format[NITF] (National Imagery Transmission Format) files need to be imported from an untrusted system into a trusted one. Widely used in national security systems, NITF is a binary file format that encapsulates imagery (e.g., JPEG) and its metadata. As part of the import, a filter is needed to unpack the NITF stream, ensure it’s as expected, and repack it before being routed to its destination. Should verification fail, the bad data is put aside for human intervention. This is how such a filter is described in a Smooks config:
+
+[source,xml]
+----
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+                      xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"
+                      xmlns:dfdl="https://www.smooks.org/xsd/smooks/dfdl-1.0.xsd">
+
+    <!-- ingest the stream from the input source (i.e., untrusted system) -->
+    <dfdl:parser schemaURI="/nitf.dfdl.xsd"/>
+
+    <core:smooks filterSourceOn="/NITF">
+        <core:action>
+            <core:inline>
+                <!-- consume the root event (i.e., 'NITF') and its descendants -->
+                <core:replace/>
+            </core:inline>
+        </core:action>
+        <core:config>
+            <smooks-resource-list>
+                <!-- happy path: serialize the valid event stream to NITF before writing it out to the execution result stream (i.e., trusted system) -->
+                <dfdl:unparser schemaURI="/nitf.dfdl.xsd" unparseOnNode="//*[not(self::InvalidData)]"
+                               distinguishedRootNode="{urn:nitf:2.1}ValidData"/>
+            </smooks-resource-list>
+        </core:config>
+    </core:smooks>
+
+    <!-- unhappy path: write the invalid event stream to a side output resource -->
+    <core:smooks filterSourceOn="/NITF/InvalidData">
+        <core:action>
+            <core:outputTo outputStreamResource="deadLetterStream"/>
+        </core:action>
+    </core:smooks>
+
+</smooks-resource-list>
+----
+
+https://gist.github.com/cjmamo/56d73cf6af94a6eae4928beaf60a0e92#file-smooks-config-xml-L6[`dfdl:parser`] validates the binary content streaming from the input source (i.e., the untrusted system) and converts it to an event stream firing the pipelines. Driving the input’s validation and transformation behaviour is the XML schema `nitf.dfdl.xsd`, copied from the https://github.com/DFDLSchemas/NITF[public DFDL schema repository] and tweaked in order to route the data depending on its correctness. The first tweak is to turn invalid NITF data into hex with an `InvalidData` element wrapped around it like so:
+
+[source,xml]
+----
+<nitf:NITF xmlns:nitf="urn:nitf:2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <InvalidData>
+        4E49544630322E3130303342463031695F33303031612020203139393731323137313032363330436865636B7320616E20756E636F6D7072657373
+        656420313032347831303234203820626974206D6F6E6F20696D61676520776974682047454F63656E7472696320646174612E204169726669656C
+        6455202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020
+        2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020
+        2020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020303030303030303030
+        3030EF...
+    </InvalidData>
+</nitf:NITF>
+----
+
+The second tweak is to nest legit data within a `ValidData` element:
+
+[source,xml]
+----
+<nitf:NITF xmlns:nitf="urn:nitf:2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <nitf:ValidData>
+        <Header>
+            <FileProfileName>NITF</FileProfileName>
+            <FileVersion>02.10</FileVersion>
+            <ComplexityLevel>3</ComplexityLevel>
+            <StandardType>BF01</StandardType>
+            <OriginatingStationID>i_3001a</OriginatingStationID>
+            <FileDateAndTime>1997-12-17T10:26:30+00:00</FileDateAndTime>
+            <FileTitle>Checks an uncompressed 1024x1024 8 bit mono image with GEOcentric data. Airfield</FileTitle>
+            <SecurityClassification>U</SecurityClassification>
+            <SecurityClassificationSystem xsi:nil="true"/>
+            <Codewords xsi:nil="true"/>
+            <ControlAndHandling xsi:nil="true"/>
+            <ReleasingInstructions xsi:nil="true"/>
+            <DeclassificationType xsi:nil="true"/>
+            <DeclassificationDate xsi:nil="true"/>
+            <DeclassificationExemption xsi:nil="true"/>
+            <Downgrade xsi:nil="true"/>
+            <DowngradeDate xsi:nil="true"/>
+            <ClassificationText xsi:nil="true"/>
+            <ClassificationAuthorityType xsi:nil="true"/>
+            <ClassificationAuthority xsi:nil="true"/>
+            <ClassificationReason xsi:nil="true"/>
+            <SecuritySourceDate xsi:nil="true"/>
+            <SecurityControlNumber xsi:nil="true"/>
+        ...
+    </nitf:ValidData>
+</nitf:NITF>
+----
+
+After ingestion, Smooks fires one of the following paths:
+
+a. https://gist.github.com/cjmamo/56d73cf6af94a6eae4928beaf60a0e92#file-smooks-config-xml-L8-L20[Happy path] on encountering events that are not descendants of the `InvalidData` node footnote:[Smooks 2 RC1 will feature support for selector negation.]. A pipeline executes https://gist.github.com/cjmamo/56d73cf6af94a6eae4928beaf60a0e92#file-smooks-config-xml-L16-L17[dfdl:unparser] to reassemble the data in its original format, to then go on and replace the XML execution result stream with the reassembled binary data which will be delivered to the destination (i.e., the trusted sytem).
+
+b. https://gist.github.com/cjmamo/56d73cf6af94a6eae4928beaf60a0e92#file-smooks-config-xml-L22-L33[Unhappy path] on encountering the `InvalidData` node. This path’s pipeline emits the hex content of `InvalidData` to a side output resource named `deadLetterStream`.
+
+Voilà, a low-cost efficient verification engine was implemented with a few lines of XML. The complete source code of this https://github.com/smooks/smooks-examples/tree/master/cross-domain-solution[example is available online].

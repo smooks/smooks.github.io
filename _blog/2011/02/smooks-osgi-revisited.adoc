@@ -1,0 +1,61 @@
+---
+layout: post
+title: "Smooks OSGI: Camel, UN/EDIFACT, ServiceMix"
+date: 2011-2-19
+author: Daniel Bevenius
+tags: ["Camel", "EDI", "Smooks"]
+---
+
+This post is about the work we have done to improve Smooks OSGI integration.
+
+With Smooks 1.4 we added support for OSGI in the form of making the smooks-all.jar into a bundle. This jar contains all the Smooks classes and resources and is a convenience jar that can be used if you don’t want to keep track of all the individual jars that make up Smooks. During this work we also added a few classes to make Smooks work well inside an OSGI container.
+
+For some background and more details about the Smooks-OSGI work please take a look at this wiki page.
+
+==== Using Smooks in an OSGI Container (with Camel and ServiceMix)
+With 1.4 we added Camel support which has had OSGI support for a long time. We added a few basic examples but it turned out that this was not the best solution. The solution in 1.4 required users to explicitly specify the packages the client bundle required and this made maintenance difficult.
+Using Smooks in Camel should not require anything more then declaring that the client bundle uses Camel and perhaps Spring. Client bundles now only need to declare that they import packages for Camel, for example:
+
+[source]
+----
+Manifest-Version: 1.0
+Export-Package: example;uses:="org.apache.camel,
+org.springframework.context.support,
+org.springframework.context"
+Bundle-Version: 1.0
+Bundle-Name: Milyn Smooks Example - Smooks Camel CVS to XML
+Bundle-ManifestVersion: 2
+Import-Package:
+example,org.apache.camel;version="2.6",
+org.springframework.context;version="1.2.0",
+org.springframework.context.support;version="1.2.0"
+Bundle-SymbolicName: milyn-smooks-example-camel-csv-to-xml
+----
+
+==== Simplified deployment to ServiceMix
+ServiceMix users will hopefully be glad to know that we now generate a features.xml file for easy deployment into service mix. A features.xml specifies all the bundles that a feature need and can be installed/uninstalled as a single unit.
+For example, to install the Smooks bundle you can use the following commands:
+
+----
+karaf@root> features:addUrl mvn:org.milyn/milyn-smooks-all/1.5-SNAPSHOT/xml/features
+karaf@root> features:install smooks
+----
+
+==== UN/EDIFACT
+Smooks has UN/EDIFACT support which includes pre-generated artifacts that are available in maven. As part of the OSGi work, we have modified these artifacts so as to make them OSGi fragment bundles
+
+Users can now install the mappings and binding as fragment bundles and these will attach to a specific version of the Smooks bundle. This is what this looks like running in Apache ServiceMix 4.3.0.1-fuse:
+
+----
+[ 430] [Active ] [ ] [ ] [ 60] Smooks OSGi (1.5.0.SNAPSHOT)
+Fragments: 439,441
+[ 439] [Resolved ] [ ] [ ] [ 60] Smooks EDI - UN/EDIFACT - D96A - Bindings (1.4)
+Hosts: 430
+[ 441] [Resolved ] [ ] [ ] [ 60] Smooks EDI - UN/EDIFACT - D96A - Mapping Model (1.4)
+Hosts: 430
+[ 448] [Active ] [ ] [Started] [ 60] Milyn Smooks Example - Smooks Camel UNEDIFACT to String (1.0)
+----
+
+Above we can see that the binding (id=439) and the mapping (id=441) have been attached to the Smooks bundle (id=420). More fragment bundles can be attached as required and you can attach the same fragment to different version of the Smooks bundle since we specify a version on the Fragment-Host header.
+
+As mentioned earlier in this post you can find more information and details about this work on this http://www.smooks.org/mediawiki/index.php?title=SmooksOsgi[wiki page].

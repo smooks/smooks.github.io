@@ -13,3 +13,7 @@ asciidoctor:
 plugins:
   - jekyll-redirect-from
   - asciidoctor-tabs
+collections:
+  blog:
+    output: true
+    permalink: /:collection/:year/:month/:day/:title/

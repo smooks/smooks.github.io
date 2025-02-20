@@ -1,0 +1,207 @@
+---
+layout: post
+title: "Smooks Persistence part 1: The Introduction"
+date: 2009-2-26
+author: Maurice
+tags: ["Java Binding", "Persistence", "Scribe", "Smooks"]
+---
+
+One of the major new features in Smooks v1.2 will be the new Persistence Cartridge. This cartridge enables the use of several entity persistence frameworks from within Smooks, currently targeting Hibernate, Ibatis and any JPA compatible framework. It also allows you to use your own Data Access Objects (DAOs).
+
+This cartridge is great for those cases where you already have your data access layer and want to use its power from within Smooks. It also allows you to reuse these persistence resources on any format of data, not just XML e.g. EDI, CSV, JSON etc.
+
+This is the first post of a series of posts about the persistence cartridge. This post is an introduction of the cartridge.  I will give an overview of what the cartridge can do and also show an example where I use custom DAO’s to persist the data of an XML document.  In the next posts in this series, I will show examples of how Hibernate, JPA and Ibatis entities can be used.
+
+The Persistence cartridge is build around a data access layer abstraction library called “Scribe”.  Scribe is a new Milyn subproject, born out of the needs of the Persistence cartridge. It enables the Persistence cartridge to use your DAOs without it actually needing to know the details of your DAOs. In fact, they don’t need to be DAOs at all.  You can also use any entity persistence framework without the Persistence cartridge seeing the difference.  Scribe supports abstracting the default actions you can expect from any DAO or persistence library like inserting, updating, deleting and querying for entities.
+
+For Scribe to understand how to use your DAOs, it needs a mapping. Scribe offers two methods for doing this:
+
+* *Java Annotations*
++
+Scribe has a set of Java Annotations like @Insert, @Update, @Delete and @Locate. These annotations enable you to map your DAOs to the DAO actions.
+
+* *Java Interfaces*
++
+Scribe defines a set of Java interfaces like DAO, Locator and Queryable.  You build your DAOs By combining and implementing these interfaces. These interfaces are primarily meant to be used for implementing adapters for persistence frameworks.
+
+The Persistence Cartridge defines a set of Smooks Visitor components that use the DAO actions defined by Scribe.  For example, the *Inserter* visitor can insert your entities by calling the method defined by the DAO action mapping.  We see an example of this later.
+
+The cartridge has the following Smooks Visitor components:
+
+* Inserter
++
+Inserts/Persists entities
+
+* Updater
++
+Updates/Merges entities
+
+* Deleter
++
+Deletes entities
+
+* Locator
++
+Locates entities with a query or with your own lookup method.
+
+Now that you have an idea of what the Persistence cartridge can do, let’s take a look at a DAO based example.  We will see Hibernate, IBatis and JPA examples in the followup posts in this series.
+
+The example will read an XML file containing order information (note that this works just the same for EDI, CSV etc).  Using the javabean cartridge, it will bind the XML data into a set of entity beans.  Using the id of the products within the order items (the <product> element) it will locate the product entities and bind them to the order entity bean.  Finally, the order bean will be persisted.
+
+The order XML message looks like this:
+
+[source,xml]
+----
+<order>
+    <ordernumber>1</ordernumber>
+    <customer>123456</customer>
+    <order-items>
+        <order-item>
+            <product>11</product>
+            <quantity>2</quantity>
+        </order-item>
+        <order-item>
+            <product>22</product>
+            <quantity>7</quantity>
+        </order-item>
+    </order-items>
+</order>
+----
+
+The following custom DAO will be used to persist the Order entity:
+
+[source,java]
+----
+@Dao
+public class OrderDao {
+
+   private final EntityManager em;
+
+   public OrderDao(EntityManager em) {
+     this.em = em;
+   }
+
+   @Insert
+   public void insertOrder(Order order) {
+     em.persist(order);
+   }
+}
+----
+
+When looking at this class you should notice the *@Dao* and *@Insert* annotations. The *@Dao* annotation declares that the OrderDao is a DAO object. The *@Insert* annotation declares that the insertOrder method should be used to insert Order entities.
+
+The following custom DAO will be used to lookup the Product entities:
+
+[source,java]
+----
+@Dao
+public class ProductDao {
+
+   private final EntityManager em;
+
+   public ProductDao(EntityManager em) {
+      this.em = em;
+   }
+
+   @Lookup(name="id")
+   public Product findProductById(@Param("id") int id) {
+      return em.find(Product.class, id);
+   }
+}
+----
+
+When looking at this class, you should notice the *@Lookup* and *@Param* annotation. The *@Lookup* annotation declares that the *ProductDao#findByProductId* method is used to lookup *Product* entities. The *name* parameter in the *@Lookup* annotation sets the lookup name reference for that method. When the name isn’t declared, the method name will be used. The optional *@Param* annotation let’s you name the parameters. This creates a better  abstraction between Smooks and the DAO. If you don’t declare the *@Param* annotation the parameters are resolved by there position.
+
+The Smooks configuration look likes this:
+
+[source,xml]
+----
+<!--
+    In this configuration you will see that we reference to the
+    DAO's via the names 'order'  and 'product'. The persistence cartridge uses
+    a DAO Register to map the DAO's to there names.
+    Later on, in the java code that executes Smooks, you will see how that is done.
+-->
+<smooks-resource-list
+   xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+   xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.1.xsd"
+   xmlns:dao="http://www.milyn.org/xsd/smooks/persistence-1.2.xsd">
+
+   <!--
+    The inserter calls the OrderDao#insertOrder() method at
+    end of Order message.
+   -->
+   <dao:inserter beanId="order" dao="order" insertOnElement="order" />
+
+   <!--
+    This is a normal Javabean binding. It creates the order bean
+    and binds data into it.
+   -->
+   <jb:bindings beanId="order" class="example.entity.Order"
+                 createOnElement="order">
+      <jb:value property="ordernumber" data="ordernumber"/>
+      <jb:value property="customerId" data="customer"/>
+      <jb:wiring setterMethod="addOrderLine" beanIdRef="orderLine" />
+   </jb:bindings>
+
+   <!--
+    This is a normal Javabean binding. Notice that we have a wiring on
+    'product'. The Product entity will not be created, but looked up
+    by a locator.
+   -->
+   <jb:bindings beanId="orderLine" class="example.entity.OrderLine"
+                 createOnElement="order-item">
+      <jb:value property="quantity" data="quantity"/>
+      <jb:wiring property="order" beanIdRef="order"/>
+      <jb:wiring property="product" beanIdRef="product"/>
+   </jb:bindings>
+
+   <!--
+    This locator calls (via Scribe) the ProductDao#findById() method.
+    The result will be added to the bean repository under
+    the bean id 'product'.
+    An exception is thrown when no result is found.
+   -->
+   <dao:locator beanId="product" dao="product" lookup="id"
+           lookupOnElement="order-item" onNoResult="EXCEPTION">
+      <dao:params>
+         <dao:value name="id" data="product" decoder="Integer"/>
+      </dao:params>
+   </dao:locator>
+
+</smooks-resource-list>
+----
+
+The following code executes Smooks:
+
+[source,java]
+----
+Smooks smooks = new Smooks("./smooks-configs/smooks-dao-config.xml");
+ExecutionContext executionContext = smooks.createExecutionContext();
+
+// The register is used to map the DAO's to a DAO name. The DAO name isbe used in
+// the configuration.
+// The MapRegister is a simple Map like implementation of the DaoRegister.
+DaoRegister<object> register =
+	MapRegister.builder()
+		.put("product", new ProductDao(em))
+		.put("order", new OrderDao(em))
+		.build();
+
+PersistenceUtil.setDAORegister(executionContext, mapRegister);
+
+// Transaction management from within Smooks isn't supported yet,
+// so we need to do it outside the filter execution
+EntityTransaction tx = em.getTransaction();
+tx.begin();
+
+smooks.filter(new StreamSource(messageIn), null, executionContext);
+
+tx.commit();
+----
+
+If you want to take this example for a spin, simply check out the examples from subversion (http://svn.codehaus.org/milyn/trunk/smooks-examples/) and you’ll find it in the “dao-router” folder.  It also shows you how to use JPA directly, without any DAOs in between.
+
+The cartridge is almost ready for it’s first release.  There is one thing that I am still not completely sure about and it would be great if people could provide some feedback.  I am not completely happy about the action names: *insert*, *update* and *delete*.  In the world of persistence frameworks, different sets of names are used for these actions.  JPA, for instance, uses *persist*, *merge* and *remove*.  Hibernate (outside of JPA) uses *save*, *update* and *delete* and Ibatis uses *insert*, *update* and *delete*. Which names would you choose and why?
+
+In the next post of the series I will explain how to use Hibernate directly.

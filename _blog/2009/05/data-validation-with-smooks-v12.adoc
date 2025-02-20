@@ -1,0 +1,133 @@
+---
+layout: post
+title: "Data Validation with Smooks v1.2"
+date: 2009-5-21
+author: Daniel
+tags: ["Blog", "Smooks"]
+---
+
+https://www.smooks.org/[Smooks] 1.2 adds support for message data Validation as one of its new features. This new feature allows you to perform strong field and fragment *validation* on not just XML data, but also on EDI, JSON, CSV etc. It currently supports *Regex* and http://mvel.codehaus.org/[*MVEL*] rules bases (*Drools* to follow). *Regex* rules allow you to perform low level field format validation, while *MVEL* rules allow you to perform Business rules validation at a fragment/message level.
+
+This is not intended as an alternative to Schema based validation such as XSD or Relax.  It provides additional layers of validation in areas not covered by these mechanisms.
+
+Examples of validations one might perform on an Order message containing a collection of Order Item:
+
+1. Use a Regex rule to validate that an orderId field follows a predefined format of "Uppercase Char, followed by 5 digits" e.g. "W12345" or "U54321".
+
+2. Use an MVEL rule to enforce a business rule by validating that an order item total is not greater than 50.00 i.e. "price * quantity < 50.00". Of course these can be more complex.
+
+The easiest way to get familiar with the validation features is to look at an example, so here goes.
+
+For the following example assume that we have the xml that looks like this:
+
+[source,xml]
+----
+<Order>
+    <header>
+        <orderId>A188127</orderId>
+        <username>user1</username>
+        <name>
+            <firstname>Harry</firstname>
+            <lastname>Fletcher</lastname>
+        </name>
+        <email>harry.fletcher@gmail.</email>
+        <state>South Dakota</state>
+    </header>
+</Order>
+----
+
+An example of a validation configuration could look like this:
+
+[source,xml]
+----
+<?xml version="1.0"?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                   xmlns:rules="http://www.milyn.org/xsd/smooks/rules-1.0.xsd"
+                   xmlns:validation="http://www.milyn.org/xsd/smooks/validation-1.0.xsd">
+
+   <!-- ruleBases used by validation rules... -->
+   <rules:ruleBases>
+      <rules:ruleBase name="customer"
+                    src="rules/customer.properties"
+                    provider="org.milyn.rules.regex.RegexProvider"/>
+   </rules:ruleBases>
+
+   <!-- email validation rule targeted at the email element in the header... -->
+   <validation:rule executeOn="Order/header/email" name="customer.email" onFail="WARN"/>
+
+</smooks-resource-list>
+----
+
+The '*exeuteOn*' attribte specifies the fragment or attribute that you want the validation rule to be applied to. In the case of a Regex rule, it specifies a specific field of data (attribute or element text), while in the case of an MVEL rule, it simply identifies the fragment that triggers execution of that rule.
+
+The next thing to notice is the '*name*' attribute. This attribute refers to a rule in one of the configured ruleBase. In the case of the example above, we refer to the '*email*' rule in the '*customer*' ruleBase i.e. '*customer.email*'. You can define as many ruleBase elements and validation element as you need, but we are only using one of each here to keep this easy to read.
+
+The 'customer’ ruleBase is handled by the RegexProvider, as defined in the 'provider’ attribute on the ruleBase configuration.  We can also see that the 'customer’ ruleBase rules are located in a properties file named '*rules/customer.properties*':
+
+[source,properties]
+----
+# Email address...
+email=^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$
+----
+
+Next, lets take a look at how we execute Smooks to capture some validation results in a http://www.milyn.org/javadoc/v1.2/smooks-cartridges/validation/org/milyn/validation/ValidationResult.html[ValidationResult] instance:
+
+[source,java]
+----
+final Smooks smooks = new Smooks("smooks-config.xml");
+try
+{
+// Create an exec context - no profiles....
+final ExecutionContext executionContext = smooks.createExecutionContext();
+final ValidationResult validationResult = new ValidationResult();
+
+    // Filter the input message...
+    smooks.filterSource(executionContext, new StringSource(messageIn), validationResult);
+
+    for (OnFailResult result : results.getWarnings())
+    {
+        System.out.println("\t" + result.getMessage());
+    }
+}
+finally
+{
+    smooks.close();
+}
+----
+
+As you can see, Validation faiures can be reported at different levels of severity.  This is controlled by setting '*onFail*' to one of '*OK*', '*WARN*', '*ERROR*', or '*FATAL*'. Setting onFail to 'FATAL’ will cause an exception to be thrown and processing to halt.  The other three levels will not generate an exception.  Failures at these lower severity levels can be accessed through the ValidationResult instance supplied to the Smooks.filterSource method.  An example of getting WARN level failures is shown above with the *result.getWarnings()* call.
+
+Having usable validation reports is important and Smooks validation supports *localized messages for validation failures*. These messages can be defined in standard Java ResourceBundle files (.properties format). A convention is used here, based on the rule source name ("*src*"). The validation message bundle base name is derived from the rule source ("*src*") by dropping the rule source file extension and appending a "*_messages*".
+
+So for our example we could have a file named '*customer_messages.properties*' containing our default locale results:
+
+[source,properties]
+----
+# Email address...
+email=ftl:Invalid email address '${ruleResult.text}' at '${path}'.
+----
+
+So calling *result.getMessage()* for a validation failure on 'customer.email’ rule will result in the following message:
+
+[quote]
+----
+Invalid email address 'harry.fletcher@gmail.’ at '/Order/header/email’.
+----
+
+And we could also add a message bundle file for Swedish users.  Following the ResourceBundle naming convention, it should be named '*customer_messages_sv_SE.properties*' and would contain the Sweish localized messages:
+
+[source,properties]
+----
+email=ftl:Felaktig epost adress '${ruleResult.text}' i '${path}'.
+----
+
+Calling *result.getMessage(new Locale("sv, "SE"))* will produce:
+
+[quote]
+----
+Felaktig epost adress 'harry.fletcher@gmail.’ i '/Order/header/email’.
+----
+
+We have only shown a portion of the validation features here.  More information can be found in the http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide[Smooks User Guide].  An example of the validation features can be found in http://www.smooks.org/mediawiki/index.php?title=V1.2:validation-basic[Validation Example].
+
+

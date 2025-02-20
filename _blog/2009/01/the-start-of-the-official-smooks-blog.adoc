@@ -1,0 +1,17 @@
+---
+layout: post
+title: The start of the official Smooks blog
+date: 2009-1-23
+author: Maurice
+tags: ["Blog", "Smooks"]
+---
+
+Yeah, we of the Smooks project are also going to do it. Start blogging about our project. The blog is the perfect place to inform you about the latest things that are going on. With this blog  we want to get our idea’s out there and introduce you to the latest features of Smooks.  You can also expect  posts with small tutorials featuring common, experimental or less know features of  Smooks or one of it’s child projects.
+
+The blog itself is in it’s Beta phase right now. So you can expect this blog to change  it’s appearance over the next couple of months.
+
+I hope you will enjoy this blog and find it usefull. Please place comments if you comments or questions. We will try to answer them all.
+
+Regards,
+
+Maurice

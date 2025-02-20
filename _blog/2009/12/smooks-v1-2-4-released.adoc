@@ -1,0 +1,15 @@
+---
+layout: post
+title: "Smooks v1.2.4 Released"
+date: 2009-12-22
+author:  Tom Fennelly
+tags: ["Uncategorized"]
+---
+
+We’ve just made a Smooks v1.2.4 patch release (http://www.smooks.org/mediawiki/index.php?title=Downloads[Download]).
+
+This contains:
+
+1. Some performance enhancements (reader pooling),
+2. Some bug fixes and,
+3. One small new feature to support http://www.smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Basic_Splitting_and_Routing[Basic Fragment Splitting and Routing].  Right… we normally only do fixes in patch releases, but I wanted to get this into the JBoss SOA Platform before it released, so we made an exception for this one.

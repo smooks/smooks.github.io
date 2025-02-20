@@ -1,0 +1,9 @@
+---
+layout: post
+title: Smooks goes Head to Head with Optimus Prime
+date: 2009-1-29
+author: Tom
+tags: ["Publications"]
+---
+
+http://it-republik.de/jaxenter/artikel/Open-Source-Framework-Smooks-Transformers-2098.html[Article on Smooks in a German IT Magazine].

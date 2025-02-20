@@ -1,0 +1,11 @@
+---
+layout: post
+title: "Multiple Results & Outputs with Smooks"
+date: 2009-8-29
+author: Tom Fennelly
+tags: ["Technical Info & Concepts"]
+---
+
+Smooks can produce “output” in a number of different ways.  It can produce multiple sets of results, as well as output fragments of data to multiple different endpoints (ESB Service Endpoints, Files, JMS Destinations, DBs etc… and in different formats), all in a single filtering pass of a message stream.
+
+For more on this, http://www.smooks.org/mediawiki/index.php?title=Multiple_Outputs/Results[please see the Smooks Wiki…]

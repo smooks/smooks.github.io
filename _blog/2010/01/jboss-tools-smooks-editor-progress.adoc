@@ -1,0 +1,48 @@
+---
+layout: post
+title: "JBoss Tools Smooks Editor – Progress…"
+date: 2010-1-15
+author:  tom
+tags: ["Uncategorized"]
+---
+
+At JBoss, we’ve been making some good progress with the http://www.jboss.org/tools/[JBoss Tools] Smooks Editor.  The following are two rough Screencasts illustrating two use cases that extend from each other.
+
+== EDI to Java
+
+In this Screencast, we bind EDI Purchase Order data (but can also be XML, JSON etc) into an "Order" object model (Java).  This Screencast was created a few weeks ago, using the v3.1.0.CR1 release of JBoss Tools.
+
+In this Screencast, we bind EDI Purchase Order data (but can also be XML, JSON etc) into an "Order" object model (Java).  This Screencast was created a few weeks ago, using the v3.1.0.CR1 release of JBoss Tools.
+
+video::http://content.screencast.com/users/tfennelly/folders/Camtasia/media/4b184ca6-9a6d-4817-b15d-aac8576d36bb/mp4h264player.swf[]
+
+== EDI to XML (via XSD)
+
+In this Screencast, we extend the example shown in the above Screencast, applying a template to the "Order" object model to produce an XML Purchase Order.  The XML Purchase Order is defined in an XML Schema (XSD), but you’ll see how the editor makes it very easy to work with the XSD.  This Screencast was created recently, using one of the http://www.jboss.org/tools/download.html[Nightly Builds of JBoss Tools].
+
+video::http://content.screencast.com/users/tfennelly/folders/Camtasia/media/4d3b6d6c-ea6d-4e6d-b826-3f0c19d87104/mp4h264player.swf[]
+
+== Status
+
+We are currently working towards the v3.1.0.CR2 release of http://www.jboss.org/tools/[JBoss Tools], which is due to be released in Feb (not sure of exact date).  There are still a number of https://jira.jboss.org/jira/browse/JBIDE/component/12311840[issues] with the editor.  We are working on these and will be resolving many of them for the 3.1.0.CR2 release.
+
+We have purposely restricted the 3.1.0 version of the editor:
+
+1. *Supported Use Cases*:
+    * _Java Mapping/Binding_:  Drag & Drop mapping/binding of XML, JSON, CSV and EDI data to Java.
+    * _CSV and XML Templating_:  Drag & Drop templating of Java Mappings (see #1 above) to produce CSV or XML (XML via XSD or XML Sample).
+2. Supported Integration:
+    * _JBoss Tools ESB Editor_: Will have basic open and edit integration with the ESB SmooksAction.
+3. Supported Versions:
+    * _Smooks v1.2 Configurations_:  The Editor will only support Smooks v1.2 configuration namespaces.  Therefore, if you have configurations using config namespaces from earlier (or newer v1.3) versions of Smooks, the editor will not open the configurations.
+
+So, the 3.1.0 version of the editor will not support:
+
+1. Direct Source to Result drag & drop templating e.g. XML to XML, EDI to XML, XML to CSV etc.  We hope to support this in a future release (next one hopefully), but for now (in the v3.1.0 release), you need to define a Java Object model to use as the canonical form of the data being mapped i.e. v3.1.0 templating works as _Source -> Java -> Result_.
+2. A number of features supported by the Smooks Runtime, such as Persistence, Validation, Splitting & Routing etc.  We will be adding support for these in future releases.
+3. Smooks v1.1 (and before) configuration namespaces that have newer versions in Smooks v1.2.  For example, Smooks v1.2 added a v1.2 javabean config namespace.  It is this version of the javabean config namespace that is supported by the editor.  The v1.1 javabean config namespace is not supported.
+4. Smooks v1.3 (yet to be released) configuration namespaces.
+
+== Try it Out…
+
+Please take the editor for a spin and let us know what you think.  It can be downloaded (standalone, or as part of http://www.jboss.org/tools/[JBoss Tools]) from the JBoss Tools Downloads Page.  https://web.archive.org/web/20100304212045/https://jira.jboss.org/jira/secure/BrowseProject.jspa?id=10020[Please log any issues] you find with the editor (against the "smooks" component), if not already logged.

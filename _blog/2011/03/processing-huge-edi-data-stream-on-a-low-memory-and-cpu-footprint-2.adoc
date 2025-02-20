@@ -1,0 +1,9 @@
+---
+layout: post
+title: "Processing Huge EDI data stream on a low memory and cpu footprint"
+date: 2011-3-29
+author: Tom Fennelly
+tags: ["EDI"]
+---
+
+Great post by Claus Straube: http://www.catify.com/2011/03/29/transforming-and-splitting-huge-edi-files-with-smooks/

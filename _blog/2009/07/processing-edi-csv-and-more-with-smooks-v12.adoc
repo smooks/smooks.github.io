@@ -1,0 +1,17 @@
+---
+layout: post
+title: "Processing EDI, XML, CSV and more with Smooks v1.2"
+date: 2009-7-14
+author: Tom
+tags: ["Release"]
+---
+
+http://www.smooks.org/[Smooks] v1.2 has just been released (http://smooks.org/mediawiki/index.php?title=Downloads[*download*]).  This release adds a number of very interesting features and enhancements to Smooks, most notably:
+
+1. http://smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#EJC_-_Edifact_Java_Compiler[*EDIFACT Java Compiler (EJC)*]:  EJC greatly simplifies the process of binding EDI data to a Java object graph.  EJC is similar to http://jaxb.dev.java.net/[*JAXBs*] *XJC*, accept for EDI messages.  This is just the first of a number of developer optimization features we are in the process of adding in the area of EDI message processing.
+2. http://smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Persistence_.28Database_Reading_and_Writing_.29[*Entity Persistence Framework Support*]:  Reuse your Entity Persistence resources (like *Hibernate*, *iBATIS* or any *JPA* compatible resource) to persist or enrich messages of any format (EDI, XML etc).  Access a database and use it’s query language, or CRUD methods, for reading and writing to the database.
+3. http://smooks.org/mediawiki/index.php?title=V1.2:Smooks_v1.2_User_Guide#Validation[*Validation*]:  Perform Rule based message fragment validation on messages of any format (EDI, XML etc).  Supports *Data Field* level validation using *regular expressions*, or *Business Rule* compliance validation using http://mvel.codehaus.org/[*MVEL*] *expressions*.
+4. *Simplified CSV Processing*:  Bind CSV records to Java objects in seconds using a much simplified XML configuration, or using a very simple programmatic API.
+5. *Improved Programmatic APIs*:  Prior to Smooks v1.2, programmatic configuration was not one of Smooks’ strengths.   In Smooks v1.2 we’ve made significant improvements in this area.  Most Smooks features can now be utilised through Java, without writing a line of XML.
+
+As well as these new features, Smooks v1.2 includes numerous bug fixes.  Please http://smooks.org/mediawiki/index.php?title=Downloads[*download Smooks v1.2*] and http://smooks.org/mediawiki/index.php?title=Mailing_Lists[let us know what you think].  We hope you find it useful!!

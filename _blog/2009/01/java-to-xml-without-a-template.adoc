@@ -1,0 +1,32 @@
+---
+layout: post
+title: Java to XML, without a template??
+date: 2009-1-28
+author: Tom
+tags: ["Java Binding"]
+---
+
+Some people use Smooks as a Java Binding framework for marshalling and unmarshalling XML, in a similar fashion to how JAXB can be used.  An “issue” that has been raised by a number of people is the fact that, with Smooks, you need to define a template for serializing the populated Java Object model (to XML, or other format).  Some people find this a bit of a drag.  They expect Smooks to be able to do it automagically.  JAXB etc support it, so why can’t Smooks?
+
+So first off… why do I think this is not easy with Smooks?  The main issue I see is that in order for Smooks to be able perform out-of-the-box unmarshalling and marshalling, without having to use a template to serialize back to XML (or whatever), it would really need to know the schema for the input/output message and how it maps to/from the associated Java object model.
+
+As I see it, one of the advantages of Smooks from a pure Java Binding perspective is the ability to bind data from an input message without requiring knowledge of the full structure of the message being processed.  Smooks is fragment based, so the binding configs can be targeted at message fragments and as long as the selector is specific enough to select the bind data, you’re OK.
+
+So, without knowing the full message structure (schema) and how exactly that schema maps to/from the java object model, it’s not really possible (in a practical sense) to take the populated object model and serialize it back out to an XML structure that conforms to the same schema as the input message.
+
+Possible solutions:
+
+1. If all you’re doing is marshalling and unmarshalling a message for which you have the schema (i.e. you’re not transforming it), well then you could just use JAXB, XStream etc.  Smooks might not be what you want!
+2. One suggestion that has been made was to use the binding selectors to “infer” the message structure and from that, build a template that can be used to serialize.  This might work in a few use cases, but it really is a hack and would be broken more often than not.  Our hearts would also be broken answering questions on “why it doesn’t work” in lots of situations.
+3. To Smooks, add support for serialization via some of these other binding frameworks (JAXB etc).  We already have some JIRAs for this.  I don’t think it would be a lot of work!
+
+Personally, I prefer option #3 because it’s going to produce the most dependable result.  So, taking an example where you need to transform an EDI message to XML, you could do the following:
+
+1. Get/create the mapping model for the EDI message.
+2. Get an XSD for the target XML and from it, generate a JAXB model.
+3. Create the binding configs that bind the data from the EDI message into the JAXB model.
+4. In the same binding config (#3 above), configure a new JAXBSerializer visitor to fire at the end of the message ($document visitAfter), outputting the result of the JAXB model Serialization as the result.
+
+So in that example, you’re using Smooks to bind the data from the EDI data stream into the XML Structure (JAXB model), and then using JAXB to serialize it in conformance to the XML’s schema.
+
+Alternatively, you could just do what I’d do and write a template to generate the required output.  Seems like a more direct route to me ;)

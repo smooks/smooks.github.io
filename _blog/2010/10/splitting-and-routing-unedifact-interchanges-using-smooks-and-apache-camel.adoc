@@ -1,0 +1,25 @@
+---
+layout: post
+title: "Splitting and Routing UN/EDIFACT Interchanges using Smooks and Apache Camel"
+date: 2010-10-27
+author: Tom Fennelly
+tags: ["Camel", "EDI"]
+---
+
+Two of the main new features in Smooks v1.4 are, out of the box support for *UN/EDIFACT* Interchanges, and *Apache Camel* integration.
+
+The new *UN/EDIFACT* support allows you to process UN/EDIFACT Interchanges by either or both of the following methods:
+
+1. Conversion to *XML*, allowing you to use standard XML tools (or other Smooks extensions) for further processing.
+2. Binding the interchange message data into *pre-built Java object models*, or custom models if you prefer to use your own.
+
+All the required artifacts for reading any of the UN/EDIFACT directories (and converting to XML) are available in Maven, as are all of the pre-built Java Object models for all the messages defined in all of the UN/EDIFACT directories.  To use them, all you need to do is include the appropriate artifacts into your project.  http://www.smooks.org/mediawiki/index.php?title=V1.4:Smooks_v1.4_User_Guide#UN.2FEDIFACT[See the User Guide].
+
+The new *Apache Camel* integration allows you to hook Smooks into your Camel routes as a Camel Component or Camel DataFormat.  Another important part of the Camel integration are the Smooks extensions that allow you to perform inline routing of Smooks BeanContext data to Camel endpoints i.e. you can also process huge (GB+) data streams.
+
+Putting these two new capabilities together allows us to provide some interesting functionality with respect to Splitting and Routing UN/EDIFACT message Interchanges.  We use Smooks to perform the reading, conversion (to XML and/or Java) and splitting of the interchanges and then use Camel to to perform the inline routing of the Java or XML (using the new Camel extensions for Smooks).
+
+We created an example that demonstrates this capability:
+
+* http://www.screencast.com/t/Pm3eAIR8DSd[*_See the Screencast_*].
+* http://smooks.org/mediawiki/index.php?title=Smooks_v1.4_Examples#Apache_Camel[*_Get the code_*] and try it yourself (the “splitting-camel” example).

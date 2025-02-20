@@ -1,0 +1,9 @@
+---
+layout: post
+title: "New feature for EDI Parser – Namespaces support"
+date: 2011-3-2
+author: zubairov
+tags: ["Uncategorized"]
+---
+
+Our work on EDI and UN/EDIFACT support for the next Smooks release continiues. Now we have a namespace support in EDI and UN/EDIFACT generated XML events.  See http://zubairov.posterous.com/namespaces-for-unedifact-in-smooks[my blog post] for more information and examples on how you could use it.

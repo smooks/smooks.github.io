@@ -1,0 +1,15 @@
+---
+title: A Mule podcast about ‘Smooks’ and ‘Smooks for Mule’
+layout: post
+date: 2009-02-02
+author: Maurice
+tags: ["Podcast", "Publications", "Smooks"]
+---
+
+MuleSource recently posted a Podcast about “Smooks for Mule” on their “From the Mule’s mouth” blog.  In the Podcast, I get interviewed by Ross Mason about “Smooks for Mule” and “Smooks”.  I talk about why I started Smooks for Mule and what Smooks can do.  I outline some examples of where Smooks is in use today, as well as what people can expect in the next releases of “Smooks for Mule” and “Smooks”.
+
+You can listen to the podcast via the player on the end of this post or you can go to the original http://blog.mulesource.org/2009/01/mulecast-a-conversation-with-the-project-despot-of-the-smooks-for-mule-project/[Mule blog post].  I hope that you find it interesting and useful.
+
+I would like to thank MuleSource for enabling this interview.
+
+audio::/assets/blog/mule_podcast_smooks_for_mule_090130.mp3[]

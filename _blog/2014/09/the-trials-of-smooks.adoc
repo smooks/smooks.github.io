@@ -1,0 +1,913 @@
+---
+layout: post
+title: "The Trials of Smooks"
+date: 2014-9-16
+author: Claude
+tags: ["CSV", "database", "FreeMarker", "ETL"]
+---
+
+_This post was reproduced on the https://oncodesign.io/2014/09/16/the-trials-of-smooks/[On Code & Design blog]._
+
+The fact that I’m a hard to please guy explains why I rarely show appreciation for a tool. I easily get frustrated when a tool fails to meet the challenges it’s meant to solve. http://www.smooks.org/[Smooks] is one of the few tools I appreciate. It’s an invaluable transformation framework in the integrator’s arsenal. On a project I was on, I threw at Smooks footnote:[The Smooks version I used was 1.5.2.] all manner of challenges, and one after another, Smooks overcame them without giving up a key requirement: *maintaining a low memory overhead during transformation*. A shoutout to http://www.smooks.org/mediawiki/index.php?title=Smooks_Team[Tom Fennelly and his team] for bringing to us such a fantastic tool.
+
+==== Trial I
+
+The initial challenge I brought to Smooks was about taking a tilde delimited CSV file and map its records to POJOs:
+
+[source%linenums%nowrap,csv]
+----
+0DARIENZO        20140408
+3~098~032~Shampoo
+3~075~392~Laptop
+1~032~478~Spade
+3~321~021~Blades
+2~045~432~Mobile
+...
+...
+...
+9000000003
+----
+
+You can see the file has an unorthodox header in addition to a footer. Using Smooks’s built-in CSV *reader*, I wrote concisely the Smooks config doing the mapping to POJOs:
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+	xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.5.xsd">
+
+    <csv:reader separator="~" fields="recordClass,code,itemId,itemDesc">
+        <csv:singleBinding beanId="product" class="org.ossandme.Product" />
+    </csv:reader>
+
+</smooks-resource-list>
+----
+
+What’s happening under the covers, and in general, is that the reader pulls data from a *source* (e.g., _java.io.InputStream_) to go on to produce a stream of SAX events. The reader I’m using above is expecting the source data to be structured as CSV and to consist of 4 columns. Let’s make things more concrete. Reading from the _products.csv_ file, the reader produces the following XML stream footnote:[You might be wondering how I know for certain the XML document shown is the one actually produced by Smooks. I know because of Smooks’s HtmlReportGenerator class.]:
+
+[source%linenums%nowrap,xml]
+----
+<csv-set>
+    <csv-record number="1">
+        <recordClass>3</recordClass>
+        <code>098</code>
+        <itemId>032</itemId>
+        <itemDesc>Shampoo</itemDesc>
+    </csv-record>
+    <csv-record number="2">
+        <recordClass>3</recordClass>
+        <code>075</code>
+        <itemId>392</itemId>
+        <itemDesc>Laptop</itemDesc>
+    </csv-record>
+    <csv-record number="3">
+        <recordClass>1</recordClass>
+        <code>032</code>
+        <itemId>478</itemId>
+        <itemDesc>Spade</itemDesc>
+    </csv-record>
+    <csv-record number="4">
+        <recordClass>3</recordClass>
+        <code>321</code>
+        <itemId>021</itemId>
+        <itemDesc>Blades</itemDesc>
+    </csv-record>
+    <csv-record number="5">
+        <recordClass>2</recordClass>
+        <code>045</code>
+        <itemId>432</itemId>
+        <itemDesc>Mobile</itemDesc>
+    </csv-record>
+    ...
+</csv-set>
+----
+
+Listening to the stream of SAX events is the *visitor*. A visitor listens to specific events from the stream to fire some kind of behaviour, typically transformation. With the _singleBinding_ element in the _csv-to-pojos.xml_ config, the CSV reader pre-configures a JavaBean visitor to listen for _csv-record_ elements. On intercepting this element, the JavaBean visitor instantiates a _org.ossandme.Product_ object and binds its properties to _csv-record_’s children element content. You’ll notice that I left _Product_’s target properties unspecified in the config. The CSV reader assumes _Product_ follows JavaBean conventions and its properties are named the same as the defined CSV columns. Records disobeying the column definition are ignored. Consequently, I do not need to worry about the file’s header and footer.
+
+With the transformation configuration out of the way, I turned my attention to running the transformation on the CSV file from my Java code and process the Product objects as they are instantiated and bound by Smooks:
+
+[source%linenums%nowrap,java]
+----
+package org.ossandme;
+
+import org.milyn.Smooks;
+import org.milyn.container.ExecutionContext;
+import org.milyn.javabean.lifecycle.BeanContextLifecycleEvent;
+import org.milyn.javabean.lifecycle.BeanContextLifecycleObserver;
+import org.milyn.javabean.lifecycle.BeanLifecycle;
+
+import javax.xml.transform.stream.StreamSource;
+
+public class CsvToPojosTransformer {
+
+    public void transform() throws Exception {
+
+        // create a Smooks instance for transforming CSV to Products
+        Smooks smooks = new Smooks(CsvToPojosTransformer.class.getResourceAsStream("/csv-to-pojos.xml"));
+
+        ExecutionContext executionContext = smooks.createExecutionContext();
+
+        // set an event listener on Smooks
+        executionContext.getBeanContext().addObserver(new BeanContextLifecycleObserver() {
+            @Override
+            public void onBeanLifecycleEvent(BeanContextLifecycleEvent event) {
+
+                // apply logic only when Smooks has made a 'org.ossandme.Product' and set its properties
+                if (event.getLifecycle().equals(BeanLifecycle.END_FRAGMENT) && event.getBeanId().toString().equals("product")) {
+                    Product product = (Product) event.getBean();
+
+                    System.out.println(product.getItemDesc());
+                    // DO STUFF
+                    // ...
+                }
+            }
+        });
+
+        // transform CSV to Products
+        smooks.filterSource(executionContext, new StreamSource(CsvToPojosTransformer.class.getResourceAsStream("/products.csv")));
+
+        smooks.close();
+    }
+
+}
+----
+
+==== Trial II
+
+A more complex transformation task I gave to Smooks was to load file records, holding a variable number of columns, into a database. As in the previous task, this file had a header as well as a footer:
+
+[source%linenums%nowrap,csv]
+----
+FH~20140407224630~1235~Calo Data
+TH~1~2014-04-06~2014-04-06 15:19:59~APPROVED~SALE~109
+TB~1~3~APPROVED~Shampoo~29012~2~4.30
+TB~1~3~APPROVED~Soap~29012~2~1.00
+TB~1~3~APPROVED~Gel~29012~2~2.90
+TB~1~3~DECLINED~Soap~29012~2~1.00
+TF~1~2014-12-01 00:00:00~VISA
+TF~1~2014-12-01 00:00:00~VISA
+...
+...
+...
+FT~265449~4412826.67~4410413.48~4248007.43
+----
+
+
+You’ll observe in the sample CSV file that records could be one of three types as denoted by the first column: _TH_, _TB_ or _TF_. The CSV reader, as it transforms and pushes records to the XML stream, can be customised such that it renames the _csv-record_ holder to the record’s primary column:
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+    xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.4.xsd"
+	xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.5.xsd"
+	xmlns:db="http://www.milyn.org/xsd/smooks/db-routing-1.1.xsd"
+	xmlns:ds="http://www.milyn.org/xsd/smooks/datasource-1.3.xsd">
+
+    <csv:reader separator="~" fields="TH[seqNo,startDate,finishDate,status,type,code] | TB[seqNo,type,status,item,voucherNo,dept,amount] | TF[seqNo,expireDate,cardType]"/>
+
+    ...
+
+</smooks-resource-list>
+----
+
+As we’ll see later, the above config permits Smooks to distinguish between the different record types. Given the sample file _transactions.csv_, the reader I’ve configured produces the following stream:
+
+[source%linenums%nowrap,xml]
+----
+<csv-set>
+    <UNMATCHED number="1">
+        <value>FH</value>
+    </UNMATCHED>
+    <TH number="2">
+        <seqNo>1</seqNo>
+        <startDate>2014-04-06</startDate>
+        <finishDate>2014-04-06 15:19:59</finishDate>
+        <status>APPROVED</status>
+        <type>SALE</type>
+        <code>109</code>
+    </TH>
+    <TB number="3">
+        <seqNo>1</seqNo>
+        <type>3</type>
+        <status>APPROVED</status>
+        <item>Shampoo</item>
+        <voucherNo>29012</voucherNo>
+        <dept>2</dept>
+        <amount>4.30</amount>
+    </TB>
+    <TB number="4">
+        <seqNo>1</seqNo>
+        <type>3</type>
+        <status>APPROVED</status>
+        <item>Soap</item>
+        <voucherNo>29012</voucherNo>
+        <dept>2</dept>
+        <amount>1.00</amount>
+    </TB>
+    <TB number="5">
+        <seqNo>1</seqNo>
+        <type>3</type>
+        <status>APPROVED</status>
+        <item>Gel</item>
+        <voucherNo>29012</voucherNo>
+        <dept>2</dept>
+        <amount>2.90</amount>
+    </TB>
+    <TB number="6">
+        <seqNo>1</seqNo>
+        <type>3</type>
+        <status>DECLINED</status>
+        <item>Soap</item>
+        <voucherNo>29012</voucherNo>
+        <dept>2</dept>
+        <amount>1.00</amount>
+    </TB>
+    <TF number="7">
+        <seqNo>1</seqNo>
+        <expireDate>2014-12-01 00:00:00</expireDate>
+        <cardType>VISA</cardType>
+    </TF>
+    <TF number="8">
+        <seqNo>1</seqNo>
+        <expireDate>2014-12-01 00:00:00</expireDate>
+        <cardType>VISA</cardType>
+    </TF>
+    ...
+    <UNMATCHED number="9">
+        <value>FT</value>
+    </UNMATCHED>
+</csv-set>
+----
+
+_UNMATCHED_ elements represent the file’s header and footer. A CSV record having _TH_ in the first field will trigger the reader to create a _TH_ element holding the other record fields. The same logic goes for _TB_ and _TF_.
+
+Database visitors load the records. However, since these visitors are limited to binding data from POJOs, I first must turn the XML mapped records from the stream into said POJOs. The CSV reader doesn’t know how to bind variable field records to POJOs so I configure the mapping myself:
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.4.xsd"
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.5.xsd"
+                      xmlns:db="http://www.milyn.org/xsd/smooks/db-routing-1.1.xsd"
+                      xmlns:ds="http://www.milyn.org/xsd/smooks/datasource-1.3.xsd">
+
+    <csv:reader separator="~" fields="TH[seqNo,startDate,finishDate,status,type,code] | TB[seqNo,type,status,item,voucherNo,dept,amount] | TF[seqNo,expireDate,cardType]"/>
+
+    <jb:bean beanId="transactionHeader" class="java.util.HashMap" createOnElement="TH">
+        <jb:value property="seqNo" data="TH/seqNo" />
+        <jb:value property="startDate" data="TH/startDate" />
+        <jb:value property="finishDate" data="TH/finishDate" />
+        <jb:value property="status" data="TH/status" />
+        <jb:value property="type" data="TH/type" />
+        <jb:value property="code" data="TH/code" />
+    </jb:bean>
+
+    <jb:bean beanId="transactionBody" class="java.util.HashMap" createOnElement="TB">
+        <jb:value property="seqNo" data="TB/seqNo" />
+        <jb:value property="type" data="TB/type" />
+        <jb:value property="status" data="TB/status" />
+        <jb:value property="item" data="TB/item" />
+        <jb:value property="voucherNo" data="TB/voucherNo" />
+        <jb:value property="dept" data="TB/dept" />
+        <jb:value property="amount" data="TB/amount" />
+    </jb:bean>
+
+    <jb:bean beanId="transactionFooter" class="java.util.HashMap" createOnElement="TF">
+        <jb:value property="seqNo" data="TF/seqNo" />
+        <jb:value property="expireDate" data="TF/expireDate" />
+        <jb:value property="cardType" data="TF/cardType" />
+    </jb:bean>
+
+    ...
+
+</smooks-resource-list>
+----
+
+Given what we’ve learnt about Smooks, we can deduce what’s happening here. The JavaBean visitor for lines 10 till 17 has a *selector* (i.e, createOnElement) for the element _TH_. A selector is a quasi XPath expression applied on XML elements as they come through the stream. On viewing _TH_, the visitor will:
+
+1. Instantiate a _HashMap_.
+
+2. Iterate through the _TH_ fragment. If an element inside the fragment matches the selector set in a _data_ attribute, then (a) a map entry is created, (b) bound to the element content, and (c) put in the map.
+
+3. Add the map to the Smooks bean context which is identified by the name set in _beanID_. The map overwrites any previous map in the context with the same ID. This makes sense since we want to prevent objects from accumulating in memory.
+
+The database visitors reference the maps in the bean context:
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.4.xsd"
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.5.xsd"
+                      xmlns:db="http://www.milyn.org/xsd/smooks/db-routing-1.1.xsd"
+                      xmlns:ds="http://www.milyn.org/xsd/smooks/datasource-1.3.xsd">
+
+    <csv:reader separator="~" fields="TH[seqNo,startDate,finishDate,status,type,code] | TB[seqNo,type,status,item,voucherNo,dept,amount] | TF[seqNo,expireDate,cardType]"/>
+
+    <jb:bean beanId="transactionHeader" class="java.util.HashMap" createOnElement="TH">
+        <jb:value property="seqNo" data="TH/seqNo" />
+        <jb:value property="startDate" data="TH/startDate" />
+        <jb:value property="finishDate" data="TH/finishDate" />
+        <jb:value property="status" data="TH/status" />
+        <jb:value property="type" data="TH/type" />
+        <jb:value property="code" data="TH/code" />
+    </jb:bean>
+
+    <jb:bean beanId="transactionBody" class="java.util.HashMap" createOnElement="TB">
+        <jb:value property="seqNo" data="TB/seqNo" />
+        <jb:value property="type" data="TB/type" />
+        <jb:value property="status" data="TB/status" />
+        <jb:value property="item" data="TB/item" />
+        <jb:value property="voucherNo" data="TB/voucherNo" />
+        <jb:value property="dept" data="TB/dept" />
+        <jb:value property="amount" data="TB/amount" />
+    </jb:bean>
+
+    <jb:bean beanId="transactionFooter" class="java.util.HashMap" createOnElement="TF">
+        <jb:value property="seqNo" data="TF/seqNo" />
+        <jb:value property="expireDate" data="TF/expireDate" />
+        <jb:value property="cardType" data="TF/cardType" />
+    </jb:bean>
+
+    <db:executor executeOnElement="TH" datasource="StagingArea">
+        <db:statement>INSERT INTO TransactionHeaders (seqNo, startDate, finishDate, status, type, code) VALUES (${transactionHeader.seqNo}, ${transactionHeader.startDate}, ${transactionHeader.finishDate}, ${transactionHeader.status}, ${transactionHeader.type}, ${transactionHeader.code})</db:statement>
+    </db:executor>
+
+    <db:executor executeOnElement="TB" datasource="StagingArea">
+        <db:statement>INSERT INTO TransactionBody (seqNo, type, status, item, voucherNo, dept, amount) VALUES (${transactionBody.seqNo}, ${transactionBody.type}, ${transactionBody.status}, ${transactionBody.item}, ${transactionBody.voucherNo}, ${transactionBody.dept}, ${transactionBody.amount})</db:statement>
+    </db:executor>
+
+    <db:executor executeOnElement="TF" datasource="StagingArea">
+        <db:statement>INSERT INTO TransactionFooters (seqNo, expireDate, cardType) VALUES (${transactionFooter.seqNo}, ${transactionFooter.expireDate}, ${transactionFooter.cardType})</db:statement>
+    </db:executor>
+
+    ...
+
+</smooks-resource-list>
+----
+
+The insert statements are bound to the map entry values and are executed *after* the element, the _executeOnElement_ selector points to, is processed. The next step is to configure a datasource for the database visitors (lines 47-49):
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.4.xsd"
+                      xmlns:csv="http://www.milyn.org/xsd/smooks/csv-1.5.xsd"
+                      xmlns:db="http://www.milyn.org/xsd/smooks/db-routing-1.1.xsd"
+                      xmlns:ds="http://www.milyn.org/xsd/smooks/datasource-1.3.xsd">
+
+    <csv:reader separator="~" fields="TH[seqNo,startDate,finishDate,status,type,code] | TB[seqNo,type,status,item,voucherNo,dept,amount] | TF[seqNo,expireDate,cardType]"/>
+
+    <jb:bean beanId="transactionHeader" class="java.util.HashMap" createOnElement="TH">
+        <jb:value property="seqNo" data="TH/seqNo" />
+        <jb:value property="startDate" data="TH/startDate" />
+        <jb:value property="finishDate" data="TH/finishDate" />
+        <jb:value property="status" data="TH/status" />
+        <jb:value property="type" data="TH/type" />
+        <jb:value property="code" data="TH/code" />
+    </jb:bean>
+
+    <jb:bean beanId="transactionBody" class="java.util.HashMap" createOnElement="TB">
+        <jb:value property="seqNo" data="TB/seqNo" />
+        <jb:value property="type" data="TB/type" />
+        <jb:value property="status" data="TB/status" />
+        <jb:value property="item" data="TB/item" />
+        <jb:value property="voucherNo" data="TB/voucherNo" />
+        <jb:value property="dept" data="TB/dept" />
+        <jb:value property="amount" data="TB/amount" />
+    </jb:bean>
+
+    <jb:bean beanId="transactionFooter" class="java.util.HashMap" createOnElement="TF">
+        <jb:value property="seqNo" data="TF/seqNo" />
+        <jb:value property="expireDate" data="TF/expireDate" />
+        <jb:value property="cardType" data="TF/cardType" />
+    </jb:bean>
+
+    <db:executor executeOnElement="TH" datasource="StagingArea">
+        <db:statement>INSERT INTO TransactionHeaders (seqNo, startDate, finishDate, status, type, code) VALUES (${transactionHeader.seqNo}, ${transactionHeader.startDate}, ${transactionHeader.finishDate}, ${transactionHeader.status}, ${transactionHeader.type}, ${transactionHeader.code})</db:statement>
+    </db:executor>
+
+    <db:executor executeOnElement="TB" datasource="StagingArea">
+        <db:statement>INSERT INTO TransactionBody (seqNo, type, status, item, voucherNo, dept, amount) VALUES (${transactionBody.seqNo}, ${transactionBody.type}, ${transactionBody.status}, ${transactionBody.item}, ${transactionBody.voucherNo}, ${transactionBody.dept}, ${transactionBody.amount})</db:statement>
+    </db:executor>
+
+    <db:executor executeOnElement="TF" datasource="StagingArea">
+        <db:statement>INSERT INTO TransactionFooters (seqNo, expireDate, cardType) VALUES (${transactionFooter.seqNo}, ${transactionFooter.expireDate}, ${transactionFooter.cardType})</db:statement>
+    </db:executor>
+
+    <ds:direct bindOnElement="$document" datasource="StagingArea"
+               driver="org.apache.derby.jdbc.EmbeddedDriver" url="jdbc:derby:memory:staging"
+               autoCommit="true" username="" password="" />
+
+</smooks-resource-list>
+----
+
+Last but not least, the Java code to kick off the data load:
+
+[source%linenums%nowrap,java]
+----
+package org.ossandme;
+
+import org.milyn.Smooks;
+
+import javax.xml.transform.stream.StreamSource;
+
+public class CsvToDbTransformer {
+
+    public void transform() throws Exception {
+
+        // create a Smooks instance for loading the CSV records to the database
+        Smooks smooks = new Smooks(CsvToDbTransformer.class.getResourceAsStream("/transactions-to-db.xml"));
+
+        // load the records
+        smooks.filterSource(new StreamSource(CsvToDbTransformer.class.getResourceAsStream("/transactions.csv")));
+
+        smooks.close();
+
+    }
+
+}
+----
+
+==== Trial III
+
+The next challenge for Smooks makes the previous ones look like child’s play. The goal: transform an XML stream to a CSV file that is eventually uploaded to an FTP server. The input:
+
+[source%linenums%nowrap,xml]
+----
+<queryResult xmlns="http://ossandme.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <record>
+        <type>Account</type>
+        <First_Name>Carlos</First_Name>
+        <Last_Name>Di Sarli</Last_Name>
+        <ShippingStreet>San Telmo</ShippingStreet>
+        <ShippingCity>Buenos Aires</ShippingCity>
+        <ShippingState>N/A</ShippingState>
+        <ShippingPostalCode></ShippingPostalCode>
+        <Member_Tier__c>Gold</Member_Tier__c>
+    </record>
+    <record>
+        <type>Account</type>
+        <First_Name>Osvaldo</First_Name>
+        <Last_Name>Fresedo</Last_Name>
+        <ShippingStreet></ShippingStreet>
+        <ShippingCity>Rome</ShippingCity>
+        <ShippingState>N/A</ShippingState>
+        <ShippingPostalCode></ShippingPostalCode>
+        <Member_Tier__c>Silver</Member_Tier__c>
+    </record>
+    <record>
+        <type>Account</type>
+        <First_Name>Roberto</First_Name>
+        <Last_Name>Canelo</Last_Name>
+        <ShippingStreet>Venezuela</ShippingStreet>
+        <ShippingCity>Buenos Aires</ShippingCity>
+        <ShippingState>N/A</ShippingState>
+        <ShippingPostalCode></ShippingPostalCode>
+        <Member_Tier__c>Silver</Member_Tier__c>
+    </record>
+    <record>
+        <type>Account</type>
+        <First_Name>Juan</First_Name>
+        <Last_Name>D'Arienzo</Last_Name>
+        <ShippingStreet></ShippingStreet>
+        <ShippingCity></ShippingCity>
+        <ShippingState></ShippingState>
+        <ShippingPostalCode></ShippingPostalCode>
+        <Member_Tier__c>Gold</Member_Tier__c>
+    </record>
+    ...
+</queryResult>
+----
+
+The desired output:
+
+[source%linenums%nowrap,csv]
+----
+000000Card Extract   20140921
+Carlos~San Telmo~Buenos Aires~N/A~~Gold
+Osvaldo~Fresedo~~Rome~N/A~~Silver
+Roberto~Canelo~Venezuela~Buenos Aires~N/A~~Silver
+Juan~D'Arienzo~~~~~Gold
+...
+999999002213
+----
+
+Considering the CSV could be large in size, my requirement was for Smooks to write the transformed content to a http://docs.oracle.com/javase/8/docs/api/java/io/PipedOutputStream.html[_PipedOutputStream_]. An FTP library would read from the http://docs.oracle.com/javase/8/docs/api/java/io/PipedInputStream.html[_PipedOutputStream_]’s connected _PipedInputStream_, and write the streamed content to a file. To this end, I wrote the class running the transformation as follows:
+
+[source%linenums%nowrap,java]
+----
+package org.ossandme;
+
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.milyn.Smooks;
+
+public class XmlToCsvTransformer {
+
+    public InputStream transform(final InputStream inputStream) throws Exception {
+
+        // create a Smooks instance for transforming XML to CSV
+        final Smooks smooks = new Smooks(getClass().getResourceAsStream("/xml-to-csv.xml"));
+
+        // create an InputStream to be read by the FTP client library
+        PipedInputStream pipedInputStream = new PipedInputStream();
+
+        // create an OutputStream for Smooks to write the CSV to
+        final PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
+
+        // smooks.filterSource(...) blocks so we carry out the transformation on a new thread
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                // transform XML read from the InputStream to CSV
+                smooks.filterSource(new StreamSource(inputStream), new StreamResult(pipedOutputStream));
+                smooks.close();
+            }
+        });
+
+        // return the PipedInputStream to be read by the FTP client library
+        return pipedInputStream;
+    }
+}
+----
+
+My focus then turned to the XML-to-CSV mapping configuration. After deliberation, I reluctantly settled to use the http://freemarker.org/[FreeMarker] visitor for writing the CSV. I considered as an alternative to develop a visitor specialised for this type of transformation but time constraints made this unfeasible. The FreeMarker visitor, like the database one, cannot read directly off the XML stream. Instead, it can read from DOM and POJOs. So I decide to use the DOM visitor such that it creates DOMs from record elements found within the input stream:
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd">
+
+    <resource-config selector="record">
+        <resource>org.milyn.delivery.DomModelCreator</resource>
+    </resource-config>
+
+</smooks-resource-list>
+----
+
+I then configured the FreeMarker visitor to apply the CSV template on seeing the element _record_ in the stream:
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">
+
+    <resource-config selector="record">
+        <resource>org.milyn.delivery.DomModelCreator</resource>
+    </resource-config>
+
+    <ftl:freemarker applyOnElement="record">
+        <ftl:template>account.ftl</ftl:template>
+    </ftl:freemarker>
+
+</smooks-resource-list>
+----
+
+Below is a simplified version of what I had in real life in _account.ftl_ (note the last line of the template must be a newline):
+
+[source%linenums%nowrap,ftl]
+----
+<#ftl ns_prefixes={"ossandme":"http://ossandme.org"}>
+${record['ossandme:First_Name']}~${record['ossandme:Last_Name']}~${record['ossandme:ShippingStreet']}~${record['ossandme:ShippingCity']}~${record['ossandme:ShippingState']}~${record['ossandme:ShippingPostalCode']}~${record['ossandme:Member_Tier__c']}
+----
+
+An additional complexity I had to consider were the CSV’s header and footer. Apart from being structured differently than the rest of the records, the header had to contain the current date whereas, for the footer, the total record count. What I did for the header was to bind the current date from my Java code to Smooks’s bean context (lines 27-30 and 38):
+
+[source%linenums%nowrap,java]
+----
+package org.ossandme;
+
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.util.Date;
+
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import org.milyn.Smooks;
+import org.milyn.container.ExecutionContext;
+
+public class XmlToCsvTransformer {
+
+    public InputStream transform(final InputStream inputStream) throws Exception {
+
+        // create a Smooks instance for transforming XML to CSV
+        final Smooks smooks = new Smooks(getClass().getResourceAsStream("/xml-to-csv.xml"));
+
+        // create an InputStream to be read by the FTP client library
+        PipedInputStream pipedInputStream = new PipedInputStream();
+
+        // create an OutputStream for Smooks to write the CSV to
+        final PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
+
+        final ExecutionContext executionContext = smooks.createExecutionContext();
+
+        // bind the current date to Smook's bean context
+        executionContext.getBeanContext().addBean("now", new Date());
+
+        // smooks.filterSource(...) blocks so we carry out the transformation on a new thread
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                // transform XML read from the InputStream to CSV
+                smooks.filterSource(executionContext, new StreamSource(inputStream), new StreamResult(pipedOutputStream));
+                smooks.close();
+            }
+        });
+
+        // return the PipedInputStream to be read by the FTP client library
+        return pipedInputStream;
+    }
+}
+----
+
+The date is then referenced from the Smooks config (lines 9-12):
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">
+
+    <resource-config selector="record">
+        <resource>org.milyn.delivery.DomModelCreator</resource>
+    </resource-config>
+
+    <ftl:freemarker applyOnElement="#document">
+        <ftl:template><!--000000Card Extract   ${now?string('yyyyMMdd')}
+<?TEMPLATE-SPLIT-PI?>--></ftl:template>
+    </ftl:freemarker>
+
+    <ftl:freemarker applyOnElement="record">
+        <ftl:template>account.ftl</ftl:template>
+    </ftl:freemarker>
+
+</smooks-resource-list>
+----
+
+With respect to the above config, at the start of the XML stream, FreeMarker writes the header to the output stream (i.e., _PipedOutputStream_):
+
+----
+000000Card Extract   [current date]
+----
+
+_<?TEMPLATE-SPLIT-PI?>_ is an embedded Smooks instruction that applies account.ftl to record elements after the header.
+
+Adding the record count to the footer is just a matter of configuring the Calculator visitor to maintain a counter in the bean context and referencing that counter from the template:
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' enco0ding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd"
+                      xmlns:calc="http://www.milyn.org/xsd/smooks/calc-1.1.xsd">
+
+    <resource-config selector="record">
+        <resource>org.milyn.delivery.DomModelCreator</resource>
+    </resource-config>
+
+    <calc:counter countOnElement="#document" beanId="totalRecordCount" start="0"/>
+    <calc:counter countOnElement="record" beanId="totalRecordCount" start="1"/>
+
+    <ftl:freemarker applyOnElement="#document">
+        <ftl:template><!--000000Card Extract   ${now?string('yyyyMMdd')}
+<?TEMPLATE-SPLIT-PI?>999999${totalRecordCount?string?left_pad(6, '0')}--></ftl:template>
+    </ftl:freemarker>
+
+    <ftl:freemarker applyOnElement="record">
+        <ftl:template>account.ftl</ftl:template>
+    </ftl:freemarker>
+
+</smooks-resource-list>
+----
+
+==== Trial IV
+
+The final challenge Smooks had to go against was to read from a _java.util.Iterator_ of maps and, like the previous task, write the transformed output to a stream in CSV format. Unlike the _InputStream_ that Smooks read from the other tasks, Smooks doesn’t have a reader that is capable of writing a properly structured XML doc from an iterator of maps. So I’m left with writing my own reader:
+
+[source%linenums%nowrap,java]
+----
+package org.ossandme;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.XMLConstants;
+
+import org.apache.commons.lang.StringUtils;
+import org.milyn.cdr.SmooksConfigurationException;
+import org.milyn.container.ExecutionContext;
+import org.milyn.delivery.java.JavaXMLReader;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.DTDHandler;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.helpers.AttributesImpl;
+
+public class MapIteratorSourceReader implements JavaXMLReader {
+
+    // the stream writer
+    private ContentHandler contentHandler;
+
+    // holds the iterator of maps
+    private List<Object> sourceObjects;
+
+    @Override
+    public ContentHandler getContentHandler() {
+        return contentHandler;
+    }
+
+    @Override
+    public DTDHandler getDTDHandler() {
+        return null;
+    }
+
+    @Override
+    public EntityResolver getEntityResolver() {
+        return null;
+    }
+
+    @Override
+    public ErrorHandler getErrorHandler() {
+        return null;
+    }
+
+    @Override
+    public boolean getFeature(String arg0) throws SAXNotRecognizedException, SAXNotSupportedException {
+        return false;
+    }
+
+    @Override
+    public Object getProperty(String arg0) throws SAXNotRecognizedException, SAXNotSupportedException {
+        return null;
+    }
+
+    // called by Smooks to perform transformation
+    @Override
+    public void parse(InputSource inputSource) throws IOException, SAXException {
+
+        // retrieve Iterator instance from sourceObjects; not the InputSource parameter
+        Iterator<Map<String, String>> iterator = (Iterator<Map<String, String>>) sourceObjects.get(0);
+
+        // write the start of the document
+        contentHandler.startDocument();
+        contentHandler.startElement(XMLConstants.NULL_NS_URI, "records", StringUtils.EMPTY, new AttributesImpl());
+
+        // iterate through the maps
+        while (iterator.hasNext()) {
+
+            // write a 'record' start tag to the stream for each map
+            contentHandler.startElement(XMLConstants.NULL_NS_URI, "record", StringUtils.EMPTY, new AttributesImpl());
+
+            // get a map from the iterator
+            Map<String, String> record = iterator.next();
+
+            // iterate through the map entries
+            for (Map.Entry<String, String> map : record.entrySet()) {
+
+                // write a start tag that is named after the entry key
+                contentHandler.startElement(XMLConstants.NULL_NS_URI, map.getKey(), StringUtils.EMPTY, new AttributesImpl());
+
+                if (map.getValue() != null) {
+                    // set the element's text content to the entry value
+                    contentHandler.characters(map.getValue().toCharArray(), 0, map.getValue().length());
+                }
+
+                // close the element that is mapped to an entry
+                contentHandler.endElement(XMLConstants.NULL_NS_URI, map.getKey(), StringUtils.EMPTY);
+            }
+
+            // close the 'record' element
+            contentHandler.endElement(XMLConstants.NULL_NS_URI, "record", StringUtils.EMPTY);
+        }
+
+        // close the document
+        contentHandler.endElement(XMLConstants.NULL_NS_URI, "records", StringUtils.EMPTY);
+        contentHandler.endDocument();
+    }
+
+    @Override
+    public void parse(String arg0) throws IOException, SAXException {
+
+    }
+
+    @Override
+    public void setContentHandler(ContentHandler contentHandler) {
+        this.contentHandler = contentHandler;
+    }
+
+    @Override
+    public void setDTDHandler(DTDHandler arg0) {
+    }
+
+    @Override
+    public void setEntityResolver(EntityResolver arg0) {
+
+    }
+
+    @Override
+    public void setErrorHandler(ErrorHandler arg0) {
+    }
+
+    @Override
+    public void setFeature(String arg0, boolean arg1) throws SAXNotRecognizedException, SAXNotSupportedException {
+    }
+
+    @Override
+    public void setProperty(String arg0, Object arg1) throws SAXNotRecognizedException, SAXNotSupportedException {
+    }
+
+    @Override
+    public void setExecutionContext(ExecutionContext executionContext) {
+
+    }
+
+    @Override
+    public void setSourceObjects(List<Object> sourceObjects) throws SmooksConfigurationException {
+        this.sourceObjects = sourceObjects;
+    }
+
+}
+----
+
+The custom reader is hooked into Smooks as follows (line 5):
+
+[source%linenums%nowrap,xml]
+----
+<?xml version='1.0' encoding='UTF-8'?>
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+                      xmlns:ftl="http://www.milyn.org/xsd/smooks/freemarker-1.1.xsd">
+
+    <reader class="org.ossandme.MapIteratorSourceReader"/>
+
+    <resource-config selector="record">
+        <resource>org.milyn.delivery.DomModelCreator</resource>
+    </resource-config>
+
+    <ftl:freemarker applyOnElement="record">
+        <ftl:template>annual-census.ftl</ftl:template>
+    </ftl:freemarker>
+
+</smooks-resource-list>
+----
+
+Finally, passing the iterator to Smooks for transformation consists of setting a _JavaSource_ parameter, holding the iterator, on _filterSource(…)_  (line 27):
+
+[source%linenums%nowrap,java]
+----
+package org.ossandme;
+
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.xml.transform.stream.StreamResult;
+
+import org.milyn.Smooks;
+import org.milyn.payload.JavaSource;
+
+public class MapIteratorToCsvTransformer {
+
+    public InputStream transform(final Iterator<Map<String, String>> mapIterator) throws Exception {
+
+        PipedInputStream pipedInputStream = new PipedInputStream();
+
+        final Smooks smooks = new Smooks(getClass().getResourceAsStream("/map-iterator-to-csv.xml"));
+        final PipedOutputStream pipedOutputStream = new PipedOutputStream(pipedInputStream);
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                smooks.filterSource(new JavaSource(mapIterator), new StreamResult(pipedOutputStream));
+                smooks.close();
+            }
+
+        });
+
+        return pipedInputStream;
+    }
+
+}
+----

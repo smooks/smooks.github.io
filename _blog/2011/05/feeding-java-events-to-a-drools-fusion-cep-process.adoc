@@ -1,0 +1,9 @@
+---
+layout: post
+title: "Feeding Java Events to a Drools Fusion CEP Process…"
+date: 2011-5-5
+author: Tom Fennelly
+tags: ["CEP", "Drools"]
+---
+
+Rob Greathouse (a co-worker of mine at JBoss) was recently asking me how he might use Smooks to feed Java Objects to a  http://www.jboss.org/drools/drools-fusion.html[Drools Fusion] CEP Process.  I took the offical Drools Fusion Stock Tick CEP example and modified it to use Smooks.  http://www.smooks.org/mediawiki/index.php?title=V1.5:drools-fusion[Check it out…]

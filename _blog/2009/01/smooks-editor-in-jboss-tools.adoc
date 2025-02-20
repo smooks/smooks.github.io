@@ -1,0 +1,15 @@
+---
+layout: post
+title: Smooks Editor in JBoss Tools
+date: 2009-1-30
+author: Tom
+tags: ["Eclipse"]
+---
+
+http://www.jboss.org/tools/[*JBoss Tools*] v3.0.0 will ship with an Editor for Smooks.
+
+http://www.jboss.org/tools/download/index.html#stable[*Download v3.0.0 CR2*]
+
+This release of the Editor will provide some basic transformation capabilities, generating Smooks configs for performing basic Xml2Java, Java2Java, Java2Xml and Xml2Xml transforms.  It generates Smooks v1.0 based configurations.  We’ve been told "_You just need the Eclipse Gaynmede (sr1) J2EE distro + JBT 3_".
+
+It would be great if people could provide feedback (forums) and bug reports (JIRA) to the JBoss Tools team.

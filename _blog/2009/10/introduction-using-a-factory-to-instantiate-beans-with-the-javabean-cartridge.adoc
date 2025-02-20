@@ -1,0 +1,86 @@
+---
+layout: post
+title: "Introduction: Using a factory to instantiate beans with the javabean cartridge"
+date: 2009-10-12
+author: Maurice
+tags: ["Java Binding", "Smooks", "Technical Info & Concepts"]
+---
+
+I would like to introduce the new factory feature in the Javabean cartridge of the up coming Smooks 1.3 release. This new features makes it possible to use a static factory method or a factory object to instantiate objects with the Javabean cartridge.
+
+Before this new feature you could only instantiate new beans by providing the class name of the bean and the bean would then be created using it’s public parameterless constructor. So it was mandatory to have a parameterless constructor on the Javabean. Here is an example:
+
+[source,xml]
+----
+<jb:bean
+   beanId="orders"
+   class="java.util.ArrayList"
+   createOnElement="orders"
+>
+     <!-- ... bindings -->
+</jb:bean>
+----
+
+But now it is possible to use a factory to instantiate the bean. So you don’t need a public parameterless constructur anymore. You even don’t have to define the actual class name any more. Any of the interfaces that the class implements suffices. However only the methods of that interface are available for binding then. Here is an example where we instantiate an ArrayList object using a static factory method:
+
+[source,xml]
+----
+<jb:bean
+   beanId="orders"
+   class="java.util.List"
+   factory="some.package.ListFactory#newList"
+   createOnElement="orders"
+>
+     <!-- ... bindings -->
+</jb:bean>
+----
+
+With the factory attribute you set the factory definition. The class attributes defines that a List object is returned. What kind of List object (ArrayList, LinkedList) is up to the ListFactory to decide. Here is another example:
+
+[source,xml]
+----
+<jb:bean
+   beanId="orders"
+   class="java.util.List"
+   factory="some.package.ListFactory#getInstance.newList"
+   createOnElement="orders"
+>
+     <!-- ... bindings -->
+</jb:bean>
+----
+
+Here we define that an instance of the ListFactory needs to be retrieved using the static method getInstance() and that then the newList() method needs to be called on the ListFactory object to create the List object. This construct makes it possible to easily call Singleton Factories.
+
+The default factory definition language looks like this: *_factory.class#static_method{.instance_method}_*
+
+It is also possible to use MVEL as the factory definition language. MVEL has some advantages over the basic default definition language, for example you can use objects from the bean context as the factory object or you can call factory methods with parameters. These parameters can be defined within the definition or they can be objects from the bean context. To be able to use MVEL you must set the ‘factory.definition.parser.class’ global parameter to ‘org.milyn.javabean.factory.MVELFactoryDefinitionParser’.
+
+Here is an example using MVEL:
+
+[source,xml]
+----
+<smooks-resource-list
+   xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+   xmlns:jb="http://www.milyn.org/xsd/smooks/javabean-1.3.xsd">
+
+	<params>
+		<param name="factory.definition.parser.class">
+			org.milyn.javabean.factory.MVELFactoryDefinitionParser
+		</param>
+	</params>
+
+    <jb:bean
+		beanId="orders"
+		class="java.util.List"
+		factory="some.package.ListFactory.getInstance().newList()"
+		createOnElement="orders"
+	>
+		<!-- ... bindings -->
+    </jb:bean>
+
+</smooks-resource-list>
+----
+
+Maybe you wonder why we don’t use MVEL as the default factory definition language? Currently the performance of the basic definition language and MVEL is about equal. The reason that the basic definition language isn’t faster is because it currently uses reflection to call the factory methods. However there are plans to use byte code generation instead of reflection. This should improve the performance dramatically. If MVEL where the default language then we couldn’t do anything to improve the performance for those people who don’t need any thing more then the basic features that the basic definition language offers.
+
+If you have any questions or remarks then I would gladly hear them.

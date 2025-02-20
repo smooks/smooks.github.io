@@ -1,0 +1,11 @@
+---
+layout: post
+title: "Eclipse Tooling for Smooks… Let us hear what you think…"
+date: 2009-9-30
+author: Tom Fennelly
+tags: ["Uncategorized"]
+---
+
+Of late, JBoss have been making more of a push on their Smooks Eclipse Tooling within JBoss Tools.  Prior to a few weeks ago, Dart Peng was “more or less” left to his own devices on this work, without much help from myself or anyone else.  More recently, Brian Fitzpatrick (JBoss) and myself have been more actively contributing to the great work being done by Dart.
+
+Brian has been blogging about this work http://jbosstools.blogspot.com/2009/09/seeking-feedback-on-smooks.html[here on the JBoss Tools blog]. Please take a look and contribute your throughs and ideas!!!

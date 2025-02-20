@@ -1,0 +1,17 @@
+---
+layout: post
+title: "Smooks v1.4 Beta1 available for download"
+date: 2010-10-26
+author: Tom Fennelly
+tags: ["Release"]
+---
+
+At last we’re nearly there with v1.4.   As well as 85+ bug fixes, Smooks v1.4 includes the following new highlight features:
+
+* *Out of the box support for UN/EDIFACT* Interchange message.  http://www.smooks.org/mediawiki/index.php?title=Smooks_v1.4_Examples#UN.2FEDIFACT[See Examples].
+* *Apache Camel Integration*.  http://www.smooks.org/mediawiki/index.php?title=Smooks_v1.4_Examples#Apache_Camel[See Examples].
+* A *Dynamic Model Builder* that’s very handy for dealing with complex evolving configuration namespaces on top of a single Java Object Model. Supports model reading and writing.  http://www.smooks.org/mediawiki/index.php?title=Smooks_v1.4_Examples#Dynamic_Model_Builder[See Examples].
+
+But that’s not all by any means.  http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11071&version=15886[*_See here for a full list of Fixes and Features_*]
+
+http://www.smooks.org/mediawiki/index.php?title=Downloads[*_Download_*]

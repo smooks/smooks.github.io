@@ -1,0 +1,11 @@
+---
+layout: post
+title: "SOPERA Data Integration Smooks Component for Talend"
+date: 2009-8-29
+author: Tom Fennelly
+tags: ["Others Using Smooks"]
+---
+
+http://www.sopera.de/[SOPERA] have created a new Open Source project on Google called "http://www.sopera.de[soperadi-smooks]".  It is (or is hopefully going to be) a Smooks component for http://www.talend.com/index.php[Talend].
+
+Cool!!!!

@@ -1,0 +1,13 @@
+---
+layout: post
+title: "Slides Smooks Community Day"
+date: 2010-9-9
+author:  Maurice
+tags: ["EDI", "Others Using Smooks", "Persistence", "Presentations", "Publications", "Scribe", "Smooks"]
+---
+
+Here is a quick overview where you can find the slides presented on the Smooks Community Day 2010:
+
+* http://www.slideshare.net/tfennelly/unedifact-interchange-processing-with-smooks-v14-5104071[UN/EDIFACT processing with Smooks]
+* http://www.slideshare.net/mzeijen/reusing-existing-datalayertopersistmultif[Reusing existing data layer to persist multi format data streams]
+* http://www.slideshare.net/RenatZubairov/sopera-di-components-for-smooks-community-day[Smooks Sopera DI Components]

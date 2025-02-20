@@ -1,0 +1,94 @@
+---
+layout: post
+title: "Smooks-Camel integration revisited"
+date: 2010-9-23
+author:  Daniel Bevenius
+tags: ["Camel"]
+---
+
+This entry is about the work we have done integrating http://www.smooks.org/[Smooks] with http://www.smooks.org/[Apache Camel] for Smooks v1.4.  With this tighter integration of these frameworks, you can leverage the power of http://www.smooks.org/[Smooks] to process/transform a wide range of data types, with the power of http://www.smooks.org/[Apache Camel] to route data to a huge range of endpoint types.
+
+Tom started this work a long time ago and got feedback from Claus Ibsen, which Tom implemented. Later Christian Mueller improved the code and I've continued working on that code base.
+
+When it comes to using Smooks in Camel there are three options of usage:
+
+*1. SmooksComponent*
+The SmooksComponent is a Camel component which can be used in a Camel route like this:
+
+[source,java]
+----
+from("file://inputDir?noop=true")
+.to("smooks://smooks-config.xml")
+.to("jms:queue:order")
+----
+
+This route will read files from the 'inputDir' directory and pass the contents of those files to the Smooks Component. The file will be automatically converted into an instance of javax.xml.transform.stream.StreamSource. TypeConversion is a built-in Camel feature that you can read more about http://camel.apache.org/type-converter.html[here].
+
+So we know what the source type is but how about the Result type we want Smooks to produce? If you have been following the latest blog posts you might have already guessed that the type(s) are configured in 'smooks-config.xml' as described in this http://blog.smooks.org/2010/09/14/camel-integration-and-new-smooks-configuration-element/[blog post].
+
+Using the SmooksComponent you can use all the features from Smooks including routing to Camel endpoints. This enables fragments to be routed during transformation. This means that the routing can be performed as the message is being filtered Vs as a batch operation after filtering the message, making it easier to handle large/huge message streams.
+
+Here is an example of routing to camel endpoints using Smooks:
+
+[source,xml]
+----
+<smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.1.xsd"
+         xmlns:camel="http://www.milyn.org/xsd/smooks/camel-1.4.xsd">
+
+  <!-- Create some bean instances from the input source... -->
+  <jb:bean beanId="orderItem"  ... ">
+    <!-- etc... See Smooks Java Binding docs -->
+  </jb:bean>
+
+  <!-- Route bean to camel endpoints... -->
+  <camel:route beanid="orderItem">
+    <camel:to endpoint="direct:slow" if="orderItem.priority == 'Normal'" />
+    <camel:to endpoint="direct:express" if="orderItem.priority == 'High'" />
+  </camel:route>
+
+</smooks-resource-list>
+----
+
+In the above example, we route Java Beans from the Smooks BeanContext to the Camel Endpoints. Note that you can also apply templates (e.g. FreeMarker) to these same beans and route the templating result instead of beans (e.g. as XML, CSV or other).
+
+The above configuration shows routing using the 'beanId' attribute. It is also possible to route using an attribute named 'routeOnElement' For more information about Smooks routing please consult the http://www.smooks.org/mediawiki/index.php?title=V1.4:Smooks_v1.4_User_Guide#Routing_Output_Data[Smooks User Guide].
+
+The SmooksComponent delegates most of its work to SmooksProcessor which will be described next.
+
+*2. SmooksProcessor*
+Using Smooks Processor gives you full control over Smooks, for example if you want to programatically create the underlying Smooks instance you'd use the SmooksProcessor. Below is an example of using the SmooksProcessor in a Camel route:
+
+[source,java]
+----
+Smooks smooks = new Smooks("edi-to-xml-smooks-config.xml");
+SmooksProcessor processor = new SmooksProcessor(smooks, context);
+from("file://input?noop=true").process(processor).
+.to("mock:result");
+----
+
+*3. SmooksDataFormat*
+SmooksDataFormat is a Camel DataFormat which is capable of transforming from one dataformat to another and back again. You would use this when you are only interested in transforming from one format to another and not interested in other Smooks features.
+
+Below is an example of using SmooksDataFormat to transform a comma separated value string into a java.util.List of Customer object instances:
+
+[source,java]
+----
+SmooksDataFormat sdf = new SmooksDataFormat("csv-smooks-unmarshal-config.xml");
+from("direct:unmarshal")
+.unmarshal(sdf).convertBodyTo(List.class)
+.to("mock:result");
+----
+
+*4. Examples*
+
+There are currently two very basic examples that demonstrate the usage of Smooks-Camel integration:
+1. https://svn.codehaus.org/milyn/trunk/smooks-examples/camel/camel-dataformat[camel-dataformat] (see note below)
+2. https://svn.codehaus.org/milyn/trunk/smooks-examples/camel/camel-integration[camel-integration] (see note below)
+
+*Note on Examples:* _You must http://www.smooks.org/mediawiki/index.php?title=V1.4:Smooks_v1.4_User_Guide#Routing_Output_Data[checkout and build all examples] before running the Camel examples._
+
+Tom is working on a really interesting example of using UN-EDIFACT in combination with Camel and will be added shortly.
+
+Thanks,
+
+/Daniel
