@@ -580,6 +580,7 @@ Below is a simplified version of what I had in real life in _account.ftl_ (note 
 ----
 <#ftl ns_prefixes={"ossandme":"http://ossandme.org"}>
 ${record['ossandme:First_Name']}~${record['ossandme:Last_Name']}~${record['ossandme:ShippingStreet']}~${record['ossandme:ShippingCity']}~${record['ossandme:ShippingState']}~${record['ossandme:ShippingPostalCode']}~${record['ossandme:Member_Tier__c']}
+
 ----
 
 An additional complexity I had to consider were the CSV’s header and footer. Apart from being structured differently than the rest of the records, the header had to contain the current date whereas, for the footer, the total record count. What I did for the header was to bind the current date from my Java code to Smooks’s bean context (lines 27-30 and 38):
