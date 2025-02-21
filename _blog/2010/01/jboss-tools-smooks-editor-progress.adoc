@@ -12,8 +12,6 @@ At JBoss, we’ve been making some good progress with the http://www.jboss.org/t
 
 In this Screencast, we bind EDI Purchase Order data (but can also be XML, JSON etc) into an "Order" object model (Java).  This Screencast was created a few weeks ago, using the v3.1.0.CR1 release of JBoss Tools.
 
-In this Screencast, we bind EDI Purchase Order data (but can also be XML, JSON etc) into an "Order" object model (Java).  This Screencast was created a few weeks ago, using the v3.1.0.CR1 release of JBoss Tools.
-
 video::http://content.screencast.com/users/tfennelly/folders/Camtasia/media/4b184ca6-9a6d-4817-b15d-aac8576d36bb/mp4h264player.swf[]
 
 == EDI to XML (via XSD)
@@ -31,9 +29,9 @@ We have purposely restricted the 3.1.0 version of the editor:
 1. *Supported Use Cases*:
     * _Java Mapping/Binding_:  Drag & Drop mapping/binding of XML, JSON, CSV and EDI data to Java.
     * _CSV and XML Templating_:  Drag & Drop templating of Java Mappings (see #1 above) to produce CSV or XML (XML via XSD or XML Sample).
-2. Supported Integration:
+2. *Supported Integration*:
     * _JBoss Tools ESB Editor_: Will have basic open and edit integration with the ESB SmooksAction.
-3. Supported Versions:
+3. *Supported Versions*:
     * _Smooks v1.2 Configurations_:  The Editor will only support Smooks v1.2 configuration namespaces.  Therefore, if you have configurations using config namespaces from earlier (or newer v1.3) versions of Smooks, the editor will not open the configurations.
 
 So, the 3.1.0 version of the editor will not support:
