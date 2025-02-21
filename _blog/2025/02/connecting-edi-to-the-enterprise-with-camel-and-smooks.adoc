@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Connecting EDI to the Enterprise with Camel &amp; Smooks"
+title: "Connecting EDI to the Enterprise with Camel & Smooks"
 date: 2025-02-19
 author: Claude
 tags: ["Camel", "EDI"]
