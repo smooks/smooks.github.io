@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Smooks v1.3… Available for download"
+title: "Processing UN/EDIFACT message Interchanges…"
 date: 2010-6-28
 author:  Tom Fennelly
 tags: ["EDI"]
