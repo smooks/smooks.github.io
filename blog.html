@@ -4,6 +4,13 @@ title: Blog
 ---
 <h1>Latest Posts</h1>
 
+<p>
+    <a href="{{ site.url }}/feed/blog.xml" title="Subscribe" style="text-decoration: none; display: flex; align-items: center; gap: 5px;">
+        <img src="{{ '/assets/images/Feed-icon.svg' | prepend: site.baseurl }}" alt="Atom Feed" width="24" height="24">
+        <span>Subscribe</span>
+    </a>
+</p>
+
 {% assign posts = site.blog | sort: 'date' | reverse %}
 {% for post in posts %}
 <a style="padding-left: 0; text-decoration: none;" href="{{ post.url }}"><h3 class="fw-normal">{{ post.title }}</h3></a>
