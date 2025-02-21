@@ -6,7 +6,7 @@ title: Blog
 
 {% assign posts = site.blog | sort: 'date' | reverse %}
 {% for post in posts %}
-<a style="padding-left: 0; text-decoration: none;" href="{{ post.url }}"><h2 class="fw-normal">{{ post.title }}</h2></a>
+<a style="padding-left: 0; text-decoration: none;" href="{{ post.url }}"><h3 class="fw-normal">{{ post.title }}</h3></a>
 <p class="lead">{{ post.date | date: "%B %d, %Y" }} by {{ post.author }}</p>
 <small class="text-muted">{{ post.excerpt }}</small>
 <a href="{{ post.url }}"><h6>Continue reading ❯</h6></a>
