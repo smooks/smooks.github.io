@@ -43,7 +43,7 @@ You can see the file has an unorthodox header in addition to a footer. Using Smo
 </smooks-resource-list>
 ----
 
-What’s happening under the covers, and in general, is that the reader pulls data from a *source* (e.g., _java.io.InputStream_) to go on to produce a stream of SAX events. The reader I’m using above is expecting the source data to be structured as CSV and to consist of 4 columns. Let’s make things more concrete. Reading from the _products.csv_ file, the reader produces the following XML stream footnote:[You might be wondering how I know for certain the XML document shown is the one actually produced by Smooks. I know because of Smooks’s HtmlReportGenerator class.]:
+What’s happening under the covers, and in general, is that the reader pulls data from a *source* (e.g., _java.io.InputStream_) to go on to produce a stream of SAX events. The reader I’m using above is expecting the source data to be structured as CSV and to consist of 4 columns. Let’s make things more concrete. Reading from the _products.csv_ file, the reader produces the following XML stream footnote:[You might be wondering how I know for certain the XML document shown is the one actually produced by Smooks. I know because of Smooks’s http://www.smooks.org/mediawiki/index.php?title=V1.5:Smooks_v1.5_User_Guide#Checking_the_Smooks_Execution_Process[HtmlReportGenerator] class.]:
 
 [source%linenums%nowrap,xml]
 ----
