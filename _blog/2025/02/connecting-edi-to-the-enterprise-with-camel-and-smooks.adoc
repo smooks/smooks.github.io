@@ -23,7 +23,7 @@ The Camel application I will showcase exchanges https://x12.org/[X12] documents,
 I will break down the above integration into stages in order to comprehend the overall flow (for those hungry to see the solution in action, you can skip the in-depth explanation and follow the https://github.com/apache/camel-jbang-examples/blob/main/edi-x12-as2/README.adoc[repo README instructions] to run and test the JBang app):
 
 . The customer's system transmits an EDI X12 purchase order in an link:https://camel.apache.org/components/next/as2-component.html[AS2] message sent over HTTP (HTTP is used for illustration purposes: a production system would typically transmit the AS2 message over HTTPS). The EDI capturing the information in the purchase order would resemble:
-
++
 ----
 ISA*00*          *00*          *ZZ*ACME           *ZZ*MYCORP         *071216*1406*U*00204*000000263*1*T*>~
 GS*IN*ACME*MYCORP*20071216*1406*000000001*X*004010~
@@ -45,13 +45,13 @@ SE*15*0001~
 GE*1*000000001~
 IEA*1*000000263~
 ----
-
++
 Transporting EDI with AS2, in contrast with transporting EDI with plain HTTPS or FTPS, is appealing for business-to-business exchanges because AS2 offers strong security guarantees such as non-repudiation of receipts.
 
 . Focusing on the supplier side, the _Receive Purchase Order_ Camel route listening for AS2 messages accepts the message containing the purchase order. This route pushes the X12 document onto a link:https://camel.apache.org/components/next/jms-component.html[JMS] queue. Immediately after, the AS2 listener endpoint delivers a notification to the AS2 client (i.e., the customer) confirming receipt of the message.
 
 . The _Ingest Purchase Order_ route picks up the X12 document from the queue and sends it to a link:https://camel.apache.org/components/next/smooks-component.html[Smooks endpoint] in order to ingest the EDI. The Smooks endpoint references the file `ingest-x12-config.xml` which configures Smooks to turn the EDI into a stream of events. Under the hood, Smooks is taking advantage of DFDL for parsing and writing the EDI. https://ogf.org/ogf/doku.php/standards/dfdl/dfdl[DFDL (Data Format Description Language)] is an open standard modeling language for describing general text and binary data. Smooks uses DFDL to emit events from EDI. For instance, given the EDI sample shown earlier, Smooks leverages DFDL to emit, conceptually:
-
++
 [source, xml]
 ----
 <interchange>
@@ -83,7 +83,7 @@ Transporting EDI with AS2, in contrast with transporting EDI with plain HTTPS or
    </segment>
 </interchange>
 ----
-
++
 Each emitted *event* corresponds to a segment or data element within the EDI document. Within `ingest-x12-config.xml`, Smooks is configured to *bind* these events to POJOs using *visitors* which target the events with *selectors*. Different visitors then *route* the POJOs via Camel to (a) verify the document identifiers with a Trading Partner Management system, AND (b) send them to an ERP for purchase order fulfillment.
 
 . The Smooks endpoint produces an XML representation of the EDI purchase order, even if a non-fatal error happens while binding the events or routing the beans. The _Ingest Purchase Order_ route goes on to post this XML to a tracking system for transaction visibility and monitoring purposes.
