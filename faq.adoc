@@ -44,7 +44,7 @@ At a fundamental level, a Smooks applications is composed of a sequence of resou
 
 ==== Is Smooks an alternative to XML transformation technologies such as XSLT?
 
-While Smooks does indeed borrow a number of concepts from XSLT, and XML more generally, it should not be conflated with XSLT or other transformation solutions. XSLT is an XML language that uses pattern-matching for transforming XML documents into other XML documents. Smooks is a _framework_ for link:documentation#fragment-based-data-processing-with-smooks[_event-driven_, _fragment-based_ data integration] using XML (e.g., XSLT, DFDL, etc...) and _non-XML_ (e.g., Java, https://groovy-lang.org/[Groovy], https://freemarker.apache.org/[FreeMarker], Docker, etc...) solutions. Smooks empowers you to apply multiple independent XSLT resources on an event stream alongside other resources in the context of a single execution.
+While Smooks does indeed borrow a number of concepts from XSLT, and XML more generally, it should not be conflated with XSLT or other transformation solutions. XSLT is an XML language that uses pattern-matching for transforming XML documents into other XML documents. Smooks is a _framework_ for link:documentation#fragment-based-data-processing[_event-driven_, _fragment-based_ data integration] using XML (e.g., XSLT, DFDL, etc...) and _non-XML_ (e.g., Java, https://groovy-lang.org/[Groovy], https://freemarker.apache.org/[FreeMarker], Docker, etc...) solutions. Smooks empowers you to apply multiple independent XSLT resources on an event stream alongside other resources in the context of a single execution.
 
 ==== How does Smooks compare with enterprise application integration (EAI) frameworks like Camel or Mule?
 
