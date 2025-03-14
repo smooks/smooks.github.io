@@ -54,7 +54,7 @@ https://camel.apache.org/[Camel] and https://github.com/mulesoft/mule[Mule] are 
 
 This is a classic Smooks usecase. See the https://github.com/smooks/smooks-examples/tree/v6/xslt-groovy[xslt-groovy example]. It uses `core:smooks` (i.e., pipeline) construct together with the `core:rewrite` construct to pre-process a date event in order for the date to be more consumable by XSLT. The XSLT script is then applied to the event stream with the `#document` (i.e., root) selector. This removes any need to have convoluted date processing logic within the XSLT script.
 
-==== Can Smooks be used to ingest non-XML formats?
+==== Can Smooks ingest non-XML formats?
 
 Certainly. You can leverage one the many out-of-the-box readers, or develop your own Smooks reader, to ingest a non-XML source (based on a profile if necessary). The reader emits events from the source, allowing the downstream Smooks resources to target and process the data. See the https://github.com/smooks/smooks-examples/tree/v6/edi-to-xml[edi-to-xml] and https://github.com/smooks/smooks-examples/tree/v6/csv-to-xml[csv-to-xml] tutorials.
 
