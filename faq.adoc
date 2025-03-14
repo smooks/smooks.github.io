@@ -19,7 +19,7 @@ redirect_from:
 
 A practical way to getting started with Smooks is to:
 
-. Read the link:documentation/#fundementals[Smooks fundamentals] section.
+. Read the link:documentation/#fundamentals[Smooks fundamentals] section.
 . Download and run some of the https://github.com/smooks/smooks-examples/tree/v6[examples].
 
 ==== How do I use Smooks from a project managed with https://maven.apache.org/[Maven]?
