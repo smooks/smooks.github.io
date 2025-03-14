@@ -80,12 +80,12 @@ Check out the https://github.com/smooks/smooks-examples/tree/v6/java-basic[java-
 
 ==== How do I configure an XSLT resource?
 
-. Check out the link:documentation#xsl-templating[user guide].
+. Check out the link:documentation#xslt_templating[user guide].
 . Check out the https://github.com/smooks/smooks-examples/tree/v6[examples].
 
 ==== How do I configure a FreeMarker resource?
 
-. Check out the link:documentation/#freemarker-templating[user guide].
+. Check out the link:documentation/#freemarker_templating[user guide].
 . Check out the templating https://github.com/smooks/smooks-examples/tree/v6[examples].
 
 ==== How do I configure a StringTemplate resource?
