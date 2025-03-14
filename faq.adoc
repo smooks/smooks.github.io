@@ -58,7 +58,7 @@ This is a classic Smooks usecase. See the https://github.com/smooks/smooks-examp
 
 Certainly. You can leverage one the many out-of-the-box readers, or develop your own Smooks reader, to ingest a non-XML source (based on a profile if necessary). The reader emits events from the source, allowing the downstream Smooks resources to target and process the data. See the https://github.com/smooks/smooks-examples/tree/v6/edi-to-xml[edi-to-xml] and https://github.com/smooks/smooks-examples/tree/v6/csv-to-xml[csv-to-xml] tutorials.
 
-==== What is the difference between the link:documentation#java-binding[JavaBean cartridge] and XML data binding frameworks like JAXB, Apache XMLBeans, and XStream?
+==== What is the difference between the link:documentation#java_binding[JavaBean cartridge] and XML data binding frameworks like JAXB, Apache XMLBeans, and XStream?
 
 The JavaBean cartridge is not designed to be an alternative to existing XML data binders such as those listed above. A dedicated XML data binding solution should be considered if the only requirement is that of marshalling Java objects into XML and unmarshalling XML into objects.
 
@@ -67,8 +67,8 @@ The JavaBean cartridge is a useful alternative:
 . For binding non-XML data.
 . For binding XML data that does not line up with the target Java object model.
 . In situations where your source data model does not conform to any schema. Some tools (e.g., JAXB and XMLBeans) require you to have an XSD, from which the Java model is generated and against which the source message is validated.
-. Performing link:documentation#java-binding-configuration-details[Expression Based Bindings].
-. For creating link:documentation#java-binding-configuration-details[Virtual Object Models]. This can be very useful when performing model driven transformations.
+. Performing link:documentation#java_binding_configuration_details[Expression Based Bindings].
+. For creating link:documentation#java_binding_configuration_details[Virtual Object Models]. This can be very useful when performing model driven transformations.
 . For binding XML data where the XML model's dataset is a superset of the Java model's dataset i.e. where you need to selectively pick data from the source XML.
 . In support of complex splitting, transformation, and routing (as well as other operations).
 
