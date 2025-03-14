@@ -108,7 +108,7 @@ Set the resource config selector to `*`.
 
 ==== What happens to events that I do not target?
 
-Un-targeted events are directed to the final output. This is unlike most templating (e.g., XSLT) where this would result in these fragments being omitted from the result.
+Un-targeted events are directed to the final output. This is unlike most templating solutions (e.g., XSLT) where this would result in these fragments being omitted from the result.
 
 ==== Can I target a fragment with multiple resources?
 
