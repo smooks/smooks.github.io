@@ -122,11 +122,13 @@ Smooks does not limit you to any single technology. You can write your own exten
 
 ==== Apart from transformation, what other forms of processing are possible with Smooks?
 
-The core of Smooks has no notion of data transformation. Smooks is an engine for applying visitors to events emitted from a data source. A visitor could be a transformer, or it could implement logic for processing or analysing data in any way to fit your use case. In other words, the answer to this question is "whatever type of processing you require". You only need to implement a visitor and hook it up with Smooks from a resource config. You can have multiple visitors interact with each other via the link:/javadoc/v2.0.0/smooks/org/smooks/api/ExecutionContext[execution context]
+The core of Smooks has no notion of data transformation. Smooks is an engine for applying visitors to events emitted from a data source. A visitor could be a transformer, or it could implement logic for processing or analysing data in any way to fit your use case. In other words, the answer to this question is "whatever type of processing you require". You only need to implement a visitor and hook it up with Smooks from a resource config.
+
+NOTE: Multiple visitors can interact with each other via the link:/javadoc/v2.0.0/smooks/org/smooks/api/ExecutionContext[execution context].
 
 ==== Can a single Smooks instance have multiple concurrent executions?
 
-Absolutely! Smooks is thread-safe.
+Absolutely! `org.smooks.Smooks` and `org.smooks.api.ApplicationContext` are thread-safe, however, each execution should have its own instance of `org.smooks.api.ExecutionContext` since an execution context is NOT thread-safe.
 
 ==== Can Smooks be extended to support other libraries, frameworks, and platforms?
 
