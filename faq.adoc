@@ -46,11 +46,11 @@ At a fundamental level, a Smooks applications is composed of a sequence of resou
 
 While Smooks does indeed borrow a number of concepts from XSLT, and XML more generally, it should not be conflated with XSLT or other transformation solutions. XSLT is an XML language that uses pattern-matching for transforming XML documents into other XML documents. Smooks is a _framework_ for link:documentation#fragment_based_processing[_event-driven_, _fragment-based_ data integration] using XML (e.g., XSLT, DFDL, etc...) and _non-XML_ (e.g., Java, https://groovy-lang.org/[Groovy], https://freemarker.apache.org/[FreeMarker], Docker, etc...) solutions. Smooks empowers you to apply multiple independent XSLT resources on an event stream alongside other resources in the context of a single execution.
 
-==== How does Smooks compare with enterprise application integration (EAI) frameworks like Camel or Mule?
+==== How does Smooks compare with enterprise application integration (EAI) frameworks like Apache Camel or Mule?
 
 https://camel.apache.org/[Camel] and https://github.com/mulesoft/mule[Mule] are frameworks for building message-oriented middleware. The unit of data within these frameworks is a message which is a packet consisting of a payload and metadata. While this data abstraction is certainly useful in many integration scenarios, it can lead to un-necessary complexity when the data needs to be broken down and processed efficiently. Depending on the context, a https://www.enterpriseintegrationpatterns.com/patterns/messaging/Sequencer.html[splitter] can help manage the complexity. On the other hand, Smooks is arguably a better candidate since it is geared towards this problem domain. Although a clear-cut answer cannot be given, we generally recommend leveraging an EAI framework for connectivity, content-based routing, and transformation/mapping whereas let Smooks do the heavy lifting when the data needs to be pulled apart and consumed in different ways.
 
-NOTE: https://camel.apache.org/components/next/smooks-component.html[Camel has a Smooks component] providing seamless integration between the two frameworks.
+NOTE: https://camel.apache.org/components/next/smooks-component.html[Apache Camel has a Smooks component] providing seamless integration between the two frameworks.
 
 ==== Can I pre-process individual chunks of a stream and then apply a transformation to the overall stream?
 
