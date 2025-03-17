@@ -58,7 +58,7 @@ This is a classic Smooks usecase. See the https://github.com/smooks/smooks-examp
 
 ==== Can Smooks ingest non-XML formats?
 
-Certainly. You can leverage one the many out-of-the-box readers, or develop your own Smooks reader, to ingest a non-XML source (based on a profile if necessary). The reader emits events from the source, allowing the downstream Smooks resources to target and process the data. See the https://github.com/smooks/smooks-examples/tree/v6/edi-to-xml[edi-to-xml] and https://github.com/smooks/smooks-examples/tree/v6/csv-to-xml[csv-to-xml] examples.
+Certainly. You can leverage one of the many out-of-the-box readers, or develop your own Smooks reader, to ingest a non-XML source (based on a profile if necessary). The reader emits events from the source, allowing the downstream Smooks resources to target and process the data. See the https://github.com/smooks/smooks-examples/tree/v6/edi-to-xml[edi-to-xml] and https://github.com/smooks/smooks-examples/tree/v6/csv-to-xml[csv-to-xml] examples.
 
 ==== What is the difference between the link:documentation#java_binding[JavaBean cartridge] and XML data binding frameworks like JAXB, Apache XMLBeans, and XStream?
 
